@@ -161,3 +161,6 @@ home.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: home.url(options),
     method: 'head',
 })
+
+import pos from './pos'
+export { pos }
