@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php artisan:*)",
+      "Bash(git:*)",
+      "Bash(php:*)",
+      "Bash(grep:*)",
+      "Bash(npm run:*)"
+    ]
+  }
+}

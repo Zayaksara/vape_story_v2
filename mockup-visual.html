@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>POS Kasir – Light Mode</title>
+  <style>
+/* ═══════════════════════════════════════════════════
+   LIGHT MODE VARIABLES  (.pos — root scope)
+═══════════════════════════════════════════════════ */
+.pos {
+  /* ── Core Background ── */
+  --background:         #1e293b;
+  --foreground:         hsl(210 40% 96%);
+
+  /* ── Card / Surface ── */
+  --card:               hsl(210 40% 96%);
+  --card-foreground:    #0f172a;
+  --card-hover:         hsl(210 40% 92%);
+  --card-selected:      hsl(174 60% 88%);
+
+  /* ── Popover ── */
+  --popover:            hsl(210 40% 96%);
+  --popover-foreground: #0f172a;
+
+  /* ── Primary CTA (Teal) ── */
+  --primary:            #2dd4bf;
+  --primary-dark:       #14b8a6;
+  --primary-foreground: #0f172a;
+
+  /* ── Secondary ── */
+  --secondary:          hsl(210 35% 90%);
+  --secondary-foreground: #334155;
+
+  /* ── Muted ── */
+  --muted:              hsl(210 35% 90%);
+  --muted-foreground:   #475569;
+
+  /* ── Accent ── */
+  --accent:             #ccfbf1;
+  --accent-foreground:  #0f766e;
+
+  /* ── Destructive ── */
+  --destructive:        #ef4444;
+  --destructive-bg:     #fee2e2;
+  --destructive-foreground: #ffffff;
+
+  /* ── Warning ── */
+  --warning:            #f59e0b;
+  --warning-bg:         #fef3c7;
+
+  /* ── Border / Input / Ring ── */
+  --border:             hsl(210 30% 82%);
+  --border-strong:      hsl(210 25% 72%);
+  --input:              hsl(210 40% 96%);
+  --ring:               #2dd4bf;
+
+  /* ── Sidebar ── */
+  --sidebar-background: hsl(210 40% 96%);
+  --sidebar-foreground: #334155;
+  --sidebar-border:     hsl(210 30% 82%);
+  --sidebar-primary:    #14b8a6;
+
+  /* ── Gradients ── */
+  --gradient-brand: linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%);
+  --gradient-brand-hover: linear-gradient(135deg, #14b8a6 0%, #0f9488 100%);
+  --gradient-brand-text: #ffffff;
+
+  /* ── Shadows ── */
+  --shadow-sm:   0 1px 3px rgba(15,23,42,0.12), 0 1px 2px rgba(15,23,42,0.08);
+  --shadow-md:   0 4px 12px rgba(15,23,42,0.18), 0 2px 4px rgba(15,23,42,0.10);
+  --shadow-card: 0 2px 8px rgba(15,23,42,0.14);
+  --shadow-teal: 0 4px 14px rgba(45,212,191,0.35);
+}
+
+/* ═══════════════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ═══════════════════════════════════════════════════
+   .pos — ROOT LAYOUT
+   Matches screenshot: [product-area | cart-panel]
+═══════════════════════════════════════════════════ */
+.pos {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  grid-template-rows: 100vh;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* ═══════════════════════════════════════════════════
+   .pos__left — PRODUCT SIDE
+═══════════════════════════════════════════════════ */
+.pos__left {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 14px 14px 14px 14px;
+  gap: 12px;
+}
+
+/* ── Search Bar ── */
+.pos__search {
+  position: relative;
+}
+.pos__search input {
+  width: 100%;
+  padding: 10px 14px 10px 40px;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  color: var(--foreground);
+  font-size: 13.5px;
+  outline: none;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.pos__search input:focus {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px rgba(45,212,191,0.15);
+}
+.pos__search input::placeholder { color: var(--muted-foreground); }
+.pos__search-icon {
+  position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+  color: var(--muted-foreground); font-size: 15px; pointer-events: none;
+}
+
+/* ── Category Tabs ── */
+.pos__categories {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+.pos__cat-tab {
+  padding: 7px 18px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  color: var(--muted-foreground);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+  user-select: none;
+}
+.pos__cat-tab:hover {
+  border-color: var(--primary);
+  color: var(--primary-dark);
+  background: var(--accent);
+}
+.pos__cat-tab.active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+  font-weight: 600;
+  box-shadow: var(--shadow-teal);
+}
+
+/* ── Product Grid ── */
+.pos__products {
+  flex: 1;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  align-content: start;
+  padding-right: 4px;
+}
+.pos__products::-webkit-scrollbar { width: 4px; }
+.pos__products::-webkit-scrollbar-track { background: transparent; }
+.pos__products::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 99px; }
+
+/* ── Product Card ── */
+.pos__product-card {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 12px 14px;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color 0.18s, box-shadow 0.18s, transform 0.12s, background 0.15s;
+  box-shadow: var(--shadow-card);
+  user-select: none;
+  min-height: 130px;
+}
+.pos__product-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 4px 16px rgba(45,212,191,0.16);
+  transform: translateY(-1px);
+}
+.pos__product-card:active { transform: scale(0.98); }
+.pos__product-card.selected {
+  background: var(--card-selected);
+  border-color: var(--primary);
+  box-shadow: 0 4px 16px rgba(45,212,191,0.20);
+}
+.pos__product-card.out-of-stock {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* Card Header: name + stock badge */
+.pos__card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+}
+.pos__product-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--card-foreground);
+  line-height: 1.35;
+  flex: 1;
+}
+.pos__stock-badge {
+  min-width: 22px; height: 22px;
+  border-radius: 6px;
+  background: var(--secondary);
+  color: var(--muted-foreground);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 5px;
+  flex-shrink: 0;
+}
+.pos__stock-badge.low {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+.pos__stock-badge.out {
+  background: var(--destructive-bg);
+  color: var(--destructive);
+}
+
+/* Brand Logo Area */
+.pos__brand-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 54px;
+  padding: 4px 0;
+  gap: 4px;
+}
+.pos__brand-logo {
+  width: 80px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 4px;
+  background: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: var(--muted-foreground);
+  letter-spacing: 0.5px;
+  overflow: hidden;
+}
+.pos__brand-logo img { width: 100%; height: 100%; object-fit: contain; }
+.pos__product-volume {
+  font-size: 11px;
+  color: var(--muted-foreground);
+  align-self: flex-end;
+  width: 100%;
+  text-align: right;
+  padding-right: 2px;
+}
+.pos__product-price {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-top: 2px;
+}
+.pos__product-card.selected .pos__product-price { color: var(--primary-dark); }
+
+/* ═══════════════════════════════════════════════════
+   .pos__cart — RIGHT PANEL
+═══════════════════════════════════════════════════ */
+.pos__cart {
+  background: var(--card);
+  border-left: 1.5px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: -2px 0 12px rgba(15,23,42,0.06);
+}
+
+/* Cart Header */
+.pos__cart-header {
+  padding: 14px 16px 12px;
+  border-bottom: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pos__cart-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--foreground);
+  display: flex; align-items: center; gap: 7px;
+  flex: 1;
+}
+.pos__cart-count {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-size: 11px; font-weight: 700;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.pos__cart-action-btn {
+  padding: 5px 12px;
+  border-radius: 7px;
+  border: 1.5px solid var(--border);
+  background: var(--secondary);
+  color: var(--muted-foreground);
+  font-size: 11.5px; font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.pos__cart-action-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary-dark);
+  background: var(--accent);
+}
+.pos__cart-action-btn.promo {
+  color: var(--primary-dark);
+  background: var(--accent);
+  border-color: rgba(45,212,191,0.4);
+}
+.pos__cart-action-btn.return {
+  color: var(--muted-foreground);
+}
+
+/* Cart Items */
+.pos__cart-items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.pos__cart-items::-webkit-scrollbar { width: 3px; }
+.pos__cart-items::-webkit-scrollbar-track { background: transparent; }
+.pos__cart-items::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+.pos__cart-empty {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  color: var(--muted-foreground); font-size: 13px; gap: 8px;
+  padding: 40px 0;
+}
+.pos__cart-empty-icon { font-size: 38px; opacity: 0.35; }
+
+.pos__cart-item {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.pos__cart-item:last-child { border-bottom: none; }
+.pos__cart-item-row1 {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.pos__cart-item-info { flex: 1; }
+.pos__cart-item-name {
+  font-size: 13px; font-weight: 600; color: var(--foreground); line-height: 1.3;
+}
+.pos__cart-item-sub { font-size: 11.5px; color: var(--muted-foreground); margin-top: 1px; }
+.pos__cart-item-del {
+  background: none; border: none; cursor: pointer;
+  color: var(--muted-foreground); font-size: 15px; padding: 2px 4px;
+  border-radius: 5px; line-height: 1;
+  transition: color 0.15s, background 0.15s;
+}
+.pos__cart-item-del:hover { color: var(--destructive); background: var(--destructive-bg); }
+.pos__cart-item-row2 {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.pos__qty-control {
+  display: flex; align-items: center; gap: 8px;
+}
+.pos__qty-btn {
+  width: 26px; height: 26px;
+  border-radius: 7px;
+  background: var(--secondary);
+  border: 1.5px solid var(--border);
+  color: var(--foreground);
+  font-size: 16px; font-weight: 600; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 0.13s;
+}
+.pos__qty-btn:hover { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
+.pos__qty-num {
+  font-size: 14px; font-weight: 700; min-width: 20px; text-align: center;
+  color: var(--foreground);
+}
+.pos__cart-item-price {
+  font-size: 14px; font-weight: 700; color: var(--foreground);
+}
+
+/* ── Cart Total ── */
+.pos__cart-total {
+  padding: 12px 16px;
+  border-top: 1.5px solid var(--border);
+  border-bottom: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--muted);
+}
+.pos__total-label { font-size: 14px; font-weight: 600; color: var(--foreground); }
+.pos__total-value { font-size: 17px; font-weight: 800; color: var(--primary-dark); }
+
+/* ── Payment Section ── */
+.pos__payment {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Pembayaran button (full width, teal gradient) */
+.pos__btn-payment {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: var(--gradient-brand);
+  color: var(--gradient-brand-text);
+  font-size: 13.5px; font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  box-shadow: var(--shadow-teal);
+  transition: opacity 0.15s, transform 0.1s;
+  letter-spacing: 0.3px;
+}
+.pos__btn-payment:hover { opacity: 0.92; background: var(--gradient-brand-hover); }
+.pos__btn-payment:active { transform: scale(0.98); }
+.pos__btn-payment:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+
+/* 2-col payment method grid */
+.pos__pay-methods {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+.pos__pay-method {
+  padding: 10px 8px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  color: var(--foreground);
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; text-align: center;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: all 0.15s;
+  box-shadow: var(--shadow-sm);
+}
+.pos__pay-method:hover {
+  border-color: var(--primary);
+  color: var(--primary-dark);
+  background: var(--accent);
+}
+.pos__pay-method.selected {
+  background: var(--gradient-brand);
+  color: var(--gradient-brand-text);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-teal);
+}
+.pos__pay-method.danger {
+  color: var(--destructive);
+  border-color: rgba(239,68,68,0.25);
+  background: var(--destructive-bg);
+}
+.pos__pay-method.danger:hover {
+  background: var(--destructive);
+  color: #fff;
+  border-color: var(--destructive);
+}
+.pos__pay-method.confirm {
+  background: var(--gradient-brand);
+  color: var(--gradient-brand-text);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-teal);
+}
+.pos__pay-method.confirm:hover { opacity: 0.9; }
+.pos__pay-icon { font-size: 15px; }
+
+/* ═══════════════════════════════════════════════════
+   SCROLLBAR & UTILITIES
+═══════════════════════════════════════════════════ */
+.pos__left::-webkit-scrollbar { width: 4px; }
+.pos__divider { height: 1px; background: var(--border); }
+.pos__text-muted  { color: var(--muted-foreground); }
+.pos__text-primary { color: var(--primary-dark); }
+
+.pos__badge {
+  display: inline-flex; align-items: center;
+  padding: 2px 8px; border-radius: 99px;
+  font-size: 11px; font-weight: 600;
+}
+.pos__badge--success { background: var(--accent); color: var(--accent-foreground); }
+.pos__badge--warning { background: var(--warning-bg); color: var(--warning); }
+.pos__badge--danger  { background: var(--destructive-bg); color: var(--destructive); }
+
+  </style>
+</head>
+<body>
+
+<div class="pos">
+
+  <!-- ════════════ LEFT: PRODUCT AREA ════════════ -->
+  <div class="pos__left">
+
+    <!-- Search -->
+    <div class="pos__search">
+      <span class="pos__search-icon">🔍</span>
+      <input type="text" placeholder="Cari produk atau kode..." />
+    </div>
+
+    <!-- Categories -->
+    <div class="pos__categories">
+      <button class="pos__cat-tab active">Semua</button>
+      <button class="pos__cat-tab">Liquid</button>
+      <button class="pos__cat-tab">Device</button>
+      <button class="pos__cat-tab">Coil</button>
+      <button class="pos__cat-tab">Aksesoris</button>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="pos__products">
+
+      <!-- Card 1 -->
+      <div class="pos__product-card">
+        <div class="pos__card-header">
+          <div class="pos__product-name">BEQU – Pineapple Saltnic</div>
+          <div class="pos__stock-badge">12</div>
+        </div>
+        <div class="pos__brand-area">
+          <div class="pos__brand-logo">BE<br>QU</div>
+          <div class="pos__product-volume">30ml</div>
+        </div>
+        <div class="pos__product-price">Rp. 110.000</div>
+      </div>
+
+      <!-- Card 2 – Selected -->
+      <div class="pos__product-card selected">
+        <div class="pos__card-header">
+          <div class="pos__product-name">BEQU – Peach Saltnic</div>
+          <div class="pos__stock-badge out">❌</div>
+        </div>
+        <div class="pos__brand-area">
+          <div class="pos__brand-logo">BE<br>QU</div>
+          <div class="pos__product-volume">30ml</div>
+        </div>
+        <div class="pos__product-price">Rp. 110.000</div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="pos__product-card">
+        <div class="pos__card-header">
+          <div class="pos__product-name">BEQU – Watermelon Saltnic</div>
+          <div class="pos__stock-badge">20</div>
+        </div>
+        <div class="pos__brand-area">
+          <div class="pos__brand-logo">BE<br>QU</div>
+          <div class="pos__product-volume">30ml</div>
+        </div>
+        <div class="pos__product-price">Rp. 110.000</div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="pos__product-card">
+        <div class="pos__card-header">
+          <div class="pos__product-name">Foom – Pod X Switch Green</div>
+          <div class="pos__stock-badge">10</div>
+        </div>
+        <div class="pos__brand-area">
+          <div class="pos__brand-logo" style="font-size:10px;letter-spacing:1px;">FOOM</div>
+          <div class="pos__product-volume">50ml</div>
+        </div>
+        <div class="pos__product-price">Rp. 210.000</div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="pos__product-card">
+        <div class="pos__card-header">
+          <div class="pos__product-name">Foom – Pod X Switch Green</div>
+          <div class="pos__stock-badge">10</div>
+        </div>
+        <div class="pos__brand-area">
+          <div class="pos__brand-logo" style="font-size:10px;letter-spacing:1px;">FOOM</div>
+          <div class="pos__product-volume">50ml</div>
+        </div>
+        <div class="pos__product-price">Rp. 210.000</div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="pos__product-card">
+        <div class="pos__card-header">
+          <div class="pos__product-name">Foom – POD X Series</div>
+          <div class="pos__stock-badge low">4</div>
+        </div>
+        <div class="pos__brand-area">
+          <div class="pos__brand-logo" style="font-size:10px;letter-spacing:1px;">FOOM</div>
+          <div class="pos__product-volume">20ml</div>
+        </div>
+        <div class="pos__product-price">Rp. 150.000</div>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="pos__product-card">
+        <div class="pos__card-header">
+          <div class="pos__product-name">Voopo – Coil Drag S</div>
+          <div class="pos__stock-badge">12</div>
+        </div>
+        <div class="pos__brand-area">
+          <div class="pos__brand-logo" style="font-size:10px;letter-spacing:1px;">VOOPOO</div>
+          <div class="pos__product-volume">30 ml</div>
+        </div>
+        <div class="pos__product-price">Rp. 45.000</div>
+      </div>
+
+      <!-- Card 8 -->
+      <div class="pos__product-card">
+        <div class="pos__card-header">
+          <div class="pos__product-name">Voopo – Drag PnP Coil</div>
+          <div class="pos__stock-badge low">2</div>
+        </div>
+        <div class="pos__brand-area">
+          <div class="pos__brand-logo" style="font-size:10px;letter-spacing:1px;">VOOPOO</div>
+          <div class="pos__product-volume">30 ml</div>
+        </div>
+        <div class="pos__product-price">Rp. 30.000</div>
+      </div>
+
+      <!-- Card 9 -->
+      <div class="pos__product-card">
+        <div class="pos__card-header">
+          <div class="pos__product-name">Foom – Cartridge POD Y</div>
+          <div class="pos__stock-badge">20</div>
+        </div>
+        <div class="pos__brand-area">
+          <div class="pos__brand-logo" style="font-size:10px;letter-spacing:1px;">FOOM</div>
+          <div class="pos__product-volume">30 ml</div>
+        </div>
+        <div class="pos__product-price">Rp. 110.000</div>
+      </div>
+
+    </div><!-- /pos__products -->
+  </div><!-- /pos__left -->
+
+
+  <!-- ════════════ RIGHT: CART PANEL ════════════ -->
+  <aside class="pos__cart">
+
+    <!-- Header -->
+    <div class="pos__cart-header">
+      <div class="pos__cart-title">
+        🛒 Keranjang
+        <span class="pos__cart-count">1</span>
+      </div>
+      <button class="pos__cart-action-btn promo">Promo</button>
+      <button class="pos__cart-action-btn return">Return</button>
+    </div>
+
+    <!-- Items -->
+    <div class="pos__cart-items">
+      <div class="pos__cart-item">
+        <div class="pos__cart-item-row1">
+          <div class="pos__cart-item-info">
+            <div class="pos__cart-item-name">BEQU – Pineapple Saltnic</div>
+            <div class="pos__cart-item-sub">Rp. 110.000</div>
+          </div>
+          <button class="pos__cart-item-del">🗑</button>
+        </div>
+        <div class="pos__cart-item-row2">
+          <div class="pos__qty-control">
+            <button class="pos__qty-btn">−</button>
+            <span class="pos__qty-num">1</span>
+            <button class="pos__qty-btn">+</button>
+          </div>
+          <div class="pos__cart-item-price">Rp.110.000</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total -->
+    <div class="pos__cart-total">
+      <span class="pos__total-label">Total</span>
+      <span class="pos__total-value">Rp.110.000</span>
+    </div>
+
+    <!-- Payment -->
+    <div class="pos__payment">
+
+      <!-- Main payment button -->
+      <button class="pos__btn-payment">
+        🧾 Pembayaran
+      </button>
+
+      <!-- 2x2 method grid -->
+      <div class="pos__pay-methods">
+        <button class="pos__pay-method selected">
+          <span class="pos__pay-icon">💵</span> Tunai
+        </button>
+        <button class="pos__pay-method">
+          <span class="pos__pay-icon">📱</span> QRIS
+        </button>
+        <button class="pos__pay-method">
+          <span class="pos__pay-icon">🏦</span> Transfer
+        </button>
+        <button class="pos__pay-method">
+          <span class="pos__pay-icon">💳</span> E-Wallet
+        </button>
+        <button class="pos__pay-method danger">
+          <span class="pos__pay-icon">✕</span> Batal
+        </button>
+        <button class="pos__pay-method confirm">
+          <span class="pos__pay-icon">✅</span> Konfirmasi
+        </button>
+      </div>
+
+    </div>
+  </aside>
+
+</div>
+</body>
+</html>

@@ -1,247 +1,341 @@
-<script setup lang="ts">
-import { ref, computed } from "vue";
-import { Head, usePage, router } from "@inertiajs/vue3";
-import { usePos } from "@/composables/usePos";
-import { pos } from "@/routes";
-import type { Product, Category } from "@/types/pos";
-
-const props = defineProps<{
-  products: Product[];
-  categories: Category[];
-  cashier: {
-    id: number;
-    name: string;
-    email: string;
-  };
-}>();
-
-const { cart, searchQuery, currentCategory, addToCart, subtotal, taxAmount, totalAmount, clearCart } = usePos();
-
-const filteredProducts = computed(() => {
-  return props.products.filter((p) => {
-    const matchCategory =
-      !currentCategory.value || p.category_id === currentCategory.value;
-    const matchSearch =
-      !searchQuery.value ||
-      p.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      p.code.toLowerCase().includes(searchQuery.value.toLowerCase());
-    return matchCategory && matchSearch && p.is_active;
-  });
-});
-
-function processPayment() {
-  if (cart.value.length === 0) {
-    return;
-  }
-
-  const items = cart.value.map((item) => ({
-    product_id: item.id,
-    batch_id: item.selectedBatchId,
-    quantity: item.quantity,
-    unit_price: item.base_price,
-    discount: item.discount,
-    total: item.base_price * item.quantity - item.discount,
-  }));
-
-  router.post(pos.payment.process().url, {
-    items,
-    total_amount: totalAmount.value,
-    paid_amount: totalAmount.value,
-    discount_amount: cart.value.reduce((sum, item) => sum + item.discount, 0),
-    tax_amount: taxAmount.value,
-    payment_method: "cash",
-  }, {
-    onSuccess: () => {
-      clearCart();
-    },
-    onError: (errors) => {
-      console.error("Payment error:", errors);
-    },
-  });
-}
-</script>
-
+<!-- ================================================
+     POS DASHBOARD - REDESIGNED WITH UI/UX PRO MAX
+     Consistent design system, no redundancy, proper hierarchy
+   =============================================== -->
 <template>
-  <Head title="POS Dashboard" />
-
-  <div class="h-screen flex flex-col bg-gray-50">
-    <div class="bg-white border-b border-gray-200 px-4 py-3">
-      <div class="flex items-center justify-between">
-        <div>
-          <h1 class="text-xl font-bold text-gray-900">POS Kasir</h1>
-          <p class="text-sm text-gray-500">Welcome, {{ cashier.name }}</p>
+  <!-- Error state modal -->
+  <div
+    v-if="error"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+  >
+    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+      <div class="text-center">
+        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
+          <svg class="h-6 w-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
         </div>
-        <div class="flex items-center gap-2">
-          <div class="text-right hidden sm:block">
-            <p class="text-sm font-medium">{{ cart.length }} items in cart</p>
-            <p class="text-lg font-bold text-primary">{{ new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(totalAmount) }}</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="mt-3 flex flex-col sm:flex-row gap-3">
-        <div class="flex-1">
-          <div class="relative">
-            <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Search products or scan barcode..."
-              class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-sm"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="flex-1 flex overflow-hidden">
-      <div class="flex-1 flex flex-col overflow-hidden">
-        <CategoryNav
-          :categories="categories"
-          :active="currentCategory"
-          @select="currentCategory = $event"
-        />
-
-        <div class="flex-1 overflow-y-auto p-4">
-          <div v-if="filteredProducts.length === 0" class="text-center py-12">
-            <p class="text-gray-500">No products available</p>
-          </div>
-          <div v-else class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            <ProductCard
-              v-for="product in filteredProducts"
-              :key="product.id"
-              :product="product"
-              @add-to-cart="addToCart(product, $event.batchId)"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div class="w-full md:w-80 border-l border-gray-200 print:hidden">
-        <div class="h-full flex flex-col">
-          <div class="flex-1 overflow-y-auto">
-            <div class="p-4">
-              <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                Shopping Cart
-                <span class="ml-auto bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full">
-                  {{ cart.length > 0 ? cart.reduce((sum, item) => sum + item.quantity, 0) : 0 }}
-                </span>
-              </h3>
-
-              <div v-if="cart.length === 0" class="text-center py-8 text-gray-500">
-                <svg class="h-12 w-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                <p>Cart is empty</p>
-                <p class="text-sm">Add items to start selling</p>
-              </div>
-
-              <div v-else class="space-y-3">
-                <div
-                  v-for="(item, index) in cart"
-                  :key="`${item.id}-${item.selectedBatchId}`"
-                  class="bg-gray-50 rounded-lg p-3"
-                >
-                  <div class="flex gap-3">
-                    <div class="w-16 h-16 rounded bg-gray-200 overflow-hidden flex-shrink-0">
-                      <img
-                        v-if="item.image"
-                        :src="`/storage/images/${item.image}`"
-                        :alt="item.name"
-                        class="w-full h-full object-cover"
-                      />
-                      <div v-else class="w-full h-full flex items-center justify-center text-gray-400 text-xs text-center p-1">
-                        {{ item.name.substring(0, 2) }}
-                      </div>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                      <h4 class="font-medium text-sm truncate">{{ item.name }}</h4>
-                      <p class="text-xs text-gray-500">Batch: {{ item.selectedBatchId?.substring(0, 8) || 'N/A' }}</p>
-                      <p class="text-sm font-semibold text-primary">Rp{{ item.base_price?.toLocaleString('id-ID') }}</p>
-                      <div class="flex items-center gap-1 mt-1">
-                        <button
-                          @click="item.quantity > 1 ? item.quantity-- : item.quantity = 1"
-                          class="w-6 h-6 flex items-center justify-center bg-gray-200 rounded text-xs"
-                        >
-                          -
-                        </button>
-                        <input
-                          v-model.number="item.quantity"
-                          type="number"
-                          min="1"
-                          class="w-10 text-center text-sm border rounded"
-                        />
-                        <button
-                          @click="item.quantity++"
-                          class="w-6 h-6 flex items-center justify-center bg-gray-200 rounded text-xs"
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-                    <button
-                      @click="cart.splice(index, 1)"
-                      class="text-red-500 hover:text-red-700 flex-shrink-0"
-                    >
-                      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                  <div class="mt-2 text-right">
-                    <span class="text-sm font-semibold">Subtotal: </span>
-                    <span class="font-semibold">Rp{{ (item.base_price * item.quantity).toLocaleString('id-ID') }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="border-t border-gray-200 bg-white p-4">
-            <div class="space-y-2 mb-4">
-              <div class="flex justify-between text-sm">
-                <span>Subtotal</span>
-                <span>Rp{{ subtotal.toLocaleString('id-ID') }}</span>
-              </div>
-              <div class="flex justify-between text-sm">
-                <span>Tax (10%)</span>
-                <span>Rp{{ taxAmount.toLocaleString('id-ID') }}</span>
-              </div>
-              <div class="flex justify-between text-sm">
-                <span>Discount</span>
-                <span class="text-red-600">-
-                  Rp{{ cart.reduce((sum, item) => sum + item.discount, 0).toLocaleString('id-ID') }}
-                </span>
-              </div>
-              <div class="border-t pt-2">
-                <div class="flex justify-between text-lg font-bold">
-                  <span>Total</span>
-                  <span class="text-primary">Rp{{ totalAmount.toLocaleString('id-ID') }}</span>
-                </div>
-              </div>
-            </div>
-            <button
-              @click="processPayment"
-              :disabled="cart.length === 0"
-              class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Process Payment
-            </button>
-            <button
-              @click="clearCart"
-              :disabled="cart.length === 0"
-              class="w-full mt-2 text-sm text-gray-500 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Clear Cart
-            </button>
-          </div>
+        <h3 class="mt-4 text-lg font-semibold text-slate-800">Error</h3>
+        <p class="mt-2 text-sm text-gray-500">{{ error }}</p>
+        <div class="mt-6 flex gap-3">
+          <button
+            @click="error = null"
+            class="flex-1 rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
+          >
+            Close
+          </button>
+          <button
+            @click="error = null; searchQuery = ''; currentCategory = null;"
+            class="flex-1 rounded-lg bg-teal-500 px-4 py-2 text-sm font-medium text-white hover:bg-teal-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+          >
+            Reset Filter
+          </button>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Main content -->
+  <main class="flex flex-1 min-h-0 overflow-hidden">
+    <!-- Left: Products -->
+    <div class="flex-1 min-h-0 flex flex-col bg-[var(--pos-bg-primary)] overflow-hidden">
+      <!-- Search & Categories Section -->
+      <div class="border-b border-gray-300 bg-[var(--pos-bg-primary)] px-4 py-3.5">
+        <!-- Search bar -->
+        <div class="mb-3">
+          <PosSearch
+            v-model="searchQuery"
+            @search="handleSearch"
+          />
+        </div>
+
+        <!-- Category navigation - single tablist, horizontal scroll -->
+        <nav
+          class="overflow-x-auto pb-1 scrollbar-hide no-scrollbar"
+          role="tablist"
+          aria-label="Kategori produk"
+        >
+          <div class="inline-flex min-w-max gap-2">
+            <button
+              v-for="category in allCategories"
+              :key="category.id"
+              role="tab"
+              :aria-selected="currentCategory === category.id"
+              :aria-controls="`category-panel-${category.id}`"
+              class="category-pill whitespace-nowrap rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 min-h-[44px] flex items-center justify-center"
+              :style="{
+                backgroundColor: currentCategory === category.id ? 'var(--pos-brand-primary)' : '#ffffff',
+                color: currentCategory === category.id ? '#ffffff' : 'var(--pos-text-secondary)',
+                borderColor: currentCategory === category.id ? 'var(--pos-brand-primary)' : 'var(--pos-border)',
+                boxShadow: currentCategory === category.id ? '0 2px 8px rgba(20, 184, 166, 0.25)' : 'none'
+              }"
+              @click="currentCategory = category.id"
+            >
+              <span>{{ category.name }}</span>
+              <span
+                class="ml-2 rounded-full px-2 py-0.5 text-xs font-bold tabular-nums"
+                :style="{
+                  backgroundColor: currentCategory === category.id ? 'rgba(255,255,255,0.25)' : '#e5e7eb',
+                  color: currentCategory === category.id ? '#ffffff' : 'var(--pos-text-muted)'
+                }"
+              >
+                {{ category.id ? (productCounts[category.id] || 0) : props.products.length }}
+              </span>
+            </button>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Product Grid - SCROLLABLE -->
+      <div class="overflow-y-auto p-4.5 product-grid scrollable flex-1">
+        <ProductGrid
+          :products="filteredProducts"
+          :loading="false"
+          :search-query="searchQuery"
+
+          @add-to-cart="addToCart"
+        />
+      </div>
+    </div>
+
+    <!-- Right:Panel (desktop) -->
+    <aside class="hidden w-80 border border-(--pos-border) bg-(--pos-bg-primary) lg:flex flex-col min-h-0">
+      <div class="flex-1 min-h-0 overflow-hidden pb-4">
+        <CartPanel
+          :cart="cart"
+          :subtotal="subtotal"
+          :discount-amount="discountAmount"
+          :tax-amount="taxAmount"
+          :total="total"
+          :is-processing="isProcessing || isLoading"
+          :cart-count="cartCount"
+          :show-cart-button="true"
+          :discount-label="discount?.label"
+          @remove-item="removeFromCart"
+          @update-quantity="updateQuantity"
+          @clear-cart="clearCart"
+          @process-payment="isPaymentModalOpen = true"
+          @toggle-cart="isCartDrawerOpen = !isCartDrawerOpen"
+          @apply-discount="applyDiscount"
+          @remove-discount="removeDiscount"
+        />
+      </div>
+    </aside>
+  </main>
+
+  <!-- Cart drawer (mobile/tablet) -->
+  <CartDrawer
+    :model-value="isCartDrawerOpen"
+    :cart="cart"
+    :subtotal="subtotal"
+    :discount-amount="discountAmount"
+    :tax-amount="taxAmount"
+    :total="total"
+    :is-processing="isProcessing || isLoading"
+    :cart-count="cartCount"
+    :show-cart-button="true"
+    :discount-label="discount?.label"
+    @update:model-value="isCartDrawerOpen = $event"
+    @remove-item="removeFromCart"
+    @update-quantity="updateQuantity"
+    @clear-cart="clearCart"
+    @process-payment="isPaymentModalOpen = true"
+    @apply-discount="applyDiscount"
+    @remove-discount="removeDiscount"
+  />
+
+  <!-- Discount modal -->
+  <DiscountModal
+    :model-value="isDiscountModalOpen"
+    :subtotal="subtotal"
+    :applied-discount="discount"
+    @update:model-value="isDiscountModalOpen = $event"
+    @apply="applyDiscount"
+  />
+
+  <!-- Payment modal -->
+  <PaymentModal
+    :model-value="isPaymentModalOpen"
+    :total="total"
+    :is-processing="isProcessing || isLoading"
+    @update:model-value="isPaymentModalOpen = $event"
+    @confirm="handlePaymentConfirm"
+  />
+
+  <!-- Receipt modal -->
+  <ReceiptModal
+    :model-value="isReceiptModalOpen"
+    :transaction="lastTransaction"
+    @update:model-value="handleCloseReceipt"
+  />
+
+  <!-- Toast -->
+  <PosToast
+    v-if="toast"
+    :model-value="toast.message"
+    :type="toast.type"
+    @update:model-value="toast = null"
+  />
 </template>
+
+<script setup lang="ts">
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+
+// Import components
+import CartDrawer from '@/components/pos/CartDrawer.vue'
+import CartPanel from '@/components/pos/CartPanel.vue'
+import DiscountModal from '@/components/pos/modals/DiscountModal.vue'
+import PaymentModal from '@/components/pos/modals/PaymentModal.vue'
+import ReceiptModal from '@/components/pos/modals/ReceiptModal.vue'
+import PosSearch from '@/components/pos/PosSearch.vue'
+import PosToast from '@/components/pos/PosToast.vue'
+import ProductGrid from '@/components/pos/ProductGrid.vue'
+import { usePos } from '@/composables/usePos'
+import type { Product, Category } from '@/types/pos'
+
+const props = defineProps<{
+  products: Product[]
+  categories: Category[]
+  cashier: {
+    id: string  // UUID
+    name: string
+    email: string
+  }
+  initial_trx_id: string
+}>()
+
+// Use the main sidebar's toggle (already available via SidebarProvider)
+const {
+  cart,
+  discount,
+  paymentMethod,
+  cashReceived,
+  transactionId,
+  isProcessing,
+  lastTransaction,
+  toast,
+  isDiscountModalOpen,
+  isPaymentModalOpen,
+  isReceiptModalOpen,
+  isCartDrawerOpen,
+  cartCount,
+  subtotal,
+  discountAmount,
+  taxAmount,
+  total,
+  change,
+  addToCart,
+  removeFromCart,
+  updateQuantity,
+  clearCart,
+  validateDiscount,
+  applyDiscount,
+  removeDiscount,
+  processPayment,
+  resetTransaction,
+  showToast,
+} = usePos(props.initial_trx_id)
+
+// Search state
+const searchQuery = ref('')
+const currentCategory = ref<number | string | null>(null)
+
+// Loading and error states
+const isLoading = ref(false)
+const error = ref<string | null>(null)
+
+// Time
+const currentTime = ref('')
+
+function updateTime() {
+  const now = new Date()
+  currentTime.value = now.toLocaleTimeString('id-ID', {
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}
+
+// Filtered products
+const filteredProducts = computed(() => {
+  return props.products.filter((p) => {
+    const matchCategory = !currentCategory.value || p.category_id === currentCategory.value
+    const matchSearch =
+      !searchQuery.value ||
+      p.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      p.sku.toLowerCase().includes(searchQuery.value.toLowerCase())
+
+    return matchCategory && matchSearch
+  })
+})
+
+// Category product counts
+const productCounts = computed(() => {
+  const counts: Record<number | string, number> = {}
+  props.categories.forEach((cat) => {
+    counts[cat.id] = props.products.filter(p => p.category_id === cat.id).length
+  })
+  return counts
+})
+
+// All categories including "Semua" (All)
+const allCategories = computed(() => [
+  { id: null as any, name: 'Semua' },
+  ...props.categories,
+])
+
+function handleSearch(value: string) {
+  searchQuery.value = value
+}
+
+async function handlePaymentConfirm({ method, cashReceived: received }: { method: any; cashReceived?: number }) {
+  try {
+    isLoading.value = true
+    error.value = null
+    cashReceived.value = received || 0
+    paymentMethod.value = method
+    await processPayment()
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : 'Payment failed'
+    showToast({
+      message: error.value,
+      type: 'error'
+    })
+  } finally {
+    isLoading.value = false
+  }
+}
+
+function handleCloseReceipt() {
+  resetTransaction()
+}
+
+onMounted(() => {
+  updateTime()
+  const interval = setInterval(updateTime, 60000)
+  onUnmounted(() => {
+    clearInterval(interval)
+  })
+})
+</script>
+
+<style scoped>
+/* Custom scrollbar for category tabs */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Ensure proper background layers */
+.bg-light-gray {
+  background-color: var(--pos-bg-secondary);
+}
+
+/* Focus visible states */
+.category-pill:focus-visible {
+  outline: 2px solid var(--pos-brand-primary);
+  outline-offset: 2px;
+}
+</style>

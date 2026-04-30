@@ -1,0 +1,425 @@
+@import 'tailwindcss';
+
+@import 'tw-animate-css';
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#app {
+    height: 100%;
+}
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    --font-sans:
+        Instrument Sans, ui-sans-serif, system-ui, sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji';
+
+    --radius-lg: var(--radius);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-sm: calc(var(--radius) - 4px);
+
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+
+    --color-sidebar: var(--sidebar-background);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+
+    /* Brand Gradient Button */
+    --gradient-brand: linear-gradient(
+        135deg,
+        #2dd4bf 20%,
+        #314158 100%,
+        #2dd4bf 100%
+    );
+    --gradient-brand-hover: linear-gradient(
+        135deg,
+        #14b8a6 20%,
+        #253347 100%,
+        #14b8a6 100%
+    );
+    --gradient-brand-text: hsl(0 0% 100%);
+}
+
+:root {
+    /* Core Background */
+    --background: #1e293b;
+    --foreground: hsl(215 30% 12%);
+
+    /* Card / Popover */
+    --card: #ffffff;
+    --card-foreground: hsl(215 30% 12%);
+    --popover: hsl(0 0% 100%);
+    --popover-foreground: hsl(215 30% 12%);
+
+    /* Primary CTA (Teal) */
+    --primary: #14b8a6;
+    --primary-foreground: hsl(0 0% 100%);
+
+    /* Secondary (Slate Light) */
+    --secondary: hsl(210 30% 92%);
+    --secondary-foreground: hsl(215 30% 20%);
+
+    /* Muted */
+    --muted: hsl(210 30% 95%);
+    --muted-foreground: hsl(215 20% 45%);
+
+    /* Accent (Teal lighter) */
+    --accent: hsl(174 55% 90%);
+    --accent-foreground: #0f766e;
+
+    /* Destructive */
+    --destructive: hsl(0 72% 55%);
+    --destructive-foreground: hsl(0 0% 98%);
+
+    /* Border / Input / Ring */
+    --border: hsl(210 25% 86%);
+    --input: hsl(210 25% 90%);
+    --ring: #2dd4bf;
+
+    /* Brand Gradient (same as dark) */
+    --gradient-brand: linear-gradient(
+        135deg,
+        #2dd4bf 20%,
+        #314158 100%,
+        #2dd4bf 100%
+    );
+
+    /* Radius */
+    --radius: 0.5rem;
+
+    /* Charts (Teal-slate palette) */
+    --chart-1: hsl(174 62% 45%);
+    --chart-2: hsl(174 72% 35%);
+    --chart-3: hsl(210 55% 45%);
+    --chart-4: hsl(192 65% 48%);
+    --chart-5: hsl(158 50% 40%);
+
+    /* Sidebar */
+    --sidebar: hsl(210 40% 97%);
+    --sidebar-background: hsl(210 40% 97%);
+    --sidebar-foreground: hsl(215 25% 28%);
+    --sidebar-primary: #14b8a6;
+    --sidebar-primary-foreground: hsl(0 0% 100%);
+    --sidebar-accent: hsl(174 55% 90%);
+    --sidebar-accent-foreground: #0f766e;
+    --sidebar-border: hsl(210 25% 88%);
+    --sidebar-ring: #2dd4bf;
+}
+
+.dark {
+    /* Core Background */
+    --background: #1e293b;
+    --foreground: hsl(210 40% 96%);
+
+    /* Card / Popover */
+    --card: hsl(210 40% 96%);
+    --card-foreground: hsl(210 40% 96%);
+    --popover: #0f172a;
+    --popover-foreground: hsl(210 40% 96%);
+
+    /* Primary CTA (Teal Highlight) */
+    --primary: #2dd4bf;
+    --primary-foreground: #0f172a;
+
+    /* Secondary (Mid Gradient Tone) */
+    --secondary: #314158;
+    --secondary-foreground: hsl(210 40% 92%);
+
+    /* Muted (Subtle Layer) */
+    --muted: #1a2540;
+    --muted-foreground: hsl(215 20% 55%);
+
+    /* Accent (CTA Hover) */
+    --accent: #14b8a6;
+    --accent-foreground: #0f172a;
+
+    /* Destructive */
+    --destructive: hsl(0 72% 55%);
+    --destructive-foreground: hsl(0 0% 98%);
+
+    /* Border / Input / Ring */
+    --border: #314158;
+    --input: #1e293b;
+    --ring: #2dd4bf;
+
+    /* Brand Gradient */
+    --gradient-brand: linear-gradient(
+        135deg,
+        #2dd4bf 20%,
+        #314158 100%,
+        #2dd4bf 100%
+    );
+    --gradient-brand-hover: linear-gradient(
+        135deg,
+        #14b8a6 20%,
+        #253347 100%,
+        #14b8a6 100%
+    );
+    --gradient-brand-text: hsl(0 0% 100%);
+
+    /* Charts (Teal-Navy) */
+    --chart-1: hsl(174 62% 50%);
+    --chart-2: hsl(174 72% 40%);
+    --chart-3: hsl(210 55% 55%);
+    --chart-4: hsl(192 70% 52%);
+    --chart-5: hsl(158 50% 45%);
+
+    /* Sidebar */
+    --sidebar: #0f172a;
+    --sidebar-background: #0f172a;
+    --sidebar-foreground: hsl(210 40% 92%);
+    --sidebar-primary: #2dd4bf;
+    --sidebar-primary-foreground: #0f172a;
+    --sidebar-accent: #314158;
+    --sidebar-accent-foreground: hsl(210 40% 92%);
+    --sidebar-border: #314158;
+    --sidebar-ring: #2dd4bf;
+}
+
+/* ====================================================
+   GLOBAL BASE LAYER
+   Only outline for focus. Border colors come from
+   component-specific definitions (Tailwind or CSS vars).
+   ==================================================== */
+
+@layer base {
+    * {
+        @apply outline-ring/50;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
+}
+
+/* ====================================================
+   POS THEME CONFIGURATION
+   Central color variables used across all POS
+   components via inline :style bindings.
+   Change these to re-theme the entire POS.
+   ==================================================== */
+
+:root {
+  --pos-bg-primary: #1e293b;
+  --pos-bg-secondary: #f9fafb;
+  --pos-bg-accent: #ccfbf1;
+  --pos-bg-danger: #fee2e2;
+  --pos-bg-warning: #fef3c7;
+  --pos-bg-success: #dcfce7;
+
+  --pos-border: #e5e7eb;
+  --pos-border-strong: #d1d5db;
+  --pos-border-focus: #14b8a6;
+  --pos-border-danger: #fca5a5;
+  --pos-border-warning: #fcd34d;
+
+  --pos-text-primary: #f9fafb;
+  --pos-text-secondary: #334155;
+  --pos-text-muted: #6b7280;
+  --pos-text-light: #9ca3af;
+  --pos-text-inverse: #ffffff;
+
+  --pos-brand-primary: #14b8a6;
+  --pos-brand-hover: #0f9488;
+  --pos-brand-light: #ecfeff;
+  --pos-brand-dark: #0d9488;
+
+  --pos-success-text: #16a34a;
+  --pos-success-bg: #dcfce7;
+  --pos-warning-text: #d97706;
+  --pos-warning-bg: #fef3c7;
+  --pos-danger-text: #dc2626;
+  --pos-danger-bg: #fee2e2;
+}
+
+.pos-layout {
+  /* ── Backgrounds ── */
+  --pos-bg-primary: #1e293b;        /* Cards, panels */
+  --pos-bg-secondary: #f9fafb;      /* Muted areas (gray-50) */
+  --pos-bg-accent: #ccfbf1;         /* Teal highlight (selected) */
+  --pos-bg-danger: #fee2e2;         /* Error state bg */
+  --pos-bg-warning: #fef3c7;        /* Warning state bg */
+  --pos-bg-success: #dcfce7;        /* Success state bg */
+
+  /* ── Borders ── */
+  --pos-border: #e5e7eb;            /* Default border (gray-200) */
+  --pos-border-strong: #d1d5db;     /* Stronger border (gray-300) */
+  --pos-border-focus: #14b8a6;      /* Focus ring (teal-500) */
+  --pos-border-danger: #fca5a5;     /* Error border */
+  --pos-border-warning: #fcd34d;    /* Warning border */
+
+  /* ── Text Colors ── */
+  --pos-text-primary: #f9fafb;      /* Headings, primary text (slate-800) */
+  --pos-text-secondary: #334155;    /* Body text (slate-700) */
+  --pos-text-muted: #6b7280;        /* Muted text (gray-500) */
+  --pos-text-light: #9ca3af;        /* Light text (gray-400) */
+  --pos-text-inverse: #ffffff;      /* White on dark bg */
+
+  /* ── Brand / Accent ── */
+  --pos-brand-primary: #14b8a6;     /* Teal 500 */
+  --pos-brand-hover: #0f9488;       /* Teal 600 */
+  --pos-brand-light: #ecfeff;       /* Teal 50 */
+  --pos-brand-dark: #0d9488;        /* Teal 700 */
+
+  /* ── Semantic Colors ── */
+  --pos-success-text: #16a34a;      /* Green 600 */
+  --pos-success-bg: #dcfce7;        /* Green 100 */
+  --pos-warning-text: #d97706;      /* Amber 600 */
+  --pos-warning-bg: #fef3c7;        /* Amber 100 */
+  --pos-danger-text: #dc2626;       /* Red 600 */
+  --pos-danger-bg: #fee2e2;         /* Red 100 */
+
+  /* ── Shadows ── */
+  --pos-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+  --pos-shadow-hover: 0 4px 12px rgba(15, 23, 42, 0.12);
+}
+
+/* Ensure POS background & content stay in light mode
+   even when global dark theme is active */
+html.dark .pos-layout {
+   background-color: #ffffff !important;
+ }
+
+ /* Scrollbar hide utility for clean horizontal scrolling */
+ .scrollbar-hide {
+   -ms-overflow-style: none;  /* IE and Edge */
+   scrollbar-width: none;  /* Firefox */
+ }
+ .scrollbar-hide::-webkit-scrollbar {
+   display: none;  /* Chrome, Safari, Opera */
+ }
+
+ /* Animations */
+@keyframes cardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Staggered card entrance */
+.pos__product-card:nth-child(1) { animation-delay: 0.05s; }
+.pos__product-card:nth-child(2) { animation-delay: 0.1s; }
+.pos__product-card:nth-child(3) { animation-delay: 0.15s; }
+.pos__product-card:nth-child(4) { animation-delay: 0.2s; }
+.pos__product-card:nth-child(5) { animation-delay: 0.25s; }
+.pos__product-card:nth-child(6) { animation-delay: 0.3s; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .product-card,
+  .category-pill,
+  .add-button,
+  .qty-btn,
+  .cart-sidebar,
+  .toast,
+  .payment-button,
+  .pos__product-card {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .product-card:active {
+    transform: scale(0.98);
+  }
+
+  .add-button:active {
+    transform: scale(0.95);
+  }
+
+  .qty-btn:active {
+    transform: scale(0.9);
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Custom scrollbar untuk product grid */
+.product-grid::-webkit-scrollbar,
+.bg-white.overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
+}
+
+.product-grid::-webkit-scrollbar-track,
+.bg-white.overflow-y-auto::-webkit-scrollbar-track {
+  background: var(--pos-border);
+  border-radius: 3px;
+}
+
+.product-grid::-webkit-scrollbar-thumb,
+.bg-white.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: var(--pos-brand-primary);
+  border-radius: 3px;
+}
+
+.product-grid::-webkit-scrollbar-thumb:hover,
+.bg-white.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: var(--pos-brand-primary);
+  box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.2);
+}
+
+
+/* Scroll untuk ProductGrid jika diberi max-height */
+.product-grid-scrollable {
+  max-height: 600px;
+  overflow-y: auto;
+}
+

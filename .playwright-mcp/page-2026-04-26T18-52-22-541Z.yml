@@ -1,0 +1,38 @@
+- generic [ref=e6]:
+  - generic [ref=e10]:
+    - generic [ref=e11]:
+      - img "Slide 1" [ref=e12]
+      - img "Slide 2" [ref=e13]
+      - img "Slide 3" [ref=e14]
+    - generic [ref=e15]:
+      - button "Go to slide 1" [ref=e16]
+      - button "Go to slide 2" [ref=e17]
+      - button "Go to slide 3" [ref=e18]
+  - generic [ref=e20]:
+    - generic [ref=e21]:
+      - heading "Welcome to Vape Story" [level=1] [ref=e22]
+      - paragraph [ref=e23]: Login dulu masbro, biar bisa nikmatin semua fitur yang ada
+    - generic [ref=e24]:
+      - generic [ref=e25]:
+        - generic [ref=e26]: Email
+        - textbox "Email" [active] [ref=e27]:
+          - /placeholder: name@company.com
+      - generic [ref=e28]:
+        - generic [ref=e29]:
+          - generic [ref=e30]: Password
+          - link "Forgot password?" [ref=e31] [cursor=pointer]:
+            - /url: /forgot-password
+        - generic [ref=e32]:
+          - textbox "Password" [ref=e33]:
+            - /placeholder: Enter your password
+          - button "Show password" [ref=e34]:
+            - img [ref=e35]
+      - generic [ref=e39] [cursor=pointer]:
+        - checkbox "Remember me" [ref=e40]:
+          - checkbox [ref=e41]
+        - generic [ref=e42]: Remember me
+      - button "Sign in" [ref=e43]
+      - generic [ref=e44]:
+        - text: Don't have an account?
+        - link "Sign up" [ref=e45] [cursor=pointer]:
+          - /url: /register
