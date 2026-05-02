@@ -27,14 +27,14 @@ class ProductController extends Controller
 
         if ($search) {
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('code', 'like', "%{$search}%");
+                $q->where('name', 'ilike', "%{$search}%")
+                  ->orWhere('code', 'ilike', "%{$search}%");
             });
         }
 
         $products = $query->get();
         $categories = Category::orderBy('name')->get();
-        $selectedCategory = $categorySlug ? Category::where('slug', $categorySlug)->first() : null;
+        $selectedCategory = $categories->firstWhere('slug', $categorySlug);
 
         return Inertia::render('POS/ProductPos', [
             'products' => $products,
