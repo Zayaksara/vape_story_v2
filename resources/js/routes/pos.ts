@@ -18,12 +18,16 @@ export default {
   transactions: {
     today: {
       url: (params?: { date?: string }) => {
-        const query = params?.date ? `?date=${params.date}` : '';
-        return `/pos/transactions/today${query}`;
+        const query = new URLSearchParams();
+        if (params?.date) query.set('date', params.date);
+        const queryString = query.toString();
+        return `/pos/transactions/today${queryString ? `?${queryString}` : ''}`;
       },
       data: (params?: { date?: string }) => {
-        const query = params?.date ? `?date=${params.date}` : '';
-        return `/pos/transactions/today/data${query}`;
+        const query = new URLSearchParams();
+        if (params?.date) query.set('date', params.date);
+        const queryString = query.toString();
+        return `/pos/transactions/today/data${queryString ? `?${queryString}` : ''}`;
       },
     },
   },
