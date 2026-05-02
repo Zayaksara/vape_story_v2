@@ -4,6 +4,12 @@ export interface Category {
   slug: string
 }
 
+export interface Brand {
+  id: string
+  name: string
+  logo?: string
+}
+
 export interface Product {
   id: string
   name: string
@@ -11,6 +17,8 @@ export interface Product {
   price: number
   stock: number
   category_id: string
+  brand_id?: string
+  brand?: Brand
   brand_logo?: string
   volume?: string
   image_url?: string
@@ -32,7 +40,7 @@ export interface Discount {
   expires_at?: string
 }
 
-export type PaymentMethod = 'cash' | 'debit' | 'qris' | 'ewallet'
+export type PaymentMethod = 'cash' | 'e_wallet' | 'bank_transfer' | 'qris'
 
 export interface Transaction {
   id: string
@@ -49,6 +57,56 @@ export interface Transaction {
   change?: number
   created_at: string
   status: 'success' | 'failed' | 'pending'
+}
+
+export interface TransactionItem {
+  id: string
+  transaction_id: string
+  product_id: string
+  batch_id?: string
+  quantity: number
+  unit_price: number
+  discount: number
+  total: number
+  product?: {
+    id: string
+    name: string
+    code: string
+  }
+}
+
+export interface TransactionWithItems extends Omit<Transaction, 'items'> {
+  items: TransactionItem[]
+  cashier?: {
+    id: string
+    name: string
+  }
+}
+
+export interface DailySummary {
+  total_transactions: number
+  total_sales: number
+  total_items: number
+  payment_methods: {
+    cash: number
+    bank_transfer: number
+    qris: number
+    e_wallet: number
+  }
+}
+
+export interface ProductPageProps {
+  products: Product[]
+  categories: Category[]
+  selectedCategory?: Category | null
+  searchQuery?: string | null
+}
+
+export interface TransactionReportProps {
+  transactions: TransactionWithItems[]
+  summary: DailySummary
+  selectedDate: string
+  today: string
 }
 
 export interface PosPageProps {
