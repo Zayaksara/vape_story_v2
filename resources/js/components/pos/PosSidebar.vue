@@ -15,30 +15,25 @@ import {
 import pos from '@/routes/pos';
 import type { NavItem } from '@/types';
 
-// Check if routes are properly defined
-if (!pos?.dashboard?.index?.url) {
-  console.warn('POS routes not properly configured. Using fallback URLs.');
-}
-
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard POS',
-        href: pos.dashboard?.index?.url?.() || '/pos/dashboard',
+        href: pos.dashboard.index.url(),
         icon: LayoutGrid,
     },
     {
         title: 'Products',
-        href: '/pos/products', // TODO: create pos.products route
+        href: '/pos/products',
         icon: Package,
     },
     {
         title: 'Riwayat Transaksi',
-        href: '/pos/transactions', // TODO: create pos.transactions route
+        href: '/pos/transactions/today',
         icon: FileText,
     },
     {
         title: 'Return',
-        href: '/pos/returns', // TODO: create pos.returns route
+        href: '/pos/returns', // TODO: implement returns page
         icon: RotateCcw,
     },
 ];
