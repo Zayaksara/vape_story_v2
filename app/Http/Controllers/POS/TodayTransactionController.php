@@ -29,9 +29,9 @@ class TodayTransactionController extends Controller
             }),
             'payment_methods' => [
                 'cash' => $transactions->where('payment_method', 'cash')->count(),
-                'debit' => $transactions->where('payment_method', 'debit')->count(),
+                'bank_transfer' => $transactions->where('payment_method', 'bank_transfer')->count(),
                 'qris' => $transactions->where('payment_method', 'qris')->count(),
-                'ewallet' => $transactions->where('payment_method', 'ewallet')->count(),
+                'e_wallet' => $transactions->where('payment_method', 'e_wallet')->count(),
             ],
         ];
 
@@ -63,9 +63,9 @@ class TodayTransactionController extends Controller
             }),
             'payment_methods' => [
                 'cash' => $transactions->where('payment_method', 'cash')->count(),
-                'debit' => $transactions->where('payment_method', 'debit')->count(),
+                'bank_transfer' => $transactions->where('payment_method', 'bank_transfer')->count(),
                 'qris' => $transactions->where('payment_method', 'qris')->count(),
-                'ewallet' => $transactions->where('payment_method', 'ewallet')->count(),
+                'e_wallet' => $transactions->where('payment_method', 'e_wallet')->count(),
             ],
         ];
 
