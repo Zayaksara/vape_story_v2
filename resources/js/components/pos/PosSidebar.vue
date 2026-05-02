@@ -23,12 +23,12 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Products',
-        href: '/pos/products',
+        href: pos.products.index.url(),
         icon: Package,
     },
     {
         title: 'Riwayat Transaksi',
-        href: '/pos/transactions/today',
+        href: pos.transactions.today.url(),
         icon: FileText,
     },
     {
