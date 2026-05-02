@@ -8,9 +8,7 @@ import type { TransactionReportProps, TransactionWithItems, PaymentMethod } from
 import { Table, TableBody, TableCaption, TableCell, TableEmpty, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 
 const props = defineProps<TransactionReportProps>()
@@ -94,6 +92,9 @@ function refreshReport() {
     {
       preserveState: true,
       preserveScroll: true,
+      onError: () => {
+        isLoading.value = false
+      },
       onFinish: () => {
         isLoading.value = false
       },
@@ -189,7 +190,7 @@ onMounted(() => {
           variant="outline"
           size="sm"
           @click="navigateDate('next')"
-          :disabled="isLoading || currentDate === props.today"
+          :disabled="isLoading || new Date(currentDate) >= new Date(props.today)"
           class="gap-1"
         >
           Next
