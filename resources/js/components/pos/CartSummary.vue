@@ -15,12 +15,6 @@
       <span class="font-medium" :style="{ color: 'var(--pos-danger-text)' }">-{{ formatPrice(discountAmount) }}</span>
     </div>
 
-    <!-- Tax -->
-    <div class="flex items-center justify-between text-sm">
-      <span :style="{ color: 'var(--pos-text-light)' }">Pajak (10%)</span>
-      <span class="font-medium" :style="{ color: 'var(--pos-text-light)' }">{{ formatPrice(taxAmount) }}</span>
-    </div>
-
     <div class="my-2 border-t" :style="{ borderTopColor: 'var(--pos-border)' }" />
 
     <!-- Total -->

@@ -3,44 +3,45 @@
 namespace App\Http\Controllers\POS;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
-use App\Models\Product;
-use Illuminate\Http\Request;
+use App\Http\Requests\POS\ProductFilterRequest;
+use App\Services\POS\ProductService;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class ProductController extends Controller
 {
-    public function index(Request $request)
+    public function __construct(
+        private readonly ProductService $productService,
+    ) {}
+
+    public function index(ProductFilterRequest $request): Response
     {
-        $categorySlug = $request->query('category');
-        $search = $request->query('search');
+        $filters = $request->validated();
 
-        $query = Product::with(['category', 'brand', 'batches'])
-            ->active()
-            ->orderBy('name');
+        $categories       = $this->productService->getCategories();
+        $products         = $this->productService->getFilteredProducts($filters);
+        $units            = $this->productService->getAvailableUnits();
+        $selectedCategory = $this->productService->resolveSelectedCategory(
+            $categories,
+            $filters['category'] ?? null,
+            $filters['category_id'] ?? null,
+        );
 
-        if ($categorySlug) {
-            $query->whereHas('category', function ($q) use ($categorySlug) {
-                $q->where('slug', $categorySlug);
-            });
-        }
-
-        if ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'ilike', "%{$search}%")
-                  ->orWhere('code', 'ilike', "%{$search}%");
-            });
-        }
-
-        $products = $query->get();
-        $categories = Category::orderBy('name')->get();
-        $selectedCategory = $categories->firstWhere('slug', $categorySlug);
+        $user = $request->user();
 
         return Inertia::render('POS/ProductPos', [
-            'products' => $products,
-            'categories' => $categories,
-            'selectedCategory' => $selectedCategory,
-            'searchQuery' => $search,
+            'products'            => $products,
+            'categories'          => $categories,
+            'units'               => $units,
+            'selectedCategory'    => $selectedCategory,
+            'selectedStockStatus' => $filters['stock_status'] ?? null,
+            'selectedUnit'        => $filters['unit'] ?? null,
+            'searchQuery'         => $filters['search'] ?? null,
+            'cashier'             => [
+                'id'    => $user->id,
+                'name'  => $user->name,
+                'email' => $user->email,
+            ],
         ]);
     }
 }

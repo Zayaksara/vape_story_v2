@@ -39,11 +39,11 @@ const carouselImages = [
         <div
             class="flex min-h-screen items-center justify-center px-6 py-10 sm:px-8 lg:px-12"
         >
-            <div class="w-full max-w-[380px] space-y-6">
+            <div class="w-full max-w-380px space-y-6">
                 <div class="space-y-2 text-left">
                     <h1
                         v-if="title"
-                        class="text-3xl font-bold tracking-tight text-white"
+                        class="text-3xl font-bold tracking-tight text-black"
                     >
                         {{ title }}
                     </h1>

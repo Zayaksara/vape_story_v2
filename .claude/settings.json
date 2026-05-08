@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rtk pnpm *)",
+      "Bash(rtk grep *)",
+      "Bash(node -e \"console.log\\('?date=' + encodeURIComponent\\('2026-05-02'\\)\\)\")"
+    ]
+  }
+}

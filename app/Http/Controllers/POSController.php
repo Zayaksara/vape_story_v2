@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;    
 
 class POSController extends Controller
 {
@@ -29,7 +30,7 @@ class POSController extends Controller
         return Inertia::render('POS/dashboard', [
             'products' => $products,
             'categories' => $categories,
-            'cashier' => auth()->user(),
+            'cashier' => Auth::user(),
         ]);
     }
 
@@ -55,7 +56,7 @@ class POSController extends Controller
             // Create transaction
             $transaction = Transaction::create([
                 'invoice_number' => $invoiceNumber,
-                'cashier_id' => auth()->id(),
+                'cashier_id' => Auth::id(),
                 'subtotal' => $validated['total_amount'],
                 'discount_amount' => $validated['discount_amount'] ?? 0,
                 'tax_amount' => $validated['tax_amount'] ?? 0,

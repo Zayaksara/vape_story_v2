@@ -9,7 +9,7 @@
 
     <!-- Drawer -->
     <div
-      class="fixed right-0 top-0 h-[100dvh] w-full max-w-[320px] bg-white shadow-2xl transition-transform duration-300"
+      class="fixed right-0 top-0 h-100dvh w-full max-w-[320px] bg-white shadow-2xl transition-transform duration-300"
       :class="isOpen ? 'translate-x-0' : 'translate-x-full'"
     >
       <CartPanel
@@ -26,7 +26,7 @@
         @update-quantity="(...args) => $emit('update-quantity', ...args)"
         @clear-cart="$emit('clear-cart')"
         @process-payment="$emit('process-payment')"
-        @apply-discount="$emit('apply-discount', $event)"
+        @open-discount="$emit('open-discount')"
         @remove-discount="$emit('remove-discount')"
         @toggle-cart="$emit('update:modelValue', false)"
       />
@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { CartItem, Discount } from '@/types/pos'
+import type { CartItem } from '@/types/pos'
 import CartPanel from './CartPanel.vue'
 
 const props = defineProps<{
@@ -58,7 +58,7 @@ defineEmits<{
   'update-quantity': [productId: string, qty: number]
   'clear-cart': []
   'process-payment': []
-  'apply-discount': [discount: Discount]
+  'open-discount': []
   'remove-discount': []
 }>()
 

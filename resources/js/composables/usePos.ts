@@ -47,7 +47,7 @@ export function usePos(initialTrxId: string) {
       : raw
   })
   const taxBase = computed(() => subtotal.value - discountAmount.value)
-  const taxAmount = computed(() => Math.round(taxBase.value * 0.1))
+  const taxAmount = computed(() => 0)
   const total = computed(() => taxBase.value + taxAmount.value)
   const change = computed(() =>
     paymentMethod.value === 'cash'
@@ -156,10 +156,42 @@ export function usePos(initialTrxId: string) {
     isProcessing.value = true
 
     try {
-      // TODO: replace with Wayfinder route
-      await new Promise(r => setTimeout(r, 1000))
+      const payload = {
+        items: cart.value.map((item) => ({
+          product_id: item.product.id,
+          quantity: item.quantity,
+          unit_price: item.product.price,
+          discount: 0,
+          total: item.subtotal,
+        })),
+        subtotal_amount: subtotal.value,
+        total_amount: total.value,
+        paid_amount: paymentMethod.value === 'cash' ? cashReceived.value : total.value,
+        discount_amount: discountAmount.value,
+        tax_amount: 0,
+        payment_method: paymentMethod.value,
+      }
+
+      const response = await fetch('/pos/payment/process', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': (
+            document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement | null
+          )?.content ?? '',
+        },
+        body: JSON.stringify(payload),
+      })
+
+      if (!response.ok) {
+        const errorPayload = await response.json().catch(() => null)
+        throw new Error(errorPayload?.message ?? 'Pembayaran gagal diproses oleh server')
+      }
+
+      const result = await response.json()
       lastTransaction.value = {
-        id: transactionId.value,
+        id: result.sale?.id ?? transactionId.value,
         cashier_id: 0,
         cashier_name: 'Kasir',
         items: [...cart.value],

@@ -1,180 +1,213 @@
 <?php
-
 namespace Database\Seeders;
-
 use App\Models\Batch;
 use App\Models\Category;
 use App\Models\Product;
+use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
-
 class PosDemoSeeder extends Seeder
 {
+    // ==================== SMART THRESHOLD LOGIC ====================
+    // Produk vape banyak yang stoknya kecil dari awal (device 1-2 pcs).
+    // Threshold adaptif berdasarkan initial_stock agar alert tidak noise.
+    private function getMinThreshold(int $initialStock): int
+    {
+        if ($initialStock <= 2) return 0; // alert hanya saat habis
+        if ($initialStock <= 5) return 1;
+        return 2;
+    }
+
+    // ==================== STOCK DISTRIBUTION PER TYPE ====================
+    // Device (pod/mod): stok kecil, realistis 1-3 pcs per item
+    // Disposable: sedang, 1-10 pcs
+    // Liquid/Salt: bisa banyak, 5-50 pcs
+    // Coil/Accessories: sedang, 3-20 pcs
+    private function getInitialStock(string $type, \Faker\Generator $faker): int
+    {
+        return match($type) {
+            'pod', 'mod'  => $faker->randomElement([1, 1, 1, 2, 2, 3]),   // mayoritas 1
+            'disposable'  => rand(1, 10),
+            'liquid','salt'=> rand(5, 50),
+            'coil'        => rand(3, 20),
+            default       => rand(1, 10),
+        };
+    }
+
+    // ==================== CURRENT STOCK SIMULATION ====================
+    // Simulasi kondisi toko: ada yang habis, hampir habis, dan normal
+    // Disesuaikan per type agar realistis
+    private function getCurrentStock(int $initialStock, string $type, \Faker\Generator $faker): int
+    {
+        $roll = rand(1, 100);
+
+        // Device: 20% habis, 40% tinggal 1, sisanya masih ada
+        if (in_array($type, ['pod', 'mod'])) {
+            if ($roll <= 20) return 0;
+            if ($roll <= 60) return 1;
+            return $initialStock;
+        }
+
+        // Semua type lain: 10% habis, 25% stok tipis, sisanya normal
+        if ($roll <= 10) return 0;
+        if ($roll <= 35) return (int) max(1, round($initialStock * $faker->randomFloat(2, 0.1, 0.3)));
+        return (int) round($initialStock * $faker->randomFloat(2, 0.5, 1.0));
+    }
+
     public function run(): void
     {
-        // Create Categories
-        $categories = [
-            ['id' => Str::uuid(), 'name' => 'Freebase', 'slug' => 'freebase', 'is_active' => true],
-            ['id' => Str::uuid(), 'name' => 'Nicotine Salt', 'slug' => 'nicotine-salt', 'is_active' => true],
-            ['id' => Str::uuid(), 'name' => 'Pod Device', 'slug' => 'pod-device', 'is_active' => true],
-            ['id' => Str::uuid(), 'name' => 'Mod Device', 'slug' => 'mod-device', 'is_active' => true],
-            ['id' => Str::uuid(), 'name' => 'Liquid', 'slug' => 'liquid', 'is_active' => true],
+        $faker = Faker::create('id_ID');
+        $resetBeforeSeed = (bool) env('POS_SEED_RESET', false);
+
+        $multiplier   = max(1, (int) env('POS_SEED_MULTIPLIER', 1));
+        $productCount = (int) env('POS_SEED_PRODUCTS', 60 * $multiplier);
+        // Untuk device, batch idealnya 1. Untuk liquid/coil bisa lebih.
+        $maxBatchesPerProduct = max(2, (int) env('POS_SEED_MAX_BATCH', 4));
+
+        if ($resetBeforeSeed) {
+            Schema::disableForeignKeyConstraints();
+            DB::table('batches')->truncate();
+            DB::table('products')->truncate();
+            DB::table('categories')->truncate();
+            Schema::enableForeignKeyConstraints();
+        }
+
+        // ==================== CATEGORIES ====================
+        $categoriesData = [
+            ['name' => 'Freebase',           'slug' => 'freebase'],
+            ['name' => 'Nicotine Salt',       'slug' => 'nicotine-salt'],
+            ['name' => 'Pod Device',          'slug' => 'pod-device'],
+            ['name' => 'Mod Device',          'slug' => 'mod-device'],
+            ['name' => 'Disposable',          'slug' => 'disposable'],
+            ['name' => 'Coil & Accessories',  'slug' => 'coil-accessories'],
+        ];
+        $categories = [];
+        foreach ($categoriesData as $cat) {
+            $categories[] = Category::updateOrCreate(
+                ['slug' => $cat['slug']],
+                [
+                    'id'        => (string) Str::uuid(),
+                    'name'      => $cat['name'],
+                    'slug'      => $cat['slug'],
+                    'is_active' => true,
+                ]
+            );
+        }
+
+        // ==================== DATA POOL ====================
+        $brands = [
+            'Elf Bar', 'Geek Bar', 'Lost Vape', 'Vaporesso', 'Voopoo', 'OXVA', 'Uwell',
+            'Nasty Juice', 'Just Juice', 'Dinner Lady', 'Vampire Vape', 'Riyal',
+            'Relx', 'HQD', 'Vuse', 'Aspire', 'Smok', 'Innokin', 'Caliburn', 'Geekvape',
+        ];
+        $flavorBases = [
+            'Mango', 'Blue Razz', 'Strawberry', 'Watermelon', 'Grape', 'Pineapple',
+            'Kiwi', 'Apple', 'Banana', 'Mixed Berry', 'Lemon Mint', 'Peach Ice',
+            'Cola', 'Energy Drink', 'Menthol', 'Tobacco', 'Coffee', 'Vanilla',
+            'Lychee', 'Dragon Fruit', 'Blackcurrant', 'Cherry', 'Orange',
         ];
 
-        foreach ($categories as $cat) {
-            Category::create($cat);
-        }
-
-        // Get category IDs for products
-        $freebaseId = $categories[0]['id'];
-        $saltId = $categories[1]['id'];
-        $podId = $categories[2]['id'];
-        $modId = $categories[3]['id'];
-        $liquidId = $categories[4]['id'];
-
-        // Create Products
-        $products = [
-            [
-                'id' => Str::uuid(),
-                'name' => 'Nasty Juice Slow Blow',
-                'code' => 'NSB-001',
-                'category_id' => $freebaseId,
-                'flavor' => 'Pineapple Lime',
-                'base_price' => 180000,
-                'size_ml' => 60,
-                'nicotine_strength' => 3,
-                'is_active' => true,
-            ],
-            [
-                'id' => Str::uuid(),
-                'name' => 'Nasty Juice Bad Blood',
-                'code' => 'NBB-002',
-                'category_id' => $freebaseId,
-                'flavor' => 'Blackcurrant',
-                'base_price' => 180000,
-                'size_ml' => 60,
-                'nicotine_strength' => 3,
-                'is_active' => true,
-            ],
-            [
-                'id' => Str::uuid(),
-                'name' => 'Drip N Vape Mango',
-                'code' => 'DNV-003',
-                'category_id' => $saltId,
-                'flavor' => 'Sweet Mango',
-                'base_price' => 120000,
-                'size_ml' => 30,
-                'nicotine_strength' => 35,
-                'is_active' => true,
-            ],
-            [
-                'id' => Str::uuid(),
-                'name' => 'Drip N Vape Grape',
-                'code' => 'DNV-004',
-                'category_id' => $saltId,
-                'flavor' => 'Purple Grape',
-                'base_price' => 120000,
-                'size_ml' => 30,
-                'nicotine_strength' => 35,
-                'is_active' => true,
-            ],
-            [
-                'id' => Str::uuid(),
-                'name' => 'Vaporesso XROS 3',
-                'code' => 'VPX-005',
-                'category_id' => $podId,
-                'flavor' => 'Device Only',
-                'base_price' => 350000,
-                'size_ml' => 0,
-                'nicotine_strength' => 0,
-                'is_active' => true,
-            ],
-            [
-                'id' => Str::uuid(),
-                'name' => 'Voopoo Drag X',
-                'code' => 'VPD-006',
-                'category_id' => $modId,
-                'flavor' => 'Device Only',
-                'base_price' => 650000,
-                'size_ml' => 0,
-                'nicotine_strength' => 0,
-                'is_active' => true,
-            ],
-            [
-                'id' => Str::uuid(),
-                'name' => 'Elf Bar BC5000',
-                'code' => 'EBB-007',
-                'category_id' => $podId,
-                'flavor' => 'Blue Razz Ice',
-                'base_price' => 150000,
-                'size_ml' => 10,
-                'nicotine_strength' => 50,
-                'is_active' => true,
-            ],
-            [
-                'id' => Str::uuid(),
-                'name' => 'Geek Bar Meloso',
-                'code' => 'GBM-008',
-                'category_id' => $podId,
-                'flavor' => 'Strawberry Banana',
-                'base_price' => 160000,
-                'size_ml' => 10,
-                'nicotine_strength' => 50,
-                'is_active' => true,
-            ],
-            [
-                'id' => Str::uuid(),
-                'name' => 'Just Juice Berry Blast',
-                'code' => 'JJB-009',
-                'category_id' => $liquidId,
-                'flavor' => 'Mixed Berries',
-                'base_price' => 130000,
-                'size_ml' => 60,
-                'nicotine_strength' => 6,
-                'is_active' => true,
-            ],
-            [
-                'id' => Str::uuid(),
-                'name' => 'Just Juice Tropical',
-                'code' => 'JJT-010',
-                'category_id' => $liquidId,
-                'flavor' => 'Mango Pineapple',
-                'base_price' => 130000,
-                'size_ml' => 60,
-                'nicotine_strength' => 6,
-                'is_active' => true,
-            ],
+        $categoryRules = [
+            $categories[0]->id => ['type' => 'liquid',     'price' => [120000, 195000], 'nic' => [3,6],   'size' => [60,100]],
+            $categories[1]->id => ['type' => 'salt',       'price' => [95000,  165000], 'nic' => [20,50], 'size' => [30,50]],
+            $categories[2]->id => ['type' => 'pod',        'price' => [220000, 450000], 'nic' => [0,0],   'size' => [0]],
+            $categories[3]->id => ['type' => 'mod',        'price' => [450000, 1250000],'nic' => [0,0],   'size' => [0]],
+            $categories[4]->id => ['type' => 'disposable', 'price' => [125000, 280000], 'nic' => [35,50], 'size' => [10,20]],
+            $categories[5]->id => ['type' => 'coil',       'price' => [45000,  120000], 'nic' => [0,0],   'size' => [0]],
         ];
 
-        foreach ($products as $prod) {
-            Product::create($prod);
-        }
+        $products = [];
 
-        // Create Batches for each product
-        foreach ($products as $prod) {
-            // Batch 1 - Good stock, cukai tahun ini
-            Batch::create([
-                'id' => Str::uuid(),
-                'product_id' => $prod['id'],
-                'lot_number' => 'LOT-'.strtoupper(Str::random(6)),
-                'stock_quantity' => rand(20, 100),
-                'expired_date' => now()->addMonths(rand(6, 12)),
-                'cost_price' => $prod['base_price'] * 0.7,
-                'cukai_year' => (int) now()->format('Y'),
-                'is_promo' => false,
+        // ==================== GENERATE PRODUCTS ====================
+        for ($i = 1; $i <= $productCount; $i++) {
+            $category = $categories[array_rand($categories)];
+            $rule     = $categoryRules[$category->id];
+            $brand    = $brands[array_rand($brands)];
+            $flavor   = $flavorBases[array_rand($flavorBases)];
+            $suffix   = strtoupper(Str::random(2));
+
+            if (in_array($rule['type'], ['pod', 'mod'])) {
+                $name = "{$brand} " . ['XROS','Drag','Argus','Centaurus','Aegis','Luxe','Target','T200'][rand(0,7)] . " {$suffix}";
+            } elseif ($rule['type'] === 'disposable') {
+                $name = "{$brand} " . ['BC5000','Meloso','Crystal','Pulse','6000','10000'][rand(0,5)] . " {$suffix}";
+            } else {
+                $name = "{$brand} {$flavor} {$suffix}";
+            }
+
+            $basePrice = round(rand($rule['price'][0], $rule['price'][1]) / 5000) * 5000;
+
+            $size = $rule['size'][0] === 0
+                ? 0
+                : $faker->randomElement([$rule['size'][0], $rule['size'][1], rand($rule['size'][0], $rule['size'][1])]);
+
+            $nic = ($rule['nic'][0] === 0 && $rule['nic'][1] === 0)
+                ? 0
+                : $faker->randomElement([$rule['nic'][0], $rule['nic'][1], rand($rule['nic'][0], $rule['nic'][1])]);
+
+            // ── Smart Threshold ──────────────────────────────────────────
+            // Stock langsung di batch tanpa initial_stock & minimum_stock
+            // Sesuaikan dengan migration schema yang ada
+            $initialStock = $this->getInitialStock($rule['type'], $faker);
+            $minimumStock = $this->getMinThreshold($initialStock);
+            // ─────────────────────────────────────────────────────────────
+
+            $product = Product::create([
+                'id'                => (string) Str::uuid(),
+                'code'              => strtoupper(substr($brand, 0, 3)) . '-' . str_pad($i, 4, '0', STR_PAD_LEFT),
+                'name'              => $name,
+                'category_id'       => $category->id,
+                'brand_id'          => null,
+                'flavor'            => in_array($rule['type'], ['pod','mod','coil']) ? 'Device Only' : $flavor,
+                'base_price'        => $basePrice,
+                'size_ml'           => $size,
+                'battery_mah'       => in_array($rule['type'], ['pod', 'mod'])
+                    ? $faker->randomElement([650, 1000, 1500, 2000, 3000])
+                    : null,
+                'nicotine_strength' => $nic,
+                'initial_stock'     => $initialStock,   // basis smart threshold
+                'minimum_stock'     => $minimumStock,   // dihitung dari initial_stock
+                'is_active'         => true,
+                'description'       => "Produk {$brand} varian {$flavor} generated seed.",
             ]);
 
-            // Batch 2 - Old cukai year (for promo testing)
-            Batch::create([
-                'id' => Str::uuid(),
-                'product_id' => $prod['id'],
-                'lot_number' => 'LOT-'.strtoupper(Str::random(6)),
-                'stock_quantity' => rand(5, 15),
-                'expired_date' => now()->subMonths(2), // Sudah lewat
-                'cost_price' => $prod['base_price'] * 0.7,
-                'cukai_year' => (int) now()->subYear()->format('Y'), // Tahun lalu
-                'is_promo' => true,
-            ]);
+            $products[] = ['model' => $product, 'type' => $rule['type'], 'initialStock' => $initialStock];
         }
+
+        // ==================== GENERATE BATCHES ====================
+        foreach ($products as $item) {
+            $product      = $item['model'];
+            $type         = $item['type'];
+            $initialStock = $item['initialStock'];
+
+            // Device idealnya 1 batch saja, produk lain bisa lebih
+            $maxBatch   = in_array($type, ['pod', 'mod']) ? 1 : $maxBatchesPerProduct;
+            $batchCount = rand(1, $maxBatch);
+
+            for ($batchIndex = 1; $batchIndex <= $batchCount; $batchIndex++) {
+                // Stock per batch disesuaikan type & initial_stock produk
+                $stockQty = $this->getCurrentStock($initialStock, $type, $faker);
+
+                $isPromo     = $faker->boolean(30);
+                $expiredDate = $isPromo
+                    ? now()->addDays(rand(-60, 45))
+                    : now()->addDays(rand(60, 540));
+
+                Batch::create([
+                    'id'             => (string) Str::uuid(),
+                    'product_id'     => $product->id,
+                    'lot_number'     => 'LOT-' . strtoupper(Str::random(8)),
+                    'stock_quantity' => $stockQty,
+                    'expired_date'   => $expiredDate,
+                    'cost_price'     => (int) round($product->base_price * $faker->randomFloat(2, 0.58, 0.78)),
+                    'cukai_year'     => (int) ($isPromo ? now()->subYear()->format('Y') : now()->format('Y')),
+                    'is_promo'       => $isPromo,
+                ]);
+            }
+        }
+
+        $this->command->info('✅ Seed POS selesai: ' . $productCount . ' produk, multiplier ' . $multiplier . 'x');
+        $this->command->info('Tip env: POS_SEED_MULTIPLIER=2 | POS_SEED_PRODUCTS=120 | POS_SEED_MAX_BATCH=5 | POS_SEED_RESET=true');
     }
 }

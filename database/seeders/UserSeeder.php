@@ -28,10 +28,20 @@ class UserSeeder extends Seeder
                 'role' => UserRole::CASHIER,
                 'email_verified_at' => now(),
             ],
+            [
+                'name' => 'Cashier',
+                'email' => 'cashier@vape.com',
+                'password' => bcrypt('cashier123'),
+                'role' => UserRole::CASHIER,
+                'email_verified_at' => now(),
+            ],
         ];
 
         foreach ($users as $userData) {
-            User::create($userData);
+            User::updateOrCreate(
+                ['email' => $userData['email']],
+                $userData
+            );
         }
     }
 }

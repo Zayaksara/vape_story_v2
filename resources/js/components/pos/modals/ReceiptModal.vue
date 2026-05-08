@@ -15,51 +15,6 @@
                     backgroundColor: 'var(--pos-border-focus, #14b8a6)',
                 }"
             >
-                <!-- Print Button -->
-                <div class="absolute top-2 right-2">
-                    <button
-                        class="flex h-8 w-8 items-center justify-center rounded-lg bg-white/80 text-gray-600 transition-all hover:bg-white hover:text-gray-800 active:scale-95"
-                        @click="printReceipt"
-                        :disabled="isPrinting"
-                        aria-label="Print receipt"
-                    >
-                        <svg
-                            v-if="!isPrinting"
-                            class="h-4 w-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
-                            />
-                        </svg>
-                        <svg
-                            v-else
-                            class="h-4 w-4 animate-spin"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                        >
-                            <circle
-                                class="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                                stroke-width="4"
-                            />
-                            <path
-                                class="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                            />
-                        </svg>
-                    </button>
-                </div>
-
                 <!-- Receipt content -->
                 <div
                     :style="{ backgroundColor: 'var(--pos-bg-primary, #1e293b)' }"
@@ -195,14 +150,6 @@
                         </div>
                         <div class="flex justify-between text-xs">
                             <span :style="{ color: 'var(--pos-text-primary)' }"
-                                >Pajak</span
-                            >
-                            <span>{{
-                                formatPrice(transaction?.tax_amount || 0)
-                            }}</span>
-                        </div>
-                        <div class="flex justify-between text-xs">
-                            <span :style="{ color: 'var(--pos-text-primary)' }"
                                 >Metode</span
                             >
                             <span class="capitalize">{{
@@ -288,7 +235,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import type { Transaction } from '@/types/pos';
 
 const props = defineProps<{
@@ -300,34 +246,8 @@ const emit = defineEmits<{
     (e: 'update:modelValue', value: boolean): void;
 }>();
 
-const isPrinting = ref(false);
-
 function close() {
     emit('update:modelValue', false);
-}
-
-function printReceipt() {
-    isPrinting.value = true;
-
-    // Hide the modal overlay and buttons for printing
-    const modal = document.querySelector('.receipt-modal');
-    const printBtn = modal?.querySelector('[aria-label="Print receipt"]');
-    const closeBtn = modal?.querySelector('button[aria-label="Close"]');
-
-    if (printBtn) {
-        (printBtn as HTMLElement).style.display = 'none';
-    }
-
-    // Trigger print after a short delay to ensure DOM updates
-    setTimeout(() => {
-        window.print();
-        isPrinting.value = false;
-
-        // Restore button visibility after printing
-        if (printBtn) {
-            (printBtn as HTMLElement).style.display = 'flex';
-        }
-    }, 100);
 }
 
 function formatPrice(price: number): string {

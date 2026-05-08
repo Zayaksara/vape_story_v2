@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Routing\Exceptions\UrlGenerationException;
 
 class Product extends Model
 {
@@ -66,7 +67,7 @@ class Product extends Model
     // ==================== SCOPES & HELPERS ====================
     public function scopeActive($query)
     {
-        return $query->where('is_active', true);
+        return $query->where('is_active', 1);
     }
 
     public function scopeLowStock($query, $threshold = 20)

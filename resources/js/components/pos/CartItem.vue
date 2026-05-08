@@ -53,7 +53,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
             </svg>
           </button>
-          <span class="w-8 text-center text-xs font-medium">{{ item.quantity }}</span>
+          <span class="w-8 text-center text-xs font-medium text-black">{{ item.quantity }}</span>
           <button
             class="flex h-6 w-6 items-center justify-center rounded-r-lg transition-colors hover:bg-gray-100"
             :style="{

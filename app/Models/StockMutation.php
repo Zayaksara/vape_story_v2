@@ -40,11 +40,11 @@ class StockMutation extends Model
 
     public function scopeOut($query)
     {
-        return $query->where('mutation_type', MutationType::OUT);
+        return $query->where('mutation_type', MutationType::SALE);
     }
 
     public function scopeIn($query)
     {
-        return $query->where('mutation_type', MutationType::IN);
+        return $query->where('mutation_type', MutationType::RESTOCK);
     }
 }

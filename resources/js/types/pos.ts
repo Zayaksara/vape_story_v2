@@ -17,6 +17,7 @@ export interface Product {
   price: number
   stock: number
   category_id: string
+  category?: Category
   brand_id?: string
   brand?: Brand
   brand_logo?: string
@@ -44,6 +45,7 @@ export type PaymentMethod = 'cash' | 'e_wallet' | 'bank_transfer' | 'qris'
 
 export interface Transaction {
   id: string
+  invoice_number: string
   cashier_id: number
   cashier_name: string
   items: CartItem[]
@@ -96,9 +98,21 @@ export interface DailySummary {
 }
 
 export interface ProductPageProps {
-  products: Product[]
+  products: {
+    data: Product[]
+    current_page: number
+    last_page: number
+    per_page: number
+    total: number
+    next_page_url: string | null
+    prev_page_url: string | null
+    links: Array<{ url: string | null; label: string; active: boolean }>
+  }
   categories: Category[]
+  units: string[]
   selectedCategory?: Category | null
+  selectedStockStatus?: string | null
+  selectedUnit?: string | null
   searchQuery?: string | null
 }
 

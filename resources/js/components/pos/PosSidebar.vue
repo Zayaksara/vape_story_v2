@@ -45,7 +45,11 @@ const mainNavItems: NavItem[] = [
             <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton size="lg" as-child>
-                        <Link :href="pos.dashboard.index.url()">
+                        <Link
+                            :href="pos.dashboard.index.url()"
+                            :preserve-state="false"
+                            :preserve-scroll="false"
+                        >
                             <AppLogo />
                         </Link>
                     </SidebarMenuButton>
@@ -57,7 +61,11 @@ const mainNavItems: NavItem[] = [
             <SidebarMenu>
                 <SidebarMenuItem v-for="item in mainNavItems" :key="item.title">
                     <SidebarMenuButton as-child>
-                        <Link :href="item.href">
+                        <Link
+                            :href="item.href"
+                            :preserve-state="false"
+                            :preserve-scroll="false"
+                        >
                             <component :is="item.icon" />
                             <span>{{ item.title }}</span>
                         </Link>

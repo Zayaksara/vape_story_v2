@@ -4,8 +4,8 @@ namespace App\Enums;
 
 enum MutationType: string
 {
-    case RESTOCK = 'restock';
-    case SALE = 'sale';
-    case RETURN = 'return';     // kalau ada
-    case ADJUST = 'adjust';
+    case RESTOCK = 'in';
+    case SALE = 'out';
+    case RETURN = 'return';
+    case ADJUST = 'adjustment';
 }

@@ -38,9 +38,9 @@
   <!-- Main content -->
   <main class="flex flex-1 min-h-0 overflow-hidden">
     <!-- Left: Products -->
-    <div class="flex-1 min-h-0 flex flex-col bg-[var(--pos-bg-primary)] overflow-hidden">
+    <div class="flex-1 min-h-0 flex flex-col bg-(--pos-bg-primary) overflow-hidden">
       <!-- Search & Categories Section -->
-      <div class="border-b border-gray-300 bg-[var(--pos-bg-primary)] px-4 py-3.5">
+      <div class="border-b border-gray-300 bg-(--pos-bg-primary) px-4 py-3.5">
         <!-- Search bar -->
         <div class="mb-3">
           <PosSearch
@@ -62,10 +62,10 @@
               role="tab"
               :aria-selected="currentCategory === category.id"
               :aria-controls="`category-panel-${category.id}`"
-              class="category-pill whitespace-nowrap rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 min-h-[44px] flex items-center justify-center"
+              class="category-pill whitespace-nowrap rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 min-h-44px flex items-center justify-center"
               :style="{
-                backgroundColor: currentCategory === category.id ? 'var(--pos-brand-primary)' : '#ffffff',
-                color: currentCategory === category.id ? '#ffffff' : 'var(--pos-text-secondary)',
+                backgroundColor: currentCategory === category.id ? 'var(--pos-brand-primary)' : 'var(--pos-bg-secondary)',
+                color: currentCategory === category.id ? 'var(--pos-text-inverse)' : 'var(--pos-text-secondary)',
                 borderColor: currentCategory === category.id ? 'var(--pos-brand-primary)' : 'var(--pos-border)',
                 boxShadow: currentCategory === category.id ? '0 2px 8px rgba(20, 184, 166, 0.25)' : 'none'
               }"
@@ -75,8 +75,8 @@
               <span
                 class="ml-2 rounded-full px-2 py-0.5 text-xs font-bold tabular-nums"
                 :style="{
-                  backgroundColor: currentCategory === category.id ? 'rgba(255,255,255,0.25)' : '#e5e7eb',
-                  color: currentCategory === category.id ? '#ffffff' : 'var(--pos-text-muted)'
+                  backgroundColor: currentCategory === category.id ? 'rgba(255,255,255,0.25)' : 'var(--pos-border)',
+                  color: currentCategory === category.id ? 'var(--pos-text-inverse)' : 'var(--pos-text-muted)'
                 }"
               >
                 {{ category.id ? (productCounts[category.id] || 0) : props.products.length }}
@@ -100,7 +100,7 @@
 
     <!-- Right:Panel (desktop) -->
     <aside class="hidden w-80 border border-(--pos-border) bg-(--pos-bg-primary) lg:flex flex-col min-h-0">
-      <div class="flex-1 min-h-0 overflow-hidden pb-4">
+      <div class="flex-1 overflow-hidden pb-4">
         <CartPanel
           :cart="cart"
           :subtotal="subtotal"
@@ -116,7 +116,7 @@
           @clear-cart="clearCart"
           @process-payment="isPaymentModalOpen = true"
           @toggle-cart="isCartDrawerOpen = !isCartDrawerOpen"
-          @apply-discount="applyDiscount"
+          @open-discount="isDiscountModalOpen = true"
           @remove-discount="removeDiscount"
         />
       </div>
@@ -140,7 +140,7 @@
     @update-quantity="updateQuantity"
     @clear-cart="clearCart"
     @process-payment="isPaymentModalOpen = true"
-    @apply-discount="applyDiscount"
+    @open-discount="isDiscountModalOpen = true"
     @remove-discount="removeDiscount"
   />
 
@@ -180,6 +180,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { router } from '@inertiajs/vue3'
 
 // Import components
 import CartDrawer from '@/components/pos/CartDrawer.vue'
@@ -210,7 +211,6 @@ const {
   discount,
   paymentMethod,
   cashReceived,
-  transactionId,
   isProcessing,
   lastTransaction,
   toast,
@@ -296,10 +296,7 @@ async function handlePaymentConfirm({ method, cashReceived: received }: { method
     await processPayment()
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Payment failed'
-    showToast({
-      message: error.value,
-      type: 'error'
-    })
+    
   } finally {
     isLoading.value = false
   }
@@ -307,6 +304,7 @@ async function handlePaymentConfirm({ method, cashReceived: received }: { method
 
 function handleCloseReceipt() {
   resetTransaction()
+  router.reload({ only: ['products'] })
 }
 
 onMounted(() => {

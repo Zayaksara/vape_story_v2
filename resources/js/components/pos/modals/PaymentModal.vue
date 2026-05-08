@@ -95,18 +95,7 @@
         </div>
 
         <!-- Other Electronic Methods (Debit/E-Wallet) -->
-        <div v-else class="mb-5">
-          <div class="flex flex-col items-center justify-center rounded-xl border-2 border-border p-6 text-center"
-               :style="{ backgroundColor: 'var(--pos-bg-secondary)' }">
-            <CreditCard class="h-12 w-12 mb-3 text-primary" />
-            <p class="text-sm font-medium mb-1 text-foreground">
-              {{ paymentMethodLabel }}
-            </p>
-            <p class="text-xs text-muted-foreground">
-              Arahkan pelanggan untuk pembayaran non-tunai
-            </p>
-          </div>
-        </div>
+
       </div>
 
       <!-- Action Buttons -->
@@ -156,8 +145,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
-import { QrCode, CreditCard, Banknote, Wallet } from 'lucide-vue-next'
+
+import { QrCode, CreditCard, Banknote, eWallet } from 'lucide-vue-next'
 
 const props = defineProps<{
   modelValue: boolean
@@ -173,9 +162,6 @@ const emit = defineEmits<{
 const cashInput = ref<HTMLInputElement | null>(null)
 const localMethod = ref<PaymentMethod>('cash')
 const localCashReceived = ref<number>(0)
-
-// Quick presets in Indonesian Rupiah (common amounts)
-const cashPresets = [10000, 20000, 50000, 100000, 200000, 500000]
 
 watch(
   () => props.modelValue,
@@ -200,9 +186,9 @@ const change = computed(() =>
 const paymentMethodLabel = computed(() => {
   const labels: Record<PaymentMethod, string> = {
     cash: 'Cash',
-    debit: 'Debit Card',
+    bank_transfer: 'bank transfer',
     qris: 'QRIS',
-    ewallet: 'E-Wallet'
+    e_wallet: 'e_Wallet'
   }
   return labels[localMethod.value]
 })

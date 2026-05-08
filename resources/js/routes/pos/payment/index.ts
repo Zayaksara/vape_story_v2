@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\POS\ProcessPaymentController::process
- * @see app/Http/Controllers/POS/ProcessPaymentController.php:13
+ * @see app/Http/Controllers/POS/ProcessPaymentController.php:16
  * @route '/pos/payment/process'
  */
 export const process = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ process.definition = {
 
 /**
 * @see \App\Http\Controllers\POS\ProcessPaymentController::process
- * @see app/Http/Controllers/POS/ProcessPaymentController.php:13
+ * @see app/Http/Controllers/POS/ProcessPaymentController.php:16
  * @route '/pos/payment/process'
  */
 process.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ process.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\POS\ProcessPaymentController::process
- * @see app/Http/Controllers/POS/ProcessPaymentController.php:13
+ * @see app/Http/Controllers/POS/ProcessPaymentController.php:16
  * @route '/pos/payment/process'
  */
 process.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -35,7 +35,7 @@ process.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
     /**
 * @see \App\Http\Controllers\POS\ProcessPaymentController::process
- * @see app/Http/Controllers/POS/ProcessPaymentController.php:13
+ * @see app/Http/Controllers/POS/ProcessPaymentController.php:16
  * @route '/pos/payment/process'
  */
     const processForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -45,7 +45,7 @@ process.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
             /**
 * @see \App\Http\Controllers\POS\ProcessPaymentController::process
- * @see app/Http/Controllers/POS/ProcessPaymentController.php:13
+ * @see app/Http/Controllers/POS/ProcessPaymentController.php:16
  * @route '/pos/payment/process'
  */
         processForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

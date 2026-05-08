@@ -108,8 +108,8 @@ const methods = [
         color: '#10B981',
     },
     {
-        key: 'debit' as PaymentMethod,
-        label: 'Debit',
+        key: 'bank_transfer' as PaymentMethod,
+        label: 'Bank Transfer',
         color: '#3B82F6',
     },
     {
@@ -118,7 +118,7 @@ const methods = [
         color: '#8B5CF6',
     },
     {
-        key: 'ewallet' as PaymentMethod,
+        key: 'e_wallet' as PaymentMethod,
         label: 'E-Wallet',
         color: '#F59E0B',
     },
@@ -128,11 +128,11 @@ function getIconPath(method: PaymentMethod): string {
     switch (method) {
         case 'cash':
             return 'M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z';
-        case 'debit':
+        case 'bank_transfer':
             return 'M2 5h20v14a2 2 0 01-2 2H4a2 2 0 01-2-2V7a2 2 0 012-2zM2 10h20';
         case 'qris':
             return 'M3 3h7v7H3V3zm11 0h7v7h-7V3zM3 14h7v7H3v-7zm11 0h7v7h-7v-7z';
-        case 'ewallet':
+        case 'e_wallet':
             return 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z';
         default:
             return '';

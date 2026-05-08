@@ -12,9 +12,9 @@
     <div class="absolute right-3 top-3 z-10">
       <span
         class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
-        :class="stockBadgeClass"
+        :class="stockBadgeClass(product.stock)"
       >
-        {{ stockBadgeText }}
+        {{ stockBadgeText(product.stock) }}
       </span>
     </div>
 
@@ -86,8 +86,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { usePosProduct } from '@/composables/usePosProduct'
 import type { Product } from '@/types/pos'
+
+// ♻️ Reusing: usePosProduct composable for shared product logic
+const { formatPrice, stockBadgeClass, stockBadgeText } = usePosProduct()
 
 const props = defineProps<{
   product: Product
@@ -102,58 +105,5 @@ function handleAdd() {
     return
   }
   emit('add-to-cart', props.product)
-}
-
-const stockBadgeClass = computed(() => {
-  const stock = props.product.stock
-
-  if (typeof stock !== 'number' || isNaN(stock)) {
-    return 'bg-gray-100 text-gray-500'
-  }
-
-  if (stock <= 0) {
-    return 'bg-red-100 text-red-600'
-  }
-
-  if (stock <= 4) {
-    return 'bg-amber-100 text-amber-600'
-  }
-
-  if (stock <= 10) {
-    return 'bg-blue-100 text-blue-600'
-  }
-
-  return 'bg-gray-100 text-gray-600'
-})
-
-const stockBadgeText = computed(() => {
-  const stock = props.product.stock
-
-  if (typeof stock !== 'number' || isNaN(stock)) {
-    return '0 pcs'
-  }
-
-  if (stock <= 0) {
-    return 'Habis'
-  }
-
-  if (stock <= 4) {
-    return `Sisa ${stock}`
-  }
-
-  return `${stock} pcs`
-})
-
-function formatPrice(price: number): string {
-  if (typeof price !== 'number' || isNaN(price)) {
-    return 'Rp 0'
-  }
-
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(price)
 }
 </script>
