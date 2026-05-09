@@ -78,6 +78,7 @@ export interface TransactionItem {
 }
 
 export interface TransactionWithItems extends Omit<Transaction, 'items'> {
+  total_amount: number
   items: TransactionItem[]
   cashier?: {
     id: string

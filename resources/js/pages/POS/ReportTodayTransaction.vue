@@ -10,7 +10,8 @@ import {
   Package,
   Search,
   ChevronUp,
-  ChevronDown
+  ChevronDown,
+  X,
 } from 'lucide-vue-next'
 import type { TransactionReportProps, TransactionWithItems, PaymentMethod } from '@/types/pos'
 
@@ -160,13 +161,6 @@ const formattedDateTime = computed(() => {
   return `${dateStr} • ${timeStr}`
 })
 
-// Computed: sorted transactions
-const sortedTransactions = computed(() => {
-  return [...props.transactions].sort((a, b) => {
-    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  })
-})
-
 // Computed: filtered transactions
 const filteredTransactions = computed(() => {
   return props.transactions.filter(transaction => {
@@ -178,7 +172,7 @@ const filteredTransactions = computed(() => {
       transaction.payment_method === paymentFilter.value
 
     return matchSearch && matchPayment
-  })
+  }).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 })
 
 // Computed: statistics calculations
@@ -200,20 +194,22 @@ const totalItems = computed(() => {
 })
 
 const filteredTotal = computed(() => {
-  return filteredTransactions.value.reduce((sum, t) => sum + (t.tax_amount || 0), 0)
+  return filteredTransactions.value.reduce((sum, t) => sum + (t.total_amount || 0), 0)
 })
 
-// Get status color
-function getStatusColor(status: string): { bg: string; text: string } {
+// Get status classes
+function getStatusClasses(status: string): string[] {
   switch (status) {
-    case 'success':
-      return { bg: 'bg-green-100', text: 'text-green-700' }
+    case 'completed':
+      return ['bg-green-100', 'text-green-700']
     case 'pending':
-      return { bg: 'bg-amber-100', text: 'text-amber-700' }
-    case 'failed':
-      return { bg: 'bg-red-100', text: 'text-red-700' }
+      return ['bg-amber-100', 'text-amber-700']
+    case 'refunded':
+      return ['bg-blue-100', 'text-blue-700']
+    case 'void':
+      return ['bg-red-100', 'text-red-700']
     default:
-      return { bg: 'bg-gray-100', text: 'text-gray-700' }
+      return ['bg-gray-100', 'text-gray-700']
   }
 }
 
@@ -362,7 +358,7 @@ function handleExport() {
                     style="color: var(--pos-text-light);"
                     @click="searchQuery = ''"
                 >
-                  <ChevronRight class="h-3.5 w-3.5" />
+                  <X :size="12" />
                 </button>
               </div>
 
@@ -402,7 +398,7 @@ function handleExport() {
                 </TableRow>
 
                 <!-- Transaction rows -->
-                <template v-for="transaction in sortedTransactions" :key="transaction.id">
+                <template v-for="transaction in filteredTransactions" :key="transaction.id">
                   <!-- Main row -->
                   <TableRow
                     class="cursor-pointer transition-all duration-300 hover:bg-teal-500/5"
@@ -430,12 +426,12 @@ function handleExport() {
                       <span class="text-xs" style="color: var(--pos-text-muted);">{{ transaction.cashier?.name || '-' }}</span>
                     </TableCell>
                     <TableCell class="py-3 px-3 text-right">
-                      <span class="text-xs font-bold" style="color: var(--pos-text-primary);">{{ formatPrice(transaction.tax_amount || 0) }}</span>
+                      <span class="text-xs font-bold" style="color: var(--pos-text-primary);">{{ formatPrice(transaction.total_amount || 0) }}</span>
                     </TableCell>
                     <TableCell class="py-3 px-3 text-center">
                       <span
                         class="rounded-full px-2.5 py-0.5 text-xs font-semibold"
-                        :style="getStatusColor(transaction.status)"
+                        :class="getStatusClasses(transaction.status)"
                       >
                         {{ transaction.status }}
                       </span>
@@ -464,7 +460,7 @@ function handleExport() {
                         </div>
                         <div class="h-px bg-[var(--pos-border)] my-2"></div>
                         <div class="flex justify-end">
-                          <span class="text-xs font-bold" style="color: var(--pos-brand-primary);">Total: {{ formatPrice(transaction.tax_amount || 0) }}</span>
+                          <span class="text-xs font-bold" style="color: var(--pos-brand-primary);">Total: {{ formatPrice(transaction.total_amount || 0) }}</span>
                         </div>
                       </div>
                     </TableCell>
