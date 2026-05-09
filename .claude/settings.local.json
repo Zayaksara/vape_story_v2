@@ -5,7 +5,12 @@
       "Bash(git:*)",
       "Bash(php:*)",
       "Bash(grep:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(gh pr create --title 'fix: correct timezone, amount field, and filter logic in ReportTodayTransaction' --body ' *)",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_click",
+      "mcp__plugin_playwright_playwright__browser_snapshot",
+      "mcp__plugin_playwright_playwright__browser_type"
     ]
   }
 }

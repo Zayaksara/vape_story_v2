@@ -1,0 +1,230 @@
+- generic [ref=e4]:
+  - main [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - button "Toggle sidebar" [ref=e8]:
+          - img [ref=e9]
+        - img "Story Vape Logo" [ref=e12]
+        - heading "Vape Story" [level=1] [ref=e14]
+      - generic [ref=e17]: Selamat datang, Cashier
+    - generic [ref=e19]:
+      - heading "Manajemen Produk" [level=1] [ref=e22]
+      - tabpanel [ref=e25]:
+        - generic [ref=e27]:
+          - generic [ref=e28]:
+            - img [ref=e30]
+            - generic [ref=e33]:
+              - paragraph [ref=e34]: 7 Jenis
+              - paragraph [ref=e35]: Stok tersedia
+          - generic [ref=e36]:
+            - img [ref=e38]
+            - generic [ref=e40]:
+              - paragraph [ref=e41]: 3 Jenis
+              - paragraph [ref=e42]: Stok segera habis (3-9 pcs)
+          - generic [ref=e43]:
+            - img [ref=e45]
+            - generic [ref=e49]:
+              - paragraph [ref=e50]: 1 Jenis
+              - paragraph [ref=e51]: Stok habis (0 pcs)
+          - generic [ref=e52]:
+            - img [ref=e54]
+            - generic [ref=e58]:
+              - paragraph [ref=e59]: 7 Jenis
+              - paragraph [ref=e60]: Total produk
+        - generic [ref=e62]:
+          - button "Semua 7" [ref=e63]:
+            - text: Semua
+            - generic [ref=e64]: "7"
+          - button "Coil & Accessories 0" [ref=e65]:
+            - img [ref=e66]
+            - text: Coil & Accessories
+            - generic [ref=e70]: "0"
+          - button "Disposable 7" [ref=e71]:
+            - img [ref=e72]
+            - text: Disposable
+            - generic [ref=e76]: "7"
+          - button "Freebase 0" [ref=e77]:
+            - img [ref=e78]
+            - text: Freebase
+            - generic [ref=e82]: "0"
+          - button "Mod Device 0" [ref=e83]:
+            - img [ref=e84]
+            - text: Mod Device
+            - generic [ref=e88]: "0"
+          - button "Nicotine Salt 0" [ref=e89]:
+            - img [ref=e90]
+            - text: Nicotine Salt
+            - generic [ref=e94]: "0"
+          - button "Pod Device 0" [ref=e95]:
+            - img [ref=e96]
+            - text: Pod Device
+            - generic [ref=e100]: "0"
+        - generic [ref=e102]:
+          - generic [ref=e104]:
+            - img
+            - textbox "Cari produk, kode, flavor…" [ref=e105]
+          - combobox [ref=e106]:
+            - generic: Disposable
+            - img
+          - combobox [ref=e107]:
+            - generic: Semua Status
+            - img
+          - generic [ref=e108] [cursor=pointer]: Filter Aktif ✕
+        - generic [ref=e109]:
+          - table [ref=e111]:
+            - rowgroup [ref=e112]:
+              - row "Image Code Name Brand Category Flavor Nicotine Size (ml) Base Price Stock Status" [ref=e113]:
+                - columnheader "Image" [ref=e114]
+                - columnheader "Code" [ref=e115]
+                - columnheader "Name" [ref=e116]
+                - columnheader "Brand" [ref=e117]
+                - columnheader "Category" [ref=e118]
+                - columnheader "Flavor" [ref=e119]
+                - columnheader "Nicotine" [ref=e120]
+                - columnheader "Size (ml)" [ref=e121]
+                - columnheader "Base Price" [ref=e122]
+                - columnheader "Stock" [ref=e123]
+                - columnheader "Status" [ref=e124]
+                - columnheader [ref=e125]
+            - rowgroup [ref=e126]:
+              - row "AP ASP-0048 Aspire Pulse BV — Disposable Vanilla 46.00 mg 10.00 ml Rp 205.000 0 unit Habis" [ref=e127] [cursor=pointer]:
+                - cell "AP" [ref=e128]:
+                  - generic [ref=e130]: AP
+                - cell "ASP-0048" [ref=e131]
+                - cell "Aspire Pulse BV" [ref=e132]
+                - cell "—" [ref=e133]
+                - cell "Disposable" [ref=e134]
+                - cell "Vanilla" [ref=e135]
+                - cell "46.00 mg" [ref=e136]
+                - cell "10.00 ml" [ref=e137]
+                - cell "Rp 205.000" [ref=e138]
+                - cell "0 unit" [ref=e139]:
+                  - generic [ref=e140]:
+                    - generic [ref=e141]: "0"
+                    - generic [ref=e142]: unit
+                - cell "Habis" [ref=e143]
+                - cell [ref=e144]:
+                  - button [ref=e146]:
+                    - img [ref=e147]
+              - row "C1 CAL-0032 Caliburn 10000 75 — Disposable Peach Ice 44.00 mg 20.00 ml Rp 150.000 44 unit Tersedia" [ref=e150] [cursor=pointer]:
+                - cell "C1" [ref=e151]:
+                  - generic [ref=e153]: C1
+                - cell "CAL-0032" [ref=e154]
+                - cell "Caliburn 10000 75" [ref=e155]
+                - cell "—" [ref=e156]
+                - cell "Disposable" [ref=e157]
+                - cell "Peach Ice" [ref=e158]
+                - cell "44.00 mg" [ref=e159]
+                - cell "20.00 ml" [ref=e160]
+                - cell "Rp 150.000" [ref=e161]
+                - cell "44 unit" [ref=e162]:
+                  - generic [ref=e163]:
+                    - generic [ref=e164]: "44"
+                    - generic [ref=e165]: unit
+                - cell "Tersedia" [ref=e168]
+                - cell [ref=e169]:
+                  - button [ref=e171]:
+                    - img [ref=e172]
+              - row "H6 HQD-0047 HQD 6000 UU — Disposable Pineapple 47.00 mg 10.00 ml Rp 260.000 4 unit Stok Tipis" [ref=e175] [cursor=pointer]:
+                - cell "H6" [ref=e176]:
+                  - generic [ref=e178]: H6
+                - cell "HQD-0047" [ref=e179]
+                - cell "HQD 6000 UU" [ref=e180]
+                - cell "—" [ref=e181]
+                - cell "Disposable" [ref=e182]
+                - cell "Pineapple" [ref=e183]
+                - cell "47.00 mg" [ref=e184]
+                - cell "10.00 ml" [ref=e185]
+                - cell "Rp 260.000" [ref=e186]
+                - cell "4 unit" [ref=e187]:
+                  - generic [ref=e188]:
+                    - generic [ref=e189]: "4"
+                    - generic [ref=e190]: unit
+                - cell "Stok Tipis" [ref=e193]
+                - cell [ref=e194]:
+                  - button [ref=e196]:
+                    - img [ref=e197]
+              - row "OP OXV-0015 OXVA Pulse GN — Disposable Cherry 36.00 mg 20.00 ml Rp 235.000 6 unit Stok Tipis" [ref=e200] [cursor=pointer]:
+                - cell "OP" [ref=e201]:
+                  - generic [ref=e203]: OP
+                - cell "OXV-0015" [ref=e204]
+                - cell "OXVA Pulse GN" [ref=e205]
+                - cell "—" [ref=e206]
+                - cell "Disposable" [ref=e207]
+                - cell "Cherry" [ref=e208]
+                - cell "36.00 mg" [ref=e209]
+                - cell "20.00 ml" [ref=e210]
+                - cell "Rp 235.000" [ref=e211]
+                - cell "6 unit" [ref=e212]:
+                  - generic [ref=e213]:
+                    - generic [ref=e214]: "6"
+                    - generic [ref=e215]: unit
+                - cell "Stok Tipis" [ref=e218]
+                - cell [ref=e219]:
+                  - button [ref=e221]:
+                    - img [ref=e222]
+              - row "UP UWE-0041 Uwell Pulse KE — Disposable Lemon Mint 35.00 mg 20.00 ml Rp 130.000 2 unit Stok Tipis" [ref=e225] [cursor=pointer]:
+                - cell "UP" [ref=e226]:
+                  - generic [ref=e228]: UP
+                - cell "UWE-0041" [ref=e229]
+                - cell "Uwell Pulse KE" [ref=e230]
+                - cell "—" [ref=e231]
+                - cell "Disposable" [ref=e232]
+                - cell "Lemon Mint" [ref=e233]
+                - cell "35.00 mg" [ref=e234]
+                - cell "20.00 ml" [ref=e235]
+                - cell "Rp 130.000" [ref=e236]
+                - cell "2 unit" [ref=e237]:
+                  - generic [ref=e238]:
+                    - generic [ref=e239]: "2"
+                    - generic [ref=e240]: unit
+                - cell "Stok Tipis" [ref=e243]
+                - cell [ref=e244]:
+                  - button [ref=e246]:
+                    - img [ref=e247]
+              - row "VM VUS-0027 Vuse Meloso KE — Disposable Strawberry 38.00 mg 10.00 ml Rp 260.000 3 unit Stok Tipis" [ref=e250] [cursor=pointer]:
+                - cell "VM" [ref=e251]:
+                  - generic [ref=e253]: VM
+                - cell "VUS-0027" [ref=e254]
+                - cell "Vuse Meloso KE" [ref=e255]
+                - cell "—" [ref=e256]
+                - cell "Disposable" [ref=e257]
+                - cell "Strawberry" [ref=e258]
+                - cell "38.00 mg" [ref=e259]
+                - cell "10.00 ml" [ref=e260]
+                - cell "Rp 260.000" [ref=e261]
+                - cell "3 unit" [ref=e262]:
+                  - generic [ref=e263]:
+                    - generic [ref=e264]: "3"
+                    - generic [ref=e265]: unit
+                - cell "Stok Tipis" [ref=e268]
+                - cell [ref=e269]:
+                  - button [ref=e271]:
+                    - img [ref=e272]
+              - row "VP VUS-0042 Vuse Pulse Q8 — Disposable Vanilla 42.00 mg 10.00 ml Rp 215.000 18 unit Stok Tipis" [ref=e275] [cursor=pointer]:
+                - cell "VP" [ref=e276]:
+                  - generic [ref=e278]: VP
+                - cell "VUS-0042" [ref=e279]
+                - cell "Vuse Pulse Q8" [ref=e280]
+                - cell "—" [ref=e281]
+                - cell "Disposable" [ref=e282]
+                - cell "Vanilla" [ref=e283]
+                - cell "42.00 mg" [ref=e284]
+                - cell "10.00 ml" [ref=e285]
+                - cell "Rp 215.000" [ref=e286]
+                - cell "18 unit" [ref=e287]:
+                  - generic [ref=e288]:
+                    - generic [ref=e289]: "18"
+                    - generic [ref=e290]: unit
+                - cell "Stok Tipis" [ref=e293]
+                - cell [ref=e294]:
+                  - button [ref=e296]:
+                    - img [ref=e297]
+          - paragraph [ref=e301]:
+            - text: Menampilkan
+            - strong [ref=e302]: "7"
+            - text: dari
+            - strong [ref=e303]: "7"
+            - text: produk
+  - region "Notifications alt+T":
+    - list

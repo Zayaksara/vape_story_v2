@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class TransactionItem extends Model
 {
@@ -26,6 +27,17 @@ class TransactionItem extends Model
         'discount' => 'decimal:2',
         'total' => 'decimal:2',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($item) {
+            if (empty($item->id)) {
+                $item->id = (string) Str::uuid();
+            }
+        });
+    }
 
     public function product()
     {

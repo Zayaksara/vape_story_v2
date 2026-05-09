@@ -36,6 +36,17 @@ class ProductService
     }
 
     /**
+     * Get all active products for summary/count cards.
+     */
+    public function getAllProductsForCounts(): Collection
+    {
+        return Product::with(['category', 'brand', 'batches'])
+            ->where('is_active', 1)
+            ->orderBy('name')
+            ->get();
+    }
+
+    /**
      * Resolve the selected category from slug or id.
      */
     public function resolveSelectedCategory(Collection $categories, ?string $slug, ?int $id): mixed
@@ -62,14 +73,14 @@ class ProductService
             ->where('size_ml', '>', 0)
             ->distinct()
             ->pluck('size_ml')
-            ->map(fn ($v) => ($v == (int) $v ? (int) $v : (float) $v) . 'ml');
+            ->map(fn ($v) => ($v == (int) $v ? (int) $v : (float) $v).'ml');
 
         $batteryUnits = Product::where('is_active', 1)
             ->whereNotNull('battery_mah')
             ->where('battery_mah', '>', 0)
             ->distinct()
             ->pluck('battery_mah')
-            ->map(fn ($v) => (int) $v . 'mAh');
+            ->map(fn ($v) => (int) $v.'mAh');
 
         return $sizeUnits
             ->merge($batteryUnits)
@@ -87,7 +98,7 @@ class ProductService
     public function parseUnit(string $unit): array
     {
         $numericValue = (float) $unit;
-        $unitType     = str_replace((string) $numericValue, '', $unit);
+        $unitType = str_replace((string) $numericValue, '', $unit);
 
         // Handle case where numeric loses the decimal (e.g. "60" from "60.0ml")
         if ($unitType === '') {
@@ -123,7 +134,7 @@ class ProductService
 
         $query->where(function ($q) use ($search) {
             $q->where('name', 'like', "%{$search}%")
-              ->orWhere('code', 'like', "%{$search}%");
+                ->orWhere('code', 'like', "%{$search}%");
         });
     }
 
@@ -133,10 +144,10 @@ class ProductService
         $totalStockSql = '(select coalesce(sum(stock_quantity), 0) from batches where batches.product_id = products.id)';
 
         match ($stockStatus) {
-            'tersedia'    => $query->whereRaw("{$totalStockSql} > 20"),
-            'habis'       => $query->whereRaw("{$totalStockSql} = 0"),
+            'tersedia' => $query->whereRaw("{$totalStockSql} > 20"),
+            'habis' => $query->whereRaw("{$totalStockSql} = 0"),
             'stok_rendah' => $query->whereRaw("{$totalStockSql} between 1 and 20"),
-            default      => null,
+            default => null,
         };
     }
 
@@ -150,7 +161,7 @@ class ProductService
 
         $query->where(function ($q) use ($numericValue, $unitType) {
             match ($unitType) {
-                'ml'  => $q->where('size_ml', $numericValue),
+                'ml' => $q->where('size_ml', $numericValue),
                 'mAh' => $q->where('battery_mah', $numericValue),
                 default => null,
             };

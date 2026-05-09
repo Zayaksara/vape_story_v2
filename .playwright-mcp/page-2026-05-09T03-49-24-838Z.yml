@@ -1,0 +1,292 @@
+- generic [ref=e4]:
+  - main [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - button "Toggle sidebar" [ref=e8]:
+          - img [ref=e9]
+        - img "Story Vape Logo" [ref=e12]
+        - heading "Vape Story" [level=1] [ref=e14]
+      - generic [ref=e17]: Selamat datang, Cashier
+    - generic [ref=e19]:
+      - heading "Manajemen Produk" [level=1] [ref=e22]
+      - tabpanel [ref=e25]:
+        - generic [ref=e27]:
+          - generic [ref=e28]:
+            - img [ref=e30]
+            - paragraph [ref=e34]: 52 Jenis
+          - generic [ref=e35]:
+            - img [ref=e37]
+            - paragraph [ref=e40]: 2 Jenis
+          - generic [ref=e41]:
+            - img [ref=e43]
+            - paragraph [ref=e48]: 2 Jenis
+          - generic [ref=e49]:
+            - img [ref=e51]
+            - generic [ref=e55]:
+              - paragraph [ref=e56]: 52 Jenis
+              - paragraph [ref=e57]: Total produk
+        - generic [ref=e59]:
+          - button "Semua 52" [ref=e60]:
+            - text: Semua
+            - generic [ref=e61]: "52"
+          - button "Coil & Accessories 12" [ref=e62]:
+            - img [ref=e63]
+            - text: Coil & Accessories
+            - generic [ref=e67]: "12"
+          - button "Disposable 7" [ref=e68]:
+            - img [ref=e69]
+            - text: Disposable
+            - generic [ref=e73]: "7"
+          - button "Freebase 12" [ref=e74]:
+            - img [ref=e75]
+            - text: Freebase
+            - generic [ref=e79]: "12"
+          - button "Mod Device 6" [ref=e80]:
+            - img [ref=e81]
+            - text: Mod Device
+            - generic [ref=e85]: "6"
+          - button "Nicotine Salt 7" [ref=e86]:
+            - img [ref=e87]
+            - text: Nicotine Salt
+            - generic [ref=e91]: "7"
+          - button "Pod Device 8" [ref=e92]:
+            - img [ref=e93]
+            - text: Pod Device
+            - generic [ref=e97]: "8"
+        - generic [ref=e99]:
+          - generic [ref=e101]:
+            - img
+            - textbox "Cari produk, kode, flavor…" [ref=e102]
+          - combobox [ref=e103]:
+            - generic: Semua Kategori
+            - img
+          - combobox [ref=e104]:
+            - generic: Semua Status
+            - img
+        - generic [ref=e105]:
+          - table [ref=e107]:
+            - rowgroup [ref=e108]:
+              - row "Image Code Name Brand Category Flavor Nicotine Size (ml) Base Price Stock Status" [ref=e109]:
+                - columnheader "Image" [ref=e110]
+                - columnheader "Code" [ref=e111]
+                - columnheader "Name" [ref=e112]
+                - columnheader "Brand" [ref=e113]
+                - columnheader "Category" [ref=e114]
+                - columnheader "Flavor" [ref=e115]
+                - columnheader "Nicotine" [ref=e116]
+                - columnheader "Size (ml)" [ref=e117]
+                - columnheader "Base Price" [ref=e118]
+                - columnheader "Stock" [ref=e119]
+                - columnheader "Status" [ref=e120]
+                - columnheader [ref=e121]
+            - rowgroup [ref=e122]:
+              - row "AC ASP-0001 Aspire Coffee ZN — Nicotine Salt Coffee 50.00 mg 30.00 ml Rp 120.000 2 unit Stok Tipis" [ref=e123] [cursor=pointer]:
+                - cell "AC" [ref=e124]:
+                  - generic [ref=e126]: AC
+                - cell "ASP-0001" [ref=e127]
+                - cell "Aspire Coffee ZN" [ref=e128]
+                - cell "—" [ref=e129]
+                - cell "Nicotine Salt" [ref=e130]
+                - cell "Coffee" [ref=e131]
+                - cell "50.00 mg" [ref=e132]
+                - cell "30.00 ml" [ref=e133]
+                - cell "Rp 120.000" [ref=e134]
+                - cell "2 unit" [ref=e135]:
+                  - generic [ref=e136]:
+                    - generic [ref=e137]: "2"
+                    - generic [ref=e138]: unit
+                - cell "Stok Tipis" [ref=e141]
+                - cell [ref=e142]:
+                  - button [ref=e144]:
+                    - img [ref=e145]
+              - row "AP ASP-0048 Aspire Pulse BV — Disposable Vanilla 46.00 mg 10.00 ml Rp 205.000 0 unit Habis" [ref=e148] [cursor=pointer]:
+                - cell "AP" [ref=e149]:
+                  - generic [ref=e151]: AP
+                - cell "ASP-0048" [ref=e152]
+                - cell "Aspire Pulse BV" [ref=e153]
+                - cell "—" [ref=e154]
+                - cell "Disposable" [ref=e155]
+                - cell "Vanilla" [ref=e156]
+                - cell "46.00 mg" [ref=e157]
+                - cell "10.00 ml" [ref=e158]
+                - cell "Rp 205.000" [ref=e159]
+                - cell "0 unit" [ref=e160]:
+                  - generic [ref=e161]:
+                    - generic [ref=e162]: "0"
+                    - generic [ref=e163]: unit
+                - cell "Habis" [ref=e164]
+                - cell [ref=e165]:
+                  - button [ref=e167]:
+                    - img [ref=e168]
+              - row "C1 CAL-0032 Caliburn 10000 75 — Disposable Peach Ice 44.00 mg 20.00 ml Rp 150.000 44 unit Tersedia" [ref=e171] [cursor=pointer]:
+                - cell "C1" [ref=e172]:
+                  - generic [ref=e174]: C1
+                - cell "CAL-0032" [ref=e175]
+                - cell "Caliburn 10000 75" [ref=e176]
+                - cell "—" [ref=e177]
+                - cell "Disposable" [ref=e178]
+                - cell "Peach Ice" [ref=e179]
+                - cell "44.00 mg" [ref=e180]
+                - cell "20.00 ml" [ref=e181]
+                - cell "Rp 150.000" [ref=e182]
+                - cell "44 unit" [ref=e183]:
+                  - generic [ref=e184]:
+                    - generic [ref=e185]: "44"
+                    - generic [ref=e186]: unit
+                - cell "Tersedia" [ref=e189]
+                - cell [ref=e190]:
+                  - button [ref=e192]:
+                    - img [ref=e193]
+              - row "CA CAL-0001 Caliburn Aegis 0W — Mod Device Device Only 0.00 mg 0.00 ml Rp 1.140.000 0 unit Habis" [ref=e196] [cursor=pointer]:
+                - cell "CA" [ref=e197]:
+                  - generic [ref=e199]: CA
+                - cell "CAL-0001" [ref=e200]
+                - cell "Caliburn Aegis 0W" [ref=e201]
+                - cell "—" [ref=e202]
+                - cell "Mod Device" [ref=e203]
+                - cell "Device Only" [ref=e204]
+                - cell "0.00 mg" [ref=e205]
+                - cell "0.00 ml" [ref=e206]
+                - cell "Rp 1.140.000" [ref=e207]
+                - cell "0 unit" [ref=e208]:
+                  - generic [ref=e209]:
+                    - generic [ref=e210]: "0"
+                    - generic [ref=e211]: unit
+                - cell "Habis" [ref=e212]
+                - cell [ref=e213]:
+                  - button [ref=e215]:
+                    - img [ref=e216]
+              - row "CB CAL-0017 Caliburn Blue Razz BK — Coil & Accessories Device Only 0.00 mg 0.00 ml Rp 80.000 5 unit Stok Tipis" [ref=e219] [cursor=pointer]:
+                - cell "CB" [ref=e220]:
+                  - generic [ref=e222]: CB
+                - cell "CAL-0017" [ref=e223]
+                - cell "Caliburn Blue Razz BK" [ref=e224]
+                - cell "—" [ref=e225]
+                - cell "Coil & Accessories" [ref=e226]
+                - cell "Device Only" [ref=e227]
+                - cell "0.00 mg" [ref=e228]
+                - cell "0.00 ml" [ref=e229]
+                - cell "Rp 80.000" [ref=e230]
+                - cell "5 unit" [ref=e231]:
+                  - generic [ref=e232]:
+                    - generic [ref=e233]: "5"
+                    - generic [ref=e234]: unit
+                - cell "Stok Tipis" [ref=e237]
+                - cell [ref=e238]:
+                  - button [ref=e240]:
+                    - img [ref=e241]
+              - row "CV CAL-0019 Caliburn Vanilla ZG — Coil & Accessories Device Only 0.00 mg 0.00 ml Rp 85.000 5 unit Stok Tipis" [ref=e244] [cursor=pointer]:
+                - cell "CV" [ref=e245]:
+                  - generic [ref=e247]: CV
+                - cell "CAL-0019" [ref=e248]
+                - cell "Caliburn Vanilla ZG" [ref=e249]
+                - cell "—" [ref=e250]
+                - cell "Coil & Accessories" [ref=e251]
+                - cell "Device Only" [ref=e252]
+                - cell "0.00 mg" [ref=e253]
+                - cell "0.00 ml" [ref=e254]
+                - cell "Rp 85.000" [ref=e255]
+                - cell "5 unit" [ref=e256]:
+                  - generic [ref=e257]:
+                    - generic [ref=e258]: "5"
+                    - generic [ref=e259]: unit
+                - cell "Stok Tipis" [ref=e262]
+                - cell [ref=e263]:
+                  - button [ref=e265]:
+                    - img [ref=e266]
+              - row "DL DIN-0045 Dinner Lady Blackcurrant 0C — Freebase Blackcurrant 3.00 mg 79.00 ml Rp 170.000 22 unit Tersedia" [ref=e269] [cursor=pointer]:
+                - cell "DL" [ref=e270]:
+                  - generic [ref=e272]: DL
+                - cell "DIN-0045" [ref=e273]
+                - cell "Dinner Lady Blackcurrant 0C" [ref=e274]
+                - cell "—" [ref=e275]
+                - cell "Freebase" [ref=e276]
+                - cell "Blackcurrant" [ref=e277]
+                - cell "3.00 mg" [ref=e278]
+                - cell "79.00 ml" [ref=e279]
+                - cell "Rp 170.000" [ref=e280]
+                - cell "22 unit" [ref=e281]:
+                  - generic [ref=e282]:
+                    - generic [ref=e283]: "22"
+                    - generic [ref=e284]: unit
+                - cell "Tersedia" [ref=e287]
+                - cell [ref=e288]:
+                  - button [ref=e290]:
+                    - img [ref=e291]
+              - row "EB ELF-0038 Elf Bar Strawberry X6 — Coil & Accessories Device Only 0.00 mg 0.00 ml Rp 100.000 10 unit Stok Tipis" [ref=e294] [cursor=pointer]:
+                - cell "EB" [ref=e295]:
+                  - generic [ref=e297]: EB
+                - cell "ELF-0038" [ref=e298]
+                - cell "Elf Bar Strawberry X6" [ref=e299]
+                - cell "—" [ref=e300]
+                - cell "Coil & Accessories" [ref=e301]
+                - cell "Device Only" [ref=e302]
+                - cell "0.00 mg" [ref=e303]
+                - cell "0.00 ml" [ref=e304]
+                - cell "Rp 100.000" [ref=e305]
+                - cell "10 unit" [ref=e306]:
+                  - generic [ref=e307]:
+                    - generic [ref=e308]: "10"
+                    - generic [ref=e309]: unit
+                - cell "Stok Tipis" [ref=e312]
+                - cell [ref=e313]:
+                  - button [ref=e315]:
+                    - img [ref=e316]
+              - row "EB ELF-0008 Elf Bar T200 MN — Pod Device Device Only 0.00 mg 0.00 ml Rp 365.000 40 unit Tersedia" [ref=e319] [cursor=pointer]:
+                - cell "EB" [ref=e320]:
+                  - generic [ref=e322]: EB
+                - cell "ELF-0008" [ref=e323]
+                - cell "Elf Bar T200 MN" [ref=e324]
+                - cell "—" [ref=e325]
+                - cell "Pod Device" [ref=e326]
+                - cell "Device Only" [ref=e327]
+                - cell "0.00 mg" [ref=e328]
+                - cell "0.00 ml" [ref=e329]
+                - cell "Rp 365.000" [ref=e330]
+                - cell "40 unit" [ref=e331]:
+                  - generic [ref=e332]:
+                    - generic [ref=e333]: "40"
+                    - generic [ref=e334]: unit
+                - cell "Tersedia" [ref=e337]
+                - cell [ref=e338]:
+                  - button [ref=e340]:
+                    - img [ref=e341]
+              - row "GB GEE-0018 Geek Bar Aegis 1N — Pod Device Device Only 0.00 mg 0.00 ml Rp 230.000 2 unit Stok Tipis" [ref=e344] [cursor=pointer]:
+                - cell "GB" [ref=e345]:
+                  - generic [ref=e347]: GB
+                - cell "GEE-0018" [ref=e348]
+                - cell "Geek Bar Aegis 1N" [ref=e349]
+                - cell "—" [ref=e350]
+                - cell "Pod Device" [ref=e351]
+                - cell "Device Only" [ref=e352]
+                - cell "0.00 mg" [ref=e353]
+                - cell "0.00 ml" [ref=e354]
+                - cell "Rp 230.000" [ref=e355]
+                - cell "2 unit" [ref=e356]:
+                  - generic [ref=e357]:
+                    - generic [ref=e358]: "2"
+                    - generic [ref=e359]: unit
+                - cell "Stok Tipis" [ref=e362]
+                - cell [ref=e363]:
+                  - button [ref=e365]:
+                    - img [ref=e366]
+          - generic [ref=e369]:
+            - paragraph [ref=e370]:
+              - text: Menampilkan
+              - strong [ref=e371]: "10"
+              - text: dari
+              - strong [ref=e372]: "52"
+              - text: produk
+            - generic [ref=e373]:
+              - button [disabled] [ref=e374]:
+                - img [ref=e375]
+              - button "1" [disabled] [ref=e377]
+              - button "2" [disabled] [ref=e378]
+              - button "3" [disabled] [ref=e379]
+              - button "4" [disabled] [ref=e380]
+              - button "5" [disabled] [ref=e381]
+              - button "6" [disabled] [ref=e382]
+              - button [ref=e383]:
+                - img [ref=e384]
+  - region "Notifications alt+T":
+    - list

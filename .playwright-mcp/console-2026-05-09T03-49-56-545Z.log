@@ -1,0 +1,246 @@
+[     668ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/pos/dashboard:47
+[    1395ms] [WARNING] [Vue warn]: Unhandled error during execution of setup function 
+  at <CartPanel cart= [] subtotal=0 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 29385c4d3062cbf13c28ccb3a0d82cc1, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[    1415ms] ReferenceError: computed is not defined
+    at setup (http://[::1]:5173/resources/js/components/pos/CartPanel.vue?t=1778298390799:59:31)
+    at callWithErrorHandling (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:1895:17)
+    at setupStatefulComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:6734:23)
+    at setupComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:6710:35)
+    at mountComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5510:3)
+    at processComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5500:8)
+    at patch (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5295:28)
+    at mountChildren (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5407:49)
+    at mountElement (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5365:28)
+    at processElement (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5348:19)
+[    1425ms] [WARNING] [Vue warn]: Slot "default" invoked outside of the render function: this will not track dependencies used in the slot. Invoke the slot function inside the render function instead. 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 29385c4d3062cbf13c28ccb3a0d82cc1, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[    1468ms] [WARNING] [Vue warn]: Unhandled error during execution of setup function 
+  at <CartPanel cart= [] subtotal=0 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 29385c4d3062cbf13c28ccb3a0d82cc1, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[    1471ms] [WARNING] [Vue warn]: Unhandled error during execution of component update 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 29385c4d3062cbf13c28ccb3a0d82cc1, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[    1484ms] ReferenceError: computed is not defined
+    at setup (http://[::1]:5173/resources/js/components/pos/CartPanel.vue?t=1778298390799:59:31)
+    at callWithErrorHandling (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:1895:17)
+    at setupStatefulComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:6734:23)
+    at setupComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:6710:35)
+    at mountComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5510:3)
+    at processComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5500:8)
+    at patch (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5295:28)
+    at mountChildren (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5407:49)
+    at mountElement (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5365:28)
+    at processElement (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5348:19)
+[   73768ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/pos/products:47
+[   74342ms] [WARNING] [Vue warn]: Hydration attribute mismatch on JSHandle@node 
+  - rendered on server: disabled="true"
+  - expected on client: (not rendered)
+  Note: this mismatch is check-only. The DOM will not be rectified in production due to performance overhead.
+  You should fix the source of the mismatch. 
+  at <Primitive id="reka-tabs-v-0-content-produk" ref=fn<ref> as-child=false  ... > 
+  at <Presence present=true force-mount="" data-slot="tabs-content"  ... > 
+  at <TabsContent data-slot="tabs-content" class="flex-1 outline-none mt-0" value="produk"  ... > 
+  at <TabsContent value="produk" class="mt-0" > 
+  at <Primitive dir="ltr" data-orientation="horizontal" as-child=false  ... > 
+  at <TabsRoot data-slot="tabs" defaultValue="produk" onUpdate:modelValue=fn  ... > 
+  at <Tabs default-value="produk" class="w-full" > 
+  at <TooltipProvider delayDuration=0 disableHoverableContent=false disableClosingTrigger=false  ... > 
+  at <TooltipProvider> 
+  at <ProductPos errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/ProductPos, props: Object, url: /pos/products, version: 29385c4d3062cbf13c28ccb3a0d82cc1, sharedProps: Array(4)} initialComponent= {__name: ProductPos, props: Object, setup: , __hmrId: 5331497f, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/products:106
+[   74349ms] [ERROR] Hydration completed but contains mismatches. @ http://localhost:8000/pos/products:106
+[   74350ms] [WARNING] [Vue warn]: Hydration attribute mismatch on JSHandle@node 
+  - rendered on server: disabled="true"
+  - expected on client: (not rendered)
+  Note: this mismatch is check-only. The DOM will not be rectified in production due to performance overhead.
+  You should fix the source of the mismatch. 
+  at <Primitive id="reka-tabs-v-0-content-produk" ref=fn<ref> as-child=false  ... > 
+  at <Presence present=true force-mount="" data-slot="tabs-content"  ... > 
+  at <TabsContent data-slot="tabs-content" class="flex-1 outline-none mt-0" value="produk"  ... > 
+  at <TabsContent value="produk" class="mt-0" > 
+  at <Primitive dir="ltr" data-orientation="horizontal" as-child=false  ... > 
+  at <TabsRoot data-slot="tabs" defaultValue="produk" onUpdate:modelValue=fn  ... > 
+  at <Tabs default-value="produk" class="w-full" > 
+  at <TooltipProvider delayDuration=0 disableHoverableContent=false disableClosingTrigger=false  ... > 
+  at <TooltipProvider> 
+  at <ProductPos errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/ProductPos, props: Object, url: /pos/products, version: 29385c4d3062cbf13c28ccb3a0d82cc1, sharedProps: Array(4)} initialComponent= {__name: ProductPos, props: Object, setup: , __hmrId: 5331497f, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/products:106
+[   74353ms] [WARNING] [Vue warn]: Hydration attribute mismatch on JSHandle@node 
+  - rendered on server: disabled="true"
+  - expected on client: (not rendered)
+  Note: this mismatch is check-only. The DOM will not be rectified in production due to performance overhead.
+  You should fix the source of the mismatch. 
+  at <Primitive id="reka-tabs-v-0-content-produk" ref=fn<ref> as-child=false  ... > 
+  at <Presence present=true force-mount="" data-slot="tabs-content"  ... > 
+  at <TabsContent data-slot="tabs-content" class="flex-1 outline-none mt-0" value="produk"  ... > 
+  at <TabsContent value="produk" class="mt-0" > 
+  at <Primitive dir="ltr" data-orientation="horizontal" as-child=false  ... > 
+  at <TabsRoot data-slot="tabs" defaultValue="produk" onUpdate:modelValue=fn  ... > 
+  at <Tabs default-value="produk" class="w-full" > 
+  at <TooltipProvider delayDuration=0 disableHoverableContent=false disableClosingTrigger=false  ... > 
+  at <TooltipProvider> 
+  at <ProductPos errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/ProductPos, props: Object, url: /pos/products, version: 29385c4d3062cbf13c28ccb3a0d82cc1, sharedProps: Array(4)} initialComponent= {__name: ProductPos, props: Object, setup: , __hmrId: 5331497f, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/products:106
+[   74357ms] [WARNING] [Vue warn]: Hydration attribute mismatch on JSHandle@node 
+  - rendered on server: disabled="true"
+  - expected on client: (not rendered)
+  Note: this mismatch is check-only. The DOM will not be rectified in production due to performance overhead.
+  You should fix the source of the mismatch. 
+  at <Primitive id="reka-tabs-v-0-content-produk" ref=fn<ref> as-child=false  ... > 
+  at <Presence present=true force-mount="" data-slot="tabs-content"  ... > 
+  at <TabsContent data-slot="tabs-content" class="flex-1 outline-none mt-0" value="produk"  ... > 
+  at <TabsContent value="produk" class="mt-0" > 
+  at <Primitive dir="ltr" data-orientation="horizontal" as-child=false  ... > 
+  at <TabsRoot data-slot="tabs" defaultValue="produk" onUpdate:modelValue=fn  ... > 
+  at <Tabs default-value="produk" class="w-full" > 
+  at <TooltipProvider delayDuration=0 disableHoverableContent=false disableClosingTrigger=false  ... > 
+  at <TooltipProvider> 
+  at <ProductPos errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/ProductPos, props: Object, url: /pos/products, version: 29385c4d3062cbf13c28ccb3a0d82cc1, sharedProps: Array(4)} initialComponent= {__name: ProductPos, props: Object, setup: , __hmrId: 5331497f, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/products:106
+[   74363ms] [WARNING] [Vue warn]: Hydration attribute mismatch on JSHandle@node 
+  - rendered on server: disabled="true"
+  - expected on client: (not rendered)
+  Note: this mismatch is check-only. The DOM will not be rectified in production due to performance overhead.
+  You should fix the source of the mismatch. 
+  at <Primitive id="reka-tabs-v-0-content-produk" ref=fn<ref> as-child=false  ... > 
+  at <Presence present=true force-mount="" data-slot="tabs-content"  ... > 
+  at <TabsContent data-slot="tabs-content" class="flex-1 outline-none mt-0" value="produk"  ... > 
+  at <TabsContent value="produk" class="mt-0" > 
+  at <Primitive dir="ltr" data-orientation="horizontal" as-child=false  ... > 
+  at <TabsRoot data-slot="tabs" defaultValue="produk" onUpdate:modelValue=fn  ... > 
+  at <Tabs default-value="produk" class="w-full" > 
+  at <TooltipProvider delayDuration=0 disableHoverableContent=false disableClosingTrigger=false  ... > 
+  at <TooltipProvider> 
+  at <ProductPos errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/ProductPos, props: Object, url: /pos/products, version: 29385c4d3062cbf13c28ccb3a0d82cc1, sharedProps: Array(4)} initialComponent= {__name: ProductPos, props: Object, setup: , __hmrId: 5331497f, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/products:106
+[   74367ms] [WARNING] [Vue warn]: Hydration attribute mismatch on JSHandle@node 
+  - rendered on server: disabled="true"
+  - expected on client: (not rendered)
+  Note: this mismatch is check-only. The DOM will not be rectified in production due to performance overhead.
+  You should fix the source of the mismatch. 
+  at <Primitive id="reka-tabs-v-0-content-produk" ref=fn<ref> as-child=false  ... > 
+  at <Presence present=true force-mount="" data-slot="tabs-content"  ... > 
+  at <TabsContent data-slot="tabs-content" class="flex-1 outline-none mt-0" value="produk"  ... > 
+  at <TabsContent value="produk" class="mt-0" > 
+  at <Primitive dir="ltr" data-orientation="horizontal" as-child=false  ... > 
+  at <TabsRoot data-slot="tabs" defaultValue="produk" onUpdate:modelValue=fn  ... > 
+  at <Tabs default-value="produk" class="w-full" > 
+  at <TooltipProvider delayDuration=0 disableHoverableContent=false disableClosingTrigger=false  ... > 
+  at <TooltipProvider> 
+  at <ProductPos errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/ProductPos, props: Object, url: /pos/products, version: 29385c4d3062cbf13c28ccb3a0d82cc1, sharedProps: Array(4)} initialComponent= {__name: ProductPos, props: Object, setup: , __hmrId: 5331497f, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/products:106
+[  622667ms] [WARNING] Warning: `DialogContent` requires a `DialogTitle` for the component to be accessible for screen reader users.
+
+If you want to hide the `DialogTitle`, you can wrap it with our VisuallyHidden component.
+
+For more information, see https://www.reka-ui.com/docs/components/dialog.html#title @ http://localhost:8000/pos/products:106
+[  622676ms] [WARNING] Warning: Missing `Description` or `aria-describedby="undefined"` for DialogContent. @ http://localhost:8000/pos/products:106
+[  626127ms] [WARNING] [Vue warn]: Unhandled error during execution of setup function 
+  at <CartPanel cart= [] subtotal=0 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/ProductPos, props: Object, url: /pos/products, version: 29385c4d3062cbf13c28ccb3a0d82cc1, sharedProps: Array(4)} initialComponent= {__name: ProductPos, props: Object, setup: , __hmrId: 5331497f, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/products:106
+[  626141ms] [WARNING] [Vue warn]: Unhandled error during execution of component update 
+  at <Inertia initialPage= {component: POS/ProductPos, props: Object, url: /pos/products, version: 29385c4d3062cbf13c28ccb3a0d82cc1, sharedProps: Array(4)} initialComponent= {__name: ProductPos, props: Object, setup: , __hmrId: 5331497f, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/products:106
+[  626224ms] ReferenceError: computed is not defined
+    at setup (http://[::1]:5173/resources/js/components/pos/CartPanel.vue?t=1778299025969:59:31)
+    at callWithErrorHandling (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:1895:17)
+    at setupStatefulComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:6734:23)
+    at setupComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:6710:35)
+    at mountComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5510:3)
+    at processComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5500:8)
+    at patch (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5295:28)
+    at mountChildren (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5407:49)
+    at mountElement (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5365:28)
+    at processElement (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5348:19)
+[  794210ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/pos/dashboard:47
+[  795416ms] [WARNING] [Vue warn]: Unhandled error during execution of setup function 
+  at <CartPanel cart= [] subtotal=0 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 29385c4d3062cbf13c28ccb3a0d82cc1, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[  795500ms] ReferenceError: computed is not defined
+    at setup (http://[::1]:5173/resources/js/components/pos/CartPanel.vue?t=1778299025969:59:31)
+    at callWithErrorHandling (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:1895:17)
+    at setupStatefulComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:6734:23)
+    at setupComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:6710:35)
+    at mountComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5510:3)
+    at processComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5500:8)
+    at patch (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5295:28)
+    at mountChildren (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5407:49)
+    at mountElement (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5365:28)
+    at processElement (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5348:19)
+[  795513ms] [WARNING] [Vue warn]: Slot "default" invoked outside of the render function: this will not track dependencies used in the slot. Invoke the slot function inside the render function instead. 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 29385c4d3062cbf13c28ccb3a0d82cc1, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[  795561ms] [WARNING] [Vue warn]: Unhandled error during execution of setup function 
+  at <CartPanel cart= [] subtotal=0 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 29385c4d3062cbf13c28ccb3a0d82cc1, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[  795563ms] [WARNING] [Vue warn]: Unhandled error during execution of component update 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 29385c4d3062cbf13c28ccb3a0d82cc1, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[  795573ms] ReferenceError: computed is not defined
+    at setup (http://[::1]:5173/resources/js/components/pos/CartPanel.vue?t=1778299025969:59:31)
+    at callWithErrorHandling (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:1895:17)
+    at setupStatefulComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:6734:23)
+    at setupComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:6710:35)
+    at mountComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5510:3)
+    at processComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5500:8)
+    at patch (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5295:28)
+    at mountChildren (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5407:49)
+    at mountElement (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5365:28)
+    at processElement (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-w423G09s.js?v=c55f9d4b:5348:19)

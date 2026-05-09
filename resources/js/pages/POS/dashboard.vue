@@ -64,8 +64,8 @@
               :aria-controls="`category-panel-${category.id}`"
               class="category-pill whitespace-nowrap rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 min-h-44px flex items-center justify-center"
               :style="{
-                backgroundColor: currentCategory === category.id ? 'var(--pos-brand-primary)' : 'var(--pos-bg-secondary)',
-                color: currentCategory === category.id ? 'var(--pos-text-inverse)' : 'var(--pos-text-secondary)',
+                backgroundColor: currentCategory === category.id ? 'var(--pos-brand-primary)' : '#ffffff',
+                color: currentCategory === category.id ? '#ffffff' : 'var(--pos-text-secondary)',
                 borderColor: currentCategory === category.id ? 'var(--pos-brand-primary)' : 'var(--pos-border)',
                 boxShadow: currentCategory === category.id ? '0 2px 8px rgba(20, 184, 166, 0.25)' : 'none'
               }"
@@ -75,8 +75,8 @@
               <span
                 class="ml-2 rounded-full px-2 py-0.5 text-xs font-bold tabular-nums"
                 :style="{
-                  backgroundColor: currentCategory === category.id ? 'rgba(255,255,255,0.25)' : 'var(--pos-border)',
-                  color: currentCategory === category.id ? 'var(--pos-text-inverse)' : 'var(--pos-text-muted)'
+                  backgroundColor: currentCategory === category.id ? 'rgba(255,255,255,0.25)' : '#e5e7eb',
+                  color: currentCategory === category.id ? '#ffffff' : 'var(--pos-text-muted)'
                 }"
               >
                 {{ category.id ? (productCounts[category.id] || 0) : props.products.length }}

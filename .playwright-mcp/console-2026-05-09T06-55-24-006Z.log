@@ -1,0 +1,39 @@
+[    1058ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/pos/dashboard:47
+[    1800ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <DiscountModal model-value=false subtotal=0 applied-discount=null  ... > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[    1805ms] [ERROR] Hydration completed but contains mismatches. @ http://localhost:8000/pos/dashboard:106
+[    1808ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-fgt) 
+  at <DialogRoot data-slot="dialog" open=false onUpdate:open=fn > 
+  at <Dialog open=false onUpdate:open=fn<emitUpdate> > 
+  at <PaymentModal model-value=false total=0 is-processing=false  ... > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[    1815ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node (text) 
+- expected on client: Symbol(v-cmt) 
+  at <ReceiptModal model-value=false transaction=null onUpdate:modelValue=fn<handleCloseReceipt> > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[  226558ms] TypeError: cashInput.value?.focus is not a function
+    at http://[::1]:5173/resources/js/components/pos/modals/PaymentModal.vue?t=1778308829473:37:37
+[  460551ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Content) @ http://localhost:8000/pos/payment/process:0
+[  460564ms] [ERROR] Payment error: Payment processing failed: SQLSTATE[23502]: Not null violation: 7 ERROR:  null value in column "batch_id" of relation "transaction_items" violates not-null constraint
+DETAIL:  Failing row contains (e57bb0f1-ca33-40c1-8aea-df1cb74dda2c, ca7d43ab-c7a4-4d00-9d12-8ce64ad4da2e, d131f72e-203e-40e9-bdc5-f05a47f5705a, null, 1, 120000.00, 0.00, 120000.00, 2026-05-09 07:03:04, 2026-05-09 07:03:04). (Connection: pgsql, Host: 127.0.0.1, Port: 5432, Database: vapor, SQL: insert into "transaction_items" ("transaction_id", "product_id", "quantity", "unit_price", "discount", "total", "id", "updated_at", "created_at") values (ca7d43ab-c7a4-4d00-9d12-8ce64ad4da2e, d131f72e-203e-40e9-bdc5-f05a47f5705a, 1, 120000, 0, 120000, e57bb0f1-ca33-40c1-8aea-df1cb74dda2c, 2026-05-09 07:03:04, 2026-05-09 07:03:04)) @ http://localhost:8000/pos/dashboard:106

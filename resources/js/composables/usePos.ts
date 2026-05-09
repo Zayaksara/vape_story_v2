@@ -192,6 +192,7 @@ export function usePos(initialTrxId: string) {
       const result = await response.json()
       lastTransaction.value = {
         id: result.sale?.id ?? transactionId.value,
+        invoice_number: result.sale?.invoice_number ?? `INV-${String(result.sale?.id ?? transactionId.value).slice(-8).toUpperCase()}`,
         cashier_id: 0,
         cashier_name: 'Kasir',
         items: [...cart.value],

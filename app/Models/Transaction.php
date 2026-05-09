@@ -7,6 +7,7 @@ use App\Enums\TransactionStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Transaction extends Model
 {
@@ -38,6 +39,17 @@ class Transaction extends Model
         'payment_method' => PaymentMethod::class,
         'status' => TransactionStatus::class,
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($transaction) {
+            if (empty($transaction->id)) {
+                $transaction->id = (string) Str::uuid();
+            }
+        });
+    }
 
     public function cashier(): BelongsTo
     {

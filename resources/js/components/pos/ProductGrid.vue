@@ -53,8 +53,6 @@ import ProductCard from './ProductCard.vue'
 const props = defineProps<{
   products: Product[]
   loading?: boolean
-  searchQuery?: string
-  currentCategory?: string | null
   maxHeight?: number  // Optional: jika ingin scroll di dalam grid
 }>()
 
@@ -62,16 +60,7 @@ defineEmits<{
   'add-to-cart': [product: Product]
 }>()
 
-const filteredProducts = computed(() => {
-  return props.products.filter(p => {
-    const matchCategory =
-      !props.currentCategory || p.category_id === props.currentCategory
-    const matchSearch =
-      !props.searchQuery ||
-      p.name.toLowerCase().includes(props.searchQuery.toLowerCase()) ||
-      p.sku.toLowerCase().includes(props.searchQuery.toLowerCase())
-
-    return matchCategory && matchSearch
-  })
-})
+// Note: Filtering is now handled in parent component (dashboard.vue)
+// This component just displays the products it receives
+const filteredProducts = computed(() => props.products)
 </script>

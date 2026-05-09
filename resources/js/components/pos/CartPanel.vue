@@ -53,7 +53,7 @@
     </button>
     <!-- Cart items - scrollable area -->
     <div class="flex-1 overflow-hidden py-1 min-h-0">
-      <div class="max-h-[26rem] min-h-0 overflow-y-auto px-4">
+      <div class="h-full min-h-0 overflow-y-auto px-4">
         <div v-if="cart.length === 0" class="flex flex-col items-center justify-center py-20 text-center">
         <svg class="mb-3 h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />

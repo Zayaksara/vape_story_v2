@@ -1,0 +1,210 @@
+[    2227ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/login:47
+[   60372ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/pos/dashboard:47
+[   62462ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <DiscountModal model-value=false subtotal=0 applied-discount=null  ... > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[   62471ms] [ERROR] Hydration completed but contains mismatches. @ http://localhost:8000/pos/dashboard:106
+[   62475ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-fgt) 
+  at <DialogRoot data-slot="dialog" open=false onUpdate:open=fn > 
+  at <Dialog open=false onUpdate:open=fn<emitUpdate> > 
+  at <PaymentModal model-value=false total=0 is-processing=false  ... > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[   62481ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node (text) 
+- expected on client: Symbol(v-cmt) 
+  at <ReceiptModal model-value=false transaction=null onUpdate:modelValue=fn<handleCloseReceipt> > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[  134479ms] TypeError: cashInput.value?.focus is not a function
+    at http://[::1]:5173/resources/js/components/pos/modals/PaymentModal.vue?t=1778308829473:37:37
+[  196304ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Content) @ http://localhost:8000/pos/payment/process:0
+[  196311ms] [ERROR] Payment error: Payment processing failed: SQLSTATE[23502]: Not null violation: 7 ERROR:  null value in column "transaction_id" of relation "transaction_items" violates not-null constraint
+DETAIL:  Failing row contains (70d4b403-3df7-44c2-bcd6-e8971280f6a4, null, d131f72e-203e-40e9-bdc5-f05a47f5705a, null, 1, 120000.00, 0.00, 120000.00, 2026-05-09 06:51:20, 2026-05-09 06:51:20). (Connection: pgsql, Host: 127.0.0.1, Port: 5432, Database: vapor, SQL: insert into "transaction_items" ("transaction_id", "product_id", "quantity", "unit_price", "discount", "total", "updated_at", "created_at") values (?, d131f72e-203e-40e9-bdc5-f05a47f5705a, 1, 120000, 0, 120000, 2026-05-09 06:51:20, 2026-05-09 06:51:20)) @ http://localhost:8000/pos/dashboard:106
+[  329806ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/pos/dashboard:47
+[  330539ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <DiscountModal model-value=false subtotal=0 applied-discount=null  ... > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[  330544ms] [ERROR] Hydration completed but contains mismatches. @ http://localhost:8000/pos/dashboard:106
+[  330547ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-fgt) 
+  at <DialogRoot data-slot="dialog" open=false onUpdate:open=fn > 
+  at <Dialog open=false onUpdate:open=fn<emitUpdate> > 
+  at <PaymentModal model-value=false total=0 is-processing=false  ... > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[  330551ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node (text) 
+- expected on client: Symbol(v-cmt) 
+  at <ReceiptModal model-value=false transaction=null onUpdate:modelValue=fn<handleCloseReceipt> > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[  396334ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/pos/dashboard:47
+[  397791ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <DiscountModal model-value=false subtotal=0 applied-discount=null  ... > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[  397800ms] [ERROR] Hydration completed but contains mismatches. @ http://localhost:8000/pos/dashboard:106
+[  397804ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-fgt) 
+  at <DialogRoot data-slot="dialog" open=false onUpdate:open=fn > 
+  at <Dialog open=false onUpdate:open=fn<emitUpdate> > 
+  at <PaymentModal model-value=false total=0 is-processing=false  ... > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[  397809ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node (text) 
+- expected on client: Symbol(v-cmt) 
+  at <ReceiptModal model-value=false transaction=null onUpdate:modelValue=fn<handleCloseReceipt> > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[  402731ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/pos/dashboard:47
+[  403437ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <DiscountModal model-value=false subtotal=0 applied-discount=null  ... > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[  403443ms] [ERROR] Hydration completed but contains mismatches. @ http://localhost:8000/pos/dashboard:106
+[  403447ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-fgt) 
+  at <DialogRoot data-slot="dialog" open=false onUpdate:open=fn > 
+  at <Dialog open=false onUpdate:open=fn<emitUpdate> > 
+  at <PaymentModal model-value=false total=0 is-processing=false  ... > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[  403454ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node (text) 
+- expected on client: Symbol(v-cmt) 
+  at <ReceiptModal model-value=false transaction=null onUpdate:modelValue=fn<handleCloseReceipt> > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[  421664ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/pos/dashboard:47
+[  422558ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <DiscountModal model-value=false subtotal=0 applied-discount=null  ... > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[  422563ms] [ERROR] Hydration completed but contains mismatches. @ http://localhost:8000/pos/dashboard:106
+[  422566ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-fgt) 
+  at <DialogRoot data-slot="dialog" open=false onUpdate:open=fn > 
+  at <Dialog open=false onUpdate:open=fn<emitUpdate> > 
+  at <PaymentModal model-value=false total=0 is-processing=false  ... > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[  422572ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node (text) 
+- expected on client: Symbol(v-cmt) 
+  at <ReceiptModal model-value=false transaction=null onUpdate:modelValue=fn<handleCloseReceipt> > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[  436225ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/pos/dashboard:47
+[  437700ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <DiscountModal model-value=false subtotal=0 applied-discount=null  ... > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[  437716ms] [ERROR] Hydration completed but contains mismatches. @ http://localhost:8000/pos/dashboard:106
+[  437721ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-fgt) 
+  at <DialogRoot data-slot="dialog" open=false onUpdate:open=fn > 
+  at <Dialog open=false onUpdate:open=fn<emitUpdate> > 
+  at <PaymentModal model-value=false total=0 is-processing=false  ... > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106
+[  437731ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node (text) 
+- expected on client: Symbol(v-cmt) 
+  at <ReceiptModal model-value=false transaction=null onUpdate:modelValue=fn<handleCloseReceipt> > 
+  at <Dashboard errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-screen overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="Laravel" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: 1bc6286b6b045356bb493e04c122e1a9, sharedProps: Array(4)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:106

@@ -63,13 +63,15 @@ export interface Transaction {
 
 export interface TransactionItem {
   id: string
-  transaction_id: string
-  product_id: string
+  transaction_id?: string
+  product_id?: string
   batch_id?: string
   quantity: number
-  unit_price: number
-  discount: number
+  unit_price?: number
+  discount?: number
   total: number
+  hpp_total?: number
+  profit?: number
   product?: {
     id: string
     name: string
@@ -109,6 +111,7 @@ export interface ProductPageProps {
     links: Array<{ url: string | null; label: string; active: boolean }>
   }
   categories: Category[]
+  all_products: Product[]
   units: string[]
   selectedCategory?: Category | null
   selectedStockStatus?: string | null
@@ -121,6 +124,13 @@ export interface TransactionReportProps {
   summary: DailySummary
   selectedDate: string
   today: string
+  report_title?: string
+  store_address?: string
+  cashier?: {
+    id: string
+    name: string
+    email: string
+  } | null
 }
 
 export interface PosPageProps {

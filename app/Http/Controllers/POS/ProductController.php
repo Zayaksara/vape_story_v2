@@ -18,9 +18,10 @@ class ProductController extends Controller
     {
         $filters = $request->validated();
 
-        $categories       = $this->productService->getCategories();
-        $products         = $this->productService->getFilteredProducts($filters);
-        $units            = $this->productService->getAvailableUnits();
+        $categories = $this->productService->getCategories();
+        $products = $this->productService->getFilteredProducts($filters);
+        $allProducts = $this->productService->getAllProductsForCounts();
+        $units = $this->productService->getAvailableUnits();
         $selectedCategory = $this->productService->resolveSelectedCategory(
             $categories,
             $filters['category'] ?? null,
@@ -30,16 +31,17 @@ class ProductController extends Controller
         $user = $request->user();
 
         return Inertia::render('POS/ProductPos', [
-            'products'            => $products,
-            'categories'          => $categories,
-            'units'               => $units,
-            'selectedCategory'    => $selectedCategory,
+            'products' => $products,
+            'categories' => $categories,
+            'all_products' => $allProducts,
+            'units' => $units,
+            'selectedCategory' => $selectedCategory,
             'selectedStockStatus' => $filters['stock_status'] ?? null,
-            'selectedUnit'        => $filters['unit'] ?? null,
-            'searchQuery'         => $filters['search'] ?? null,
-            'cashier'             => [
-                'id'    => $user->id,
-                'name'  => $user->name,
+            'selectedUnit' => $filters['unit'] ?? null,
+            'searchQuery' => $filters['search'] ?? null,
+            'cashier' => [
+                'id' => $user->id,
+                'name' => $user->name,
                 'email' => $user->email,
             ],
         ]);

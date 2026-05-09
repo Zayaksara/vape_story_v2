@@ -1,9 +1,9 @@
 <template>
   <Teleport to="body">
     <Dialog :open="modelValue" @update:open="emitUpdate">
-      <DialogContent class="sm:max-w-lg h-[calc(100vh-4rem)] max-h-[calc(100vh-4rem)] overflow-hidden">
-        <div class="flex h-full flex-col">
-          <div class="min-h-0 overflow-y-auto px-0 pb-5 pt-3">
+      <DialogContent class="w-[min(96vw,40rem)] max-h-[92dvh] overflow-hidden p-0">
+        <div class="flex max-h-[92dvh] flex-col">
+          <div class="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6">
             <DialogHeader>
               <DialogTitle class="flex items-center gap-2 text-primary">
                 <svg class="h-5 w-5 text-border" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -20,7 +20,7 @@
             <Card class="mb-5 border-2 border-primary">
               <CardContent class="pt-5 pb-5 text-center">
                 <p class="text-sm mb-1 text-muted-foreground">Total Tagihan</p>
-                <p class="text-4xl font-extrabold tracking-tight text-primary">
+                <p class="text-3xl sm:text-4xl font-extrabold tracking-tight text-primary">
                   {{ formatPrice(total) }}
                 </p>
               </CardContent>
@@ -32,12 +32,35 @@
           <PaymentMethods
             v-model="localMethod"
             :disabled="isProcessing"
-            class="grid grid-cols-4 gap-2"
+            class="grid grid-cols-2 gap-2 sm:grid-cols-4"
           />
         </div>
 
         <!-- Cash Input Section -->
         <div v-if="localMethod === 'cash'" class="mb-5 space-y-3">
+          <!-- Quick money buttons -->
+          <div class="grid grid-cols-3 gap-2 sm:grid-cols-5">
+            <Button
+              v-for="preset in cashPresets"
+              :key="preset"
+              type="button"
+              variant="outline"
+              class="h-9 text-xs"
+              :disabled="isProcessing"
+              @click="setCashReceived(preset)"
+            >
+              {{ formatCompactPrice(preset) }}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              class="h-9 text-xs sm:col-span-1"
+              :disabled="isProcessing"
+              @click="setCashReceived(total)"
+            >
+              Uang Pas
+            </Button>
+          </div>
 
           <!-- Cash Input -->
           <div class="relative">
@@ -49,7 +72,7 @@
               type="number"
               inputmode="numeric"
               pattern="[0-9]*"
-              class="w-full pl-10 pr-4 py-6 text-2xl font-bold text-center tracking-wider"
+              class="w-full pl-10 pr-4 py-4 text-xl sm:text-2xl font-bold text-center tracking-wider"
               :class="{
                 'border-green-500 focus-visible:ring-green-500': localCashReceived >= total && total > 0,
                 'border-red-500 focus-visible:ring-red-500': localCashReceived < total && localCashReceived > 0
@@ -88,18 +111,50 @@
 
         <!-- QRIS Section -->
         <div v-else-if="localMethod === 'qris'" class="mb-5">
-          <div class="flex flex-col items-center justify-center rounded-xl border-2 border-border border-dashed p-6 text-center"
+          <div class="flex flex-col items-center justify-center rounded-xl border-2 border-border border-dashed p-4 text-center sm:p-6"
               :style="{ backgroundColor: 'var(--pos-bg-secondary)' }">
-            <QrCode class="h-10 w-20 mb-3 text-muted-foreground" />
+            <img
+              v-if="showQrisImage"
+              src="/storage/images/QRCODE.webp"
+              alt="QRIS Payment Code"
+              class="mb-2 h-auto w-full max-w-[220px] rounded-md object-contain"
+              loading="lazy"
+              @error="showQrisImage = false"
+            />
+            <QrCode v-else class="h-10 w-20 mb-3 text-muted-foreground" />
+            <p class="text-xs text-muted-foreground">
+              Scan QR untuk menyelesaikan pembayaran
+            </p>
+            <Button
+              v-if="showQrisImage"
+              type="button"
+              variant="outline"
+              class="mt-3 h-8 px-3 text-xs"
+              :disabled="isProcessing"
+              @click="isQrFullscreenOpen = true"
+            >
+              Perbesar QR
+            </Button>
           </div>
         </div>
 
         <!-- Other Electronic Methods (Debit/E-Wallet) -->
-
+        <div v-else class="mb-5">
+          <div class="flex flex-col items-center justify-center rounded-xl border-2 border-border p-5 text-center"
+               :style="{ backgroundColor: 'var(--pos-bg-secondary)' }">
+            <CreditCard class="h-10 w-10 mb-2 text-primary" />
+            <p class="text-sm font-medium mb-1 text-foreground">
+              {{ paymentMethodLabel }}
+            </p>
+            <p class="text-xs text-muted-foreground">
+              Arahkan pelanggan untuk menyelesaikan pembayaran non-tunai
+            </p>
+          </div>
+        </div>
       </div>
 
       <!-- Action Buttons -->
-      <DialogFooter class="flex flex-col-reverse sm:flex-row gap-2 justify-end">
+      <DialogFooter class="shrink-0 border-t bg-background px-4 py-3 sm:px-6 sm:py-4 flex flex-col-reverse sm:flex-row gap-2 justify-end">
         <Button
           variant="outline"
           class="flex-1"
@@ -133,6 +188,32 @@
     </div>
   </DialogContent>
     </Dialog>
+
+    <Dialog :open="isQrFullscreenOpen" @update:open="isQrFullscreenOpen = $event">
+      <DialogContent class="w-[min(98vw,56rem)] max-h-[96dvh] overflow-hidden p-0">
+        <div class="flex max-h-[96dvh] flex-col bg-black">
+          <div class="flex items-center justify-between border-b border-white/20 px-4 py-3 text-white">
+            <p class="text-sm font-semibold">QRIS - Fullscreen</p>
+            <Button
+              type="button"
+              variant="ghost"
+              class="h-8 px-3 text-xs text-white hover:bg-white/10"
+              @click="isQrFullscreenOpen = false"
+            >
+              Tutup
+            </Button>
+          </div>
+
+          <div class="flex min-h-0 flex-1 items-center justify-center p-4 sm:p-6">
+            <img
+              src="/storage/images/QRCODE.webp"
+              alt="QRIS Payment Code Fullscreen"
+              class="h-auto max-h-full w-full max-w-[560px] rounded-lg bg-white p-2 object-contain"
+            />
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   </Teleport>
 </template>
 
@@ -146,7 +227,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
 
-import { QrCode, CreditCard, Banknote, eWallet } from 'lucide-vue-next'
+import { QrCode, CreditCard, Banknote, Wallet } from 'lucide-vue-next'
 
 const props = defineProps<{
   modelValue: boolean
@@ -162,6 +243,8 @@ const emit = defineEmits<{
 const cashInput = ref<HTMLInputElement | null>(null)
 const localMethod = ref<PaymentMethod>('cash')
 const localCashReceived = ref<number>(0)
+const showQrisImage = ref(true)
+const isQrFullscreenOpen = ref(false)
 
 watch(
   () => props.modelValue,
@@ -182,6 +265,8 @@ watch(localMethod, () => {
 const change = computed(() =>
   localMethod.value === 'cash' ? Math.max(0, localCashReceived.value - props.total) : 0
 )
+
+const cashPresets = computed(() => [100000, 200000, 300000, 400000])
 
 const paymentMethodLabel = computed(() => {
   const labels: Record<PaymentMethod, string> = {

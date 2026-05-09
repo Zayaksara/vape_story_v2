@@ -278,7 +278,7 @@ const totalItems = computed(() => {
 })
 
 const filteredTotal = computed(() => {
-  return filteredTransactions.value.reduce((sum, t) => sum + (t.total_amount || 0), 0)
+  return filteredTransactions.value.reduce((sum, t) => sum + (t.total || 0), 0)
 })
 
 const reportMetaTitle = computed(
@@ -408,7 +408,7 @@ function handleExport() {
       paymentMethodLabels[transaction.payment_method] ?? transaction.payment_method,
       transaction.cashier?.name ?? '-',
       transaction.status,
-      String(transaction.total_amount || 0),
+      String(transaction.total || 0),
       String(transaction.items?.length ?? 0),
     ]
   })
@@ -663,7 +663,7 @@ function handleExport() {
                       <span class="text-xs" style="color: var(--pos-text-muted);">{{ transaction.cashier?.name || '-' }}</span>
                     </TableCell>
                     <TableCell class="py-3 px-3 text-right">
-                      <span class="text-xs font-bold" style="color: var(--pos-text-primary);">{{ formatPrice(transaction.total_amount || 0) }}</span>
+                      <span class="text-xs font-bold" style="color: var(--pos-text-primary);">{{ formatPrice(transaction.total || 0) }}</span>
                     </TableCell>
                     <TableCell class="py-3 px-3 text-center">
                       <span
@@ -697,7 +697,7 @@ function handleExport() {
                         </div>
                         <div class="h-px bg-[var(--pos-border)] my-2"></div>
                         <div class="flex justify-end">
-                          <span class="text-xs font-bold" style="color: var(--pos-brand-primary);">Total: {{ formatPrice(transaction.total_amount || 0) }}</span>
+                          <span class="text-xs font-bold" style="color: var(--pos-brand-primary);">Total: {{ formatPrice(transaction.total || 0) }}</span>
                         </div>
                       </div>
                     </TableCell>

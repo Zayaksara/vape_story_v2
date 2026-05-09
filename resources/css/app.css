@@ -234,6 +234,13 @@ html, body {
         font-family: 'Nunito Sans', ui-sans-serif, system-ui, sans-serif;
     }
 
+    /* Minimal browser consistency for POS */
+    html {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+
     /* Improved focus styles for accessibility */
     *:focus-visible {
         outline: 2px solid var(--pos-brand-primary);
@@ -277,12 +284,13 @@ html, body {
    --pos-border-focus: #14b8a6;
    --pos-border-danger: #fca5a5;
    --pos-border-warning: #fcd34d;
+   --pos-border-primary: #334155;
 
-   --pos-text-primary: #334155;
-   --pos-text-secondary: #475569;
+   --pos-text-primary: #f9fafb;
+   --pos-text-secondary: #334155;
    --pos-text-muted: #6b7280;
-   --pos-text-light: #9ca3af;
-   --pos-text-inverse: #f9fafb;
+   --pos-text-light: #14b8a6;
+   --pos-text-inverse: #ffffff;
 
    --pos-brand-primary: #14b8a6;
    --pos-brand-hover: #0f9488;
@@ -299,7 +307,7 @@ html, body {
 
 .pos-layout {
    /* ── Backgrounds ── */
-   --pos-bg-primary: #1e293b;        /* Cards, panels */
+   --pos-bg-primary: #ffffff;        /* Cards, panels - CHANGED to white */
    --pos-bg-secondary: #f9fafb;      /* Muted areas (gray-50) */
    --pos-bg-accent: #ccfbf1;         /* Teal highlight (selected) */
    --pos-bg-danger: #fee2e2;         /* Error state bg */
@@ -314,11 +322,11 @@ html, body {
    --pos-border-warning: #fcd34d;    /* Warning border */
 
    /* ── Text Colors ── */
-   --pos-text-primary: #334155;      /* Headings, primary text (slate-700) - for light bg */
-   --pos-text-secondary: #475569;   /* Body text (slate-600) */
+   --pos-text-primary: #1e293b;      /* Headings, primary text (slate-800) */
+   --pos-text-secondary: #334155;    /* Body text (slate-700) */
    --pos-text-muted: #6b7280;        /* Muted text (gray-500) */
    --pos-text-light: #9ca3af;        /* Light text (gray-400) */
-   --pos-text-inverse: #f9fafb;      /* Light text on dark bg */
+   --pos-text-inverse: #ffffff;      /* White on dark bg */
 
    /* ── Brand / Accent ── */
    --pos-brand-primary: #14b8a6;     /* Teal 500 */
@@ -337,11 +345,48 @@ html, body {
    /* ── Shadows ── */
    --pos-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
    --pos-shadow-hover: 0 4px 12px rgba(15, 23, 42, 0.12);
+
+   /* Force consistent background across browsers */
+   background-color: #f9fafb !important;
 }
 
-/* Ensure POS background & content stay in light mode
-   even when global dark theme is active */
+/* ====================================================
+   POS THEME CONFIGURATION - FORCE LIGHT MODE
+   ==================================================== */
+/* Ensure POS always uses light mode regardless of system preference */
+.pos-layout,
 html.dark .pos-layout {
+   /* Force light mode backgrounds */
+   --pos-bg-primary: #ffffff !important;
+   --pos-bg-secondary: #f9fafb !important;
+   --pos-bg-accent: #ccfbf1 !important;
+   --pos-bg-danger: #fee2e2 !important;
+   --pos-bg-warning: #fef3c7 !important;
+   --pos-bg-success: #dcfce7 !important;
+
+   /* Force light mode text colors */
+   --pos-text-primary: #1e293b !important;
+   --pos-text-secondary: #334155 !important;
+   --pos-text-muted: #6b7280 !important;
+   --pos-text-light: #9ca3af !important;
+   --pos-text-inverse: #ffffff !important;
+
+   /* Force light mode backgrounds on main container */
+   background-color: #f9fafb !important;
+}
+
+/* Ensure all POS containers have consistent background */
+.pos-layout [class*="pos"],
+.pos-layout [class*="POS"],
+.pos-report-container,
+.pos-product-container,
+.pos-cart-container {
+   background-color: #f9fafb !important;
+}
+
+/* Force light mode for POS cards */
+.pos-layout .card,
+.pos-layout [class*="card"] {
    background-color: #ffffff !important;
 }
 
