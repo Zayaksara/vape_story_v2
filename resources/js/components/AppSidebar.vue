@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, FolderGit2, LayoutGrid, ShoppingBag } from 'lucide-vue-next';
+import { BarChart2, BookOpen, FolderGit2, LayoutGrid, Package, ShoppingBag, Tag, Users } from 'lucide-vue-next';
 import AppLogo from '@/components/AppLogo.vue';
 import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
@@ -15,17 +15,39 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import admin from '@/routes/admin';
+import pos from '@/routes/pos';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
-        href: dashboard(),
+        title: 'Dashboard Pintar',
+        href: admin.dashboard.index.url(),
         icon: LayoutGrid,
     },
     {
+        title: 'Laporan Penjualan',
+        href: '/admin/reports',
+        icon: BarChart2,
+    },
+    {
+        title: 'Manajemen Produk',
+        href: '/admin/products',
+        icon: Package,
+    },
+    {
+        title: 'Promo & Diskon',
+        href: '/admin/promos',
+        icon: Tag,
+    },
+    {
+        title: 'Kelola Akun',
+        href: '/admin/accounts',
+        icon: Users,
+    },
+    {
         title: 'POS Kasir',
-        href: route('pos.dashboard'),
+        href: pos.dashboard.index.url(),
         icon: ShoppingBag,
     },
 ];

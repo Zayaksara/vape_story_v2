@@ -1,6 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../wayfinder'
 /**
- * @see routes/web.php:24
+* @see \App\Http\Controllers\Admin\DashboardController::index
+ * @see app/Http/Controllers/Admin/DashboardController.php:13
  * @route '/admin/dashboard'
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -14,7 +15,8 @@ index.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
- * @see routes/web.php:24
+* @see \App\Http\Controllers\Admin\DashboardController::index
+ * @see app/Http/Controllers/Admin/DashboardController.php:13
  * @route '/admin/dashboard'
  */
 index.url = (options?: RouteQueryOptions) => {
@@ -22,7 +24,8 @@ index.url = (options?: RouteQueryOptions) => {
 }
 
 /**
- * @see routes/web.php:24
+* @see \App\Http\Controllers\Admin\DashboardController::index
+ * @see app/Http/Controllers/Admin/DashboardController.php:13
  * @route '/admin/dashboard'
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -30,7 +33,8 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     method: 'get',
 })
 /**
- * @see routes/web.php:24
+* @see \App\Http\Controllers\Admin\DashboardController::index
+ * @see app/Http/Controllers/Admin/DashboardController.php:13
  * @route '/admin/dashboard'
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -39,7 +43,8 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
     /**
- * @see routes/web.php:24
+* @see \App\Http\Controllers\Admin\DashboardController::index
+ * @see app/Http/Controllers/Admin/DashboardController.php:13
  * @route '/admin/dashboard'
  */
     const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -48,7 +53,8 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     })
 
             /**
- * @see routes/web.php:24
+* @see \App\Http\Controllers\Admin\DashboardController::index
+ * @see app/Http/Controllers/Admin/DashboardController.php:13
  * @route '/admin/dashboard'
  */
         indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -56,7 +62,8 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
             method: 'get',
         })
             /**
- * @see routes/web.php:24
+* @see \App\Http\Controllers\Admin\DashboardController::index
+ * @see app/Http/Controllers/Admin/DashboardController.php:13
  * @route '/admin/dashboard'
  */
         indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

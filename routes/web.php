@@ -21,7 +21,7 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     // Admin routes - admin only access
     Route::prefix('admin')->name('admin.')->middleware(['admin'])->group(function () {
-        Route::get('dashboard', fn () => inertia('admin/dashboard'))->name('dashboard.index');
+        Route::get('dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard.index');
         // Future admin routes: Route::get('users', ...)->name('users.index');
     });
 

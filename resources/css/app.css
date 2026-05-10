@@ -137,6 +137,14 @@ html, body {
     --chart-4: hsl(192 65% 48%);
     --chart-5: hsl(158 50% 40%);
 
+    /* Status */
+    --success: hsl(142 71% 45%);
+    --success-foreground: hsl(0 0% 100%);
+    --warning: hsl(38 92% 50%);
+    --warning-foreground: hsl(0 0% 100%);
+    /* Card secondary text (readable on white cards) */
+    --card-muted-foreground: hsl(215 25% 45%);
+
     /* Sidebar */
     --sidebar: hsl(210 40% 97%);
     --sidebar-background: hsl(210 40% 97%);
@@ -206,6 +214,14 @@ html, body {
     --chart-3: hsl(210 55% 55%);
     --chart-4: hsl(192 70% 52%);
     --chart-5: hsl(158 50% 45%);
+
+    /* Status */
+    --success: hsl(142 71% 52%);
+    --success-foreground: hsl(0 0% 5%);
+    --warning: hsl(38 95% 55%);
+    --warning-foreground: hsl(0 0% 5%);
+    /* Card secondary text */
+    --card-muted-foreground: hsl(215 20% 60%);
 
     /* Sidebar */
     --sidebar: #0f172a;

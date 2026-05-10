@@ -685,18 +685,22 @@ function handleExport() {
                   <!-- Expanded details -->
                   <TableRow v-if="isTransactionExpanded(transaction.id)" class="bg-[var(--pos-brand-light)]">
                     <TableCell colspan="7" class="px-4 py-3">
-                      <div class="space-y-1.5">
+                      <div class="space-y-1.5 max-h-64 overflow-y-auto">
                         <div
                           v-for="item in transaction.items"
                           :key="item.id"
-                          class="flex justify-between text-xs"
+                          class="grid grid-cols-3 gap-2 text-xs pb-1.5 border-b border-[var(--pos-border)]"
                           style="color: var(--pos-text-primary);"
                         >
-                          <span>{{ item.quantity }}x {{ item.product?.name || 'Unknown' }}</span>
-                          <span class="font-medium">{{ formatPrice(item.total || 0) }}</span>
+                          <div class="col-span-2 min-w-0">
+                            <div class="flex gap-1 items-start">
+                              <span class="shrink-0 font-medium">{{ item.quantity }}x</span>
+                              <span class="truncate">{{ item.product?.name || 'Unknown' }}</span>
+                            </div>
+                          </div>
+                          <div class="text-right font-medium shrink-0">{{ formatPrice(item.total || 0) }}</div>
                         </div>
-                        <div class="h-px bg-[var(--pos-border)] my-2"></div>
-                        <div class="flex justify-end">
+                        <div class="pt-2 border-t-2 border-[var(--pos-border)] flex justify-end">
                           <span class="text-xs font-bold" style="color: var(--pos-brand-primary);">Total: {{ formatPrice(transaction.total || 0) }}</span>
                         </div>
                       </div>

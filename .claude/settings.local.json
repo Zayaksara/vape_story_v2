@@ -10,7 +10,9 @@
       "mcp__plugin_playwright_playwright__browser_navigate",
       "mcp__plugin_playwright_playwright__browser_click",
       "mcp__plugin_playwright_playwright__browser_snapshot",
-      "mcp__plugin_playwright_playwright__browser_type"
+      "mcp__plugin_playwright_playwright__browser_type",
+      "Bash(cd D:/story_vape && python3 skills/ui-ux-pro-max/scripts/search.py \"admin dashboard analytics POS retail dark professional\" --design-system -p \"Vape Story Admin\" -f markdown)",
+      "Bash(cd \"D:/story_vape\" && rtk npm run build 2>&1)"
     ]
   }
 }

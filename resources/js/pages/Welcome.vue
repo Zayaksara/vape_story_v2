@@ -2,7 +2,7 @@
 import { Head, Link } from '@inertiajs/vue3';
 import { router } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
-import { login, register } from '@/routes';
+import { login } from '@/routes';
 
 const props = withDefaults(
     defineProps<{
