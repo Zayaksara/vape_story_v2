@@ -27,7 +27,7 @@ const isOpen = computed(() => {
     <div v-if="variant === 'header'" class="flex min-h-screen w-full flex-col">
         <slot />
     </div>
-    <SidebarProvider v-else :default-open="isOpen">
+    <SidebarProvider v-else :default-open="isOpen" class="flex min-h-screen flex-col">
         <slot />
     </SidebarProvider>
 </template>

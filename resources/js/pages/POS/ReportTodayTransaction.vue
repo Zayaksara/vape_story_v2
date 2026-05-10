@@ -67,20 +67,14 @@ function formatTime(dateString: string): string {
   return date.toLocaleTimeString('id-ID', {
     hour: '2-digit',
     minute: '2-digit',
-    timeZone: 'Asia/Jakarta',
   })
 }
 
 /** Jam seperti contoh cetak (10.30). */
 function formatTimeDot(dateString: string): string {
-  const parts = new Intl.DateTimeFormat('id-ID', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-    timeZone: 'Asia/Jakarta',
-  }).formatToParts(new Date(dateString))
-  const h = parts.find(p => p.type === 'hour')?.value ?? '00'
-  const m = parts.find(p => p.type === 'minute')?.value ?? '00'
+  const date = new Date(dateString)
+  const h = String(date.getHours()).padStart(2, '0')
+  const m = String(date.getMinutes()).padStart(2, '0')
   return `${h}.${m}`
 }
 
@@ -105,16 +99,9 @@ function formatIdLongDateTime(d: Date): string {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
-    timeZone: 'Asia/Jakarta',
   })
-  const timeParts = new Intl.DateTimeFormat('id-ID', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-    timeZone: 'Asia/Jakarta',
-  }).formatToParts(d)
-  const hh = timeParts.find(p => p.type === 'hour')?.value ?? '00'
-  const mm = timeParts.find(p => p.type === 'minute')?.value ?? '00'
+  const hh = String(d.getHours()).padStart(2, '0')
+  const mm = String(d.getMinutes()).padStart(2, '0')
   return `${datePart} ${hh}:${mm}`
 }
 
@@ -278,7 +265,7 @@ const totalItems = computed(() => {
 })
 
 const filteredTotal = computed(() => {
-  return filteredTransactions.value.reduce((sum, t) => sum + (t.total || 0), 0)
+  return filteredTransactions.value.reduce((sum, t) => sum + (t.tax_amount || 0), 0)
 })
 
 const reportMetaTitle = computed(
@@ -408,7 +395,7 @@ function handleExport() {
       paymentMethodLabels[transaction.payment_method] ?? transaction.payment_method,
       transaction.cashier?.name ?? '-',
       transaction.status,
-      String(transaction.total || 0),
+      String(transaction.tax_amount || 0),
       String(transaction.items?.length ?? 0),
     ]
   })
@@ -487,7 +474,6 @@ function handleExport() {
               Hari ini
             </Button>
           </div>
-
         </div>
         <div class="flex shrink-0 flex-wrap items-center gap-3">
           <button
@@ -663,12 +649,12 @@ function handleExport() {
                       <span class="text-xs" style="color: var(--pos-text-muted);">{{ transaction.cashier?.name || '-' }}</span>
                     </TableCell>
                     <TableCell class="py-3 px-3 text-right">
-                      <span class="text-xs font-bold" style="color: var(--pos-text-primary);">{{ formatPrice(transaction.total || 0) }}</span>
+                      <span class="text-xs font-bold" style="color: var(--pos-text-primary);">{{ formatPrice(transaction.tax_amount || 0) }}</span>
                     </TableCell>
                     <TableCell class="py-3 px-3 text-center">
                       <span
                         class="rounded-full px-2.5 py-0.5 text-xs font-semibold"
-                        :class="[getStatusColor(transaction.status).bg, getStatusColor(transaction.status).text]"
+                        :style="getStatusColor(transaction.status)"
                       >
                         {{ transaction.status }}
                       </span>
@@ -685,23 +671,19 @@ function handleExport() {
                   <!-- Expanded details -->
                   <TableRow v-if="isTransactionExpanded(transaction.id)" class="bg-[var(--pos-brand-light)]">
                     <TableCell colspan="7" class="px-4 py-3">
-                      <div class="space-y-1.5 max-h-64 overflow-y-auto">
+                      <div class="space-y-1.5">
                         <div
                           v-for="item in transaction.items"
                           :key="item.id"
-                          class="grid grid-cols-3 gap-2 text-xs pb-1.5 border-b border-[var(--pos-border)]"
+                          class="flex justify-between text-xs"
                           style="color: var(--pos-text-primary);"
                         >
-                          <div class="col-span-2 min-w-0">
-                            <div class="flex gap-1 items-start">
-                              <span class="shrink-0 font-medium">{{ item.quantity }}x</span>
-                              <span class="truncate">{{ item.product?.name || 'Unknown' }}</span>
-                            </div>
-                          </div>
-                          <div class="text-right font-medium shrink-0">{{ formatPrice(item.total || 0) }}</div>
+                          <span>{{ item.quantity }}x {{ item.product?.name || 'Unknown' }}</span>
+                          <span class="font-medium">{{ formatPrice(item.total || 0) }}</span>
                         </div>
-                        <div class="pt-2 border-t-2 border-[var(--pos-border)] flex justify-end">
-                          <span class="text-xs font-bold" style="color: var(--pos-brand-primary);">Total: {{ formatPrice(transaction.total || 0) }}</span>
+                        <div class="h-px bg-[var(--pos-border)] my-2"></div>
+                        <div class="flex justify-end">
+                          <span class="text-xs font-bold" style="color: var(--pos-brand-primary);">Total: {{ formatPrice(transaction.tax_amount || 0) }}</span>
                         </div>
                       </div>
                     </TableCell>

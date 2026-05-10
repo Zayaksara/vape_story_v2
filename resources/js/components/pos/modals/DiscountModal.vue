@@ -2,141 +2,173 @@
   <Teleport to="body">
     <div
       v-if="modelValue"
-      class="discount-modal fixed inset-0 z-50 flex items-center justify-center p-4"
+      class="adm-sheet discount-modal fixed inset-0 z-50 flex items-center justify-center p-4"
       role="dialog"
       aria-modal="true"
-      aria-labelledby="modal-title"
+      aria-labelledby="discount-modal-title"
     >
       <!-- Backdrop -->
       <div
-        class="absolute inset-0 backdrop-blur-sm bg-black/50 transition-opacity"
+        class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
         @click="close"
       />
 
       <!-- Modal -->
       <div
-        class="relative z-10 w-full max-w-[360px] rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-200"
-        :style="{
-          backgroundColor: 'var(--pos-bg-primary)'
-        }"
+        class="relative z-10 w-full max-w-[400px] overflow-hidden rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-200"
+        style="background: #ffffff;"
       >
         <!-- Header -->
-        <div class="border-b p-4"
-             :style="{ borderBottomColor: 'var(--pos-border)' }">
-          <h3 id="modal-title" class="text-lg font-bold"
-              :style="{ color: 'var(--pos-text-primary)' }">
-            Pilih Diskon
-          </h3>
+        <div
+          class="relative flex items-start justify-between gap-3 border-b px-5 py-4"
+          style="border-color: var(--pos-border); background: var(--pos-brand-light);"
+        >
+          <div class="flex items-center gap-2.5">
+            <div
+              class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+              style="background: #fff;"
+            >
+              <Tag class="h-4 w-4" style="color: var(--pos-brand-primary);" />
+            </div>
+            <div>
+              <h3
+                id="discount-modal-title"
+                class="text-sm font-bold"
+                style="color: var(--pos-brand-dark);"
+              >
+                Pilih Voucher
+              </h3>
+              <p class="text-[11px]" style="color: var(--pos-text-secondary);">
+                {{ discounts.length }} voucher tersedia
+              </p>
+            </div>
+          </div>
           <button
-            class="absolute right-3 top-3 rounded-full p-1 transition-colors hover:bg-gray-100"
-            :style="{ color: 'var(--pos-text-muted)' }"
-            @click="close"
+            class="cursor-pointer rounded-full p-1.5 transition-colors hover:bg-white/60"
+            style="color: var(--pos-text-muted);"
             aria-label="Tutup modal"
+            @click="close"
           >
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <X class="h-4 w-4" />
           </button>
         </div>
 
         <!-- Search -->
-        <div class="border-b p-4"
-             :style="{ borderBottomColor: 'var(--pos-border)' }">
+        <div class="border-b px-4 py-3" style="border-color: var(--pos-border); background: #f8fafc;">
           <div class="relative">
-            <svg class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2"
-                 :style="{ color: 'var(--pos-text-muted)' }"
-                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
+            <Search
+              class="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2"
+              style="color: var(--pos-text-muted);"
+            />
             <input
               ref="searchInput"
               v-model="searchQuery"
               type="text"
-              placeholder="Cari voucher..."
-              class="w-full rounded-lg border py-2 pl-9 pr-4 text-sm outline-none"
-              :style="{
-                borderColor: 'var(--pos-border)',
-                backgroundColor: 'var(--pos-bg-secondary)'
-              }"
+              placeholder="Cari kode atau nama voucher…"
+              class="h-9 w-full rounded-md border pl-8 pr-3 text-xs outline-none transition"
+              style="border-color: var(--pos-border); background: #fff; color: var(--pos-text-secondary);"
             />
           </div>
         </div>
 
         <!-- List -->
-        <div class="max-h-[400px] overflow-y-auto p-2">
-          <div v-if="filteredDiscounts.length === 0" class="py-8 text-center">
-            <p :style="{ color: 'var(--pos-text-muted)' }">Tidak ada voucher ditemukan</p>
+        <div class="max-h-[420px] overflow-y-auto p-3">
+          <div v-if="filteredDiscounts.length === 0" class="py-12 text-center">
+            <Tag class="mx-auto mb-2 h-10 w-10" style="color: var(--pos-text-muted); opacity: 0.3;" />
+            <p class="text-sm font-medium" style="color: var(--pos-text-muted);">
+              {{ discounts.length === 0 ? 'Belum ada voucher aktif' : 'Voucher tidak ditemukan' }}
+            </p>
+            <p class="mt-1 text-xs" style="color: var(--pos-text-light);">
+              {{ discounts.length === 0 ? 'Buat promo di Manajemen Promo' : 'Coba kata kunci lain' }}
+            </p>
           </div>
 
           <button
             v-for="d in filteredDiscounts"
             :key="d.code"
-            class="discount-item w-full rounded-xl border p-3 text-left transition-all mb-2 last:mb-0"
+            class="mb-2 w-full cursor-pointer rounded-lg border p-3 text-left transition-all last:mb-0 hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-60"
             :style="{
               borderColor: discount?.code === d.code ? 'var(--pos-brand-primary)' : 'var(--pos-border)',
-              backgroundColor: discount?.code === d.code ? 'var(--pos-brand-light)' : 'var(--pos-bg-primary)'
+              background: discount?.code === d.code ? 'var(--pos-brand-light)' : '#fff',
             }"
+            :disabled="!canApply(d)"
             @click="apply(d)"
           >
             <div class="flex items-start justify-between gap-2">
               <div class="min-w-0 flex-1">
                 <div class="flex items-center gap-2">
-                  <span class="font-medium"
-                        :style="{ color: 'var(--pos-text-secondary)' }">{{ d.label }}</span>
+                  <span class="text-sm font-semibold" style="color: var(--pos-text-secondary);">
+                    {{ d.label }}
+                  </span>
                   <span
                     v-if="discount?.code === d.code"
-                    class="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold"
-                    :style="{
-                      backgroundColor: 'var(--pos-brand-primary)',
-                      color: 'var(--pos-text-inverse)'
-                    }"
+                    class="inline-flex items-center gap-1 shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold"
+                    style="background: var(--pos-brand-primary); color: #fff;"
                   >
-                    Aktif
+                    <CheckCircle2 class="h-3 w-3" /> Aktif
                   </span>
                 </div>
-                <p class="text-xs"
-                   :style="{ color: 'var(--pos-text-muted)' }">{{ d.code }}</p>
+                <p class="mt-0.5 font-mono text-[11px]" style="color: var(--pos-text-muted);">
+                  {{ d.code }}
+                </p>
               </div>
               <div class="shrink-0 text-right">
-                <span class="text-sm font-bold"
-                      :style="{ color: 'var(--pos-brand-primary)' }">
-                  {{ d.value }}{{ d.type === 'percent' ? '%' : 'K' }}
+                <span class="text-base font-bold" style="color: var(--pos-brand-primary);">
+                  {{ d.type === 'percent' ? `${d.value}%` : formatPrice(d.value) }}
                 </span>
+                <p class="text-[10px]" style="color: var(--pos-text-muted);">
+                  {{ d.type === 'percent' ? 'Persentase' : 'Potongan' }}
+                </p>
               </div>
             </div>
 
-            <div v-if="d.min_purchase" class="mt-2 flex items-center gap-1">
-              <span class="text-[10px]"
-                    :style="{ color: 'var(--pos-text-muted)' }">
-                Min. belanja {{ formatPrice(d.min_purchase) }}
-              </span>
+            <div class="mt-2 flex flex-wrap items-center gap-1.5">
               <span
-                v-if="subtotal < (d.min_purchase || 0)"
-                class="ml-1 rounded px-1.5 py-0.5 text-[10px]"
-                :style="{
-                  backgroundColor: 'var(--pos-danger-bg)',
-                  color: 'var(--pos-danger-text)'
-                }"
+                v-if="d.min_purchase"
+                class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold"
+                :style="subtotal < (d.min_purchase || 0)
+                  ? 'background: var(--pos-bg-danger); color: var(--pos-danger-text);'
+                  : 'background: var(--pos-bg-success); color: var(--pos-success-text);'"
               >
-                Belum memenuhi
+                Min. {{ formatPrice(d.min_purchase) }}
+                <span class="ml-1 opacity-80">
+                  {{ subtotal < (d.min_purchase || 0) ? '· belum cukup' : '· memenuhi' }}
+                </span>
               </span>
-              <span
-                v-else
-                class="ml-1 rounded px-1.5 py-0.5 text-[10px]"
-                :style="{
-                  backgroundColor: 'var(--pos-success-bg)',
-                  color: 'var(--pos-success-text)'
-                }"
-              >
-                Memenuhi
-              </span>
-            </div>
 
-            <div v-if="d.expires_at" class="mt-1 text-[10px]"
-                 :style="{ color: 'var(--pos-text-muted)' }">
-              Kadaluarsa: {{ formatDate(d.expires_at) }}
+              <span
+                v-if="d.max_discount"
+                class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold"
+                style="background: #f1f5f9; color: var(--pos-text-secondary);"
+              >
+                Maks. {{ formatPrice(d.max_discount) }}
+              </span>
+
+              <span
+                v-if="d.expires_at"
+                class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px]"
+                style="background: var(--pos-bg-warning); color: var(--pos-warning-text);"
+              >
+                Berakhir {{ formatDate(d.expires_at) }}
+              </span>
             </div>
+          </button>
+        </div>
+
+        <!-- Footer -->
+        <div
+          class="flex items-center justify-between border-t px-4 py-3"
+          style="border-color: var(--pos-border); background: #f8fafc;"
+        >
+          <p class="text-[11px]" style="color: var(--pos-text-muted);">
+            Subtotal: <strong style="color: var(--pos-text-secondary);">{{ formatPrice(subtotal) }}</strong>
+          </p>
+          <button
+            class="cursor-pointer rounded-md border px-3 py-1.5 text-xs font-semibold transition hover:bg-white"
+            style="border-color: var(--pos-border); color: var(--pos-text-secondary); background: #fff;"
+            @click="close"
+          >
+            Tutup
           </button>
         </div>
       </div>
@@ -146,13 +178,18 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { Search, X, Tag, CheckCircle2 } from 'lucide-vue-next'
 import type { Discount } from '@/types/pos'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   modelValue: boolean
   subtotal: number
   appliedDiscount?: Discount | null
-}>()
+  discounts?: Discount[]
+}>(), {
+  appliedDiscount: null,
+  discounts: () => [],
+})
 
 const emit = defineEmits<{
   'update:modelValue': [value: boolean]
@@ -162,64 +199,33 @@ const emit = defineEmits<{
 const searchInput = ref<HTMLInputElement | null>(null)
 const searchQuery = ref('')
 
-// Mock discounts - would come from API
-const availableDiscounts = ref<Discount[]>([
-  {
-    code: 'WELCOME10',
-    label: 'Diskon Selamat Datang',
-    type: 'percent',
-    value: 10,
-    min_purchase: 50000,
-    expires_at: '2024-12-31T23:59:59Z',
-  },
-  {
-    code: 'FIX25K',
-    label: 'Potongan Rp 25.000',
-    type: 'fixed',
-    value: 25000,
-    min_purchase: 100000,
-    expires_at: '2024-12-31T23:59:59Z',
-  },
-  {
-    code: 'VIP15',
-    label: 'Diskon VIP Member',
-    type: 'percent',
-    value: 15,
-    max_discount: 100000,
-    expires_at: '2024-12-31T23:59:59Z',
-  },
-])
-
 const discount = computed(() => props.appliedDiscount)
 
 const filteredDiscounts = computed(() => {
-  if (!searchQuery.value) {
-    return availableDiscounts.value
-  }
-
-  return availableDiscounts.value.filter(d =>
-    d.code.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    d.label.toLowerCase().includes(searchQuery.value.toLowerCase())
+  const q = searchQuery.value.trim().toLowerCase()
+  if (!q) return props.discounts
+  return props.discounts.filter(d =>
+    d.code.toLowerCase().includes(q) ||
+    d.label.toLowerCase().includes(q),
   )
 })
+
+function canApply(d: Discount): boolean {
+  if (!d.min_purchase) return true
+  return props.subtotal >= d.min_purchase
+}
 
 function close() {
   emit('update:modelValue', false)
 }
 
 function apply(d: Discount) {
-  if (d.min_purchase && props.subtotal < d.min_purchase) {
-    return
-  }
-
+  if (!canApply(d)) return
   emit('apply', d)
 }
 
 function formatPrice(price: number): string {
-  if (typeof price !== 'number' || isNaN(price)) {
-    return 'Rp 0'
-  }
-
+  if (typeof price !== 'number' || isNaN(price)) return 'Rp 0'
   return new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
@@ -229,6 +235,36 @@ function formatPrice(price: number): string {
 }
 
 function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString('id-ID')
+  return new Date(dateStr).toLocaleDateString('id-ID', {
+    day: '2-digit', month: 'short', year: 'numeric',
+  })
 }
 </script>
+
+<style>
+.discount-modal.adm-sheet {
+  --pos-bg-primary: #ffffff;
+  --pos-bg-secondary: #f9fafb;
+  --pos-bg-accent: #ccfbf1;
+  --pos-bg-danger: #fee2e2;
+  --pos-bg-warning: #fef3c7;
+  --pos-bg-success: #dcfce7;
+  --pos-border: #e5e7eb;
+  --pos-text-primary: #0f172a;
+  --pos-text-secondary: #1e293b;
+  --pos-text-muted: #64748b;
+  --pos-text-light: #94a3b8;
+  --pos-brand-primary: #14b8a6;
+  --pos-brand-light: #ecfeff;
+  --pos-brand-dark: #0d9488;
+  --pos-success-text: #16a34a;
+  --pos-warning-text: #d97706;
+  --pos-danger-text: #dc2626;
+}
+
+.discount-modal input:focus {
+  border-color: var(--pos-brand-primary);
+  outline: 2px solid var(--pos-brand-light);
+  outline-offset: 1px;
+}
+</style>

@@ -149,6 +149,7 @@
     :model-value="isDiscountModalOpen"
     :subtotal="subtotal"
     :applied-discount="discount"
+    :discounts="props.promos ?? []"
     @update:model-value="isDiscountModalOpen = $event"
     @apply="applyDiscount"
   />
@@ -192,7 +193,7 @@ import PosSearch from '@/components/pos/PosSearch.vue'
 import PosToast from '@/components/pos/PosToast.vue'
 import ProductGrid from '@/components/pos/ProductGrid.vue'
 import { usePos } from '@/composables/usePos'
-import type { Product, Category } from '@/types/pos'
+import type { Product, Category, Discount } from '@/types/pos'
 
 const props = defineProps<{
   products: Product[]
@@ -203,6 +204,7 @@ const props = defineProps<{
     email: string
   }
   initial_trx_id: string
+  promos?: Discount[]
 }>()
 
 // Use the main sidebar's toggle (already available via SidebarProvider)

@@ -10,7 +10,7 @@
             <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="close" />
 
             <div
-                class="receipt-content relative z-10 w-full max-w-sm max-h-[90vh] animate-in overflow-hidden rounded-2xl shadow-2xl duration-200 zoom-in-95 fade-in flex flex-col"
+                class="receipt-content relative z-10 w-full max-w-sm animate-in overflow-hidden rounded-2xl shadow-2xl duration-200 zoom-in-95 fade-in"
                 :style="{
                     backgroundColor: 'var(--pos-border-focus, #14b8a6)',
                 }"
@@ -18,7 +18,7 @@
                 <!-- Receipt content -->
                 <div
                     :style="{ backgroundColor: 'var(--pos-bg-primary, #1e293b)' }"
-                    class="receipt-body p-5 flex-1 overflow-y-auto"
+                    class="receipt-body p-5"
                 >
                     <!-- Header -->
                     <div class="mb-4 text-center">
@@ -78,7 +78,7 @@
 
                     <!-- Items -->
                     <div
-                        class="space-y-2 py-4 max-h-48 overflow-y-auto"
+                        class="space-y-2 py-4"
                         :style="{
                             borderTop: '1px solid var(--pos-border)',
                             borderBottom: '1px solid var(--pos-border)',

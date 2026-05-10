@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Routing\Exceptions\UrlGenerationException;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -41,6 +42,17 @@ class Product extends Model
         'resistance_ohm' => 'decimal:2',
         'is_active' => 'boolean',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($product) {
+            if (empty($product->id)) {
+                $product->id = (string) Str::uuid();
+            }
+        });
+    }
 
     /**
      * Append custom attributes to JSON/array serialization.

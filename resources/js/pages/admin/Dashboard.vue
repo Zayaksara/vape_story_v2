@@ -11,17 +11,12 @@ import {
     Banknote,
     Package,
 } from 'lucide-vue-next'
-import { dashboard } from '@/routes'
-import AppLayout from '@/layouts/AppLayout.vue'
+import AdminLayout from '@/layouts/admin/AdminLayout.vue'
 import type { DashboardPageProps, Period } from '@/types/admin'
 
+
 defineOptions({
-    layout: (h: any, page: any) => h(AppLayout, {
-        breadcrumbs: [
-            { title: 'Dashboard', href: dashboard() },
-            { title: 'Dashboard Pintar' },
-        ],
-    }, () => page),
+    layout: (h: any, page: any) => h(AdminLayout, {}, () => page),
 })
 
 const props = defineProps<DashboardPageProps>()
@@ -281,7 +276,6 @@ const comparisonRows = computed(() => [
     <Head title="Dashboard Pintar" />
 
     <div class="adm-page">
-
         <!-- Period Filter -->
         <div class="filter-bar">
             <div class="filter-tabs">
@@ -306,7 +300,7 @@ const comparisonRows = computed(() => [
 
         <!-- Period hint — sits on dark page bg → pos-text-primary -->
         <p class="period-hint">
-            {{ date_range.start }} – {{ date_range.end }} &nbsp;·&nbsp; {{ comparisonLabel }}
+            {{ date_range.start }} – {{ date_range.end }} &nbsp; &nbsp; {{ comparisonLabel }}
             ({{ date_range.prev_start }} – {{ date_range.prev_end }})
         </p>
 
@@ -444,7 +438,6 @@ const comparisonRows = computed(() => [
             <VueApexCharts type="bar" height="220" :options="topBrandsOptions" :series="topBrandsSeries" />
             <p v-if="top_brands.length === 0" class="chart-empty">Belum ada data merek</p>
         </div>
-
     </div>
 </template>
 
@@ -453,14 +446,11 @@ const comparisonRows = computed(() => [
 .adm-page {
     width: 100%;
     max-width: 1280px;
-    padding: 1.5rem;
+    margin: 0 auto;
+    padding: 0;
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
-    overflow-y: auto;
-    overflow-x: hidden;
-    flex: 1 1 0%;
-    min-height: 0;
     box-sizing: border-box;
 }
 
@@ -734,13 +724,37 @@ const comparisonRows = computed(() => [
     margin: 0;
 }
 
+/* ── Scrollbar ───────────────────────────────────────────────────────────── */
+.adm-page::-webkit-scrollbar {
+    width: 8px;
+}
+
+.adm-page::-webkit-scrollbar-track {
+    background: var(--card);
+}
+
+.adm-page::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.adm-page::-webkit-scrollbar-thumb:hover {
+    background: var(--pos-text-muted);
+}
+
+/* Firefox scrollbar */
+.adm-page {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) var(--card);
+}
+
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
     .chart-row { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 640px) {
-    .adm-page         { padding: 1rem; }
     .stats-grid       { grid-template-columns: 1fr 1fr; }
     .stat-card__value { font-size: 1.25rem; }
 }

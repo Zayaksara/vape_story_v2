@@ -604,59 +604,51 @@ function stockInfo(stock: number): StockInfo {
 
         <!-- ── Detail Sheet ────────────────────────────────────────────────── -->
         <Sheet v-model:open="sheetOpen">
-            <SheetContent class="w-full overflow-y-auto p-5 sm:max-w-md sm:p-6">
+            <SheetContent class="adm-sheet w-full overflow-y-auto p-5 sm:max-w-md sm:p-6">
                 <SheetHeader>
                     <SheetTitle>Detail Produk</SheetTitle>
                     <SheetDescription>Informasi lengkap produk</SheetDescription>
                 </SheetHeader>
 
                 <div v-if="selectedProduct" class="mt-5 flex flex-col gap-4">
-                    <!-- Image -->
-                    <div
-                        class="aspect-square w-full overflow-hidden rounded-xl"
-                        style="background: var(--pos-bg-accent);"
-                    >
-                        <img
-                            v-if="selectedProduct.image_url"
-                            :src="selectedProduct.image_url"
-                            :alt="selectedProduct.name"
-                            class="h-full w-full object-cover"
-                        />
-                        <div v-else class="flex h-full w-full items-center justify-center">
-                            <span class="text-5xl font-bold" style="color: var(--pos-brand-primary); opacity: 0.3;">
+                    <div class="flex flex-col items-center gap-3 rounded-xl p-5 text-center" style="background: var(--pos-brand-light);">
+                        <div class="flex h-24 w-24 items-center justify-center overflow-hidden rounded-xl" style="background: #fff;">
+                            <img
+                                v-if="selectedProduct.image_url"
+                                :src="selectedProduct.image_url"
+                                :alt="selectedProduct.name"
+                                class="h-full w-full object-cover"
+                            />
+                            <span v-else class="text-2xl font-bold" style="color: var(--pos-brand-primary);">
                                 {{ productInitials(selectedProduct.name) }}
+                            </span>
+                        </div>
+                        <div>
+                            <p class="text-base font-bold" style="color: var(--pos-brand-dark);">{{ selectedProduct.name }}</p>
+                            <p class="mt-1 font-mono text-xs" style="color: var(--pos-text-secondary);">{{ selectedProduct.sku }}</p>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-center gap-2">
+                            <span
+                                class="inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold"
+                                :style="selectedProduct.stock === 0
+                                    ? 'background: #fff; color: var(--pos-danger-text);'
+                                    : selectedProduct.stock <= 20
+                                        ? 'background: #fff; color: var(--pos-warning-text);'
+                                        : 'background: #fff; color: var(--pos-success-text);'"
+                            >
+                                {{ stockInfo(selectedProduct.stock).label }}
+                            </span>
+                            <span
+                                v-if="selectedProduct.volume"
+                                class="inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold"
+                                style="background: #fff; color: var(--pos-text-secondary);"
+                            >
+                                {{ selectedProduct.volume }}
                             </span>
                         </div>
                     </div>
 
-                    <!-- Name -->
-                    <div class="space-y-1">
-                        <h2 class="text-lg font-bold" style="color: var(--pos-text-secondary);">{{ selectedProduct.name }}</h2>
-                        <p class="font-mono text-xs mt-1" style="color: var(--pos-text-muted);">{{ selectedProduct.sku }}</p>
-                    </div>
-
                     <Separator />
-
-                    <!-- Status badge -->
-                    <div class="flex flex-wrap gap-2">
-                        <span
-                            class="rounded-full px-3 py-1 text-xs font-semibold"
-                            :style="selectedProduct.stock === 0
-                                ? 'background: var(--pos-danger-bg); color: var(--pos-danger-text);'
-                                : selectedProduct.stock <= 20
-                                    ? 'background: var(--pos-warning-bg); color: var(--pos-warning-text);'
-                                    : 'background: var(--pos-success-bg); color: var(--pos-success-text);'"
-                        >
-                            {{ stockInfo(selectedProduct.stock).label }}
-                        </span>
-                        <span
-                            v-if="selectedProduct.volume"
-                            class="rounded-full border px-3 py-1 text-xs font-semibold"
-                            style="border-color: var(--pos-border); color: var(--pos-text-secondary);"
-                        >
-                            {{ selectedProduct.volume }}
-                        </span>
-                    </div>
 
                     <!-- Detail rows -->
                     <div class="flex flex-col divide-y rounded-lg border" style="border-color: var(--pos-border);">
@@ -669,11 +661,9 @@ function stockInfo(stock: number): StockInfo {
                             { label: 'Volume',      value: selectedProduct.volume ?? '—' },
                             { label: 'Kategori',    value: selectedProduct.category?.name ?? '—' },
                             { label: 'Brand',       value: selectedProduct.brand?.name ?? '—' },
-                        ]" :key="i" class="flex items-center justify-between px-4 py-2.5"
-                            style="border-color: var(--pos-border);"
-                        >
+                        ]" :key="i" class="flex items-center justify-between px-4 py-2.5">
                             <span class="text-xs" style="color: var(--pos-text-muted);">{{ row.label }}</span>
-                            <span class="text-sm font-semibold" style="color: var(--pos-text-secondary);">{{ row.value }}</span>
+                            <span class="max-w-[60%] truncate text-right text-sm font-semibold" style="color: var(--pos-text-secondary);" :title="String(row.value)">{{ row.value }}</span>
                         </div>
                     </div>
                 </div>
@@ -683,3 +673,47 @@ function stockInfo(stock: number): StockInfo {
     </div>
     </TooltipProvider>
 </template>
+
+<style>
+/* Sheet di-teleport ke <body>. Re-deklarasi token POS supaya konsisten
+     dengan Sheet di halaman admin (Akun/Promo/Produk). */
+.adm-sheet {
+    --pos-bg-primary: #ffffff;
+    --pos-bg-secondary: #f9fafb;
+    --pos-bg-accent: #ccfbf1;
+    --pos-bg-danger: #fee2e2;
+    --pos-bg-warning: #fef3c7;
+    --pos-bg-success: #dcfce7;
+    --pos-border: #e5e7eb;
+    --pos-border-strong: #d1d5db;
+    --pos-text-primary: #0f172a;
+    --pos-text-secondary: #1e293b;
+    --pos-text-muted: #64748b;
+    --pos-text-light: #94a3b8;
+    --pos-brand-primary: #14b8a6;
+    --pos-brand-hover: #0f9488;
+    --pos-brand-light: #ecfeff;
+    --pos-brand-dark: #0d9488;
+    --pos-success-text: #16a34a;
+    --pos-warning-text: #d97706;
+    --pos-danger-text: #dc2626;
+
+    background: #ffffff !important;
+    color: var(--pos-text-secondary);
+}
+
+.adm-sheet [data-slot='sheet-title'] {
+    color: var(--pos-text-primary);
+    font-weight: 700;
+}
+
+.adm-sheet [data-slot='sheet-description'] {
+    color: var(--pos-text-muted);
+}
+
+.adm-sheet hr,
+.adm-sheet [role='separator'] {
+    border-color: var(--pos-border);
+    background: var(--pos-border);
+}
+</style>
