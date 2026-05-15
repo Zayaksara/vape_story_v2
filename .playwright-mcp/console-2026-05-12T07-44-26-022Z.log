@@ -1,0 +1,20 @@
+[    3879ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/:47
+[    4536ms] TypeError: _ is not a function
+    at Zr (http://localhost:8000/build/assets/vue.runtime.esm-bundler-CsyRCI2p.js:1:33208)
+    at http://localhost:8000/build/assets/ProductFormFields-C1hAwY5X.js:9:5395
+[    4537ms] TypeError: _ is not a function
+    at Zr (http://localhost:8000/build/assets/vue.runtime.esm-bundler-CsyRCI2p.js:1:33208)
+    at http://localhost:8000/build/assets/ProductFormFields-C1hAwY5X.js:9:5395
+[    4538ms] TypeError: _ is not a function
+    at Zr (http://localhost:8000/build/assets/vue.runtime.esm-bundler-CsyRCI2p.js:1:33208)
+    at http://localhost:8000/build/assets/ProductFormFields-C1hAwY5X.js:9:5395
+[   11325ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/:47
+[   11984ms] TypeError: _ is not a function
+    at Zr (http://localhost:8000/build/assets/vue.runtime.esm-bundler-CsyRCI2p.js:1:33208)
+    at http://localhost:8000/build/assets/ProductFormFields-C1hAwY5X.js:9:5395
+[   11985ms] TypeError: _ is not a function
+    at Zr (http://localhost:8000/build/assets/vue.runtime.esm-bundler-CsyRCI2p.js:1:33208)
+    at http://localhost:8000/build/assets/ProductFormFields-C1hAwY5X.js:9:5395
+[   11986ms] TypeError: _ is not a function
+    at Zr (http://localhost:8000/build/assets/vue.runtime.esm-bundler-CsyRCI2p.js:1:33208)
+    at http://localhost:8000/build/assets/ProductFormFields-C1hAwY5X.js:9:5395

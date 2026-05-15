@@ -85,7 +85,7 @@ html, body {
 
 :root {
     /* Core Background */
-    --background: #1e293b;
+    --background: #f9fafb;
     --foreground: hsl(215 30% 12%);
 
     /* Card / Popover */
@@ -288,7 +288,7 @@ html, body {
    ==================================================== */
 
 :root {
-   --pos-bg-primary: #1e293b;
+   --pos-bg-primary: #ffffff;
    --pos-bg-secondary: #f9fafb;
    --pos-bg-accent: #ccfbf1;
    --pos-bg-danger: #fee2e2;
@@ -302,10 +302,10 @@ html, body {
    --pos-border-warning: #fcd34d;
    --pos-border-primary: #334155;
 
-   --pos-text-primary: #f9fafb;
+   --pos-text-primary: #1e293b;
    --pos-text-secondary: #334155;
    --pos-text-muted: #6b7280;
-   --pos-text-light: #14b8a6;
+   --pos-text-light: #9ca3af;
    --pos-text-inverse: #ffffff;
 
    --pos-brand-primary: #14b8a6;

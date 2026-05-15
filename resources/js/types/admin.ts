@@ -26,6 +26,24 @@ export interface TrendPoint {
     transactions: number
 }
 
+export interface TrendSummary {
+    max_revenue: number
+    max_period: string
+    min_revenue: number
+    min_period: string
+    avg_revenue: number
+    total_revenue: number
+    total_transactions: number
+}
+
+export interface RevenueTrend {
+    current: TrendPoint[]
+    previous: TrendPoint[]
+    forecast: TrendPoint[]
+    labels: string[]
+    summary: TrendSummary
+}
+
 export interface TopItem {
     name: string
     revenue: number
@@ -42,7 +60,7 @@ export interface DashboardPageProps {
     stats: DashboardStats
     period: Period
     date_range: DateRange
-    revenue_trend: TrendPoint[]
+    revenue_trend: RevenueTrend
     top_products: TopItem[]
     top_categories: TopItem[]
     top_brands: TopItem[]

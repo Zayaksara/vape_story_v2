@@ -97,6 +97,9 @@ class ProductController extends Controller
                 Storage::disk('public')->delete($product->image);
             }
             $data['image'] = $request->file('image')->store('products', 'public');
+        } else {
+            // Jangan timpa kolom image dengan null saat user tidak upload gambar baru
+            unset($data['image']);
         }
 
         $product->update($data);

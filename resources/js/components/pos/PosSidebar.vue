@@ -22,7 +22,7 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Products',
+        title: 'Katalog Produk',
         href: pos.products.index.url(),
         icon: Package,
     },
@@ -32,7 +32,7 @@ const mainNavItems: NavItem[] = [
         icon: FileText,
     },
     {
-        title: 'Return',
+        title: 'Pengembalian Barang',
         href: '/pos/returns', // TODO: implement returns page
         icon: RotateCcw,
     },

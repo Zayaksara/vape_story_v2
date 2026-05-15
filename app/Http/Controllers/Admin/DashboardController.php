@@ -27,7 +27,7 @@ class DashboardController extends Controller
                 'prev_start' => $prevStart->toDateString(),
                 'prev_end'   => $prevEnd->toDateString(),
             ],
-            'revenue_trend'   => $this->queryRevenueTrend($start, $end, $period),
+            'revenue_trend'   => $this->queryRevenueTrend($start, $end, $prevStart, $prevEnd, $period),
             'top_products'    => $this->queryTopProducts($start, $end),
             'top_categories'  => $this->queryTopCategories($start, $end),
             'top_brands'      => $this->queryTopBrands($start, $end),
@@ -139,25 +139,44 @@ class DashboardController extends Controller
 
     // ─── Revenue trend (time-series) ──────────────────────────────────────────
 
-    private function queryRevenueTrend(Carbon $start, Carbon $end, string $period): array
+    private function queryRevenueTrend(Carbon $start, Carbon $end, Carbon $prevStart, Carbon $prevEnd, string $period): array
     {
-        if ($period === 'daily') {
-            // Group by hour
-            $truncExpr = "DATE_TRUNC('hour', created_at AT TIME ZONE 'Asia/Jakarta')";
-            $labelExpr = "TO_CHAR(DATE_TRUNC('hour', created_at AT TIME ZONE 'Asia/Jakarta'), 'YYYY-MM-DD HH24:00')";
-        } elseif ($period === 'yearly') {
-            // Group by month
-            $truncExpr = "DATE_TRUNC('month', created_at AT TIME ZONE 'Asia/Jakarta')";
-            $labelExpr = "TO_CHAR(DATE_TRUNC('month', created_at AT TIME ZONE 'Asia/Jakarta'), 'YYYY-MM-DD')";
-        } elseif ($period === 'quarterly') {
-            // Group by week
-            $truncExpr = "DATE_TRUNC('week', created_at AT TIME ZONE 'Asia/Jakarta')";
-            $labelExpr = "TO_CHAR(DATE_TRUNC('week', created_at AT TIME ZONE 'Asia/Jakarta'), 'YYYY-MM-DD')";
-        } else {
-            // weekly, monthly, custom → group by day
-            $truncExpr = "DATE_TRUNC('day', created_at AT TIME ZONE 'Asia/Jakarta')";
-            $labelExpr = "TO_CHAR(DATE_TRUNC('day', created_at AT TIME ZONE 'Asia/Jakarta'), 'YYYY-MM-DD')";
+        [$truncUnit, $labelFormat, $carbonStep] = match ($period) {
+            'daily'     => ['hour',  'YYYY-MM-DD HH24:00', 'addHour'],
+            'yearly'    => ['month', 'YYYY-MM-DD',         'addMonth'],
+            'quarterly' => ['week',  'YYYY-MM-DD',         'addWeek'],
+            default     => ['day',   'YYYY-MM-DD',         'addDay'],
+        };
+
+        $current  = $this->fetchTrendSeries($start, $end, $period, $truncUnit, $labelFormat, $carbonStep);
+        $previous = $this->fetchTrendSeries($prevStart, $prevEnd, $period, $truncUnit, $labelFormat, $carbonStep);
+
+        // Align previous to same bucket count as current (so they overlay on the same X axis).
+        $bucketCount = count($current);
+        $previous    = array_slice($previous, 0, $bucketCount);
+        while (count($previous) < $bucketCount) {
+            $previous[] = ['period' => '', 'revenue' => 0.0, 'transactions' => 0];
         }
+
+        // Simple "tick" labels — index 1..N — so the chart x-axis is uniform across all 3 series.
+        $labels = $this->buildTickLabels($current, $period);
+
+        // Forecast: moving-average of last 3 buckets, extended forward for the same bucket count.
+        $forecast = $this->buildForecast($current, window: 3);
+
+        return [
+            'current'  => $current,
+            'previous' => $previous,
+            'forecast' => $forecast,
+            'labels'   => $labels,
+            'summary'  => $this->buildTrendSummary($current),
+        ];
+    }
+
+    private function fetchTrendSeries(Carbon $start, Carbon $end, string $period, string $truncUnit, string $labelFormat, string $carbonStep): array
+    {
+        $truncExpr = "DATE_TRUNC('{$truncUnit}', created_at AT TIME ZONE 'Asia/Jakarta')";
+        $labelExpr = "TO_CHAR({$truncExpr}, '{$labelFormat}')";
 
         $rows = DB::table('sales')
             ->whereBetween('created_at', [$start, $end])
@@ -169,13 +188,168 @@ class DashboardController extends Controller
             ")
             ->groupByRaw($truncExpr)
             ->orderByRaw($truncExpr)
-            ->get();
+            ->get()
+            ->keyBy('period');
 
-        return $rows->map(fn ($r) => [
-            'period'       => $r->period,
-            'revenue'      => (float) $r->revenue,
-            'transactions' => (int)   $r->transactions,
-        ])->values()->all();
+        return $this->buildTrendBuckets($start, $end, $period, $carbonStep, $labelFormat, $rows);
+    }
+
+    private function buildTickLabels(array $current, string $period): array
+    {
+        return array_map(function ($bucket) use ($period) {
+            $key = $bucket['period'] ?? '';
+            if ($key === '') {
+                return '';
+            }
+
+            try {
+                $dt = Carbon::parse($key, 'Asia/Jakarta');
+            } catch (\Throwable) {
+                return $key;
+            }
+
+            return match ($period) {
+                'daily'     => $dt->format('H:00'),
+                'yearly'    => $dt->translatedFormat('M'),
+                'quarterly' => 'W' . $dt->isoWeek,
+                default     => $dt->format('d M'),
+            };
+        }, $current);
+    }
+
+    private function buildForecast(array $current, int $window = 3): array
+    {
+        $forecast = [];
+        $values   = array_column($current, 'revenue');
+        $txValues = array_column($current, 'transactions');
+        $count    = count($current);
+
+        foreach ($current as $i => $bucket) {
+            $isFuture = $bucket['revenue'] === 0.0 && $bucket['transactions'] === 0;
+            $start    = max(0, $i - $window);
+            $sliceRev = array_slice($values, $start, $i - $start);
+            $sliceTx  = array_slice($txValues, $start, $i - $start);
+
+            // Filter out zero values from the moving-average source so future-empty buckets
+            // don't drag the projection down to 0.
+            $sliceRev = array_filter($sliceRev, fn ($v) => $v > 0);
+            $sliceTx  = array_filter($sliceTx, fn ($v) => $v > 0);
+
+            $avgRev = count($sliceRev) > 0 ? array_sum($sliceRev) / count($sliceRev) : 0.0;
+            $avgTx  = count($sliceTx)  > 0 ? array_sum($sliceTx)  / count($sliceTx)  : 0.0;
+
+            $forecast[] = [
+                'period'       => $bucket['period'],
+                'revenue'      => $isFuture ? round($avgRev, 2) : $bucket['revenue'],
+                'transactions' => $isFuture ? (int) round($avgTx) : $bucket['transactions'],
+            ];
+
+            unset($start, $sliceRev, $sliceTx);
+        }
+
+        // If nothing in current has data, forecast stays all zeros — frontend will hide the series.
+        if (array_sum($values) <= 0) {
+            return array_map(fn ($b) => ['period' => $b['period'], 'revenue' => 0.0, 'transactions' => 0], $current);
+        }
+
+        return $forecast;
+    }
+
+    private function buildTrendSummary(array $current): array
+    {
+        $maxRev = 0.0;
+        $maxKey = '';
+        $minRev = PHP_FLOAT_MAX;
+        $minKey = '';
+        $sumRev = 0.0;
+        $sumTx  = 0;
+        $nonZero = 0;
+
+        foreach ($current as $b) {
+            $sumRev += $b['revenue'];
+            $sumTx  += $b['transactions'];
+
+            if ($b['revenue'] > $maxRev) {
+                $maxRev = $b['revenue'];
+                $maxKey = $b['period'];
+            }
+            if ($b['revenue'] > 0 && $b['revenue'] < $minRev) {
+                $minRev = $b['revenue'];
+                $minKey = $b['period'];
+            }
+            if ($b['revenue'] > 0) {
+                $nonZero++;
+            }
+        }
+
+        if ($minRev === PHP_FLOAT_MAX) {
+            $minRev = 0.0;
+        }
+
+        return [
+            'max_revenue'        => $maxRev,
+            'max_period'         => $maxKey,
+            'min_revenue'        => $minRev,
+            'min_period'         => $minKey,
+            'avg_revenue'        => $nonZero > 0 ? round($sumRev / $nonZero, 2) : 0.0,
+            'total_revenue'      => $sumRev,
+            'total_transactions' => $sumTx,
+        ];
+    }
+
+    /**
+     * Generate a complete time series with zero-filled gaps so the chart always
+     * has a continuous baseline (24 hours for daily, 7 days for weekly, etc.).
+     */
+    private function buildTrendBuckets(
+        Carbon $start,
+        Carbon $end,
+        string $period,
+        string $carbonStep,
+        string $labelFormat,
+        \Illuminate\Support\Collection $rows
+    ): array {
+        $tz = 'Asia/Jakarta';
+
+        $cursor = match ($period) {
+            'daily'     => $start->copy()->setTimezone($tz)->startOfDay(),
+            'yearly'    => $start->copy()->setTimezone($tz)->startOfMonth(),
+            'quarterly' => $start->copy()->setTimezone($tz)->startOfWeek(),
+            default     => $start->copy()->setTimezone($tz)->startOfDay(),
+        };
+
+        $stop = $end->copy()->setTimezone($tz);
+
+        $phpFormat = $this->pgFormatToPhpFormat($labelFormat);
+
+        $buckets = [];
+        $safety  = 0;
+
+        while ($cursor->lte($stop) && $safety++ < 500) {
+            $key  = $cursor->format($phpFormat);
+            $row  = $rows->get($key);
+
+            $buckets[] = [
+                'period'       => $key,
+                'revenue'      => $row ? (float) $row->revenue      : 0.0,
+                'transactions' => $row ? (int)   $row->transactions : 0,
+            ];
+
+            $cursor->{$carbonStep}();
+        }
+
+        return $buckets;
+    }
+
+    private function pgFormatToPhpFormat(string $pgFormat): string
+    {
+        return strtr($pgFormat, [
+            'YYYY'   => 'Y',
+            'MM'     => 'm',
+            'DD'     => 'd',
+            'HH24'   => 'H',
+            ':00'    => ':00',
+        ]);
     }
 
     // ─── Top 5 products ───────────────────────────────────────────────────────

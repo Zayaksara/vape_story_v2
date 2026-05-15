@@ -1,0 +1,9 @@
+# Cloudflare Tunnel config for Vape Story
+# Replace the credentials-file path after running `tunnel create`
+tunnel: vapestory-tunnel
+credentials-file: C:\Users\Lenovo\.cloudflared\XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX.json
+
+ingress:
+  - hostname: vapestory.serverfaqih.my.id
+    service: http://127.0.0.1:8000
+  - service: http_status:404

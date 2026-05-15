@@ -20,6 +20,7 @@ class ProductReturn extends Model
     protected $fillable = [
         'return_number',
         'order_id',
+        'sale_id',
         'cashier_id',
         'reason',
         'status',
@@ -37,6 +38,11 @@ class ProductReturn extends Model
     public function order()
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function sale()
+    {
+        return $this->belongsTo(Sale::class);
     }
 
     public function cashier()

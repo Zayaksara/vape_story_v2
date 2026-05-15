@@ -12,7 +12,31 @@ import {
     Package,
 } from 'lucide-vue-next'
 import AdminLayout from '@/layouts/admin/AdminLayout.vue'
-import type { DashboardPageProps, Period } from '@/types/admin'
+import type { DashboardPageProps, Period, TrendPoint } from '@/types/admin'
+
+// ── Pastel palette (light-mode friendly) ─────────────────────────────────────
+const PALETTE = {
+    teal:    '#5eead4',  // teal-300
+    mint:    '#a7f3d0',  // emerald-200
+    amber:   '#fde68a',  // amber-200
+    rose:    '#fecaca',  // red-200
+    violet:  '#c7d2fe',  // indigo-200
+    sky:     '#bae6fd',  // sky-200
+    peach:   '#fed7aa',  // orange-200
+    lavender:'#ddd6fe',  // violet-200
+}
+const PALETTE_STRONG = {
+    teal:    '#14b8a6',
+    mint:    '#10b981',
+    amber:   '#f59e0b',
+    rose:    '#f43f5e',
+    violet:  '#6366f1',
+    sky:     '#0ea5e9',
+    peach:   '#f97316',
+    lavender:'#8b5cf6',
+}
+const PASTEL_COLORS    = [PALETTE.teal,    PALETTE.amber,    PALETTE.rose,    PALETTE.violet,    PALETTE.sky]
+const PASTEL_STROKES   = [PALETTE_STRONG.teal, PALETTE_STRONG.amber, PALETTE_STRONG.rose, PALETTE_STRONG.violet, PALETTE_STRONG.sky]
 
 
 defineOptions({
@@ -82,6 +106,13 @@ function formatNumber(n: number): string {
     return new Intl.NumberFormat('id-ID').format(n)
 }
 
+function formatCurrencyCompact(n: number): string {
+    if (n >= 1_000_000_000) return 'Rp ' + (n / 1_000_000_000).toFixed(1) + ' M'
+    if (n >= 1_000_000)     return 'Rp ' + (n / 1_000_000).toFixed(1) + ' jt'
+    if (n >= 1_000)         return 'Rp ' + (n / 1_000).toFixed(0) + ' rb'
+    return 'Rp ' + Math.round(n)
+}
+
 function trendClass(pct: number): string {
     if (pct > 0) return 'trend-up'
     if (pct < 0) return 'trend-down'
@@ -119,80 +150,161 @@ const trendLabel = computed(() => {
     return 'Tanggal'
 })
 
-const revenueTrendOptions = computed(() => ({
-    ...chartBaseOptions.value,
-    chart: { ...chartBaseOptions.value.chart, id: 'revenue-trend', type: 'area', height: 280 },
-    dataLabels: { enabled: false },
-    stroke: { curve: 'smooth', width: 2 },
-    fill: {
-        type: 'gradient',
-        gradient: { shadeIntensity: 1, opacityFrom: 0.45, opacityTo: 0.02, stops: [0, 90, 100] },
-    },
-    xaxis: {
-        categories: props.revenue_trend.map(p => p.period),
-        labels: { style: { fontSize: '11px' }, rotate: -30, rotateAlways: false },
-        title: { text: trendLabel.value, style: { fontSize: '11px' } },
-    },
-    yaxis: [
-        {
-            title: { text: 'Pendapatan (Rp)', style: { fontSize: '11px' } },
-            labels: { formatter: (v: number) => formatCurrency(v), style: { fontSize: '10px' } },
-        },
-        {
-            opposite: true,
-            title: { text: 'Transaksi', style: { fontSize: '11px' } },
-            labels: { formatter: (v: number) => formatNumber(v), style: { fontSize: '10px' } },
-        },
-    ],
-    colors: ['hsl(221 83% 53%)', 'hsl(142 71% 45%)'],
-    legend: { position: 'top' as const },
-    tooltip: {
-        ...chartBaseOptions.value.tooltip,
-        shared: true, intersect: false,
-        y: [
-            { formatter: (v: number) => formatCurrency(v) },
-            { formatter: (v: number) => formatNumber(v) + ' transaksi' },
-        ],
-    },
-    noData: { text: 'Belum ada data penjualan', style: { fontSize: '13px' } },
-}))
+const trendSummary = computed(() => props.revenue_trend.summary)
 
-const revenueTrendSeries = computed(() => [
-    { name: 'Pendapatan', data: props.revenue_trend.map(p => p.revenue) },
-    { name: 'Transaksi',  data: props.revenue_trend.map(p => p.transactions) },
-])
+const formatBucketLabel = (key: string): string => {
+    if (!key) return '-'
+    try {
+        const dt = new Date(key.replace(' ', 'T'))
+        if (Number.isNaN(dt.getTime())) return key
+        if (selectedPeriod.value === 'daily') {
+            return dt.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+        }
+        return dt.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' })
+    } catch {
+        return key
+    }
+}
+
+const revenueTrendOptions = computed(() => {
+    const sum = trendSummary.value
+    return {
+        ...chartBaseOptions.value,
+        chart: { ...chartBaseOptions.value.chart, id: 'revenue-trend', type: 'area' as const, height: 320 },
+        dataLabels: {
+            enabled: true,
+            enabledOnSeries: [1],
+            formatter: (v: number) => v > 0 ? formatCurrencyCompact(v) : '',
+            background: { enabled: true, foreColor: '#0f766e', borderRadius: 4, padding: 3, opacity: 0.85, borderColor: PALETTE.teal },
+            style: { fontSize: '9px', fontWeight: 600 },
+            offsetY: -6,
+        },
+        stroke: {
+            curve: 'smooth' as const,
+            width: [2, 3, 2],
+            dashArray: [0, 0, 6],
+        },
+        fill: {
+            type: 'gradient',
+            gradient: { shadeIntensity: 1, opacityFrom: [0.15, 0.5, 0.05], opacityTo: [0.01, 0.02, 0.01], stops: [0, 90, 100] },
+        },
+        markers: {
+            size: [3, 4, 3],
+            strokeWidth: 2,
+            strokeColors: '#ffffff',
+            hover: { size: 6 },
+        },
+        xaxis: {
+            categories: props.revenue_trend.labels,
+            labels: { style: { fontSize: '11px', colors: '#475569' }, rotate: -25, rotateAlways: false },
+            title: { text: trendLabel.value, style: { fontSize: '11px', color: '#334155', fontWeight: 600 } },
+            axisBorder: { color: '#e2e8f0' },
+            axisTicks: { color: '#e2e8f0' },
+        },
+        yaxis: {
+            title: { text: 'Pendapatan (Rp)', style: { fontSize: '11px', color: '#334155', fontWeight: 600 } },
+            labels: { formatter: (v: number) => formatCurrencyCompact(v), style: { fontSize: '10px', colors: '#64748b' } },
+        },
+        annotations: {
+            yaxis: sum.avg_revenue > 0 ? [
+                {
+                    y: sum.avg_revenue,
+                    borderColor: PALETTE_STRONG.amber,
+                    strokeDashArray: 4,
+                    label: {
+                        borderColor: PALETTE_STRONG.amber,
+                        style: { color: '#78350f', background: PALETTE.amber, fontSize: '10px', fontWeight: 600 },
+                        text: `Rata-rata ${formatCurrencyCompact(sum.avg_revenue)}`,
+                        position: 'left',
+                        offsetX: 80,
+                    },
+                },
+                ...(sum.max_revenue > 0 ? [{
+                    y: sum.max_revenue,
+                    borderColor: PALETTE_STRONG.rose,
+                    strokeDashArray: 4,
+                    label: {
+                        borderColor: PALETTE_STRONG.rose,
+                        style: { color: '#881337', background: PALETTE.rose, fontSize: '10px', fontWeight: 600 },
+                        text: `Tertinggi ${formatCurrencyCompact(sum.max_revenue)}`,
+                        position: 'right',
+                    },
+                }] : []),
+            ] : [],
+        },
+        colors: [PALETTE_STRONG.violet, PALETTE_STRONG.teal, PALETTE_STRONG.amber],
+        legend: { position: 'top' as const, fontSize: '12px', fontWeight: 500, markers: { size: 8 } },
+        tooltip: {
+            ...chartBaseOptions.value.tooltip,
+            shared: true, intersect: false,
+            y: { formatter: (v: number) => formatCurrency(v) },
+        },
+        grid: { ...chartBaseOptions.value.grid, padding: { top: 10, right: 20, bottom: 0, left: 10 } },
+        noData: { text: 'Belum ada data penjualan', style: { fontSize: '13px' } },
+    }
+})
+
+const revenueTrendSeries = computed(() => {
+    const buckets = props.revenue_trend
+    const currentHasData = buckets.current.some((p: TrendPoint) => p.revenue > 0)
+
+    return [
+        { name: 'Masa Lalu',     data: buckets.previous.map((p: TrendPoint) => p.revenue) },
+        { name: 'Masa Sekarang', data: buckets.current.map((p: TrendPoint)  => p.revenue) },
+        ...(currentHasData ? [{ name: 'Prediksi (MA)', data: buckets.forecast.map((p: TrendPoint) => p.revenue) }] : []),
+    ]
+})
+
+const hasRevenueTrend = computed(() => {
+    const t = props.revenue_trend
+    return (
+        (t.current.some(p => p.revenue > 0 || p.transactions > 0)) ||
+        (t.previous.some(p => p.revenue > 0 || p.transactions > 0))
+    )
+})
+
+const hasTopProducts   = computed(() => props.top_products.some(p => (p.revenue ?? 0) > 0))
+const hasTopCategories = computed(() => props.top_categories.some(c => (c.revenue ?? 0) > 0))
+const hasTopBrands     = computed(() => props.top_brands.some(b => (b.revenue ?? 0) > 0))
+const hasPayments      = computed(() => props.payment_methods.some(p => (p.count ?? 0) > 0))
 
 const barDataLabels = computed(() => ({
     enabled: true,
-    formatter: (v: number) => formatCurrency(v),
-    offsetX: 8,
-    style: { fontSize: '10px', colors: [isDark.value ? '#ccc' : '#444'] },
+    formatter: (v: number) => formatCurrencyCompact(v),
+    offsetX: 28,
+    style: { fontSize: '10px', fontWeight: 600, colors: ['#334155'] },
 }))
 
 const barPlotOptions = {
-    bar: { horizontal: true, borderRadius: 4, barHeight: '60%', dataLabels: { position: 'top' } },
+    bar: {
+        horizontal: true,
+        borderRadius: 6,
+        barHeight: '65%',
+        distributed: true,
+        dataLabels: { position: 'top' },
+    },
 }
 
 const topProductsOptions = computed(() => ({
     ...chartBaseOptions.value,
-    chart: { ...chartBaseOptions.value.chart, type: 'bar', height: 220 },
+    chart: { ...chartBaseOptions.value.chart, type: 'bar' as const, height: 240 },
     plotOptions: barPlotOptions,
     dataLabels: barDataLabels.value,
     xaxis: {
         categories: props.top_products.map(p => p.name),
-        labels: { formatter: (v: number) => formatCurrency(v), style: { fontSize: '10px' } },
+        title: { text: 'Pendapatan (Rp)', style: { fontSize: '11px', color: '#334155', fontWeight: 600 } },
+        labels: { formatter: (v: number) => formatCurrencyCompact(v), style: { fontSize: '10px', colors: '#64748b' } },
     },
-    colors: ['hsl(221 83% 53%)'],
+    yaxis: { labels: { style: { fontSize: '11px', colors: '#475569' } } },
+    colors: PASTEL_COLORS,
+    legend: { show: false },
     noData: { text: 'Belum ada data', style: { fontSize: '13px' } },
     tooltip: { ...chartBaseOptions.value.tooltip, y: { formatter: (v: number) => formatCurrency(v) } },
 }))
 
 const topProductsSeries = computed(() => [{ name: 'Pendapatan', data: props.top_products.map(p => p.revenue) }])
 
-const donutColors = [
-    'hsl(221 83% 53%)', 'hsl(142 71% 45%)', 'hsl(38 92% 50%)',
-    'hsl(291 64% 42%)', 'hsl(15 75% 55%)',
-]
+const donutColors = PASTEL_COLORS
 
 const donutPlotOptions = (label: string, formatter: (w: any) => string) => ({
     pie: {
@@ -208,14 +320,20 @@ const donutPlotOptions = (label: string, formatter: (w: any) => string) => ({
 
 const topCategoriesOptions = computed(() => ({
     ...chartBaseOptions.value,
-    chart: { ...chartBaseOptions.value.chart, type: 'donut', height: 260 },
+    chart: { ...chartBaseOptions.value.chart, type: 'donut' as const, height: 280 },
     labels: props.top_categories.map(c => c.name),
     colors: donutColors,
+    stroke: { width: 2, colors: ['#ffffff'] },
     plotOptions: donutPlotOptions('Total', (w: any) =>
-        formatCurrency(w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0))
+        formatCurrencyCompact(w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0))
     ),
-    dataLabels: { enabled: false },
-    legend: { position: 'bottom' as const, fontSize: '11px' },
+    dataLabels: {
+        enabled: true,
+        formatter: (val: number) => val.toFixed(0) + '%',
+        style: { fontSize: '11px', fontWeight: 700, colors: ['#334155'] },
+        dropShadow: { enabled: false },
+    },
+    legend: { position: 'bottom' as const, fontSize: '11px', fontWeight: 500, markers: { size: 8 } },
     noData: { text: 'Belum ada data', style: { fontSize: '13px' } },
     tooltip: { ...chartBaseOptions.value.tooltip, y: { formatter: (v: number) => formatCurrency(v) } },
 }))
@@ -224,14 +342,17 @@ const topCategoriesSeries = computed(() => props.top_categories.map(c => c.reven
 
 const topBrandsOptions = computed(() => ({
     ...chartBaseOptions.value,
-    chart: { ...chartBaseOptions.value.chart, type: 'bar', height: 220 },
+    chart: { ...chartBaseOptions.value.chart, type: 'bar' as const, height: 240 },
     plotOptions: barPlotOptions,
     dataLabels: barDataLabels.value,
     xaxis: {
         categories: props.top_brands.map(b => b.name),
-        labels: { formatter: (v: number) => formatCurrency(v), style: { fontSize: '10px' } },
+        title: { text: 'Pendapatan (Rp)', style: { fontSize: '11px', color: '#334155', fontWeight: 600 } },
+        labels: { formatter: (v: number) => formatCurrencyCompact(v), style: { fontSize: '10px', colors: '#64748b' } },
     },
-    colors: ['hsl(291 64% 42%)'],
+    yaxis: { labels: { style: { fontSize: '11px', colors: '#475569' } } },
+    colors: [PALETTE.violet, PALETTE.lavender, PALETTE.sky, PALETTE.mint, PALETTE.peach],
+    legend: { show: false },
     noData: { text: 'Belum ada data', style: { fontSize: '13px' } },
     tooltip: { ...chartBaseOptions.value.tooltip, y: { formatter: (v: number) => formatCurrency(v) } },
 }))
@@ -250,14 +371,20 @@ const paymentMethodLabel = (method: string): string => {
 
 const paymentOptions = computed(() => ({
     ...chartBaseOptions.value,
-    chart: { ...chartBaseOptions.value.chart, type: 'donut', height: 260 },
+    chart: { ...chartBaseOptions.value.chart, type: 'donut' as const, height: 280 },
     labels: props.payment_methods.map(p => paymentMethodLabel(p.method)),
-    colors: ['hsl(142 71% 45%)', 'hsl(221 83% 53%)', 'hsl(38 92% 50%)', 'hsl(15 75% 55%)', 'hsl(291 64% 42%)'],
+    colors: [PALETTE.teal, PALETTE.amber, PALETTE.sky, PALETTE.rose, PALETTE.violet],
+    stroke: { width: 2, colors: ['#ffffff'] },
     plotOptions: donutPlotOptions('Transaksi', (w: any) =>
         formatNumber(w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0))
     ),
-    dataLabels: { enabled: false },
-    legend: { position: 'bottom' as const, fontSize: '11px' },
+    dataLabels: {
+        enabled: true,
+        formatter: (val: number) => val.toFixed(0) + '%',
+        style: { fontSize: '11px', fontWeight: 700, colors: ['#334155'] },
+        dropShadow: { enabled: false },
+    },
+    legend: { position: 'bottom' as const, fontSize: '11px', fontWeight: 500, markers: { size: 8 } },
     noData: { text: 'Belum ada data', style: { fontSize: '13px' } },
     tooltip: { ...chartBaseOptions.value.tooltip, y: { formatter: (v: number) => formatNumber(v) + ' transaksi' } },
 }))
@@ -331,13 +458,48 @@ const comparisonRows = computed(() => [
             </div>
         </div>
 
-        <!-- Tren Pendapatan (Area chart, full width) -->
+        <!-- Tren Pendapatan (Area chart, full width) — Past vs Present vs Forecast -->
         <div class="chart-card chart-card--full">
-            <div class="chart-card__header">
-                <h3 class="chart-card__title">Tren Pendapatan</h3>
-                <span class="chart-card__sub">{{ trendLabel }} dalam periode yang dipilih</span>
+            <div class="chart-card__header chart-card__header--row">
+                <div>
+                    <h3 class="chart-card__title">Tren Pendapatan</h3>
+                    <span class="chart-card__sub">{{ trendLabel }} • Masa Lalu vs Masa Sekarang vs Prediksi</span>
+                </div>
+                <div class="trend-summary">
+                    <div class="trend-summary__item">
+                        <span class="trend-summary__label">Tertinggi</span>
+                        <span class="trend-summary__value trend-summary__value--rose">
+                            {{ formatCurrencyCompact(trendSummary.max_revenue) }}
+                        </span>
+                        <span class="trend-summary__hint">{{ formatBucketLabel(trendSummary.max_period) }}</span>
+                    </div>
+                    <div class="trend-summary__item">
+                        <span class="trend-summary__label">Rata-rata</span>
+                        <span class="trend-summary__value trend-summary__value--amber">
+                            {{ formatCurrencyCompact(trendSummary.avg_revenue) }}
+                        </span>
+                        <span class="trend-summary__hint">per {{ trendLabel.toLowerCase() }}</span>
+                    </div>
+                    <div class="trend-summary__item">
+                        <span class="trend-summary__label">Total Transaksi</span>
+                        <span class="trend-summary__value trend-summary__value--teal">
+                            {{ formatNumber(trendSummary.total_transactions) }}
+                        </span>
+                        <span class="trend-summary__hint">{{ formatCurrencyCompact(trendSummary.total_revenue) }}</span>
+                    </div>
+                </div>
             </div>
-            <VueApexCharts type="area" height="280" :options="revenueTrendOptions" :series="revenueTrendSeries" />
+            <VueApexCharts
+                v-if="hasRevenueTrend"
+                type="area"
+                height="320"
+                :options="revenueTrendOptions"
+                :series="revenueTrendSeries"
+            />
+            <div v-else class="chart-empty-state" style="height: 320px">
+                <p class="chart-empty-title">Belum ada data penjualan</p>
+                <p class="chart-empty-sub">Belum ada transaksi untuk periode ini</p>
+            </div>
         </div>
 
         <!-- Row 2: Perbandingan Periode + Pembayaran Populer -->
@@ -374,7 +536,17 @@ const comparisonRows = computed(() => [
                     <h3 class="chart-card__title">Pembayaran Populer</h3>
                     <span class="chart-card__sub">Distribusi metode pembayaran</span>
                 </div>
-                <VueApexCharts type="donut" height="260" :options="paymentOptions" :series="paymentSeries" />
+                <VueApexCharts
+                    v-if="hasPayments"
+                    type="donut"
+                    height="260"
+                    :options="paymentOptions"
+                    :series="paymentSeries"
+                />
+                <div v-else class="chart-empty-state" style="height: 260px">
+                    <p class="chart-empty-title">Belum ada data pembayaran</p>
+                    <p class="chart-empty-sub">Belum ada transaksi pada periode ini</p>
+                </div>
             </div>
         </div>
 
@@ -385,7 +557,17 @@ const comparisonRows = computed(() => [
                     <h3 class="chart-card__title">Top 5 Produk</h3>
                     <span class="chart-card__sub">Berdasarkan pendapatan</span>
                 </div>
-                <VueApexCharts type="bar" height="220" :options="topProductsOptions" :series="topProductsSeries" />
+                <VueApexCharts
+                    v-if="hasTopProducts"
+                    type="bar"
+                    height="220"
+                    :options="topProductsOptions"
+                    :series="topProductsSeries"
+                />
+                <div v-else class="chart-empty-state" style="height: 220px">
+                    <p class="chart-empty-title">Belum ada produk terjual</p>
+                    <p class="chart-empty-sub">Top produk akan muncul setelah ada penjualan</p>
+                </div>
                 <div class="table-scroll">
                     <table class="rank-table" v-if="top_products.length > 0">
                         <thead>
@@ -409,7 +591,17 @@ const comparisonRows = computed(() => [
                     <h3 class="chart-card__title">Top 5 Kategori</h3>
                     <span class="chart-card__sub">Distribusi pendapatan per kategori</span>
                 </div>
-                <VueApexCharts type="donut" height="260" :options="topCategoriesOptions" :series="topCategoriesSeries" />
+                <VueApexCharts
+                    v-if="hasTopCategories"
+                    type="donut"
+                    height="260"
+                    :options="topCategoriesOptions"
+                    :series="topCategoriesSeries"
+                />
+                <div v-else class="chart-empty-state" style="height: 260px">
+                    <p class="chart-empty-title">Belum ada data kategori</p>
+                    <p class="chart-empty-sub">Distribusi kategori akan muncul setelah ada penjualan</p>
+                </div>
                 <div class="table-scroll">
                     <table class="rank-table" v-if="top_categories.length > 0">
                         <thead>
@@ -435,8 +627,17 @@ const comparisonRows = computed(() => [
                 <h3 class="chart-card__title">Top 5 Merek</h3>
                 <span class="chart-card__sub">Merek dengan pendapatan tertinggi</span>
             </div>
-            <VueApexCharts type="bar" height="220" :options="topBrandsOptions" :series="topBrandsSeries" />
-            <p v-if="top_brands.length === 0" class="chart-empty">Belum ada data merek</p>
+            <VueApexCharts
+                v-if="hasTopBrands"
+                type="bar"
+                height="220"
+                :options="topBrandsOptions"
+                :series="topBrandsSeries"
+            />
+            <div v-else class="chart-empty-state" style="height: 220px">
+                <p class="chart-empty-title">Belum ada data merek</p>
+                <p class="chart-empty-sub">Top merek akan muncul setelah ada penjualan</p>
+            </div>
         </div>
     </div>
 </template>
@@ -464,7 +665,8 @@ const comparisonRows = computed(() => [
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    overflow: visible;
 }
 
 .filter-tabs {
@@ -497,9 +699,19 @@ const comparisonRows = computed(() => [
 }
 
 .filter-tab--active {
-    background: var(--primary);
-    color: var(--primary-foreground);
-    border-color: var(--primary);
+    background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+    color: #ffffff;
+    border-color: #0d9488;
+    font-weight: 600;
+    box-shadow:
+        0 2px 6px rgba(20, 184, 166, 0.35),
+        0 0 0 2px rgba(20, 184, 166, 0.12);
+}
+
+.filter-tab--active:hover {
+    background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+    color: #ffffff;
+    border-color: #0f766e;
 }
 
 .custom-range {
@@ -632,6 +844,56 @@ const comparisonRows = computed(() => [
     gap: 0.15rem;
 }
 
+.chart-card__header--row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+/* ── Trend summary chips ────────────────────────────────────────────────── */
+.trend-summary {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.trend-summary__item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.1rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: calc(var(--radius) - 2px);
+    background: color-mix(in srgb, var(--muted) 55%, transparent);
+    min-width: 110px;
+}
+
+.trend-summary__label {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: var(--pos-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.trend-summary__value {
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.trend-summary__value--rose  { color: #e11d48; }
+.trend-summary__value--amber { color: #d97706; }
+.trend-summary__value--teal  { color: #0d9488; }
+
+.trend-summary__hint {
+    font-size: 0.6875rem;
+    color: var(--pos-text-muted);
+    font-weight: 500;
+}
+
 .chart-card__title {
     font-size: 0.9375rem;
     font-weight: 600;
@@ -721,6 +983,31 @@ const comparisonRows = computed(() => [
     color: var(--pos-text-muted);
     font-size: 0.8125rem;
     padding: 1.5rem 0;
+    margin: 0;
+}
+
+/* ── Chart empty state (when no data) ───────────────────────────────────── */
+.chart-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    background: color-mix(in srgb, var(--muted) 40%, transparent);
+    border: 1px dashed var(--border);
+    border-radius: calc(var(--radius) - 2px);
+}
+
+.chart-empty-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--pos-text-secondary);
+    margin: 0;
+}
+
+.chart-empty-sub {
+    font-size: 0.75rem;
+    color: var(--pos-text-muted);
     margin: 0;
 }
 

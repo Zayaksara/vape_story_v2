@@ -56,6 +56,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('payment/process', 'App\Http\Controllers\POS\ProcessPaymentController@process')->name('payment.process');
         Route::get('products', [App\Http\Controllers\POS\ProductController::class, 'index'])->name('products.index');
         Route::get('transactions/today', [App\Http\Controllers\POS\TodayTransactionController::class, 'index'])->name('transactions.today');
+
+        Route::get('returns', [App\Http\Controllers\POS\ReturnController::class, 'index'])->name('returns.index');
+        Route::post('returns', [App\Http\Controllers\POS\ReturnController::class, 'store'])->name('returns.store');
     });
 });
 

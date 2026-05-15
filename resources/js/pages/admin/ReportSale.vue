@@ -11,6 +11,7 @@ import {
   Tags,
   CreditCard,
   Boxes,
+  Undo2,
   TrendingUp,
   AlertTriangle,
   DollarSign,
@@ -43,8 +44,8 @@ defineOptions({
 
 // ─── Types ───────────────────────────────────────────────────────────────
 type Period = 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly' | 'custom'
-type TabKey = 'category' | 'product' | 'brand' | 'payment' | 'stock'
-type ExportType = 'category' | 'product' | 'brand' | 'payment' | 'stock_top' | 'stock_out'
+type TabKey = 'category' | 'product' | 'brand' | 'payment' | 'stock' | 'returns'
+type ExportType = 'category' | 'product' | 'brand' | 'payment' | 'stock_top' | 'stock_out' | 'returns'
 
 interface CategoryRow { id: string; name: string; qty: number; revenue: number; profit: number; stock: number }
 interface BrandRow extends CategoryRow {}
@@ -64,6 +65,30 @@ interface OutOfStockRow {
   last_sold_at: string | null;
 }
 
+interface ReturnItemRow {
+  product_name: string
+  quantity: number
+  unit_price: number
+  subtotal: number
+}
+interface ReturnRow {
+  id: string
+  return_number: string
+  invoice_number: string
+  reason: string
+  notes: string | null
+  status: string
+  cashier_name: string
+  created_at: string
+  items: ReturnItemRow[]
+  total_qty: number
+  total_value: number
+}
+interface ReturnsData {
+  list: ReturnRow[]
+  totals: { total_returns: number; total_qty: number; total_value: number }
+}
+
 interface Category { id: string; name: string }
 interface Brand { id: string; name: string }
 
@@ -73,6 +98,7 @@ const props = defineProps<{
   by_brand: BrandRow[]
   by_payment_method: PaymentRow[]
   by_stock: { top_selling: TopSellingRow[]; out_of_stock: OutOfStockRow[] }
+  by_returns: ReturnsData
   summary: { total_revenue: number; total_profit: number; total_items: number; total_transactions: number }
   period: Period
   date_range: { start: string; end: string }
@@ -144,6 +170,7 @@ const tabs: { key: TabKey; label: string; icon: any }[] = [
   { key: 'brand',    label: 'Merek',        icon: Tags },
   { key: 'payment',  label: 'Metode Bayar', icon: CreditCard },
   { key: 'stock',    label: 'Stok',         icon: Boxes },
+  { key: 'returns',  label: 'Return',       icon: Undo2 },
 ]
 
 const periodOptions: { value: Period; label: string }[] = [
@@ -163,6 +190,7 @@ const exportOptions = computed<{ value: ExportType; label: string }[]>(() => {
     { value: 'payment',  label: 'Per Metode Bayar' },
     { value: 'stock_top', label: 'Stok Terlaris' },
     { value: 'stock_out', label: 'Stok Habis' },
+    { value: 'returns', label: 'Return' },
   ]
   return base
 })
@@ -246,6 +274,32 @@ const filteredOutOfStock = computed(() =>
     r => matchesSearch(r.name) || (r.code && r.code.toLowerCase().includes(search.value.toLowerCase())),
   ),
 )
+
+const filteredReturns = computed(() => {
+  const q = search.value.trim().toLowerCase()
+  const list = props.by_returns?.list ?? []
+  if (!q) return list
+  return list.filter(r =>
+    r.return_number.toLowerCase().includes(q) ||
+    r.invoice_number.toLowerCase().includes(q) ||
+    r.cashier_name.toLowerCase().includes(q) ||
+    r.reason.toLowerCase().includes(q) ||
+    r.items.some(it => it.product_name.toLowerCase().includes(q)),
+  )
+})
+
+const expandedReturns = ref<Set<string>>(new Set())
+function toggleReturn(id: string) {
+  if (expandedReturns.value.has(id)) expandedReturns.value.delete(id)
+  else expandedReturns.value.add(id)
+}
+
+function formatDateTime(iso: string | null): string {
+  if (!iso) return '—'
+  const d = new Date(iso)
+  return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })
+    + ' ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+}
 
 // ─── Period change ──────────────────────────────────────────────────────
 function applyPeriod() {
@@ -586,6 +640,105 @@ const periodLabel = computed(() => {
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- ─── RETURN ─────────────────────────────────────────────────── -->
+      <div v-else-if="activeTab === 'returns'" class="p-4 space-y-4">
+        <!-- Summary mini-cards -->
+        <div class="grid grid-cols-2 gap-3 md:grid-cols-3">
+          <div class="rounded-lg border p-3" style="border-color: var(--pos-border); background: var(--pos-bg-secondary);">
+            <p class="text-[11px] font-semibold uppercase tracking-wide" style="color: var(--pos-text-muted);">Total Return</p>
+            <p class="mt-1 text-lg font-bold" style="color: var(--pos-text-primary);">
+              {{ formatNum(props.by_returns?.totals?.total_returns ?? 0) }}
+            </p>
+          </div>
+          <div class="rounded-lg border p-3" style="border-color: var(--pos-border); background: var(--pos-bg-secondary);">
+            <p class="text-[11px] font-semibold uppercase tracking-wide" style="color: var(--pos-text-muted);">Total Qty Dikembalikan</p>
+            <p class="mt-1 text-lg font-bold" style="color: var(--pos-text-primary);">
+              {{ formatNum(props.by_returns?.totals?.total_qty ?? 0) }}
+            </p>
+          </div>
+          <div class="rounded-lg border p-3" style="border-color: var(--pos-border); background: var(--pos-bg-secondary);">
+            <p class="text-[11px] font-semibold uppercase tracking-wide" style="color: var(--pos-text-muted);">Total Nilai Return</p>
+            <p class="mt-1 text-lg font-bold" style="color: var(--pos-danger-text);">
+              {{ formatRp(props.by_returns?.totals?.total_value ?? 0) }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Returns list -->
+        <div class="overflow-x-auto rounded-lg border" style="border-color: var(--pos-border);">
+          <table class="w-full text-sm">
+            <thead style="background: var(--pos-bg-secondary);">
+              <tr class="text-left">
+                <th class="px-4 py-3 text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">No. Return</th>
+                <th class="px-4 py-3 text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Tanggal</th>
+                <th class="px-4 py-3 text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Transaksi</th>
+                <th class="px-4 py-3 text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Kasir</th>
+                <th class="px-4 py-3 text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Alasan</th>
+                <th class="px-4 py-3 text-xs font-bold uppercase tracking-wide text-right" style="color: var(--pos-text-muted);">Qty</th>
+                <th class="px-4 py-3 text-xs font-bold uppercase tracking-wide text-right" style="color: var(--pos-text-muted);">Nilai</th>
+                <th class="px-4 py-3 text-xs font-bold uppercase tracking-wide text-center" style="color: var(--pos-text-muted);">Status</th>
+                <th class="px-1 py-3 w-8"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-if="!filteredReturns.length">
+                <td colspan="9" class="px-4 py-12 text-center text-sm" style="color: var(--pos-text-muted);">
+                  Tidak ada transaksi return pada periode ini.
+                </td>
+              </tr>
+              <template v-for="r in filteredReturns" :key="r.id">
+                <tr
+                  class="cursor-pointer border-t transition hover:bg-gray-50"
+                  style="border-color: var(--pos-border);"
+                  @click="toggleReturn(r.id)"
+                >
+                  <td class="px-4 py-3 font-mono text-xs font-semibold" style="color: var(--pos-text-primary);">{{ r.return_number }}</td>
+                  <td class="px-4 py-3 text-xs" style="color: var(--pos-text-muted);">{{ formatDateTime(r.created_at) }}</td>
+                  <td class="px-4 py-3 font-mono text-xs" style="color: var(--pos-text-secondary);">{{ r.invoice_number }}</td>
+                  <td class="px-4 py-3 text-xs" style="color: var(--pos-text-secondary);">{{ r.cashier_name }}</td>
+                  <td class="px-4 py-3 text-xs" style="color: var(--pos-text-secondary);">{{ r.reason }}</td>
+                  <td class="px-4 py-3 text-right text-xs font-semibold" style="color: var(--pos-text-primary);">{{ formatNum(r.total_qty) }}</td>
+                  <td class="px-4 py-3 text-right text-xs font-bold" style="color: var(--pos-danger-text);">{{ formatRp(r.total_value) }}</td>
+                  <td class="px-4 py-3 text-center">
+                    <span
+                      class="inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold"
+                      style="background: var(--pos-success-bg); color: var(--pos-success-text);"
+                    >{{ r.status }}</span>
+                  </td>
+                  <td class="px-1 py-3 text-center">
+                    <ChevronDown
+                      :class="['h-3.5 w-3.5 transition-transform', expandedReturns.has(r.id) ? 'rotate-180' : '']"
+                      style="color: var(--pos-text-light);"
+                    />
+                  </td>
+                </tr>
+                <tr v-if="expandedReturns.has(r.id)" style="background: var(--pos-bg-secondary);">
+                  <td colspan="9" class="px-6 py-3">
+                    <p class="mb-2 text-[11px] font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">
+                      Detail Item ({{ r.items.length }})
+                    </p>
+                    <div class="space-y-1">
+                      <div
+                        v-for="(it, idx) in r.items"
+                        :key="idx"
+                        class="flex items-center justify-between text-xs"
+                        style="color: var(--pos-text-secondary);"
+                      >
+                        <span>{{ it.quantity }}× {{ it.product_name }}</span>
+                        <span class="font-semibold">{{ formatRp(it.subtotal) }}</span>
+                      </div>
+                    </div>
+                    <p v-if="r.notes" class="mt-2 text-[11px] italic" style="color: var(--pos-text-muted);">
+                      Catatan: {{ r.notes }}
+                    </p>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- ─── STOK ───────────────────────────────────────────────────── -->

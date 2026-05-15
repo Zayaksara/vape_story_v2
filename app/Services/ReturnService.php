@@ -5,9 +5,11 @@ namespace App\Services;
 use App\Enums\MutationType;
 use App\Enums\OrderStatus;
 use App\Enums\ReturnStatus;
+use App\Models\Batch;
 use App\Models\Order;
 use App\Models\ProductReturn;
 use App\Models\ReturnItem;
+use App\Models\Sale;
 use App\Models\StockMutation;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -123,6 +125,101 @@ class ReturnService
         ]);
 
         return $productReturn->fresh();
+    }
+
+    /**
+     * Kasir memproses return langsung dari Sale (POS) — tanpa approval admin.
+     * Stok dikembalikan ke batch dengan expiry terdekat (FEFO restore).
+     */
+    public function processSaleReturn(Sale $sale, User $cashier, array $data): ProductReturn
+    {
+        return DB::transaction(function () use ($sale, $cashier, $data) {
+            if ($sale->status === 'returned') {
+                throw new \RuntimeException('Transaksi ini sudah di-return.');
+            }
+            if ($sale->status !== 'completed') {
+                throw new \RuntimeException('Hanya transaksi completed yang bisa di-return.');
+            }
+            if (empty($data['items'])) {
+                throw new \RuntimeException('Minimal satu item harus dipilih untuk return.');
+            }
+
+            $saleItems = $sale->items()->with('product')->get()->keyBy('id');
+
+            $productReturn = ProductReturn::create([
+                'return_number' => $this->generateReturnNumber(),
+                'sale_id' => $sale->id,
+                'cashier_id' => $cashier->id,
+                'reason' => $data['reason'],
+                'status' => ReturnStatus::PROCESSED,
+                'approved_by' => $cashier->id,
+                'approved_at' => now(),
+                'notes' => $data['notes'] ?? null,
+            ]);
+
+            $totalReturnedQty = 0;
+            $totalOriginalQty = 0;
+
+            foreach ($data['items'] as $reqItem) {
+                $saleItem = $saleItems->get($reqItem['sale_item_id']) ?? null;
+                if (! $saleItem) {
+                    throw new \RuntimeException('Item transaksi tidak ditemukan.');
+                }
+
+                $qty = (int) $reqItem['quantity'];
+                if ($qty <= 0) {
+                    continue;
+                }
+                if ($qty > (int) $saleItem->quantity) {
+                    throw new \RuntimeException('Jumlah return melebihi jumlah pembelian.');
+                }
+
+                $totalOriginalQty += (int) $saleItem->quantity;
+                $totalReturnedQty += $qty;
+
+                // FEFO restore: kembalikan stok ke batch dengan expiry terdekat untuk produk ini
+                $batch = Batch::where('product_id', $saleItem->product_id)
+                    ->orderBy('expired_date', 'asc')
+                    ->lockForUpdate()
+                    ->first();
+
+                if (! $batch) {
+                    throw new \RuntimeException('Tidak ada batch tujuan untuk produk '.($saleItem->product->name ?? '').'.');
+                }
+
+                $batch->increment('stock_quantity', $qty);
+
+                ReturnItem::create([
+                    'return_id' => $productReturn->id,
+                    'batch_id' => $batch->id,
+                    'product_name' => $saleItem->product->name ?? '-',
+                    'quantity' => $qty,
+                    'unit_price' => $saleItem->unit_price,
+                    'subtotal' => $qty * (float) $saleItem->unit_price,
+                ]);
+
+                StockMutation::create([
+                    'batch_id' => $batch->id,
+                    'mutation_type' => MutationType::RETURN,
+                    'quantity' => $qty,
+                    'reference_type' => ProductReturn::class,
+                    'reference_id' => $productReturn->id,
+                    'notes' => 'Return POS #'.$productReturn->return_number,
+                ]);
+            }
+
+            if ($totalReturnedQty === 0) {
+                throw new \RuntimeException('Tidak ada item dengan jumlah return yang valid.');
+            }
+
+            // Hitung total qty asli (loop semua sale items, bukan hanya yg di-return)
+            $allOriginalQty = (int) $sale->items->sum('quantity');
+            $sale->update([
+                'status' => $totalReturnedQty >= $allOriginalQty ? 'returned' : 'partial_return',
+            ]);
+
+            return $productReturn->load('returnItems');
+        });
     }
 
     /**

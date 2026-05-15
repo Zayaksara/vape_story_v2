@@ -33,4 +33,14 @@ class Sale extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function productReturns()
+    {
+        return $this->hasMany(ProductReturn::class, 'sale_id');
+    }
+
+    public function hasReturn(): bool
+    {
+        return $this->productReturns()->exists();
+    }
 }

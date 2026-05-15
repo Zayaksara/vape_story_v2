@@ -25,6 +25,7 @@ class ReportSaleController extends Controller
         $byProduct  = $this->aggregateByProduct($start, $end);
         $byPayment  = $this->aggregateByPayment($start, $end);
         $byStock    = $this->aggregateStock($start, $end);
+        $byReturns  = $this->aggregateReturns($start, $end);
 
         $summary = [
             'total_revenue'      => (float) $byPayment->sum('revenue'),
@@ -39,6 +40,7 @@ class ReportSaleController extends Controller
             'by_brand'          => $byBrand->values(),
             'by_payment_method' => $byPayment->values(),
             'by_stock'          => $byStock,
+            'by_returns'        => $byReturns,
             'summary'           => $summary,
             'period'            => $request->query('period', 'monthly'),
             'date_range'        => [
@@ -61,6 +63,7 @@ class ReportSaleController extends Controller
             'payment'        => $this->csvPayment($start, $end),
             'stock_top'      => $this->csvStockTop($start, $end),
             'stock_out'      => $this->csvStockOut(),
+            'returns'        => $this->csvReturns($start, $end),
             default          => $this->csvCategory($start, $end),
         };
 
@@ -503,6 +506,88 @@ class ReportSaleController extends Controller
         ];
     }
 
+    private function aggregateReturns(Carbon $start, Carbon $end): array
+    {
+        $returns = DB::table('returns')
+            ->leftJoin('sales', 'sales.id', '=', 'returns.sale_id')
+            ->leftJoin('users as cashier', 'cashier.id', '=', 'returns.cashier_id')
+            ->whereBetween('returns.created_at', [$start, $end])
+            ->orderByDesc('returns.created_at')
+            ->select([
+                'returns.id',
+                'returns.return_number',
+                'returns.sale_id',
+                'returns.reason',
+                'returns.notes',
+                'returns.status',
+                'returns.created_at',
+                DB::raw('cashier.name as cashier_name'),
+            ])
+            ->get();
+
+        if ($returns->isEmpty()) {
+            return [
+                'list' => [],
+                'totals' => [
+                    'total_returns' => 0,
+                    'total_qty' => 0,
+                    'total_value' => 0.0,
+                ],
+            ];
+        }
+
+        $returnIds = $returns->pluck('id')->all();
+
+        $items = DB::table('return_items')
+            ->whereIn('return_id', $returnIds)
+            ->select([
+                'return_id',
+                'product_name',
+                'quantity',
+                'unit_price',
+                'subtotal',
+            ])
+            ->get()
+            ->groupBy('return_id');
+
+        $list = $returns->map(function ($r) use ($items) {
+            $rowItems = ($items[$r->id] ?? collect())->map(fn ($i) => [
+                'product_name' => $i->product_name,
+                'quantity' => (int) $i->quantity,
+                'unit_price' => (float) $i->unit_price,
+                'subtotal' => (float) $i->subtotal,
+            ])->values()->all();
+
+            $totalQty = array_sum(array_column($rowItems, 'quantity'));
+            $totalValue = array_sum(array_column($rowItems, 'subtotal'));
+
+            return [
+                'id' => (string) $r->id,
+                'return_number' => $r->return_number,
+                'invoice_number' => $r->sale_id
+                    ? 'SALE-'.str_pad((string) $r->sale_id, 6, '0', STR_PAD_LEFT)
+                    : '-',
+                'reason' => $r->reason,
+                'notes' => $r->notes,
+                'status' => is_object($r->status) ? $r->status->value : (string) $r->status,
+                'cashier_name' => $r->cashier_name ?? '-',
+                'created_at' => Carbon::parse($r->created_at)->toIso8601String(),
+                'items' => $rowItems,
+                'total_qty' => $totalQty,
+                'total_value' => (float) $totalValue,
+            ];
+        })->values();
+
+        return [
+            'list' => $list,
+            'totals' => [
+                'total_returns' => $list->count(),
+                'total_qty' => (int) $list->sum('total_qty'),
+                'total_value' => (float) $list->sum('total_value'),
+            ],
+        ];
+    }
+
     // ─── Subqueries ───────────────────────────────────────────────────────────
 
     private function avgCostSubquery()
@@ -570,6 +655,24 @@ class ReportSaleController extends Controller
         ])->all();
 
         return ['stok-terlaris', $headers, $data];
+    }
+
+    private function csvReturns(Carbon $start, Carbon $end): array
+    {
+        $data = $this->aggregateReturns($start, $end)['list'] ?? [];
+        $headers = ['No. Return', 'Tanggal', 'No. Transaksi', 'Kasir', 'Alasan', 'Total Qty', 'Total Nilai', 'Status'];
+        $rows = collect($data)->map(fn ($r) => [
+            $r['return_number'],
+            Carbon::parse($r['created_at'])->setTimezone(self::TZ)->format('Y-m-d H:i'),
+            $r['invoice_number'],
+            $r['cashier_name'],
+            $r['reason'],
+            $r['total_qty'],
+            $r['total_value'],
+            $r['status'],
+        ])->all();
+
+        return ['return', $headers, $rows];
     }
 
     private function csvStockOut(): array

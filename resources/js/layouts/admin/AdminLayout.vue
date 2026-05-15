@@ -143,12 +143,16 @@
     </div>
 
     <Toaster />
+
+    <!-- AI Assistant Floating Action Button (admin-only) -->
+    <AiAssistantFab />
   </div>
 </template>
 
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3'
 import { Toaster } from '@/components/ui/sonner'
+import AiAssistantFab from '@/components/admin/AiAssistantFab.vue'
 import { ref, computed, onMounted } from 'vue'
 import {
   LayoutDashboard,

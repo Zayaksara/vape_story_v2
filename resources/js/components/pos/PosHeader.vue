@@ -37,12 +37,9 @@ backgroundColor: 'var(--pos-bg-primary)'
 
     <!-- Transaction ID -->
     <div class="ml-auto flex items-center gap-2">
-      <Badge variant="outline" class="text-xs font-mono">
-        {{ transactionId }}
-      </Badge>
       <span class="text-xs"
             :style="{ color: 'var(--pos-text-light)' }">
-        {{ currentTime }}
+        {{ displayTime }}
       </span>
       <span class="text-base font-medium"
             :style="{ color: 'var(--pos-text-primary)' }">
@@ -55,12 +52,45 @@ backgroundColor: 'var(--pos-bg-primary)'
 <script setup lang="ts">
 import { Badge } from '@/components/ui/badge'
 import { useSidebar } from '@/components/ui/sidebar'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 
-defineProps<{
+const props = defineProps<{
   cashierName: string
   transactionId: string
-  currentTime: string
+  currentTime?: string
 }>()
 
 const { toggleSidebar } = useSidebar()
+
+const now = ref(new Date())
+let timer: ReturnType<typeof setInterval> | null = null
+
+function formatNow(d: Date): string {
+  const datePart = d.toLocaleDateString('id-ID', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  })
+  const hh = String(d.getHours()).padStart(2, '0')
+  const mm = String(d.getMinutes()).padStart(2, '0')
+  const ss = String(d.getSeconds()).padStart(2, '0')
+  return `${datePart} ${hh}:${mm}:${ss}`
+}
+
+const displayTime = computed(() =>
+  props.currentTime && props.currentTime.trim() !== ''
+    ? props.currentTime
+    : formatNow(now.value),
+)
+
+onMounted(() => {
+  timer = setInterval(() => {
+    now.value = new Date()
+  }, 1000)
+})
+
+onUnmounted(() => {
+  if (timer) clearInterval(timer)
+})
 </script>

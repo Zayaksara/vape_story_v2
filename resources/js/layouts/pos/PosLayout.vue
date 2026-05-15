@@ -9,7 +9,7 @@
           :transaction-id="transactionId"
           :current-time="currentTime"
         />
-        <div :key="page.url" class="flex flex-col flex-1 min-h-0 overflow-hidden">
+        <div class="flex flex-col flex-1 min-h-0 overflow-hidden">
           <slot />
         </div>
       </SidebarInset>
@@ -21,7 +21,6 @@
 <script setup lang="ts">
 import PosSidebar from '@/components/pos/PosSidebar.vue'
 import PosHeader from '@/components/pos/PosHeader.vue'
-import { usePage } from '@inertiajs/vue3'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { Toaster } from '@/components/ui/sonner'
 
@@ -40,8 +39,6 @@ const props = withDefaults(defineProps<Props>(), {
   transactionId: '',
   currentTime: '',
 })
-
-const page = usePage()
 </script>
 
 <style scoped>

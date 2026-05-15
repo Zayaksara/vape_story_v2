@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Daftar Belanja - Vape Story</title>
+    
     <style>
         /* Hilangkan header/footer browser (tanggal/URL/page#) saat Ctrl+P.
            margin: 0 di @page mengeliminasi area utk header/footer otomatis browser.
@@ -405,7 +406,7 @@
         @if($include_top_selling)
         <div class="section">
             <div class="section-title">
-                <span>🔥 Stok Terlaris (Pertimbangkan Restok) <span class="count">{{ count($top_selling) }} produk</span></span>
+                <span><i class="fa-light fa-fire"></i> Stok Terlaris (Pertimbangkan Restok) <span class="count">{{ count($top_selling) }} produk</span></span>
             </div>
             <table id="topTable" data-section="Stok Terlaris">
                 <thead>
