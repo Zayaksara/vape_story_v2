@@ -1,0 +1,35 @@
+{
+  "worktrees": {
+    "wt-1777031961301-1": {
+      "branch": "flower-pig",
+      "path": "d:\\story_vape\\.kilo\\worktrees\\flower-pig",
+      "parentBranch": "master",
+      "createdAt": "2026-04-24T11:59:21.301Z"
+    },
+    "wt-1777563448627-1": {
+      "branch": "fog-macaroni",
+      "path": "d:\\story_vape\\.kilo\\worktrees\\fog-macaroni",
+      "parentBranch": "master",
+      "createdAt": "2026-04-30T15:37:28.627Z"
+    }
+  },
+  "sessions": {
+    "ses_240a40323ffeYK2WbHrsBQ5nn0": {
+      "worktreeId": "wt-1777031961301-1",
+      "createdAt": "2026-04-24T11:59:34.601Z"
+    },
+    "ses_220f6464cffe5xsLjiEACC7x5K": {
+      "worktreeId": "wt-1777563448627-1",
+      "createdAt": "2026-04-30T15:37:29.782Z"
+    }
+  },
+  "tabOrder": {
+    "local": [
+      "pending:1"
+    ]
+  },
+  "worktreeOrder": [
+    "wt-1777031961301-1",
+    "wt-1777563448627-1"
+  ]
+}
