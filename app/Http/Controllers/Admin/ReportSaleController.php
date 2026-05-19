@@ -270,12 +270,14 @@ class ReportSaleController extends Controller
     {
         $avgCostSub = $this->avgCostSubquery();
         $stockSub   = $this->productStockSubquery();
+        $factorSub  = $this->saleFactorSubquery();
 
         $rows = DB::table('sale_items')
             ->join('sales', 'sales.id', '=', 'sale_items.sale_id')
             ->join('products', 'products.id', '=', 'sale_items.product_id')
             ->join('categories', 'categories.id', '=', 'products.category_id')
             ->leftJoinSub($avgCostSub, 'ac', 'ac.product_id', '=', 'sale_items.product_id')
+            ->leftJoinSub($factorSub, 'sf', 'sf.sale_id', '=', 'sales.id')
             ->whereBetween('sales.created_at', [$start, $end])
             ->where('sales.status', 'completed')
             ->groupBy('categories.id', 'categories.name')
@@ -283,8 +285,8 @@ class ReportSaleController extends Controller
                 'categories.id',
                 'categories.name',
                 DB::raw('SUM(sale_items.quantity)::int as qty'),
-                DB::raw('SUM(sale_items.total)::numeric as revenue'),
-                DB::raw('SUM(sale_items.total - (sale_items.quantity * COALESCE(ac.avg_cost, 0)))::numeric as profit'),
+                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1))::numeric as revenue'),
+                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1) - (sale_items.quantity * COALESCE(ac.avg_cost, 0)))::numeric as profit'),
             ])
             ->orderByDesc('revenue')
             ->get();
@@ -311,12 +313,14 @@ class ReportSaleController extends Controller
     {
         $avgCostSub = $this->avgCostSubquery();
         $stockSub   = $this->productStockSubquery();
+        $factorSub  = $this->saleFactorSubquery();
 
         $rows = DB::table('sale_items')
             ->join('sales', 'sales.id', '=', 'sale_items.sale_id')
             ->join('products', 'products.id', '=', 'sale_items.product_id')
             ->join('brands', 'brands.id', '=', 'products.brand_id')
             ->leftJoinSub($avgCostSub, 'ac', 'ac.product_id', '=', 'sale_items.product_id')
+            ->leftJoinSub($factorSub, 'sf', 'sf.sale_id', '=', 'sales.id')
             ->whereBetween('sales.created_at', [$start, $end])
             ->where('sales.status', 'completed')
             ->groupBy('brands.id', 'brands.name')
@@ -324,8 +328,8 @@ class ReportSaleController extends Controller
                 'brands.id',
                 'brands.name',
                 DB::raw('SUM(sale_items.quantity)::int as qty'),
-                DB::raw('SUM(sale_items.total)::numeric as revenue'),
-                DB::raw('SUM(sale_items.total - (sale_items.quantity * COALESCE(ac.avg_cost, 0)))::numeric as profit'),
+                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1))::numeric as revenue'),
+                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1) - (sale_items.quantity * COALESCE(ac.avg_cost, 0)))::numeric as profit'),
             ])
             ->orderByDesc('revenue')
             ->get();
@@ -352,6 +356,7 @@ class ReportSaleController extends Controller
     {
         $avgCostSub = $this->avgCostSubquery();
         $stockSub   = $this->productStockSubquery();
+        $factorSub  = $this->saleFactorSubquery();
 
         $rows = DB::table('sale_items')
             ->join('sales', 'sales.id', '=', 'sale_items.sale_id')
@@ -360,6 +365,7 @@ class ReportSaleController extends Controller
             ->leftJoin('brands', 'brands.id', '=', 'products.brand_id')
             ->leftJoinSub($avgCostSub, 'ac', 'ac.product_id', '=', 'sale_items.product_id')
             ->leftJoinSub($stockSub, 'ps', 'ps.product_id', '=', 'sale_items.product_id')
+            ->leftJoinSub($factorSub, 'sf', 'sf.sale_id', '=', 'sales.id')
             ->whereBetween('sales.created_at', [$start, $end])
             ->where('sales.status', 'completed')
             ->groupBy('products.id', 'products.code', 'products.name', 'categories.name', 'brands.name', 'ps.stock')
@@ -370,8 +376,8 @@ class ReportSaleController extends Controller
                 DB::raw('categories.name as category_name'),
                 DB::raw('brands.name as brand_name'),
                 DB::raw('SUM(sale_items.quantity)::int as qty'),
-                DB::raw('SUM(sale_items.total)::numeric as revenue'),
-                DB::raw('SUM(sale_items.total - (sale_items.quantity * COALESCE(ac.avg_cost, 0)))::numeric as profit'),
+                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1))::numeric as revenue'),
+                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1) - (sale_items.quantity * COALESCE(ac.avg_cost, 0)))::numeric as profit'),
                 DB::raw('COALESCE(ps.stock, 0)::int as stock'),
             ])
             ->orderByDesc('revenue')
@@ -424,14 +430,14 @@ class ReportSaleController extends Controller
 
     private function aggregateStock(Carbon $start, Carbon $end): array
     {
-        $stockSub = $this->productStockSubquery();
+        $stockSub  = $this->productStockSubquery();
+        $factorSub = $this->saleFactorSubquery();
 
-        // Total revenue periode (untuk hitung persentase kontribusi tiap produk)
-        $totalRevenue = (float) DB::table('sale_items')
-            ->join('sales', 'sales.id', '=', 'sale_items.sale_id')
-            ->whereBetween('sales.created_at', [$start, $end])
-            ->where('sales.status', 'completed')
-            ->sum('sale_items.total') ?: 1.0;
+        // Total revenue periode (net setelah diskon transaksi)
+        $totalRevenue = (float) DB::table('sales')
+            ->whereBetween('created_at', [$start, $end])
+            ->where('status', 'completed')
+            ->sum('total_amount') ?: 1.0;
 
         $topSelling = DB::table('sale_items')
             ->join('sales', 'sales.id', '=', 'sale_items.sale_id')
@@ -439,17 +445,19 @@ class ReportSaleController extends Controller
             ->leftJoin('categories', 'categories.id', '=', 'products.category_id')
             ->leftJoin('brands', 'brands.id', '=', 'products.brand_id')
             ->leftJoinSub($stockSub, 'ps', 'ps.product_id', '=', 'sale_items.product_id')
+            ->leftJoinSub($factorSub, 'sf', 'sf.sale_id', '=', 'sales.id')
             ->whereBetween('sales.created_at', [$start, $end])
             ->where('sales.status', 'completed')
-            ->groupBy('products.id', 'products.code', 'products.name', 'categories.name', 'brands.name', 'ps.stock')
+            ->groupBy('products.id', 'products.code', 'products.name', 'products.min_stock', 'categories.name', 'brands.name', 'ps.stock')
             ->select([
                 'products.id',
                 'products.code',
                 'products.name',
+                'products.min_stock',
                 DB::raw('categories.name as category_name'),
                 DB::raw('brands.name as brand_name'),
                 DB::raw('SUM(sale_items.quantity)::int as qty_sold'),
-                DB::raw('SUM(sale_items.total)::numeric as revenue'),
+                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1))::numeric as revenue'),
                 DB::raw('COALESCE(ps.stock, 0)::int as stock_remaining'),
             ])
             ->orderByDesc('revenue')
@@ -465,6 +473,7 @@ class ReportSaleController extends Controller
                 'revenue'          => (float) $r->revenue,
                 'sales_percentage' => round(((float) $r->revenue / $totalRevenue) * 100, 2),
                 'stock_remaining'  => (int) $r->stock_remaining,
+                'min_stock'        => (int) ($r->min_stock ?? 0),
             ])->values();
 
         // Last sold timestamp per product (subquery)
@@ -602,6 +611,21 @@ class ReportSaleController extends Controller
         return DB::table('batches')
             ->groupBy('product_id')
             ->select('product_id', DB::raw('COALESCE(SUM(stock_quantity), 0)::int as stock'));
+    }
+
+    /**
+     * Faktor diskon per sale = total_amount (setelah diskon) / SUM(sale_items.total) (sebelum diskon trx).
+     * Dipakai untuk mengalikan setiap baris item agar revenue/profit memperhitungkan diskon transaksi.
+     */
+    private function saleFactorSubquery()
+    {
+        return DB::table('sales')
+            ->join('sale_items', 'sale_items.sale_id', '=', 'sales.id')
+            ->groupBy('sales.id', 'sales.total_amount')
+            ->select(
+                DB::raw('sales.id as sale_id'),
+                DB::raw('CASE WHEN SUM(sale_items.total) > 0 THEN sales.total_amount / SUM(sale_items.total) ELSE 1 END as factor')
+            );
     }
 
     // ─── CSV generators ───────────────────────────────────────────────────────

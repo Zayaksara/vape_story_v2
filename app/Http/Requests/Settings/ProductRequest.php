@@ -45,6 +45,7 @@ class ProductRequest extends FormRequest
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
             'description' => ['nullable', 'string', 'max:1000'],
             'is_active' => ['boolean'],
+            'min_stock' => ['nullable', 'integer', 'min:0'],
             // Liquid / Device specific
             'flavor' => ['nullable', 'string', 'max:100'],
             'size_ml' => ['nullable', 'numeric', 'min:0'],
@@ -61,8 +62,8 @@ class ProductRequest extends FormRequest
             'category_id.required' => 'Kategori wajib dipilih.',
             'category_id.exists' => 'Kategori tidak ditemukan.',
             'brand_id.exists' => 'Brand tidak ditemukan.',
-            'base_price.required' => 'Harga dasar wajib diisi.',
-            'base_price.min' => 'Harga dasar tidak boleh negatif.',
+            'base_price.required' => 'Harga Jual wajib diisi.',
+            'base_price.min' => 'Harga Jual tidak boleh negatif.',
             'image.image' => 'File harus berupa gambar.',
             'image.mimes' => 'Format gambar harus jpeg, png, jpg, atau webp.',
             'image.max' => 'Ukuran gambar maksimal 2MB.',

@@ -33,6 +33,7 @@ class Product extends Model
         'description',
         'image',              // ← BARU
         'is_active',
+        'min_stock',
     ];
 
     protected $casts = [
@@ -41,6 +42,7 @@ class Product extends Model
         'size_ml' => 'decimal:2',
         'resistance_ohm' => 'decimal:2',
         'is_active' => 'boolean',
+        'min_stock' => 'integer',
     ];
 
     protected static function boot()
@@ -58,7 +60,7 @@ class Product extends Model
      * Append custom attributes to JSON/array serialization.
      * These are computed accessors needed by the frontend.
      */
-    protected $appends = ['price', 'stock', 'sku', 'image_url', 'volume'];
+    protected $appends = ['price', 'stock', 'sku', 'image_url', 'volume', 'promo_price', 'promo_stock'];
 
     // ==================== RELATIONSHIPS ====================
     public function category()
@@ -89,13 +91,6 @@ class Product extends Model
         });
     }
 
-    public function scopeNearExpiry($query, $days = 30)
-    {
-        return $query->whereHas('batches', function ($q) use ($days) {
-            $q->where('expired_date', '<=', now()->addDays($days));
-        });
-    }
-
     public function totalStock()
     {
         return $this->batches()->sum('stock_quantity');
@@ -121,6 +116,38 @@ class Product extends Model
         }
 
         return $this->batches()->sum('stock_quantity');
+    }
+
+    /**
+     * Total stok dari batch promo (cukai lama) yang masih ada.
+     */
+    public function getPromoStockAttribute(): int
+    {
+        if ($this->relationLoaded('batches')) {
+            return (int) $this->batches
+                ->where('is_promo', true)
+                ->where('stock_quantity', '>', 0)
+                ->sum('stock_quantity');
+        }
+
+        return (int) $this->batches()
+            ->where('is_promo', true)
+            ->where('stock_quantity', '>', 0)
+            ->sum('stock_quantity');
+    }
+
+    /**
+     * Harga jual terendah dari batch promo aktif. Null bila tidak ada promo.
+     */
+    public function getPromoPriceAttribute(): ?float
+    {
+        $batches = $this->relationLoaded('batches')
+            ? $this->batches->where('is_promo', true)->where('stock_quantity', '>', 0)
+            : $this->batches()->where('is_promo', true)->where('stock_quantity', '>', 0)->get();
+
+        $price = $batches->whereNotNull('promo_price')->min('promo_price');
+
+        return $price !== null ? (float) $price : null;
     }
 
     public function getSkuAttribute()

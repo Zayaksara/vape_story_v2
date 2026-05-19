@@ -44,8 +44,8 @@ defineOptions({
 
 // ─── Types ───────────────────────────────────────────────────────────────
 type Period = 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly' | 'custom'
-type TabKey = 'category' | 'product' | 'brand' | 'payment' | 'stock' | 'returns'
-type ExportType = 'category' | 'product' | 'brand' | 'payment' | 'stock_top' | 'stock_out' | 'returns'
+type TabKey = 'product' | 'brand' | 'payment' | 'stock' | 'returns'
+type ExportType = 'product' | 'brand' | 'payment' | 'stock_top' | 'stock_out' | 'returns'
 
 interface CategoryRow { id: string; name: string; qty: number; revenue: number; profit: number; stock: number }
 interface BrandRow extends CategoryRow {}
@@ -58,6 +58,7 @@ interface PaymentRow { method: string; label: string; transactions: number; reve
 interface TopSellingRow {
   id: string; code: string; name: string; category: string | null; brand: string | null;
   qty_sold: number; revenue: number; sales_percentage: number; stock_remaining: number;
+  min_stock?: number;
 }
 interface OutOfStockRow {
   id: string; code: string; name: string;
@@ -107,7 +108,7 @@ const props = defineProps<{
 }>()
 
 // ─── State ───────────────────────────────────────────────────────────────
-const activeTab = ref<TabKey>('category')
+const activeTab = ref<TabKey>('product')
 const search = ref('')
 const sortKey = ref<string>('revenue')
 const sortDir = ref<'asc' | 'desc'>('desc')
@@ -165,7 +166,6 @@ function generateShoppingList() {
 }
 
 const tabs: { key: TabKey; label: string; icon: any }[] = [
-  { key: 'category', label: 'Kategori',     icon: Layers },
   { key: 'product',  label: 'Produk',       icon: Package },
   { key: 'brand',    label: 'Merek',        icon: Tags },
   { key: 'payment',  label: 'Metode Bayar', icon: CreditCard },
@@ -184,12 +184,10 @@ const periodOptions: { value: Period; label: string }[] = [
 
 const exportOptions = computed<{ value: ExportType; label: string }[]>(() => {
   const base: { value: ExportType; label: string }[] = [
-    { value: 'category', label: 'Per Kategori' },
     { value: 'product',  label: 'Per Produk' },
     { value: 'brand',    label: 'Per Merek' },
     { value: 'payment',  label: 'Per Metode Bayar' },
     { value: 'stock_top', label: 'Stok Terlaris' },
-    { value: 'stock_out', label: 'Stok Habis' },
     { value: 'returns', label: 'Return' },
   ]
   return base
@@ -265,9 +263,9 @@ const filteredPayment = computed(() =>
   sortRows(props.by_payment_method.filter(r => matchesSearch(r.label))),
 )
 const filteredTopSelling = computed(() =>
-  props.by_stock.top_selling.filter(
-    r => matchesSearch(r.name) || (r.code && r.code.toLowerCase().includes(search.value.toLowerCase())),
-  ),
+  [...props.by_stock.top_selling]
+    .filter(r => matchesSearch(r.name) || (r.code && r.code.toLowerCase().includes(search.value.toLowerCase())))
+    .sort((a, b) => b.qty_sold - a.qty_sold),
 )
 const filteredOutOfStock = computed(() =>
   props.by_stock.out_of_stock.filter(
@@ -449,7 +447,7 @@ const periodLabel = computed(() => {
         <div class="mb-1.5 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide" style="color: var(--pos-text-muted);">
           <TrendingUp class="h-3.5 w-3.5" /> Total Profit
         </div>
-        <p class="text-lg font-bold" style="color: var(--pos-success-text);">{{ formatRp(summary.total_profit) }}</p>
+        <p class="text-lg font-bold" :style="{ color: summary.total_profit < 0 ? 'var(--pos-danger-text)' : 'var(--pos-success-text)' }">{{ formatRp(summary.total_profit) }}</p>
       </div>
       <div class="rounded-lg border bg-white p-4" style="border-color: var(--pos-border); box-shadow: var(--pos-shadow);">
         <div class="mb-1.5 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide" style="color: var(--pos-text-muted);">
@@ -501,37 +499,8 @@ const periodLabel = computed(() => {
       </div>
 
       <!-- Tab content -->
-      <!-- ─── KATEGORI ────────────────────────────────────────────────── -->
-      <div v-if="activeTab === 'category'" class="overflow-x-auto">
-        <table class="w-full text-sm">
-          <thead style="background: var(--pos-bg-secondary);">
-            <tr class="text-left">
-              <th class="px-4 py-3 text-xs font-bold uppercase tracking-wide cursor-pointer" style="color: var(--pos-text-muted);" @click="setSort('name')">Kategori</th>
-              <th class="px-4 py-3 text-xs font-bold uppercase tracking-wide cursor-pointer text-right" style="color: var(--pos-text-muted);" @click="setSort('qty')">Qty</th>
-              <th class="px-4 py-3 text-xs font-bold uppercase tracking-wide cursor-pointer text-right" style="color: var(--pos-text-muted);" @click="setSort('revenue')">Revenue</th>
-              <th class="px-4 py-3 text-xs font-bold uppercase tracking-wide cursor-pointer text-right" style="color: var(--pos-text-muted);" @click="setSort('profit')">Profit</th>
-              <th class="px-4 py-3 text-xs font-bold uppercase tracking-wide cursor-pointer text-right" style="color: var(--pos-text-muted);" @click="setSort('stock')">Stok Saat Ini</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="row in filteredCategory" :key="row.id" class="border-t" style="border-color: var(--pos-border);">
-              <td class="px-4 py-3 font-medium" style="color: var(--pos-text-secondary);">{{ row.name }}</td>
-              <td class="px-4 py-3 text-right" style="color: var(--pos-text-secondary);">{{ formatNum(row.qty) }}</td>
-              <td class="px-4 py-3 text-right font-semibold" style="color: var(--pos-text-primary);">{{ formatRp(row.revenue) }}</td>
-              <td class="px-4 py-3 text-right" style="color: var(--pos-success-text);">{{ formatRp(row.profit) }}</td>
-              <td class="px-4 py-3 text-right" style="color: var(--pos-text-secondary);">{{ formatNum(row.stock) }}</td>
-            </tr>
-            <tr v-if="!filteredCategory.length">
-              <td colspan="5" class="px-4 py-12 text-center text-sm" style="color: var(--pos-text-muted);">
-                Tidak ada data kategori untuk periode ini.
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
       <!-- ─── PRODUK ─────────────────────────────────────────────────── -->
-      <div v-else-if="activeTab === 'product'" class="overflow-x-auto">
+      <div v-if="activeTab === 'product'" class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead style="background: var(--pos-bg-secondary);">
             <tr class="text-left">
@@ -553,7 +522,7 @@ const periodLabel = computed(() => {
               <td class="px-4 py-3 text-xs" style="color: var(--pos-text-muted);">{{ row.brand ?? '—' }}</td>
               <td class="px-4 py-3 text-right" style="color: var(--pos-text-secondary);">{{ formatNum(row.qty) }}</td>
               <td class="px-4 py-3 text-right font-semibold" style="color: var(--pos-text-primary);">{{ formatRp(row.revenue) }}</td>
-              <td class="px-4 py-3 text-right" style="color: var(--pos-success-text);">{{ formatRp(row.profit) }}</td>
+              <td class="px-4 py-3 text-right" :style="{ color: row.profit < 0 ? 'var(--pos-danger-text)' : 'var(--pos-success-text)' }">{{ formatRp(row.profit) }}</td>
               <td class="px-4 py-3 text-right">
                 <span
                   class="inline-block rounded-full px-2 py-0.5 text-xs font-semibold"
@@ -591,7 +560,7 @@ const periodLabel = computed(() => {
               <td class="px-4 py-3 font-medium" style="color: var(--pos-text-secondary);">{{ row.name }}</td>
               <td class="px-4 py-3 text-right" style="color: var(--pos-text-secondary);">{{ formatNum(row.qty) }}</td>
               <td class="px-4 py-3 text-right font-semibold" style="color: var(--pos-text-primary);">{{ formatRp(row.revenue) }}</td>
-              <td class="px-4 py-3 text-right" style="color: var(--pos-success-text);">{{ formatRp(row.profit) }}</td>
+              <td class="px-4 py-3 text-right" :style="{ color: row.profit < 0 ? 'var(--pos-danger-text)' : 'var(--pos-success-text)' }">{{ formatRp(row.profit) }}</td>
               <td class="px-4 py-3 text-right" style="color: var(--pos-text-secondary);">{{ formatNum(row.stock) }}</td>
             </tr>
             <tr v-if="!filteredBrand.length">
@@ -748,7 +717,7 @@ const periodLabel = computed(() => {
           <div class="mb-3 flex items-center gap-2">
             <TrendingUp class="h-4 w-4" style="color: var(--pos-success-text);" />
             <h3 class="text-sm font-bold" style="color: var(--pos-text-primary);">Produk Terlaris</h3>
-            <span class="text-xs" style="color: var(--pos-text-muted);">(ranking berdasarkan % kontribusi penjualan)</span>
+            <span class="text-xs" style="color: var(--pos-text-muted);">(ranking berdasarkan jumlah unit terjual)</span>
           </div>
           <div class="overflow-x-auto rounded-lg border" style="border-color: var(--pos-border);">
             <table class="w-full text-sm">
@@ -793,7 +762,7 @@ const periodLabel = computed(() => {
                       class="inline-block rounded-full px-2 py-0.5 text-xs font-semibold"
                       :style="row.stock_remaining === 0
                         ? { background: 'var(--pos-danger-bg)', color: 'var(--pos-danger-text)' }
-                        : row.stock_remaining < 10
+                        : (row.min_stock ?? 0) > 0 && row.stock_remaining <= (row.min_stock ?? 0)
                           ? { background: 'var(--pos-warning-bg)', color: 'var(--pos-warning-text)' }
                           : { background: 'var(--pos-success-bg)', color: 'var(--pos-success-text)' }"
                     >
@@ -811,44 +780,6 @@ const periodLabel = computed(() => {
           </div>
         </section>
 
-        <!-- Out of stock -->
-        <section>
-          <div class="mb-3 flex items-center gap-2">
-            <AlertTriangle class="h-4 w-4" style="color: var(--pos-danger-text);" />
-            <h3 class="text-sm font-bold" style="color: var(--pos-text-primary);">Stok Habis</h3>
-            <span class="rounded-full px-2 py-0.5 text-[10px] font-bold"
-                  style="background: var(--pos-danger-bg); color: var(--pos-danger-text);">
-              {{ filteredOutOfStock.length }} produk
-            </span>
-          </div>
-          <div class="overflow-x-auto rounded-lg border" style="border-color: var(--pos-border);">
-            <table class="w-full text-sm">
-              <thead style="background: var(--pos-bg-secondary);">
-                <tr class="text-left">
-                  <th class="px-4 py-3 text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Kode</th>
-                  <th class="px-4 py-3 text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Produk</th>
-                  <th class="px-4 py-3 text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Kategori</th>
-                  <th class="px-4 py-3 text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Merek</th>
-                  <th class="px-4 py-3 text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Terakhir Terjual</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="row in filteredOutOfStock" :key="row.id" class="border-t" style="border-color: var(--pos-border);">
-                  <td class="px-4 py-3 font-mono text-xs" style="color: var(--pos-text-muted);">{{ row.code }}</td>
-                  <td class="px-4 py-3 font-medium" style="color: var(--pos-text-secondary);">{{ row.name }}</td>
-                  <td class="px-4 py-3 text-xs" style="color: var(--pos-text-muted);">{{ row.category ?? '—' }}</td>
-                  <td class="px-4 py-3 text-xs" style="color: var(--pos-text-muted);">{{ row.brand ?? '—' }}</td>
-                  <td class="px-4 py-3 text-xs" style="color: var(--pos-text-secondary);">{{ formatDate(row.last_sold_at) }}</td>
-                </tr>
-                <tr v-if="!filteredOutOfStock.length">
-                  <td colspan="5" class="px-4 py-8 text-center text-sm" style="color: var(--pos-text-muted);">
-                    Tidak ada produk yang stoknya habis. 🎉
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
       </div>
     </div>
 

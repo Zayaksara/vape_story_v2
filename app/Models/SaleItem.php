@@ -13,12 +13,16 @@ class SaleItem extends Model
         'quantity',
         'unit_price',
         'discount',
+        'promo_discount',
+        'promo_units',
         'total',
     ];
 
     protected $casts = [
         'unit_price' => 'decimal:2',
         'discount' => 'decimal:2',
+        'promo_discount' => 'decimal:2',
+        'promo_units' => 'integer',
         'total' => 'decimal:2',
     ];
 

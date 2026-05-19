@@ -6,7 +6,7 @@ import {
     Search, X, Package, Eye,
     Zap, Wind, Layers, Tag,
     ChevronLeft, ChevronRight,
-    BoxIcon, AlertTriangle, XCircle, Warehouse,
+    BoxIcon, XCircle, Warehouse,
 } from 'lucide-vue-next'
 import type { Category, Product, ProductPageProps } from '@/types/pos'
 
@@ -37,9 +37,15 @@ import { index as posProductsRoute } from '@/routes/pos/products'
 
 // ── Props ─────────────────────────────────────────────────────────────────────
 
+interface BrandRef { id: string; name: string; slug: string }
+interface ProductStats { total: number; out_of_stock: number }
+
 const props = defineProps<
     ProductPageProps & {
         cashier: { id: string; name: string; email: string }
+        brands?: BrandRef[]
+        selectedBrand?: BrandRef | null
+        stats?: ProductStats
     }
 >()
 
@@ -47,14 +53,14 @@ const props = defineProps<
 
 const search       = ref(props.searchQuery ?? '')
 const categorySlug = ref(props.selectedCategory?.slug ?? 'all')
-const stockStatus  = ref(props.selectedStockStatus ?? 'all')
+const brandSlug    = ref(props.selectedBrand?.slug ?? 'all')
 const isLoading    = ref(false)
 
 const hasActiveFilters = computed(() =>
     !!(
         search.value ||
         (categorySlug.value && categorySlug.value !== 'all') ||
-        (stockStatus.value && stockStatus.value !== 'all')
+        (brandSlug.value && brandSlug.value !== 'all')
     ),
 )
 
@@ -77,7 +83,7 @@ function applyFilters() {
             query: {
                 search: search.value || undefined,
                 category: categorySlug.value === 'all' ? undefined : categorySlug.value,
-                stock_status: stockStatus.value === 'all' ? undefined : stockStatus.value,
+                brand: brandSlug.value === 'all' ? undefined : brandSlug.value,
             },
         }),
         {},
@@ -93,7 +99,7 @@ function applyFilters() {
 function resetFilters() {
     search.value       = ''
     categorySlug.value = 'all'
-    stockStatus.value  = 'all'
+    brandSlug.value    = 'all'
     router.get(posProductsRoute.url(), {}, { preserveState: false })
 }
 
@@ -119,7 +125,7 @@ function goToPage(page: number) {
                 page,
                 search: search.value || undefined,
                 category: categorySlug.value === 'all' ? undefined : categorySlug.value,
-                stock_status: stockStatus.value === 'all' ? undefined : stockStatus.value,
+                brand: brandSlug.value === 'all' ? undefined : brandSlug.value,
             },
         }),
         {},
@@ -133,13 +139,12 @@ function goToPage(page: number) {
 
 const debouncedSearch = useDebounceFn(applyFilters, 400)
 watch(search, debouncedSearch)
-watch([categorySlug, stockStatus], applyFilters)
+watch([categorySlug, brandSlug], applyFilters)
 
 // ── Derived stats (from current page data) ────────────────────────────────────
 
-const statTersedia  = computed(() => props.products.total)
-const statTipis     = computed(() => props.products.data.filter(p => p.stock > 0 && p.stock <= 20).length)
-const statHabis     = computed(() => props.products.data.filter(p => p.stock === 0).length)
+const statTersedia  = computed(() => props.stats?.total ?? props.products.total)
+const statHabis     = computed(() => props.stats?.out_of_stock ?? props.products.data.filter(p => p.stock === 0).length)
 
 // ── Formatters ────────────────────────────────────────────────────────────────
 
@@ -156,10 +161,10 @@ function productInitials(name: string): string {
 type StockVariant = 'default' | 'secondary' | 'destructive' | 'outline'
 type StockInfo    = { label: string; variant: StockVariant; color: string }
 
-function stockInfo(stock: number): StockInfo {
-    if (stock === 0)  return { label: 'Habis',       variant: 'destructive', color: 'var(--pos-danger-text)' }
-    if (stock <= 20)  return { label: 'Stok Tipis',  variant: 'secondary',   color: 'var(--pos-warning-text)' }
-    return                   { label: 'Tersedia',    variant: 'default',     color: 'var(--pos-success-text)' }
+function stockInfo(stock: number, minStock: number = 0): StockInfo {
+    if (stock === 0)                       return { label: 'Habis',      variant: 'destructive', color: 'var(--pos-danger-text)' }
+    if (minStock > 0 && stock <= minStock) return { label: 'Stok Tipis', variant: 'secondary',   color: 'var(--pos-warning-text)' }
+    return                                        { label: 'Tersedia',   variant: 'default',     color: 'var(--pos-success-text)' }
 }
 </script>
 
@@ -188,7 +193,7 @@ function stockInfo(stock: number): StockInfo {
 
                     <!-- ── Ringkasan ───────────────────────────────────────── -->
                     <div class="mb-5">
-                        <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+                        <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
 
                             <!-- Tersedia -->
                             <div
@@ -210,29 +215,6 @@ function stockInfo(stock: number): StockInfo {
                                         <span class="text-sm font-semibold"> Jenis</span>
                                     </p>
                                     <p class="mt-0.5 text-xs" style="color: var(--pos-text-muted);">Stok tersedia</p>
-                                </div>
-                            </div>
-
-                            <!-- Tipis -->
-                            <div
-                                class="flex items-center gap-3 rounded-lg border p-4"
-                                style="background: #fff; border-color: var(--pos-border);"
-                            >
-                                <div
-                                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
-                                    style="background: var(--pos-bg-warning);"
-                                >
-                                    <AlertTriangle class="h-5 w-5" style="color: var(--pos-warning-text);" />
-                                </div>
-                                <div>
-                                    <p
-                                        class="text-2xl font-bold leading-none"
-                                        style="color: var(--pos-text-secondary);"
-                                    >
-                                        {{ statTipis }}
-                                        <span class="text-sm font-semibold"> Jenis</span>
-                                    </p>
-                                    <p class="mt-0.5 text-xs" style="color: var(--pos-text-muted);">Stok segera habis</p>
                                 </div>
                             </div>
 
@@ -343,19 +325,19 @@ function stockInfo(stock: number): StockInfo {
                                 </SelectContent>
                             </Select>
 
-                            <!-- Stock status -->
-                            <Select v-model="stockStatus">
+                            <!-- Brand filter -->
+                            <Select v-model="brandSlug">
                                 <SelectTrigger
-                                    class="h-8 w-36 border text-xs"
+                                    class="h-8 w-40 border text-xs"
                                     style="border-color: var(--pos-border);"
                                 >
-                                    <SelectValue placeholder="Semua Status" />
+                                    <SelectValue placeholder="Semua Merek" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">Semua Status</SelectItem>
-                                    <SelectItem value="tersedia">Tersedia</SelectItem>
-                                    <SelectItem value="stok_rendah">Stok Tipis</SelectItem>
-                                    <SelectItem value="habis">Stok Habis</SelectItem>
+                                    <SelectItem value="all">Semua Merek</SelectItem>
+                                    <SelectItem v-for="b in (brands ?? [])" :key="b.id" :value="b.slug">
+                                        {{ b.name }}
+                                    </SelectItem>
                                 </SelectContent>
                             </Select>
 
@@ -383,7 +365,7 @@ function stockInfo(stock: number): StockInfo {
                                     <TableHead class="text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Flavor</TableHead>
                                     <TableHead class="text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Nicotine</TableHead>
                                     <TableHead class="text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Size (ml)</TableHead>
-                                    <TableHead class="text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Base Price</TableHead>
+                                    <TableHead class="text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Selling Price</TableHead>
                                     <TableHead class="text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Stock</TableHead>
                                     <TableHead class="text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Status</TableHead>
                                     <TableHead class="w-10 pr-4" />
@@ -483,7 +465,7 @@ function stockInfo(stock: number): StockInfo {
                                         </TableCell>
 
                                         <TableCell>
-                                            <span class="text-sm font-bold tabular-nums" :style="{ color: stockInfo(product.stock).color }">
+                                            <span class="text-sm font-bold tabular-nums" :style="{ color: stockInfo(product.stock, Number((product as any).min_stock ?? 0)).color }">
                                                 {{ product.stock }}
                                             </span>
                                         </TableCell>
@@ -494,11 +476,11 @@ function stockInfo(stock: number): StockInfo {
                                                 class="rounded-full px-2.5 py-0.5 text-xs font-semibold"
                                                 :style="product.stock === 0
                                                     ? 'background: var(--pos-danger-bg); color: var(--pos-danger-text);'
-                                                    : product.stock <= 20
+                                                    : Number((product as any).min_stock ?? 0) > 0 && product.stock <= Number((product as any).min_stock)
                                                         ? 'background: var(--pos-warning-bg); color: var(--pos-warning-text);'
                                                         : 'background: var(--pos-success-bg); color: var(--pos-success-text);'"
                                             >
-                                                {{ stockInfo(product.stock).label }}
+                                                {{ stockInfo(product.stock, Number((product as any).min_stock ?? 0)).label }}
                                             </span>
                                         </TableCell>
 
@@ -632,11 +614,11 @@ function stockInfo(stock: number): StockInfo {
                                 class="inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold"
                                 :style="selectedProduct.stock === 0
                                     ? 'background: #fff; color: var(--pos-danger-text);'
-                                    : selectedProduct.stock <= 20
+                                    : Number((selectedProduct as any).min_stock ?? 0) > 0 && selectedProduct.stock <= Number((selectedProduct as any).min_stock)
                                         ? 'background: #fff; color: var(--pos-warning-text);'
                                         : 'background: #fff; color: var(--pos-success-text);'"
                             >
-                                {{ stockInfo(selectedProduct.stock).label }}
+                                {{ stockInfo(selectedProduct.stock, Number((selectedProduct as any).min_stock ?? 0)).label }}
                             </span>
                             <span
                                 v-if="selectedProduct.volume"
@@ -654,7 +636,7 @@ function stockInfo(stock: number): StockInfo {
                     <div class="flex flex-col divide-y rounded-lg border" style="border-color: var(--pos-border);">
                         <div v-for="(row, i) in [
                             { label: 'Kode Produk', value: selectedProduct.sku },
-                            { label: 'Harga Dasar', value: formatPrice((selectedProduct as any).base_price ?? selectedProduct.price) },
+                            { label: 'Harga Jual', value: formatPrice((selectedProduct as any).base_price ?? selectedProduct.price) },
                             { label: 'Stok',        value: String(selectedProduct.stock) + ' unit' },
                             { label: 'Flavor',      value: (selectedProduct as any).flavor ?? '—' },
                             { label: 'Nikotin',     value: (selectedProduct as any).nicotine_strength ? `${(selectedProduct as any).nicotine_strength} mg` : '—' },

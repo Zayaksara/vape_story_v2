@@ -16,9 +16,12 @@ const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 
 const display = computed({
   get() {
-    const raw = String(props.modelValue ?? '').replace(/[^\d]/g, '')
-    if (!raw) return ''
-    return Number(raw).toLocaleString('id-ID')
+    if (props.modelValue === null || props.modelValue === undefined || props.modelValue === '') return ''
+    const num = typeof props.modelValue === 'number'
+      ? props.modelValue
+      : Number(String(props.modelValue).replace(/[^\d.-]/g, ''))
+    if (!Number.isFinite(num)) return ''
+    return Math.trunc(num).toLocaleString('id-ID')
   },
   set(v: string) {
     const digits = v.replace(/[^\d]/g, '')

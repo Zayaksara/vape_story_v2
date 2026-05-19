@@ -299,6 +299,7 @@ interface PrintLineRow {
   productName: string
   quantity: number
   sellingTotal: number
+  discount: number
   paymentLabel: string
   hppTotal: number
   profit: number
@@ -321,6 +322,7 @@ const dailyPrintRows = computed<PrintLineRow[]>(() => {
         productName: item.product?.name ?? '-',
         quantity: item.quantity,
         sellingTotal: item.total ?? 0,
+        discount: (item as any).discount ?? 0,
         paymentLabel: paymentMethodLabels[t.payment_method] ?? String(t.payment_method),
         hppTotal: hpp,
         profit,
@@ -333,15 +335,21 @@ const dailyPrintRows = computed<PrintLineRow[]>(() => {
 const dailyPrintTotals = computed(() => {
   const rows = dailyPrintRows.value
   let selling = 0
+  let discount = 0
   let hpp = 0
   let profit = 0
   for (const r of rows) {
     selling += r.sellingTotal
+    discount += r.discount
     hpp += r.hppTotal
     profit += r.profit
   }
-  return { selling, hpp, profit }
+  return { selling, discount, hpp, profit }
 })
+
+const dailyPrintTotalDiscount = computed(() =>
+  filteredTransactions.value.reduce((sum, t) => sum + ((t as any).discount_amount ?? 0), 0),
+)
 
 const cashierAccountLabel = computed(() => props.cashier?.name ?? props.cashier?.email ?? '-')
 
@@ -797,7 +805,17 @@ function handleExport() {
                         <span class="text-xs font-medium" style="color: var(--pos-text-muted);">{{ formatTime(transaction.created_at) }}</span>
                       </TableCell>
                       <TableCell class="py-3 px-3">
-                        <span class="text-xs font-mono font-semibold" style="color: var(--pos-text-primary);">{{ transaction.invoice_number }}</span>
+                        <div class="flex items-center gap-1.5">
+                          <span class="text-xs font-mono font-semibold" style="color: var(--pos-text-primary);">{{ transaction.invoice_number }}</span>
+                          <span
+                            v-if="(transaction as any).discount_amount > 0"
+                            class="rounded-full px-1.5 py-0.5 text-[10px] font-bold"
+                            style="background: #fee2e2; color: #dc2626;"
+                            :title="`Diskon ${formatPrice((transaction as any).discount_amount)}`"
+                          >
+                            DISKON -{{ formatPrice((transaction as any).discount_amount) }}
+                          </span>
+                        </div>
                       </TableCell>
                       <TableCell class="py-3 px-3">
                         <div class="flex items-center gap-1.5">
@@ -833,17 +851,48 @@ function handleExport() {
                           <div
                             v-for="item in transaction.items"
                             :key="item.id"
-                            class="flex justify-between text-xs"
+                            class="flex flex-col gap-0.5 text-xs"
                             style="color: var(--pos-text-primary);"
                           >
-                            <span>{{ item.quantity }}x {{ item.product?.name || 'Unknown' }}</span>
-                            <span class="font-medium">{{ formatPrice(item.total || 0) }}</span>
+                            <div class="flex justify-between">
+                              <span>
+                                {{ item.quantity }}x {{ item.product?.name || 'Unknown' }}
+                                <span
+                                  v-if="(item as any).discount > 0"
+                                  class="ml-1 rounded px-1 text-[10px] font-bold"
+                                  style="background: #fee2e2; color: #dc2626;"
+                                >
+                                  -{{ formatPrice((item as any).discount) }}
+                                </span>
+                              </span>
+                              <span class="font-medium">{{ formatPrice(item.total || 0) }}</span>
+                            </div>
+                            <div
+                              v-if="(item as any).promo_discount > 0"
+                              class="flex items-center justify-between pl-4 text-[11px]"
+                              style="color: #b45309;"
+                            >
+                              <span class="inline-flex items-center gap-1">
+                                <span class="rounded px-1.5 py-0.5 text-[9px] font-bold" style="background: #fef3c7;">CUKAI LAMA</span>
+                                {{ (item as any).promo_units }} unit dari batch promo
+                              </span>
+                              <span class="font-semibold">hemat {{ formatPrice((item as any).promo_discount) }}</span>
+                            </div>
                           </div>
                           <div class="h-px bg-[var(--pos-border)] my-2"></div>
-                          <div class="flex justify-end">
-                            <span class="text-xs font-bold" style="color: var(--pos-brand-primary);">
-                              Total: {{ formatPrice(transaction.tax_amount || 0) }}
-                            </span>
+                          <div class="space-y-0.5 text-xs" style="color: var(--pos-text-secondary);">
+                            <div v-if="(transaction as any).discount_amount > 0" class="flex justify-between">
+                              <span>Subtotal</span>
+                              <span>{{ formatPrice((transaction as any).subtotal || 0) }}</span>
+                            </div>
+                            <div v-if="(transaction as any).discount_amount > 0" class="flex justify-between font-semibold" style="color: #dc2626;">
+                              <span>Diskon</span>
+                              <span>-{{ formatPrice((transaction as any).discount_amount) }}</span>
+                            </div>
+                            <div class="flex justify-between text-sm font-bold" style="color: var(--pos-brand-primary);">
+                              <span>Total Dibayar</span>
+                              <span>{{ formatPrice(transaction.tax_amount || 0) }}</span>
+                            </div>
                           </div>
                         </div>
                       </TableCell>
@@ -883,6 +932,7 @@ function handleExport() {
             <th class="border border-black px-2 py-1.5 font-bold">Barang</th>
             <th class="border border-black px-2 py-1.5 font-bold">Jumlah</th>
             <th class="border border-black px-2 py-1.5 font-bold">Harga jual</th>
+            <th class="border border-black px-2 py-1.5 font-bold">Diskon</th>
             <th class="border border-black px-2 py-1.5 font-bold">Pembayaran</th>
             <th class="border border-black px-2 py-1.5 font-bold">HPP</th>
             <th class="border border-black px-2 py-1.5 font-bold">Untung</th>
@@ -890,7 +940,7 @@ function handleExport() {
         </thead>
         <tbody>
           <tr v-if="dailyPrintRows.length === 0">
-            <td colspan="7" class="border border-black px-2 py-8 text-gray-600">
+            <td colspan="8" class="border border-black px-2 py-8 text-gray-600">
               Tidak ada penjualan pada tanggal ini
             </td>
           </tr>
@@ -899,6 +949,7 @@ function handleExport() {
             <td class="border border-black px-2 py-1 text-left">{{ row.productName }}</td>
             <td class="border border-black px-2 py-1">{{ row.quantity }}</td>
             <td class="border border-black px-2 py-1">{{ formatPrice(row.sellingTotal) }}</td>
+            <td class="border border-black px-2 py-1">{{ row.discount > 0 ? '-' + formatPrice(row.discount) : '-' }}</td>
             <td class="border border-black px-2 py-1">{{ row.paymentLabel }}</td>
             <td class="border border-black px-2 py-1">{{ formatPrice(row.hppTotal) }}</td>
             <td class="border border-black px-2 py-1">{{ formatPrice(row.profit) }}</td>
@@ -908,6 +959,7 @@ function handleExport() {
           <tr>
             <td colspan="3" class="border border-black px-2 py-2 font-bold uppercase">TOTAL PENJUALAN</td>
             <td class="border border-black px-2 py-2 font-bold">{{ formatPrice(dailyPrintTotals.selling) }}</td>
+            <td class="border border-black px-2 py-2 font-bold">-{{ formatPrice(dailyPrintTotalDiscount) }}</td>
             <td class="border border-black px-2 py-2">&nbsp;</td>
             <td class="border border-black px-2 py-2 font-bold">{{ formatPrice(dailyPrintTotals.hpp) }}</td>
             <td class="border border-black px-2 py-2 font-bold">{{ formatPrice(dailyPrintTotals.profit) }}</td>

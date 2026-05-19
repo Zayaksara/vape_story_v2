@@ -29,6 +29,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('products/{product}', [App\Http\Controllers\Admin\ProductController::class, 'update'])->name('products.update');
         Route::delete('products/{product}', [App\Http\Controllers\Admin\ProductController::class, 'destroy'])->name('products.destroy');
         Route::post('categories', [App\Http\Controllers\Admin\CategoryController::class, 'store'])->name('categories.store');
+        Route::post('brands', [App\Http\Controllers\Admin\BrandController::class, 'store'])->name('brands.store');
         Route::post('products/{product}/batches', [App\Http\Controllers\Admin\BatchController::class, 'store'])->name('products.batches.store');
         Route::put('products/{product}/batches/{batch}', [App\Http\Controllers\Admin\BatchController::class, 'update'])->name('products.batches.update');
         Route::delete('products/{product}/batches/{batch}', [App\Http\Controllers\Admin\BatchController::class, 'destroy'])->name('products.batches.destroy');

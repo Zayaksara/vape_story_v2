@@ -24,10 +24,12 @@ class ProductController extends Controller
 
     public function index(Request $request): Response
     {
-        $filters = $request->only(['search', 'category', 'stock_status']);
+        $filters = $request->only(['search', 'category', 'brand', 'stock_status']);
 
         $categories = $this->productService->getCategories();
+        $brands     = Brand::orderBy('name')->get(['id', 'name', 'slug']);
         $products   = $this->productService->getFilteredProducts($filters, 15);
+        $stats      = $this->productService->getStats($filters);
 
         $selectedCategory = $this->productService->resolveSelectedCategory(
             $categories,
@@ -35,11 +37,18 @@ class ProductController extends Controller
             null,
         );
 
+        $selectedBrand = ! empty($filters['brand'])
+            ? $brands->firstWhere('slug', $filters['brand'])
+            : null;
+
         return Inertia::render('admin/ManajemenProduct', [
             'products'            => $products,
             'categories'          => $categories,
+            'brands'              => $brands,
+            'stats'               => $stats,
             'searchQuery'         => $filters['search'] ?? null,
             'selectedCategory'    => $selectedCategory,
+            'selectedBrand'       => $selectedBrand,
             'selectedStockStatus' => $filters['stock_status'] ?? null,
         ]);
     }
@@ -67,11 +76,11 @@ class ProductController extends Controller
             $batch->id             = (string) Str::uuid();
             $batch->product_id     = $product->getKey();
             $batch->lot_number     = $request->input('batch_lot_number') ?: 'LOT-'.strtoupper(Str::random(6));
-            $batch->expired_date   = $request->input('batch_expired_date');
             $batch->stock_quantity = (int) $request->input('batch_stock_quantity');
             $batch->cost_price     = (float) $request->input('batch_cost_price', 0);
             $batch->cukai_year     = $request->input('batch_cukai_year') ?: null;
             $batch->is_promo       = $request->boolean('batch_is_promo');
+            $batch->promo_price    = $batch->is_promo ? (float) $request->input('batch_promo_price', 0) : null;
             $batch->save();
         }
 

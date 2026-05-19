@@ -14,7 +14,6 @@ class InventoryService
             $batch = Batch::create([
                 'product_id' => $product->id,
                 'lot_number' => $data['lot_number'],
-                'expired_date' => $data['expired_date'],
                 'stock_quantity' => $data['quantity'],
                 'cost_price' => $data['cost_price'],
             ]);
@@ -43,7 +42,7 @@ class InventoryService
 
     public function getStockReport()
     {
-        return Product::with(['batches' => fn ($q) => $q->inStock()->oldestExpiry()])
+        return Product::with(['batches' => fn ($q) => $q->inStock()])
             ->withSum('batches', 'stock_quantity')
             ->withSum('batches', 'cost_price')
             ->get();

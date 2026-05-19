@@ -598,7 +598,7 @@ function toggleProductTarget(id: number | string) {
               <div v-for="(row, i) in [
                 { label: 'Tipe',          value: typeLabel(selectedPromo.type) },
                 { label: 'Nilai',         value: valueLabel(selectedPromo) },
-                { label: 'Min. Pembelian', value: selectedPromo.min_purchase > 0 ? formatPrice(selectedPromo.min_purchase) : 'Tidak ada' },
+                { label: 'Min. Nominal', value: selectedPromo.min_purchase > 0 ? formatPrice(selectedPromo.min_purchase) : 'Tidak ada' },
                 { label: 'Maks. Diskon',  value: selectedPromo.max_discount ? formatPrice(selectedPromo.max_discount) : 'Tidak dibatasi' },
                 { label: 'Periode',       value: `${formatDate(selectedPromo.start_date)} – ${formatDate(selectedPromo.end_date)}` },
                 { label: 'Target',        value: targetLabel(selectedPromo) },
@@ -700,7 +700,7 @@ function toggleProductTarget(id: number | string) {
 
             <div class="grid grid-cols-2 gap-3">
               <div class="space-y-1.5">
-                <label class="text-xs font-semibold" style="color: var(--pos-text-secondary);">Min. Pembelian</label>
+                <label class="text-xs font-semibold" style="color: var(--pos-text-secondary);">Min. Nominal</label>
                 <Input v-model.number="form.min_purchase" type="number" min="0" placeholder="0" class="h-9 tabular-nums" />
               </div>
               <div class="space-y-1.5">

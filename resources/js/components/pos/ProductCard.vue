@@ -9,12 +9,19 @@
     @click="handleAdd"
   >
     <!-- Stock badge -->
-    <div class="absolute right-3 top-3 z-10">
+    <div class="absolute right-3 top-3 z-10 flex flex-col items-end gap-1">
       <span
         class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
-        :class="stockBadgeClass(product.stock)"
+        :class="stockBadgeClass(product.stock, productMinStock)"
       >
-        {{ stockBadgeText(product.stock) }}
+        {{ stockBadgeText(product.stock, productMinStock) }}
+      </span>
+      <span
+        v-if="hasPromo"
+        class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold shadow"
+        style="background: #fef3c7; color: #b45309;"
+      >
+        CUKAI LAMA
       </span>
     </div>
 
@@ -56,7 +63,15 @@
 
       <!-- Price -->
       <div class="mt-auto pt-1">
-        <div class="text-lg font-bold leading-none tracking-tight"
+        <div v-if="hasPromo" class="flex flex-col leading-tight">
+          <span class="text-[10px] line-through" :style="{ color: 'var(--pos-text-light)' }">
+            {{ formatPrice(product.price) }}
+          </span>
+          <span class="text-lg font-bold tracking-tight" style="color: #b45309;">
+            {{ formatPrice(promoPriceValue) }}
+          </span>
+        </div>
+        <div v-else class="text-lg font-bold leading-none tracking-tight"
              :style="{ color: 'var(--pos-brand-primary)' }">
           {{ formatPrice(product.price) }}
         </div>
@@ -86,10 +101,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { usePosProduct } from '@/composables/usePosProduct'
 import type { Product } from '@/types/pos'
 
-// ♻️ Reusing: usePosProduct composable for shared product logic
 const { formatPrice, stockBadgeClass, stockBadgeText } = usePosProduct()
 
 const props = defineProps<{
@@ -99,6 +114,11 @@ const props = defineProps<{
 const emit = defineEmits<{
   'add-to-cart': [product: Product]
 }>()
+
+const promoStock = computed(() => Number((props.product as any).promo_stock ?? 0))
+const promoPriceValue = computed(() => Number((props.product as any).promo_price ?? 0))
+const hasPromo = computed(() => promoStock.value > 0 && promoPriceValue.value > 0)
+const productMinStock = computed(() => Number((props.product as any).min_stock ?? 0))
 
 function handleAdd() {
   if (props.product.stock <= 0) {

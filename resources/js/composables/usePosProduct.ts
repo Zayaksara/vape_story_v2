@@ -6,47 +6,44 @@ import type { Product } from '@/types/pos'
  */
 export function usePosProduct() {
   // ── STOCK STATUS LABELS ─────────────────────────────────
-  const stockStatusLabel = (stock: number): string => {
+  const stockStatusLabel = (stock: number, minStock: number = 0): string => {
     if (stock === 0) {
       return 'Habis'
     }
-    if (stock <= 20) {
-      return 'Stok Rendah'
+    if (minStock > 0 && stock <= minStock) {
+      return 'Stok Tipis'
     }
     return 'Tersedia'
   }
 
   // ── STOCK STATUS CLASSES ───────────────────────────────
-  const stockStatusClass = (stock: number): string => {
+  const stockStatusClass = (stock: number, minStock: number = 0): string => {
     if (stock === 0) {
       return 'bg-destructive/10 text-destructive'
     }
-    if (stock <= 20) {
+    if (minStock > 0 && stock <= minStock) {
       return 'bg-accent/10 text-accent'
     }
     return 'bg-primary/10 text-primary'
   }
 
   // ── CARD BADGE CLASSES ─────────────────────────────────
-  const stockBadgeClass = (stock: number): string => {
+  const stockBadgeClass = (stock: number, minStock: number = 0): string => {
     if (stock <= 0) {
       return 'bg-red-100 text-red-600'
     }
-    if (stock <= 4) {
+    if (minStock > 0 && stock <= minStock) {
       return 'bg-amber-100 text-amber-600'
-    }
-    if (stock <= 10) {
-      return 'bg-blue-100 text-blue-600'
     }
     return 'bg-gray-100 text-gray-600'
   }
 
   // ── CARD BADGE TEXT ───────────────────────────────────
-  const stockBadgeText = (stock: number): string => {
+  const stockBadgeText = (stock: number, minStock: number = 0): string => {
     if (stock <= 0) {
       return 'Habis'
     }
-    if (stock <= 4) {
+    if (minStock > 0 && stock <= minStock) {
       return `Sisa ${stock}`
     }
     return `${stock} pcs`

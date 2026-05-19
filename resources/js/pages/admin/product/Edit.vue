@@ -22,9 +22,9 @@ defineOptions({
 interface Batch {
     id: string
     lot_number: string
-    expired_date: string
     stock_quantity: number
     cost_price: number
+    promo_price?: number | null
     cukai_year?: number | null
     is_promo: boolean
 }
@@ -36,6 +36,7 @@ const props = defineProps<{
 }>()
 
 const categoriesList = ref([...props.categories])
+const brandsList = ref([...props.brands])
 
 // ── Product form ──────────────────────────────────────────────────────────────
 
@@ -50,6 +51,7 @@ const form = useForm({
     size_ml:           props.product.size_ml ? String(props.product.size_ml) : '',
     description:       props.product.description ?? '',
     is_active:         props.product.is_active,
+    min_stock:         (props.product as any).min_stock ?? 0,
     image:             null as File | null,
     _method:           'PUT',
 })
@@ -57,6 +59,12 @@ const form = useForm({
 function onCategoryAdded(cat: { id: string; name: string }) {
     if (!categoriesList.value.find(c => c.id === cat.id)) {
         categoriesList.value.push(cat)
+    }
+}
+
+function onBrandAdded(brand: { id: string; name: string }) {
+    if (!brandsList.value.find(b => b.id === brand.id)) {
+        brandsList.value.push(brand)
     }
 }
 
@@ -68,12 +76,13 @@ function submit() {
 
 const showAddBatch  = ref(false)
 const editingBatch  = ref<string | null>(null)
+const batchErrors   = ref<Record<string, string>>({})
 
 const newBatch = reactive({
     lot_number:     '',
-    expired_date:   '',
     stock_quantity: '',
     cost_price:     '',
+    promo_price:    '',
     cukai_year:     '',
     is_promo:       false,
 })
@@ -84,9 +93,9 @@ function startEditBatch(batch: Batch) {
     editingBatch.value = batch.id
     editBatchData[batch.id] = {
         lot_number:     batch.lot_number,
-        expired_date:   batch.expired_date?.slice(0, 10) ?? '',
         stock_quantity: String(batch.stock_quantity),
-        cost_price:     String(batch.cost_price),
+        cost_price:     String(batch.cost_price ?? ''),
+        promo_price:    batch.promo_price ? String(batch.promo_price) : '',
         cukai_year:     batch.cukai_year ? String(batch.cukai_year) : '',
         is_promo:       batch.is_promo,
     }
@@ -94,13 +103,15 @@ function startEditBatch(batch: Batch) {
 
 function cancelEditBatch() {
     editingBatch.value = null
+    batchErrors.value = {}
 }
 
 function saveBatch(batch: Batch) {
     const data = editBatchData[batch.id]
     router.put(`/admin/products/${props.product.id}/batches/${batch.id}`, data, {
         preserveScroll: true,
-        onSuccess: () => { editingBatch.value = null },
+        onSuccess: () => { editingBatch.value = null; batchErrors.value = {} },
+        onError: (errors) => { batchErrors.value = errors as Record<string, string> },
     })
 }
 
@@ -109,23 +120,21 @@ function addBatch() {
         preserveScroll: true,
         onSuccess: () => {
             showAddBatch.value      = false
+            batchErrors.value       = {}
             newBatch.lot_number     = ''
-            newBatch.expired_date   = ''
             newBatch.stock_quantity = ''
             newBatch.cost_price     = ''
+            newBatch.promo_price    = ''
             newBatch.cukai_year     = ''
             newBatch.is_promo       = false
         },
+        onError: (errors) => { batchErrors.value = errors as Record<string, string> },
     })
 }
 
 function deleteBatch(batch: Batch) {
     if (!confirm(`Hapus batch "${batch.lot_number}" (stok: ${batch.stock_quantity})?`)) return
     router.delete(`/admin/products/${props.product.id}/batches/${batch.id}`, { preserveScroll: true })
-}
-
-function formatDate(d: string) {
-    return d ? new Date(d).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'
 }
 
 function formatPrice(n: number) {
@@ -153,10 +162,11 @@ function formatPrice(n: number) {
                     <ProductFormFields
                         :form="form"
                         :categories="categoriesList"
-                        :brands="brands"
+                        :brands="brandsList"
                         :initial-image-url="product.image_url ?? null"
                         mode="edit"
                         @category-added="onCategoryAdded"
+                        @brand-added="onBrandAdded"
                     />
 
                     <div class="flex justify-end gap-2 border-t pt-4" style="border-color: var(--pos-border);">
@@ -193,14 +203,12 @@ function formatPrice(n: number) {
                         <div>
                             <label class="mb-1 block text-xs font-semibold" style="color: var(--pos-text-muted);">Jumlah Stok <span class="text-red-500">*</span></label>
                             <input v-model="newBatch.stock_quantity" type="number" min="0" placeholder="0" class="w-full rounded-md border px-3 py-1.5 text-sm outline-none" style="border-color: var(--pos-border);" />
+                            <p v-if="batchErrors.stock_quantity" class="mt-1 text-xs text-red-500">{{ batchErrors.stock_quantity }}</p>
                         </div>
                         <div>
                             <label class="mb-1 block text-xs font-semibold" style="color: var(--pos-text-muted);">Harga Modal <span class="text-red-500">*</span></label>
                             <CurrencyInput v-model="newBatch.cost_price" placeholder="0" />
-                        </div>
-                        <div>
-                            <label class="mb-1 block text-xs font-semibold" style="color: var(--pos-text-muted);">Kadaluarsa <span class="text-red-500">*</span></label>
-                            <input v-model="newBatch.expired_date" type="date" class="w-full rounded-md border px-3 py-1.5 text-sm outline-none" style="border-color: var(--pos-border);" />
+                            <p v-if="batchErrors.cost_price" class="mt-1 text-xs text-red-500">{{ batchErrors.cost_price }}</p>
                         </div>
                         <div>
                             <label class="mb-1 block text-xs font-semibold" style="color: var(--pos-text-muted);">No. Lot</label>
@@ -210,11 +218,17 @@ function formatPrice(n: number) {
                             <label class="mb-1 block text-xs font-semibold" style="color: var(--pos-text-muted);">Tahun Cukai</label>
                             <input v-model="newBatch.cukai_year" type="number" :placeholder="new Date().getFullYear().toString()" class="w-full rounded-md border px-3 py-1.5 text-sm outline-none" style="border-color: var(--pos-border);" />
                         </div>
-                        <div class="flex items-end pb-1">
+                        <div class="col-span-2 flex items-center gap-3">
                             <label class="flex cursor-pointer items-center gap-2">
                                 <input v-model="newBatch.is_promo" type="checkbox" class="h-4 w-4 rounded" />
                                 <span class="text-sm" style="color: var(--pos-text-secondary);">Cukai lama (Promo)</span>
                             </label>
+                        </div>
+                        <div v-if="newBatch.is_promo" class="col-span-2">
+                            <label class="mb-1 block text-xs font-semibold" style="color: var(--pos-text-muted);">Harga Jual Promo <span class="text-red-500">*</span></label>
+                            <CurrencyInput v-model="newBatch.promo_price" placeholder="0" />
+                            <p class="mt-1 text-[11px]" style="color: var(--pos-text-muted);">Harga ini dipakai di POS selama stok promo masih ada.</p>
+                            <p v-if="batchErrors.promo_price" class="mt-1 text-xs text-red-500">{{ batchErrors.promo_price }}</p>
                         </div>
                     </div>
                     <div class="flex gap-2 pt-1">
@@ -240,10 +254,11 @@ function formatPrice(n: number) {
                                 <div class="min-w-0">
                                     <p class="truncate text-sm font-semibold" style="color: var(--pos-text-secondary);">
                                         {{ batch.lot_number }}
-                                        <span v-if="batch.is_promo" class="ml-1 rounded-full px-1.5 py-0.5 text-[10px] font-bold" style="background: var(--pos-warning-bg); color: var(--pos-warning-text);">PROMO</span>
+                                        <span v-if="batch.is_promo" class="ml-1 rounded-full px-1.5 py-0.5 text-[10px] font-bold" style="background: var(--pos-warning-bg); color: var(--pos-warning-text);">CUKAI LAMA</span>
                                     </p>
                                     <p class="mt-0.5 text-xs" style="color: var(--pos-text-muted);">
-                                        Exp: {{ formatDate(batch.expired_date) }} · Modal: {{ formatPrice(batch.cost_price) }}
+                                        Modal: {{ formatPrice(batch.cost_price) }}
+                                        <span v-if="batch.is_promo && batch.promo_price"> · Harga Promo: <strong>{{ formatPrice(batch.promo_price) }}</strong></span>
                                         <span v-if="batch.cukai_year"> · Cukai {{ batch.cukai_year }}</span>
                                     </p>
                                 </div>
@@ -264,14 +279,12 @@ function formatPrice(n: number) {
                                 <div>
                                     <label class="mb-1 block text-xs font-semibold" style="color: var(--pos-text-muted);">Jumlah Stok</label>
                                     <input v-model="editBatchData[batch.id].stock_quantity" type="number" min="0" class="w-full rounded-md border px-3 py-1.5 text-sm outline-none" style="border-color: var(--pos-border);" />
+                                    <p v-if="batchErrors.stock_quantity" class="mt-1 text-xs text-red-500">{{ batchErrors.stock_quantity }}</p>
                                 </div>
                                 <div>
                                     <label class="mb-1 block text-xs font-semibold" style="color: var(--pos-text-muted);">Harga Modal</label>
                                     <CurrencyInput v-model="editBatchData[batch.id].cost_price" placeholder="0" />
-                                </div>
-                                <div>
-                                    <label class="mb-1 block text-xs font-semibold" style="color: var(--pos-text-muted);">Kadaluarsa</label>
-                                    <input v-model="editBatchData[batch.id].expired_date" type="date" class="w-full rounded-md border px-3 py-1.5 text-sm outline-none" style="border-color: var(--pos-border);" />
+                                    <p v-if="batchErrors.cost_price" class="mt-1 text-xs text-red-500">{{ batchErrors.cost_price }}</p>
                                 </div>
                                 <div>
                                     <label class="mb-1 block text-xs font-semibold" style="color: var(--pos-text-muted);">No. Lot</label>
@@ -281,11 +294,16 @@ function formatPrice(n: number) {
                                     <label class="mb-1 block text-xs font-semibold" style="color: var(--pos-text-muted);">Tahun Cukai</label>
                                     <input v-model="editBatchData[batch.id].cukai_year" type="number" class="w-full rounded-md border px-3 py-1.5 text-sm outline-none" style="border-color: var(--pos-border);" />
                                 </div>
-                                <div class="flex items-end pb-1">
+                                <div class="col-span-2 flex items-center gap-3">
                                     <label class="flex cursor-pointer items-center gap-2">
                                         <input v-model="editBatchData[batch.id].is_promo" type="checkbox" class="h-4 w-4 rounded" />
                                         <span class="text-sm" style="color: var(--pos-text-secondary);">Cukai lama (Promo)</span>
                                     </label>
+                                </div>
+                                <div v-if="editBatchData[batch.id].is_promo" class="col-span-2">
+                                    <label class="mb-1 block text-xs font-semibold" style="color: var(--pos-text-muted);">Harga Jual Promo <span class="text-red-500">*</span></label>
+                                    <CurrencyInput v-model="editBatchData[batch.id].promo_price" placeholder="0" />
+                                    <p v-if="batchErrors.promo_price" class="mt-1 text-xs text-red-500">{{ batchErrors.promo_price }}</p>
                                 </div>
                             </div>
                             <div class="flex gap-2">

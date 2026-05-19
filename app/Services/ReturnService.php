@@ -177,9 +177,9 @@ class ReturnService
                 $totalOriginalQty += (int) $saleItem->quantity;
                 $totalReturnedQty += $qty;
 
-                // FEFO restore: kembalikan stok ke batch dengan expiry terdekat untuk produk ini
+                // Kembalikan stok ke batch terlama (urut created_at) untuk produk ini.
                 $batch = Batch::where('product_id', $saleItem->product_id)
-                    ->orderBy('expired_date', 'asc')
+                    ->orderBy('created_at', 'asc')
                     ->lockForUpdate()
                     ->first();
 

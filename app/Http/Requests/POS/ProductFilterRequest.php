@@ -22,6 +22,7 @@ class ProductFilterRequest extends FormRequest
         return [
             'category' => ['sometimes', 'string', 'max:100'],
             'category_id' => ['sometimes', 'uuid', 'exists:categories,id'],
+            'brand' => ['sometimes', 'string', 'max:100'],
             'search' => ['sometimes', 'string', 'max:255'],
             'stock_status' => ['sometimes', 'in:tersedia,habis,stok_rendah'],
             'unit' => ['sometimes', 'string', 'max:20'],

@@ -7,7 +7,7 @@ import {
     Zap, Wind, Layers, Tag, Plus,
     ChevronLeft, ChevronRight,
     ChevronsUpDown, ArrowUp, ArrowDown,
-    BoxIcon, AlertTriangle, XCircle, Warehouse,
+    BoxIcon, XCircle, Warehouse,
 } from 'lucide-vue-next'
 import type { Category, Product, ProductPageProps } from '@/types/pos'
 
@@ -50,11 +50,17 @@ defineOptions({
 
 // ── Props ─────────────────────────────────────────────────────────────────────
 
+interface BrandRef { id: string; name: string; slug: string }
+interface ProductStats { total: number; out_of_stock: number }
+
 const props = defineProps<
     ProductPageProps & {
         selectedStockStatus?: string | null
         searchQuery?: string | null
         selectedCategory?: Category | null
+        brands?: BrandRef[]
+        selectedBrand?: BrandRef | null
+        stats?: ProductStats
     }
 >()
 
@@ -62,14 +68,14 @@ const props = defineProps<
 
 const search       = ref(props.searchQuery ?? '')
 const categorySlug = ref(props.selectedCategory?.slug ?? 'all')
-const stockStatus  = ref(props.selectedStockStatus ?? 'all')
+const brandSlug    = ref(props.selectedBrand?.slug ?? 'all')
 const isLoading    = ref(false)
 
 const hasActiveFilters = computed(() =>
     !!(
         search.value ||
         (categorySlug.value && categorySlug.value !== 'all') ||
-        (stockStatus.value && stockStatus.value !== 'all')
+        (brandSlug.value && brandSlug.value !== 'all')
     ),
 )
 
@@ -92,7 +98,7 @@ function applyFilters() {
             query: {
                 search: search.value || undefined,
                 category: categorySlug.value === 'all' ? undefined : categorySlug.value,
-                stock_status: stockStatus.value === 'all' ? undefined : stockStatus.value,
+                brand: brandSlug.value === 'all' ? undefined : brandSlug.value,
             },
         }),
         {},
@@ -108,7 +114,7 @@ function applyFilters() {
 function resetFilters() {
     search.value       = ''
     categorySlug.value = 'all'
-    stockStatus.value  = 'all'
+    brandSlug.value    = 'all'
     router.get(adminProductsRoute.url(), {}, { preserveState: false })
 }
 
@@ -131,7 +137,7 @@ function goToPage(page: number) {
                 page,
                 search: search.value || undefined,
                 category: categorySlug.value === 'all' ? undefined : categorySlug.value,
-                stock_status: stockStatus.value === 'all' ? undefined : stockStatus.value,
+                brand: brandSlug.value === 'all' ? undefined : brandSlug.value,
             },
         }),
         {},
@@ -160,7 +166,7 @@ function confirmDelete(product: Product) {
 
 const debouncedSearch = useDebounceFn(applyFilters, 400)
 watch(search, debouncedSearch)
-watch([categorySlug, stockStatus], applyFilters)
+watch([categorySlug, brandSlug], applyFilters)
 
 // ── Sorting (client-side, current page) ───────────────────────────────────────
 
@@ -196,7 +202,7 @@ function sortValue(p: Product, key: SortKey): string | number {
         case 'size':       return Number(a.size_ml ?? -1)
         case 'base_price': return Number(a.base_price ?? p.price ?? 0)
         case 'stock':      return Number(p.stock ?? 0)
-        case 'status':     return p.stock === 0 ? 0 : p.stock <= 20 ? 1 : 2
+        case 'status':     return p.stock === 0 ? 0 : (Number((p as any).min_stock ?? 0) > 0 && p.stock <= Number((p as any).min_stock)) ? 1 : 2
     }
 }
 
@@ -215,9 +221,8 @@ const sortedProducts = computed<Product[]>(() => {
 
 // ── Derived stats ─────────────────────────────────────────────────────────────
 
-const statTersedia  = computed(() => props.products.total)
-const statTipis     = computed(() => props.products.data.filter(p => p.stock > 0 && p.stock <= 20).length)
-const statHabis     = computed(() => props.products.data.filter(p => p.stock === 0).length)
+const statTersedia  = computed(() => props.stats?.total ?? props.products.total)
+const statHabis     = computed(() => props.stats?.out_of_stock ?? props.products.data.filter(p => p.stock === 0).length)
 
 // ── Formatters ────────────────────────────────────────────────────────────────
 
@@ -234,10 +239,10 @@ function productInitials(name: string): string {
 type StockVariant = 'default' | 'secondary' | 'destructive' | 'outline'
 type StockInfo    = { label: string; variant: StockVariant; color: string }
 
-function stockInfo(stock: number): StockInfo {
-    if (stock === 0)  return { label: 'Habis',       variant: 'destructive', color: 'var(--pos-danger-text)' }
-    if (stock <= 20)  return { label: 'Stok Tipis',  variant: 'secondary',   color: 'var(--pos-warning-text)' }
-    return                   { label: 'Tersedia',    variant: 'default',     color: 'var(--pos-success-text)' }
+function stockInfo(stock: number, minStock: number = 0): StockInfo {
+    if (stock === 0)                                return { label: 'Habis',      variant: 'destructive', color: 'var(--pos-danger-text)' }
+    if (minStock > 0 && stock <= minStock)          return { label: 'Stok Tipis', variant: 'secondary',   color: 'var(--pos-warning-text)' }
+    return                                                 { label: 'Tersedia',   variant: 'default',     color: 'var(--pos-success-text)' }
 }
 </script>
 
@@ -246,7 +251,7 @@ function stockInfo(stock: number): StockInfo {
     <div class="adm-page px-6 py-5">
 
         <!-- ── Summary Cards ──────────────────────────────────────────────── -->
-        <div class="mb-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <div class="mb-5 grid grid-cols-1 gap-3 md:grid-cols-3">
 
             <div class="flex items-center gap-3 rounded-lg border p-4 bg-white" style="border-color: var(--pos-border);">
                 <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg" style="background: var(--pos-bg-success);">
@@ -257,18 +262,6 @@ function stockInfo(stock: number): StockInfo {
                         {{ statTersedia }}<span class="text-sm font-semibold"> Jenis</span>
                     </p>
                     <p class="mt-0.5 text-xs" style="color: var(--pos-text-muted);">Total produk</p>
-                </div>
-            </div>
-
-            <div class="flex items-center gap-3 rounded-lg border p-4 bg-white" style="border-color: var(--pos-border);">
-                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg" style="background: var(--pos-bg-warning);">
-                    <AlertTriangle class="h-5 w-5" style="color: var(--pos-warning-text);" />
-                </div>
-                <div>
-                    <p class="text-2xl font-bold leading-none" style="color: var(--pos-text-secondary);">
-                        {{ statTipis }}<span class="text-sm font-semibold"> Jenis</span>
-                    </p>
-                    <p class="mt-0.5 text-xs" style="color: var(--pos-text-muted);">Stok segera habis</p>
                 </div>
             </div>
 
@@ -339,16 +332,16 @@ function stockInfo(stock: number): StockInfo {
                     </SelectContent>
                 </Select>
 
-                <!-- Stock status filter -->
-                <Select v-model="stockStatus">
-                    <SelectTrigger class="h-8 w-36 border text-xs" style="border-color: var(--pos-border);">
-                        <SelectValue placeholder="Semua Status" />
+                <!-- Brand filter -->
+                <Select v-model="brandSlug">
+                    <SelectTrigger class="h-8 w-40 border text-xs" style="border-color: var(--pos-border);">
+                        <SelectValue placeholder="Semua Merek" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="all">Semua Status</SelectItem>
-                        <SelectItem value="tersedia">Tersedia</SelectItem>
-                        <SelectItem value="stok_rendah">Stok Tipis</SelectItem>
-                        <SelectItem value="habis">Stok Habis</SelectItem>
+                        <SelectItem value="all">Semua Merek</SelectItem>
+                        <SelectItem v-for="b in (brands ?? [])" :key="b.id" :value="b.slug">
+                            {{ b.name }}
+                        </SelectItem>
                     </SelectContent>
                 </Select>
 
@@ -389,7 +382,7 @@ function stockInfo(stock: number): StockInfo {
                                 { key: 'flavor',     label: 'Flavor' },
                                 { key: 'nicotine',   label: 'Nicotine' },
                                 { key: 'size',       label: 'Size (ml)' },
-                                { key: 'base_price', label: 'Base Price' },
+                                { key: 'base_price', label: 'Selling Price' },
                                 { key: 'stock',      label: 'Stock' },
                                 { key: 'status',     label: 'Status' },
                             ]"
@@ -484,20 +477,30 @@ function stockInfo(stock: number): StockInfo {
                             </TableCell>
 
                             <TableCell>
-                                <span class="text-sm font-bold tabular-nums" :style="{ color: stockInfo(product.stock).color }">{{ product.stock }}</span>
+                                <span class="text-sm font-bold tabular-nums" :style="{ color: stockInfo(product.stock, Number((product as any).min_stock ?? 0)).color }">{{ product.stock }}</span>
                             </TableCell>
 
                             <TableCell>
-                                <span
-                                    class="rounded-full px-2.5 py-0.5 text-xs font-semibold"
-                                    :style="product.stock === 0
-                                        ? 'background: var(--pos-danger-bg); color: var(--pos-danger-text);'
-                                        : product.stock <= 20
-                                            ? 'background: var(--pos-warning-bg); color: var(--pos-warning-text);'
-                                            : 'background: var(--pos-success-bg); color: var(--pos-success-text);'"
-                                >
-                                    {{ stockInfo(product.stock).label }}
-                                </span>
+                                <div class="flex flex-wrap items-center gap-1">
+                                    <span
+                                        class="rounded-full px-2.5 py-0.5 text-xs font-semibold"
+                                        :style="product.stock === 0
+                                            ? 'background: var(--pos-danger-bg); color: var(--pos-danger-text);'
+                                            : Number((product as any).min_stock ?? 0) > 0 && product.stock <= Number((product as any).min_stock)
+                                                ? 'background: var(--pos-warning-bg); color: var(--pos-warning-text);'
+                                                : 'background: var(--pos-success-bg); color: var(--pos-success-text);'"
+                                    >
+                                        {{ stockInfo(product.stock, Number((product as any).min_stock ?? 0)).label }}
+                                    </span>
+                                    <span
+                                        v-if="Number((product as any).promo_stock ?? 0) > 0"
+                                        class="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                                        style="background: #fef3c7; color: #b45309;"
+                                        title="Memiliki stok cukai lama"
+                                    >
+                                        CUKAI LAMA
+                                    </span>
+                                </div>
                             </TableCell>
 
                             <!-- Aksi -->
@@ -619,11 +622,11 @@ function stockInfo(stock: number): StockInfo {
                                 class="inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold"
                                 :style="selectedProduct.stock === 0
                                     ? 'background: #fff; color: var(--pos-danger-text);'
-                                    : selectedProduct.stock <= 20
+                                    : Number((selectedProduct as any).min_stock ?? 0) > 0 && selectedProduct.stock <= Number((selectedProduct as any).min_stock)
                                         ? 'background: #fff; color: var(--pos-warning-text);'
                                         : 'background: #fff; color: var(--pos-success-text);'"
                             >
-                                {{ stockInfo(selectedProduct.stock).label }}
+                                {{ stockInfo(selectedProduct.stock, Number((selectedProduct as any).min_stock ?? 0)).label }}
                             </span>
                             <span v-if="selectedProduct.volume" class="inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold" style="background: #fff; color: var(--pos-text-secondary);">
                                 {{ selectedProduct.volume }}
@@ -636,8 +639,9 @@ function stockInfo(stock: number): StockInfo {
                     <div class="flex flex-col divide-y rounded-lg border" style="border-color: var(--pos-border);">
                         <div v-for="(row, i) in [
                             { label: 'Kode Produk', value: selectedProduct.sku },
-                            { label: 'Harga Dasar', value: formatPrice((selectedProduct as any).base_price ?? selectedProduct.price) },
+                            { label: 'Harga Jual', value: formatPrice((selectedProduct as any).base_price ?? selectedProduct.price) },
                             { label: 'Stok',        value: String(selectedProduct.stock) + ' unit' },
+                            { label: 'Ambang Stok Menipis', value: Number((selectedProduct as any).min_stock ?? 0) > 0 ? `${(selectedProduct as any).min_stock} unit` : '— (nonaktif)' },
                             { label: 'Flavor',      value: (selectedProduct as any).flavor ?? '—' },
                             { label: 'Nikotin',     value: (selectedProduct as any).nicotine_strength ? `${(selectedProduct as any).nicotine_strength} mg` : '—' },
                             { label: 'Volume',      value: selectedProduct.volume ?? '—' },

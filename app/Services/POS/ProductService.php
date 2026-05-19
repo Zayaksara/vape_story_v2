@@ -15,16 +15,45 @@ class ProductService
      */
     public function getFilteredProducts(array $filters, int $perPage = 10): LengthAwarePaginator
     {
-        $query = Product::with(['category', 'brand', 'batches'])
+        return $this->buildFilteredQuery($filters)
+            ->with(['category', 'brand', 'batches'])
+            ->paginate($perPage)
+            ->withQueryString();
+    }
+
+    /**
+     * Aggregated stats (total + stok habis) untuk filter yang sama dengan getFilteredProducts,
+     * tanpa pagination. Dipakai untuk summary card di Manajemen Produk / POS.
+     */
+    public function getStats(array $filters): array
+    {
+        $base = $this->buildFilteredQuery($filters);
+
+        $total = (clone $base)->count();
+
+        $outOfStock = (clone $base)
+            ->whereRaw('(select coalesce(sum(stock_quantity), 0) from batches where batches.product_id = products.id) = 0')
+            ->count();
+
+        return [
+            'total' => $total,
+            'out_of_stock' => $outOfStock,
+        ];
+    }
+
+    private function buildFilteredQuery(array $filters): Builder
+    {
+        $query = Product::query()
             ->where('is_active', 1)
             ->orderBy('name');
 
         $this->applyCategoryFilter($query, $filters);
+        $this->applyBrandFilter($query, $filters);
         $this->applySearchFilter($query, $filters);
         $this->applyStockStatusFilter($query, $filters);
         $this->applyUnitFilter($query, $filters);
 
-        return $query->paginate($perPage)->withQueryString();
+        return $query;
     }
 
     /**
@@ -124,17 +153,35 @@ class ProductService
         }
     }
 
+    private function applyBrandFilter(Builder $query, array $filters): void
+    {
+        if (! empty($filters['brand'])) {
+            $slug = $filters['brand'];
+            $query->whereHas('brand', fn ($q) => $q->where('slug', $slug));
+        }
+    }
+
     private function applySearchFilter(Builder $query, array $filters): void
     {
         if (empty($filters['search'])) {
             return;
         }
 
-        $search = $filters['search'];
+        $driver  = $query->getModel()->getConnection()->getDriverName();
+        $likeOp  = $driver === 'pgsql' ? 'ilike' : 'like';
+        $tokens  = array_filter(preg_split('/\s+/', trim((string) $filters['search'])));
 
-        $query->where(function ($q) use ($search) {
-            $q->where('name', 'like', "%{$search}%")
-                ->orWhere('code', 'like', "%{$search}%");
+        $query->where(function ($outer) use ($tokens, $likeOp) {
+            foreach ($tokens as $token) {
+                $like = '%'.$token.'%';
+                $outer->where(function ($q) use ($like, $likeOp) {
+                    $q->where('products.name', $likeOp, $like)
+                        ->orWhere('products.code', $likeOp, $like)
+                        ->orWhere('products.flavor', $likeOp, $like)
+                        ->orWhereHas('brand',    fn ($b) => $b->where('name', $likeOp, $like))
+                        ->orWhereHas('category', fn ($c) => $c->where('name', $likeOp, $like));
+                });
+            }
         });
     }
 
@@ -144,10 +191,9 @@ class ProductService
         $totalStockSql = '(select coalesce(sum(stock_quantity), 0) from batches where batches.product_id = products.id)';
 
         match ($stockStatus) {
-            'tersedia' => $query->whereRaw("{$totalStockSql} > 20"),
-            'habis' => $query->whereRaw("{$totalStockSql} = 0"),
-            'stok_rendah' => $query->whereRaw("{$totalStockSql} between 1 and 20"),
-            default => null,
+            'tersedia' => $query->whereRaw("{$totalStockSql} > 0"),
+            'habis'    => $query->whereRaw("{$totalStockSql} = 0"),
+            default    => null,
         };
     }
 

@@ -24,6 +24,7 @@ const props = defineProps<{
 }>()
 
 const categoriesList = ref([...props.categories])
+const brandsList     = ref([...props.brands])
 
 const form = useForm({
     code:                  '',
@@ -36,9 +37,10 @@ const form = useForm({
     size_ml:               '',
     description:           '',
     is_active:             true,
+    min_stock:             0,
     image:                 null as File | null,
     batch_lot_number:      '',
-    batch_expired_date:    '',
+    batch_promo_price:     '',
     batch_stock_quantity:  '',
     batch_cost_price:      '',
     batch_cukai_year:      '',
@@ -48,6 +50,12 @@ const form = useForm({
 function onCategoryAdded(cat: { id: string; name: string }) {
     if (!categoriesList.value.find(c => c.id === cat.id)) {
         categoriesList.value.push(cat)
+    }
+}
+
+function onBrandAdded(brand: { id: string; name: string }) {
+    if (!brandsList.value.find(b => b.id === brand.id)) {
+        brandsList.value.push(brand)
     }
 }
 
@@ -78,9 +86,10 @@ function submit() {
                     <ProductFormFields
                         :form="form"
                         :categories="categoriesList"
-                        :brands="brands"
+                        :brands="brandsList"
                         mode="create"
                         @category-added="onCategoryAdded"
+                        @brand-added="onBrandAdded"
                     />
 
                     <!-- ── Stok Awal ──────────────────────────────────────── -->
@@ -104,31 +113,28 @@ function submit() {
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="mb-1.5 block text-xs font-semibold" style="color: var(--pos-text-muted);">Tanggal Kadaluarsa <span v-if="form.batch_stock_quantity" class="text-red-500">*</span></label>
-                                    <input v-model="form.batch_expired_date" type="date"
-                                        class="w-full rounded-md border px-3 py-2 text-sm outline-none transition focus:ring-2"
-                                        style="border-color: var(--pos-border); color: var(--pos-text-secondary);" />
-                                </div>
-                                <div>
                                     <label class="mb-1.5 block text-xs font-semibold" style="color: var(--pos-text-muted);">No. Lot</label>
                                     <input v-model="form.batch_lot_number" type="text" placeholder="Auto-generate jika kosong"
                                         class="w-full rounded-md border px-3 py-2 text-sm outline-none transition focus:ring-2"
                                         style="border-color: var(--pos-border); color: var(--pos-text-secondary);" />
                                 </div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="mb-1.5 block text-xs font-semibold" style="color: var(--pos-text-muted);">Tahun Cukai</label>
                                     <input v-model="form.batch_cukai_year" type="number" min="2000" max="2100" :placeholder="new Date().getFullYear().toString()"
                                         class="w-full rounded-md border px-3 py-2 text-sm outline-none transition focus:ring-2"
                                         style="border-color: var(--pos-border); color: var(--pos-text-secondary);" />
                                 </div>
-                                <div class="flex items-end pb-2">
-                                    <label class="flex cursor-pointer items-center gap-2">
-                                        <input v-model="form.batch_is_promo" type="checkbox" class="h-4 w-4 rounded" />
-                                        <span class="text-sm font-medium" style="color: var(--pos-text-secondary);">Cukai lama (Promo)</span>
-                                    </label>
-                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <label class="flex cursor-pointer items-center gap-2">
+                                    <input v-model="form.batch_is_promo" type="checkbox" class="h-4 w-4 rounded" />
+                                    <span class="text-sm font-medium" style="color: var(--pos-text-secondary);">Cukai lama (Promo)</span>
+                                </label>
+                            </div>
+                            <div v-if="form.batch_is_promo">
+                                <label class="mb-1.5 block text-xs font-semibold" style="color: var(--pos-text-muted);">Harga Jual Promo <span class="text-red-500">*</span></label>
+                                <CurrencyInput v-model="form.batch_promo_price" placeholder="0" />
+                                <p class="mt-1 text-[11px]" style="color: var(--pos-text-muted);">Harga ini dipakai di POS selama stok promo masih ada.</p>
                             </div>
                         </div>
                     </div>

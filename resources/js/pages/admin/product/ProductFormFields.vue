@@ -23,6 +23,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   'category-added': [category: Category]
+  'brand-added':    [brand: Brand]
 }>()
 
 // ── Image ─────────────────────────────────────────────────────────────────────
@@ -100,6 +101,45 @@ async function submitNewCategory() {
     creatingCategory.value = false
   }
 }
+
+// ── Brand create modal ───────────────────────────────────────────────────────
+
+const brandModalOpen = ref(false)
+const newBrandName = ref('')
+const newBrandDesc = ref('')
+const creatingBrand = ref(false)
+
+function openBrandModal() {
+  newBrandName.value = ''
+  newBrandDesc.value = ''
+  brandModalOpen.value = true
+}
+
+async function submitNewBrand() {
+  if (!newBrandName.value.trim()) {
+    toast.error('Nama brand wajib diisi')
+    return
+  }
+
+  creatingBrand.value = true
+  try {
+    const { data } = await axios.post<Brand>('/admin/brands', {
+      name: newBrandName.value.trim(),
+      description: newBrandDesc.value.trim() || null,
+    })
+    emit('brand-added', data)
+    props.form.brand_id = data.id
+    brandModalOpen.value = false
+    toast.success(`Brand "${data.name}" dibuat`)
+  } catch (err: any) {
+    const msg = err?.response?.data?.errors?.name?.[0]
+      ?? err?.response?.data?.message
+      ?? 'Gagal membuat brand'
+    toast.error(msg)
+  } finally {
+    creatingBrand.value = false
+  }
+}
 </script>
 
 <template>
@@ -175,23 +215,51 @@ async function submitNewCategory() {
     </div>
     <div>
       <label class="mb-1.5 block text-xs font-semibold" style="color: var(--pos-text-muted);">Brand</label>
-      <select
-        v-model="form.brand_id"
-        class="w-full rounded-md border px-3 py-2 text-sm outline-none transition focus:ring-2"
-        style="border-color: var(--pos-border); color: var(--pos-text-secondary);"
-      >
-        <option value="">Pilih brand</option>
-        <option v-for="brand in brands" :key="brand.id" :value="brand.id">{{ brand.name }}</option>
-      </select>
+      <div class="flex items-stretch gap-2">
+        <select
+          v-model="form.brand_id"
+          class="flex-1 rounded-md border px-3 py-2 text-sm outline-none transition focus:ring-2"
+          style="border-color: var(--pos-border); color: var(--pos-text-secondary);"
+        >
+          <option value="">Pilih brand</option>
+          <option v-for="brand in brands" :key="brand.id" :value="brand.id">{{ brand.name }}</option>
+        </select>
+        <button
+          type="button"
+          class="flex shrink-0 cursor-pointer items-center gap-1 rounded-md px-3 text-xs font-semibold transition hover:opacity-90"
+          style="background: var(--pos-brand-primary); color: #fff;"
+          title="Tambah brand baru"
+          @click="openBrandModal"
+        >
+          <Plus class="h-3.5 w-3.5" />
+        </button>
+      </div>
       <p v-if="form.errors.brand_id" class="mt-1 text-xs text-red-500">{{ form.errors.brand_id }}</p>
     </div>
   </div>
 
-  <!-- Harga Dasar -->
-  <div>
-    <label class="mb-1.5 block text-xs font-semibold" style="color: var(--pos-text-muted);">Harga Dasar <span class="text-red-500">*</span></label>
-    <CurrencyInput v-model="form.base_price" required placeholder="0" />
-    <p v-if="form.errors.base_price" class="mt-1 text-xs text-red-500">{{ form.errors.base_price }}</p>
+  <!-- Harga Jual + Min Stok -->
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <label class="mb-1.5 block text-xs font-semibold" style="color: var(--pos-text-muted);">Harga Jual <span class="text-red-500">*</span></label>
+      <CurrencyInput v-model="form.base_price" required placeholder="0" />
+      <p v-if="form.errors.base_price" class="mt-1 text-xs text-red-500">{{ form.errors.base_price }}</p>
+    </div>
+    <div>
+      <label class="mb-1.5 block text-xs font-semibold" style="color: var(--pos-text-muted);">Ambang Stok Menipis</label>
+      <input
+        v-model.number="form.min_stock"
+        type="number"
+        min="0"
+        placeholder="0"
+        class="w-full rounded-md border px-3 py-2 text-sm outline-none transition focus:ring-2"
+        style="border-color: var(--pos-border); color: var(--pos-text-secondary);"
+      />
+      <p class="mt-1 text-[11px]" style="color: var(--pos-text-muted);">
+        Tandai stok menipis bila ≤ angka ini. Isi 0 untuk menonaktifkan peringatan.
+      </p>
+      <p v-if="form.errors.min_stock" class="mt-1 text-xs text-red-500">{{ form.errors.min_stock }}</p>
+    </div>
   </div>
 
   <!-- Flavor + Nicotine + Size -->
@@ -332,6 +400,83 @@ async function submitNewCategory() {
               style="background: var(--pos-brand-primary); color: #fff;"
             >
               {{ creatingCategory ? 'Menyimpan…' : 'Simpan Kategori' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </Teleport>
+
+  <!-- ── Brand create modal ───────────────────────────────────────────────── -->
+  <Teleport to="body">
+    <div
+      v-if="brandModalOpen"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" @click="brandModalOpen = false" />
+      <div
+        class="relative z-10 w-full max-w-sm overflow-hidden rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-200"
+        style="background: #fff;"
+      >
+        <div
+          class="flex items-center justify-between border-b px-5 py-4"
+          style="border-color: var(--pos-border); background: var(--pos-brand-light);"
+        >
+          <div>
+            <h3 class="text-sm font-bold" style="color: var(--pos-brand-dark);">Brand Baru</h3>
+            <p class="text-[11px]" style="color: var(--pos-text-secondary);">Tambah merek produk</p>
+          </div>
+          <button
+            class="cursor-pointer rounded-full p-1.5 transition-colors hover:bg-white/60"
+            style="color: var(--pos-text-muted);"
+            @click="brandModalOpen = false"
+          >
+            <X class="h-4 w-4" />
+          </button>
+        </div>
+
+        <form class="space-y-4 p-5" @submit.prevent="submitNewBrand">
+          <div>
+            <label class="mb-1.5 block text-xs font-semibold" style="color: var(--pos-text-muted);">Nama Brand <span class="text-red-500">*</span></label>
+            <input
+              v-model="newBrandName"
+              type="text"
+              required
+              autofocus
+              placeholder="cth: SMOK, Voopoo, Lost Vape"
+              class="w-full rounded-md border px-3 py-2 text-sm outline-none transition focus:ring-2"
+              style="border-color: var(--pos-border); color: var(--pos-text-secondary);"
+            />
+          </div>
+          <div>
+            <label class="mb-1.5 block text-xs font-semibold" style="color: var(--pos-text-muted);">Deskripsi (opsional)</label>
+            <textarea
+              v-model="newBrandDesc"
+              rows="2"
+              placeholder="Keterangan singkat"
+              class="w-full resize-none rounded-md border px-3 py-2 text-sm outline-none transition focus:ring-2"
+              style="border-color: var(--pos-border); color: var(--pos-text-secondary);"
+            />
+          </div>
+
+          <div class="flex justify-end gap-2 border-t pt-3" style="border-color: var(--pos-border);">
+            <button
+              type="button"
+              class="cursor-pointer rounded-md border px-4 py-2 text-xs font-semibold"
+              style="border-color: var(--pos-border); color: var(--pos-text-secondary); background: #fff;"
+              @click="brandModalOpen = false"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              :disabled="creatingBrand"
+              class="cursor-pointer rounded-md px-4 py-2 text-xs font-semibold disabled:opacity-60"
+              style="background: var(--pos-brand-primary); color: #fff;"
+            >
+              {{ creatingBrand ? 'Menyimpan…' : 'Simpan Brand' }}
             </button>
           </div>
         </form>

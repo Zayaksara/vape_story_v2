@@ -182,8 +182,7 @@ const menuItems = [
   { label: 'Laporan Penjualan', href: '/admin/reports/sales', icon: BarChart3 },
   { label: 'History Pembayaran', href: '/admin/transactions/today', icon: Receipt },
   { label: 'Kelola Akun', href: '/admin/users', icon: Users },
-  { label: 'Promo & Diskon', href: '/admin/promotions', icon: Tag },
-  { label: 'Point of Sale', href: '/POS/dashboard', icon: ShoppingBasket },
+  { label: 'Promo & Diskon', href: '/admin/promotions', icon: Tag }
 ]
 
 const currentUrl = computed(() => page.url || '')

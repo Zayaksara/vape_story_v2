@@ -30,9 +30,12 @@
           :style="{ color: 'var(--pos-text-primary)' }">
         {{ item.product.name }}
       </h4>
-      <p class="text-[10px]"
+      <p class="flex items-center gap-1 text-[10px]"
          :style="{ color: 'var(--pos-text-primary)' }">
-        {{ formatPrice(item.product.price) }} /pcs
+        <span v-if="hasPromo" class="line-through" :style="{ color: 'var(--pos-text-light)' }">{{ formatPrice(item.product.price) }}</span>
+        <span :style="hasPromo ? { color: '#b45309', fontWeight: 600 } : {}">{{ formatPrice(unitPrice) }}</span>
+        <span>/pcs</span>
+        <span v-if="hasPromo" class="rounded px-1 py-0 text-[9px] font-bold" style="background: #fef3c7; color: #b45309;">CUKAI LAMA</span>
       </p>
       <div class="flex items-center gap-2 pt-0.5">
         <div class="qty-btn flex items-center gap-1 rounded-lg border bg-white"
@@ -91,11 +94,18 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { CartItem } from '@/types/pos'
 
 const props = defineProps<{
   item: CartItem
 }>()
+
+const unitPrice = computed(() => {
+  const u = Number((props.item as any).unit_price)
+  return Number.isFinite(u) && u > 0 ? u : props.item.product.price
+})
+const hasPromo = computed(() => unitPrice.value < props.item.product.price)
 
 const emit = defineEmits<{
   'remove': [productId: string]

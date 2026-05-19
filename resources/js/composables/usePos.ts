@@ -68,8 +68,13 @@ export function usePos(initialTrxId: string) {
       return
     }
 
-    // Ensure price is a valid number
-    const validPrice = typeof product.price === 'number' && !isNaN(product.price) ? product.price : 0
+    // Pakai harga promo (cukai lama) jika tersedia, fallback ke harga normal.
+    const promoStock = Number((product as any).promo_stock ?? 0)
+    const promoPrice = Number((product as any).promo_price ?? 0)
+    const usePromo   = promoStock > 0 && promoPrice > 0
+    const unitPrice  = usePromo
+      ? promoPrice
+      : (typeof product.price === 'number' && !isNaN(product.price) ? product.price : 0)
 
     const existing = cart.value.find(i => i.product.id === product.id)
 
@@ -80,13 +85,15 @@ export function usePos(initialTrxId: string) {
       }
 
       existing.quantity++
-      existing.subtotal = existing.quantity * existing.product.price
+      existing.subtotal = existing.quantity * unitPrice
+      ;(existing as any).unit_price = unitPrice
     } else {
       cart.value.push({
         product,
         quantity: 1,
-        subtotal: validPrice,
-      })
+        subtotal: unitPrice,
+        unit_price: unitPrice,
+      } as any)
     }
   }
 
@@ -112,7 +119,8 @@ export function usePos(initialTrxId: string) {
     }
 
     item.quantity = qty
-    item.subtotal = qty * item.product.price
+    const unit = Number((item as any).unit_price ?? item.product.price)
+    item.subtotal = qty * unit
   }
 
   function clearCart(): void {
@@ -160,7 +168,7 @@ export function usePos(initialTrxId: string) {
         items: cart.value.map((item) => ({
           product_id: item.product.id,
           quantity: item.quantity,
-          unit_price: item.product.price,
+          unit_price: Number((item as any).unit_price ?? item.product.price),
           discount: 0,
           total: item.subtotal,
         })),
