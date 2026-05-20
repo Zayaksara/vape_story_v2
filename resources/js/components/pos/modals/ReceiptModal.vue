@@ -20,38 +20,68 @@
                     :style="{ backgroundColor: 'var(--pos-bg-primary, #1e293b)' }"
                     class="receipt-body p-5"
                 >
-                    <!-- Header -->
-                    <div class="mb-4 text-center">
-                        <div
-                            class="mb-2 flex items-center justify-center gap-2"
+                    <!-- Store Header -->
+                    <div class="mb-3 text-center">
+                        <img
+                            v-if="showLogoOnReceipt && storeLogo"
+                            :src="storeLogo"
+                            :alt="`Logo ${storeName}`"
+                            class="mx-auto mb-2 h-12 w-12 rounded object-contain"
+                        />
+                        <p
+                            v-if="storeName"
+                            class="text-sm font-bold"
+                            :style="{ color: 'var(--pos-text-primary)' }"
                         >
-                            <div
-                                class="h-8 w-8 rounded-full"
-                                :style="{
-                                    backgroundColor: 'var(--pos-brand-primary)',
-                                }"
+                            {{ storeName }}
+                        </p>
+                        <p
+                            v-if="storeAddress"
+                            class="text-[10px] leading-snug"
+                            :style="{ color: 'var(--pos-text-primary)' }"
+                        >
+                            {{ storeAddress }}
+                        </p>
+                        <p
+                            v-if="storePhone"
+                            class="text-[10px]"
+                            :style="{ color: 'var(--pos-text-primary)' }"
+                        >
+                            {{ storePhone }}
+                        </p>
+                        <p
+                            v-if="receiptHeader"
+                            class="mt-1 whitespace-pre-line text-[10px] leading-snug"
+                            :style="{ color: 'var(--pos-text-primary)' }"
+                        >
+                            {{ receiptHeader }}
+                        </p>
+                    </div>
+
+                    <!-- Success indicator -->
+                    <div class="mb-3 text-center">
+                        <div
+                            class="mx-auto mb-1 h-7 w-7 rounded-full"
+                            :style="{ backgroundColor: 'var(--pos-brand-primary)' }"
+                        >
+                            <svg
+                                class="h-full w-full p-1.5"
+                                :style="{ color: 'var(--pos-text-inverse)' }"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
                             >
-                                <svg
-                                    class="h-full w-full p-2"
-                                    :style="{
-                                        color: 'var(--pos-text-inverse)',
-                                    }"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                    />
-                                </svg>
-                            </div>
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
                         </div>
                         <h2
                             id="receipt-title"
-                            class="text-lg font-bold"
+                            class="text-sm font-bold"
                             :style="{ color: 'var(--pos-text-primary)' }"
                         >
                             Pembayaran Berhasil
@@ -208,6 +238,15 @@
                     >
                         Kasir: {{ transaction?.cashier_name }}
                     </div>
+
+                    <!-- Custom receipt footer -->
+                    <p
+                        v-if="receiptFooter"
+                        class="mt-3 whitespace-pre-line text-center text-[10px] leading-snug"
+                        :style="{ color: 'var(--pos-text-primary)' }"
+                    >
+                        {{ receiptFooter }}
+                    </p>
                 </div>
 
                 <!-- Footer -->
@@ -266,13 +305,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
 import type { Transaction } from '@/types/pos';
 
 const props = defineProps<{
     modelValue: boolean;
     transaction?: Transaction | null;
 }>();
+
+const page = usePage();
+const storeName = computed(() => (page.props.storeName as string | undefined) ?? '');
+const storeLogo = computed(() => (page.props.storeLogo as string | null | undefined) ?? null);
+const storeAddress = computed(() => (page.props.storeAddress as string | null | undefined) ?? null);
+const storePhone = computed(() => (page.props.storePhone as string | null | undefined) ?? null);
+const receiptHeader = computed(() => (page.props.storeReceiptHeader as string | null | undefined) ?? null);
+const receiptFooter = computed(() => (page.props.storeReceiptFooter as string | null | undefined) ?? null);
+const showLogoOnReceipt = computed(() => Boolean(page.props.storeShowLogoOnReceipt));
 
 const emit = defineEmits<{
     (e: 'update:modelValue', value: boolean): void;

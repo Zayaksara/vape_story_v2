@@ -7,35 +7,23 @@ import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
+    SidebarGroup,
+    SidebarGroupContent,
+    SidebarGroupLabel,
     SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    SidebarRail,
 } from '@/components/ui/sidebar';
 import pos from '@/routes/pos';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard POS',
-        href: pos.dashboard.index.url(),
-        icon: LayoutGrid,
-    },
-    {
-        title: 'Katalog Produk',
-        href: pos.products.index.url(),
-        icon: Package,
-    },
-    {
-        title: 'Riwayat Transaksi',
-        href: pos.transactions.today.url(),
-        icon: FileText,
-    },
-    {
-        title: 'Pengembalian Barang',
-        href: '/pos/returns', // TODO: implement returns page
-        icon: RotateCcw,
-    },
+    { title: 'Dashboard POS', href: pos.dashboard.index.url(), icon: LayoutGrid },
+    { title: 'Katalog Produk', href: pos.products.index.url(), icon: Package },
+    { title: 'Riwayat Transaksi', href: pos.transactions.today.url(), icon: FileText },
+    { title: 'Pengembalian Barang', href: '/pos/returns', icon: RotateCcw },
 ];
 </script>
 
@@ -58,24 +46,31 @@ const mainNavItems: NavItem[] = [
         </SidebarHeader>
 
         <SidebarContent>
-            <SidebarMenu>
-                <SidebarMenuItem v-for="item in mainNavItems" :key="item.title">
-                    <SidebarMenuButton as-child>
-                        <Link
-                            :href="item.href"
-                            :preserve-state="false"
-                            :preserve-scroll="false"
-                        >
-                            <component :is="item.icon" />
-                            <span>{{ item.title }}</span>
-                        </Link>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-            </SidebarMenu>
+            <SidebarGroup>
+                <SidebarGroupLabel>Menu Utama</SidebarGroupLabel>
+                <SidebarGroupContent>
+                    <SidebarMenu>
+                        <SidebarMenuItem v-for="item in mainNavItems" :key="item.title">
+                            <SidebarMenuButton as-child>
+                                <Link
+                                    :href="item.href"
+                                    :preserve-state="false"
+                                    :preserve-scroll="false"
+                                >
+                                    <component :is="item.icon" />
+                                    <span>{{ item.title }}</span>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </SidebarGroupContent>
+            </SidebarGroup>
         </SidebarContent>
 
         <SidebarFooter>
             <NavUser />
         </SidebarFooter>
+
+        <SidebarRail />
     </Sidebar>
 </template>

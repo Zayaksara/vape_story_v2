@@ -144,31 +144,31 @@
     @remove-discount="removeDiscount"
   />
 
-  <!-- Discount modal -->
-  <DiscountModal
-    :model-value="isDiscountModalOpen"
-    :subtotal="subtotal"
-    :applied-discount="discount"
-    :discounts="props.promos ?? []"
-    @update:model-value="isDiscountModalOpen = $event"
-    @apply="applyDiscount"
-  />
+  <!-- Modals (client-only — Teleport tidak SSR-friendly) -->
+  <template v-if="isMounted">
+    <DiscountModal
+      :model-value="isDiscountModalOpen"
+      :subtotal="subtotal"
+      :applied-discount="discount"
+      :discounts="props.promos ?? []"
+      @update:model-value="isDiscountModalOpen = $event"
+      @apply="applyDiscount"
+    />
 
-  <!-- Payment modal -->
-  <PaymentModal
-    :model-value="isPaymentModalOpen"
-    :total="total"
-    :is-processing="isProcessing || isLoading"
-    @update:model-value="isPaymentModalOpen = $event"
-    @confirm="handlePaymentConfirm"
-  />
+    <PaymentModal
+      :model-value="isPaymentModalOpen"
+      :total="total"
+      :is-processing="isProcessing || isLoading"
+      @update:model-value="isPaymentModalOpen = $event"
+      @confirm="handlePaymentConfirm"
+    />
 
-  <!-- Receipt modal -->
-  <ReceiptModal
-    :model-value="isReceiptModalOpen"
-    :transaction="lastTransaction"
-    @update:model-value="handleCloseReceipt"
-  />
+    <ReceiptModal
+      :model-value="isReceiptModalOpen"
+      :transaction="lastTransaction"
+      @update:model-value="handleCloseReceipt"
+    />
+  </template>
 
   <!-- Toast -->
   <PosToast
@@ -246,6 +246,9 @@ const currentCategory = ref<number | string | null>(null)
 const isLoading = ref(false)
 const error = ref<string | null>(null)
 
+// Client-only flag (cegah SSR hydration mismatch untuk konten time/Teleport)
+const isMounted = ref(false)
+
 // Time
 const currentTime = ref('')
 
@@ -310,6 +313,7 @@ function handleCloseReceipt() {
 }
 
 onMounted(() => {
+  isMounted.value = true
   updateTime()
   const interval = setInterval(updateTime, 60000)
   onUnmounted(() => {

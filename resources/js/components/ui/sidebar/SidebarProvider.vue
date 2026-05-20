@@ -36,7 +36,9 @@ function setOpenMobile(value: boolean) {
 }
 
 function toggleSidebar() {
-  setOpenMobile(!openMobile.value)
+  return isMobile.value
+    ? setOpenMobile(!openMobile.value)
+    : setOpen(!open.value)
 }
 
 useEventListener("keydown", (event: KeyboardEvent) => {

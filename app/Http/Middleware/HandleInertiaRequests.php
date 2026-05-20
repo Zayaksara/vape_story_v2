@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\StoreSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -35,12 +37,22 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $store = Schema::hasTable('store_settings') ? StoreSetting::current() : null;
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
                 'user' => $request->user(),
             ],
+            'storeName' => $store?->name ?? config('app.name'),
+            'storeLogo' => $store?->logo_url,
+            'storeTagline' => $store?->tagline,
+            'storeAddress' => $store?->address,
+            'storePhone' => $store?->phone,
+            'storeReceiptHeader' => $store?->receipt_header,
+            'storeReceiptFooter' => $store?->receipt_footer,
+            'storeShowLogoOnReceipt' => (bool) ($store?->show_logo_on_receipt ?? false),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

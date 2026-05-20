@@ -39,10 +39,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('reports/sales/export', [App\Http\Controllers\Admin\ReportSaleController::class, 'export'])->name('reports.sales.export');
         Route::get('reports/sales/shopping-list', [App\Http\Controllers\Admin\ReportSaleController::class, 'shoppingList'])->name('reports.sales.shopping-list');
 
-        Route::get('users',              [App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
-        Route::post('users',             [App\Http\Controllers\Admin\UserController::class, 'store'])->name('users.store');
-        Route::put('users/{user}',       [App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
-        Route::delete('users/{user}',    [App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
+        Route::middleware('throttle:30,1')->group(function () {
+            Route::get('users',              [App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
+            Route::post('users',             [App\Http\Controllers\Admin\UserController::class, 'store'])->name('users.store');
+            Route::put('users/{user}',       [App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
+            Route::delete('users/{user}',    [App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
+        });
 
         Route::get('promotions',                  [App\Http\Controllers\Admin\PromotionController::class, 'index'])->name('promotions.index');
         Route::post('promotions',                 [App\Http\Controllers\Admin\PromotionController::class, 'store'])->name('promotions.store');

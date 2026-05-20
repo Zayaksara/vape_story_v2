@@ -39,7 +39,8 @@ backgroundColor: 'var(--pos-bg-primary)'
     <div class="ml-auto flex items-center gap-2">
       <span class="text-xs"
             :style="{ color: 'var(--pos-text-light)' }">
-        {{ displayTime }}
+        <span v-if="isMounted">{{ displayTime }}</span>
+        <span v-else>&nbsp;</span>
       </span>
       <span class="text-base font-medium"
             :style="{ color: 'var(--pos-text-primary)' }">
@@ -63,6 +64,7 @@ const props = defineProps<{
 const { toggleSidebar } = useSidebar()
 
 const now = ref(new Date())
+const isMounted = ref(false)
 let timer: ReturnType<typeof setInterval> | null = null
 
 function formatNow(d: Date): string {
@@ -85,6 +87,8 @@ const displayTime = computed(() =>
 )
 
 onMounted(() => {
+  isMounted.value = true
+  now.value = new Date()
   timer = setInterval(() => {
     now.value = new Date()
   }, 1000)

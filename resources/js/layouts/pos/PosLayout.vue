@@ -4,8 +4,7 @@
       <PosSidebar />
       <SidebarInset>
         <PosHeader
-          v-if="cashier"
-          :cashier-name="cashier.name"
+          :cashier-name="cashierName"
           :transaction-id="transactionId"
           :current-time="currentTime"
         />
@@ -19,6 +18,8 @@
 </template>
 
 <script setup lang="ts">
+import { usePage } from '@inertiajs/vue3'
+import { computed } from 'vue'
 import PosSidebar from '@/components/pos/PosSidebar.vue'
 import PosHeader from '@/components/pos/PosHeader.vue'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
@@ -38,6 +39,13 @@ const props = withDefaults(defineProps<Props>(), {
   cashier: undefined,
   transactionId: '',
   currentTime: '',
+})
+
+const page = usePage()
+const cashierName = computed(() => {
+  if (props.cashier?.name) return props.cashier.name
+  const user = page.props.auth?.user as { name?: string } | undefined
+  return user?.name ?? 'Kasir'
 })
 </script>
 

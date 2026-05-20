@@ -11,7 +11,7 @@ import TwoFactorSetupModal from '@/components/TwoFactorSetupModal.vue';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useTwoFactorAuth } from '@/composables/useTwoFactorAuth';
-import { edit } from '@/routes/security';
+import SettingsRoleLayout from '@/layouts/SettingsRoleLayout.vue';
 import { disable, enable } from '@/routes/two-factor';
 
 type Props = {
@@ -27,14 +27,7 @@ withDefaults(defineProps<Props>(), {
 });
 
 defineOptions({
-    layout: {
-        breadcrumbs: [
-            {
-                title: 'Security settings',
-                href: edit(),
-            },
-        ],
-    },
+    layout: SettingsRoleLayout,
 });
 
 const { hasSetupData, clearTwoFactorAuthData } = useTwoFactorAuth();

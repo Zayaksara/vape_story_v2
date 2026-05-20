@@ -1,5 +1,6 @@
-﻿<script setup lang="ts">
-import { Form, Head } from '@inertiajs/vue3';
+<script setup lang="ts">
+import { Form, Head, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import InputError from '@/components/InputError.vue';
 import PasswordInput from '@/components/PasswordInput.vue';
 import TextLink from '@/components/TextLink.vue';
@@ -13,8 +14,8 @@ import { store } from '@/routes/login';
 import { request } from '@/routes/password';
 
 const {
-    title = 'Welcome to Vape Story',
-    description = 'Login dulu masbro, biar bisa nikmatin semua fitur yang ada',
+    title: titleProp,
+    description: descriptionProp,
     status,
     canResetPassword,
     canRegister,
@@ -25,15 +26,34 @@ const {
     canResetPassword: boolean;
     canRegister: boolean;
 }>();
+
+const page = usePage();
+const storeName = computed(() => (page.props.storeName as string | undefined) ?? 'Story Vape');
+const storeLogo = computed(() => (page.props.storeLogo as string | null | undefined) ?? null);
+const storeTagline = computed(() => (page.props.storeTagline as string | null | undefined) ?? null);
+const storeAddress = computed(() => (page.props.storeAddress as string | null | undefined) ?? null);
+const storePhone = computed(() => (page.props.storePhone as string | null | undefined) ?? null);
+
+const computedTitle = computed(() => titleProp ?? `Selamat datang di ${storeName.value}`);
+const computedDescription = computed(() => descriptionProp ?? storeTagline.value ?? 'Masuk untuk mulai transaksi.');
 </script>
 
 <template>
-    <CustomAuthSplitLayout :title="title" :description="description">
+    <CustomAuthSplitLayout :title="computedTitle" :description="computedDescription">
         <Head title="Log in" />
+
+        <div v-if="storeLogo" class="mb-4 flex items-center gap-3">
+            <img
+                :src="storeLogo"
+                :alt="`Logo ${storeName}`"
+                class="h-12 w-12 rounded-lg object-contain"
+            />
+            <span class="text-sm font-semibold text-foreground">{{ storeName }}</span>
+        </div>
 
         <div
             v-if="status"
-            class="mb-4 rounded-md bg-red-500/10 p-3 text-sm text-red-500"
+            class="mb-4 rounded-md bg-destructive/10 p-3 text-sm text-destructive"
         >
             {{ status }}
         </div>
@@ -44,11 +64,8 @@ const {
             v-slot="{ errors, processing }"
             class="flex flex-col gap-5"
         >
-            <!-- Email Field -->
-            <div class="field-control">
-                <Label for="email" class="text-sm font-medium text-gray-300"
-                    >Email</Label
-                >
+            <div class="grid gap-2">
+                <Label for="email">Email</Label>
                 <Input
                     id="email"
                     type="email"
@@ -58,26 +75,21 @@ const {
                     :tabindex="1"
                     autocomplete="email"
                     placeholder="name@company.com"
-                    class="field-control-input mt-1 h-11 w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-400 focus:border-gray-400 focus:ring-1 focus:ring-gray-400 focus:outline-none"
+                    class="h-11"
                 />
-                <InputError :message="errors.email" class="error" />
+                <InputError :message="errors.email" />
             </div>
 
-            <!-- Password Field -->
-            <div class="field-control">
+            <div class="grid gap-2">
                 <div class="flex items-center justify-between">
-                    <Label
-                        for="password"
-                        class="text-sm font-medium text-gray-300"
-                        >Password</Label
-                    >
+                    <Label for="password">Password</Label>
                     <TextLink
                         v-if="canResetPassword"
                         :href="request()"
-                        class="text-sm text-gray-400 hover:text-white"
+                        class="text-sm text-muted-foreground hover:text-foreground"
                         :tabindex="5"
                     >
-                        Forgot password?
+                        Lupa password?
                     </TextLink>
                 </div>
                 <PasswordInput
@@ -86,51 +98,41 @@ const {
                     required
                     :tabindex="2"
                     autocomplete="current-password"
-                    placeholder="Enter your password"
-                    class="field-control-input mt-1 h-11 w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-white placeholder-gray-400 focus:border-gray-400 focus:ring-1 focus:ring-gray-400 focus:outline-none"
+                    placeholder="Masukkan password"
+                    class="h-11"
                 />
-                <InputError :message="errors.password" class="error" />
+                <InputError :message="errors.password" />
             </div>
 
-            <!-- Remember Me -->
             <div class="flex items-center justify-between">
-                <Label
-                    for="remember"
-                    class="flex cursor-pointer items-center gap-2"
-                >
-                    <Checkbox
-                        id="remember"
-                        name="remember"
-                        :tabindex="3"
-                        class="border-gray-600"
-                    />
-                    <span class="text-sm text-gray-400">Remember me</span>
+                <Label for="remember" class="flex cursor-pointer items-center gap-2">
+                    <Checkbox id="remember" name="remember" :tabindex="3" />
+                    <span class="text-sm text-muted-foreground">Ingat saya</span>
                 </Label>
             </div>
 
-            <!-- Submit Button -->
             <Button
                 type="submit"
-                class="submit-button gradient-brand hover:gradient-brand-hover mt-2 h-11 w-full rounded-lg px-4 py-2 text-sm font-semibold text-white focus:outline-none"
+                class="mt-2 h-11 w-full"
                 :tabindex="4"
                 :disabled="processing"
                 data-test="login-button"
             >
                 <Spinner v-if="processing" class="mr-2 size-4 animate-spin" />
-                Sign in
+                Masuk
             </Button>
 
-            <!-- Register Link -->
-            <div class="text-center text-sm text-gray-400" v-if="canRegister">
-                Don't have an account?
-                <TextLink
-                    :href="register()"
-                    :tabindex="5"
-                    class="font-medium text-white hover:underline"
-                >
-                    Sign up
-                </TextLink>
+            <div v-if="canRegister" class="text-center text-sm text-muted-foreground">
+                Belum punya akun? Hubungi admin toko.
             </div>
         </Form>
+
+        <div
+            v-if="storeAddress || storePhone"
+            class="mt-8 border-t pt-4 text-xs leading-relaxed text-muted-foreground"
+        >
+            <p v-if="storeAddress" class="truncate" :title="storeAddress">{{ storeAddress }}</p>
+            <p v-if="storePhone">{{ storePhone }}</p>
+        </div>
     </CustomAuthSplitLayout>
 </template>

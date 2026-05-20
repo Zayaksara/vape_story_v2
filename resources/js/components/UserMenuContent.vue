@@ -35,7 +35,7 @@ defineProps<Props>();
         <DropdownMenuItem :as-child="true">
             <Link class="block w-full cursor-pointer" :href="edit()" prefetch>
                 <Settings class="mr-2 h-4 w-4" />
-                Settings
+                Pengaturan
             </Link>
         </DropdownMenuItem>
     </DropdownMenuGroup>
@@ -51,8 +51,8 @@ defineProps<Props>();
                 @click="handleLogout"
             >
                 <LogOut class="mr-2 h-4 w-4" />
-                <span v-if="processing">Logging out...</span>
-                <span v-else>Log out</span>
+                <span v-if="processing">Sedang keluar...</span>
+                <span v-else>Keluar</span>
             </Button>
         </Form>
     </DropdownMenuItem>

@@ -1,53 +1,67 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
-import { router } from '@inertiajs/vue3';
-import { ref, onMounted } from 'vue';
+import { Head, router, usePage } from '@inertiajs/vue3';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { login } from '@/routes';
 
-const props = withDefaults(
-    defineProps<{
-        canRegister: boolean;
-    }>(),
-    {
-        canRegister: true,
-    },
-);
+defineProps<{
+    canRegister?: boolean;
+}>();
+
+const page = usePage();
+const storeName = computed(() => (page.props.storeName as string | undefined) ?? 'Story Vape');
+const storeLogo = computed(() => (page.props.storeLogo as string | null | undefined) ?? '/storage/images/logo.png');
+const storeTagline = computed(() => (page.props.storeTagline as string | null | undefined) ?? 'Selamat datang');
+const carouselImages = computed<string[]>(() => (page.props.storeCarouselImages as string[] | undefined) ?? []);
+
+const SPLASH_DURATION = 1500;
 
 const showSplash = ref(true);
 const logoLoaded = ref(false);
 const fadeOut = ref(false);
+const isMounted = ref(false);
+const bgImage = computed<string | null>(() => {
+    if (carouselImages.value.length === 0) return null;
+    return carouselImages.value[Math.floor(Math.random() * carouselImages.value.length)];
+});
 
-const handleSplashComplete = () => {
+let splashTimer: ReturnType<typeof setTimeout> | null = null;
+let fadeTimer: ReturnType<typeof setTimeout> | null = null;
+
+function handleSplashComplete() {
     fadeOut.value = true;
-    setTimeout(() => {
+    fadeTimer = setTimeout(() => {
         showSplash.value = false;
         router.visit(login());
-    }, 800);
-};
+    }, 600);
+}
 
 onMounted(() => {
+    isMounted.value = true;
+
     const img = new Image();
-    img.src = '/storage/images/logo.png';
+    img.src = storeLogo.value;
     img.onload = () => {
         logoLoaded.value = true;
     };
+    img.onerror = () => {
+        logoLoaded.value = true; // tetap lanjut walaupun logo gagal
+    };
 
-    setTimeout(() => {
-        handleSplashComplete();
-    }, 4000);
+    splashTimer = setTimeout(handleSplashComplete, SPLASH_DURATION);
+});
+
+onUnmounted(() => {
+    if (splashTimer) clearTimeout(splashTimer);
+    if (fadeTimer) clearTimeout(fadeTimer);
 });
 </script>
 
 <template>
-    <Head title="Welcome">
-        <link rel="preconnect" href="https://rsms.me/" />
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-    </Head>
+    <Head :title="storeName" />
 
-    <!-- Splash Screen -->
     <Transition
-        enter-active-class="transition-opacity duration-1000"
-        leave-active-class="transition-opacity duration-800"
+        enter-active-class="transition-opacity duration-700"
+        leave-active-class="transition-opacity duration-500"
         enter-from-class="opacity-0"
         enter-to-class="opacity-100"
         leave-from-class="opacity-100"
@@ -55,17 +69,22 @@ onMounted(() => {
     >
         <div
             v-if="showSplash"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black"
+            class="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black"
         >
-            <div class="relative flex flex-col items-center justify-center">
-                <!-- Animated Logo Container -->
+            <!-- Carousel background (kalau owner sudah upload) -->
+            <div v-if="isMounted && bgImage" class="absolute inset-0">
+                <img
+                    :src="bgImage"
+                    alt=""
+                    class="absolute inset-0 h-full w-full scale-110 object-cover blur-sm"
+                />
+                <div class="absolute inset-0 bg-black/70"></div>
+            </div>
+
+            <div class="relative z-10 flex flex-col items-center justify-center">
                 <div
-                    class="relative transform transition-all duration-1000 ease-out"
-                    :class="
-                        logoLoaded
-                            ? 'scale-100 opacity-100'
-                            : 'scale-50 opacity-0'
-                    "
+                    class="relative transform transition-all duration-700 ease-out"
+                    :class="logoLoaded ? 'scale-100 opacity-100' : 'scale-75 opacity-0'"
                 >
                     <div
                         class="absolute -inset-8 animate-pulse rounded-full bg-gradient-to-r from-blue-600 to-purple-600 opacity-20 blur-2xl"
@@ -73,45 +92,32 @@ onMounted(() => {
 
                     <img
                         v-if="logoLoaded"
-                        src="/storage/images/logo.png"
-                        alt="Logo"
-                        class="floating-logo relative z-10 h-72 w-72 object-contain md:h-96 md:w-96"
+                        :src="storeLogo"
+                        :alt="`Logo ${storeName}`"
+                        class="floating-logo relative z-10 h-56 w-56 object-contain md:h-72 md:w-72"
                     />
 
-                    <!-- Loading Spinner -->
                     <div
-                        v-if="!logoLoaded"
-                        class="flex h-72 w-72 items-center justify-center md:h-96 md:w-96"
+                        v-else
+                        class="flex h-56 w-56 items-center justify-center md:h-72 md:w-72"
                     >
-                        <div
-                            class="spinner h-20 w-20 rounded-full border-4 border-blue-500 border-t-transparent"
-                        ></div>
+                        <div class="spinner h-16 w-16 rounded-full border-4 border-blue-500 border-t-transparent"></div>
                     </div>
                 </div>
 
                 <div
-                    class="mt-8 transform transition-all delay-300 duration-1000"
-                    :class="
-                        logoLoaded
-                            ? 'translate-y-0 opacity-100'
-                            : 'translate-y-4 opacity-0'
-                    "
+                    class="mt-6 transform text-center transition-all delay-200 duration-700"
+                    :class="logoLoaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
                 >
-                    <h1
-                        class="fade-in-up text-3xl font-bold tracking-wide text-white md:text-4xl"
-                    >
-                        Vape Story
+                    <h1 class="text-3xl font-bold tracking-wide text-white md:text-4xl">
+                        {{ storeName }}
                     </h1>
-                    <p
-                        class="fade-in-up-delay mt-2 text-center text-sm text-gray-400 md:text-base"
-                    >
-                        Sabar yaaaa...
+                    <p class="mt-2 text-sm text-gray-300 md:text-base">
+                        {{ storeTagline }}
                     </p>
                 </div>
 
-                <div
-                    class="mt-8 h-1 w-48 overflow-hidden rounded-full bg-gray-700 md:w-64"
-                >
+                <div class="mt-6 h-1 w-40 overflow-hidden rounded-full bg-gray-700 md:w-56">
                     <div
                         class="progress-bar h-full rounded-full bg-gradient-to-r from-blue-500 to-purple-500"
                     ></div>
@@ -123,56 +129,25 @@ onMounted(() => {
 
 <style scoped>
 @keyframes float {
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-20px);
-    }
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
 }
 
 @keyframes progress {
-    0% {
-        width: 0%;
-    }
-    100% {
-        width: 100%;
-    }
+    0% { width: 0%; }
+    100% { width: 100%; }
 }
 
 @keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
+    to { transform: rotate(360deg); }
 }
 
 .floating-logo {
     animation: float 3s ease-in-out infinite;
 }
 
-.fade-in-up {
-    animation: fadeInUp 0.8s ease-out forwards;
-}
-
-.fade-in-up-delay {
-    animation: fadeInUp 0.8s ease-out 0.5s forwards;
-    opacity: 0;
-}
-
 .progress-bar {
-    animation: progress 4s linear forwards;
+    animation: progress 1.5s linear forwards;
 }
 
 .spinner {
