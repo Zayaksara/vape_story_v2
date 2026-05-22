@@ -5,7 +5,7 @@ import { toast } from 'vue-sonner'
 import {
   Search, X, Plus, Pencil, Trash2, Eye,
   Tag, CheckCircle2, Clock, XCircle, Percent,
-  CalendarDays, Package, Gift,
+  CalendarDays, Package,
 } from 'lucide-vue-next'
 
 import { Input } from '@/components/ui/input'
@@ -40,7 +40,7 @@ defineOptions({
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-type PromoType = 'percentage' | 'fixed' | 'bogo'
+type PromoType = 'percentage' | 'fixed'
 type PromoStatus = 'active' | 'scheduled' | 'expired' | 'inactive'
 type TargetType = 'all' | 'specific'
 
@@ -172,13 +172,12 @@ function formatDate(ymd: string): string {
 }
 
 function typeLabel(t: PromoType): string {
-  return { percentage: 'Persentase', fixed: 'Potongan Tetap', bogo: 'Beli X Dapat Y' }[t]
+  return { percentage: 'Persentase', fixed: 'Potongan Tetap' }[t]
 }
 
 function valueLabel(p: Promo): string {
   if (p.type === 'percentage') return `${p.value}%`
-  if (p.type === 'fixed')      return formatPrice(p.value)
-  return `Beli 2 Gratis ${p.value}`
+  return formatPrice(p.value)
 }
 
 function statusInfo(s: PromoStatus): { label: string; bg: string; color: string } {
@@ -403,7 +402,6 @@ function toggleProductTarget(id: number | string) {
               <SelectItem value="all">Semua Tipe</SelectItem>
               <SelectItem value="percentage">Persentase</SelectItem>
               <SelectItem value="fixed">Potongan Tetap</SelectItem>
-              <SelectItem value="bogo">Beli X Dapat Y</SelectItem>
             </SelectContent>
           </Select>
 
@@ -471,8 +469,7 @@ function toggleProductTarget(id: number | string) {
                       style="background: var(--pos-brand-light); color: var(--pos-brand-primary);"
                     >
                       <Percent v-if="promo.type === 'percentage'" class="h-3 w-3" />
-                      <Tag     v-else-if="promo.type === 'fixed'"  class="h-3 w-3" />
-                      <Gift    v-else class="h-3 w-3" />
+                      <Tag     v-else class="h-3 w-3" />
                       {{ typeLabel(promo.type) }}
                     </span>
                   </TableCell>
@@ -683,7 +680,6 @@ function toggleProductTarget(id: number | string) {
                   <SelectContent>
                     <SelectItem value="percentage">Persentase (%)</SelectItem>
                     <SelectItem value="fixed">Potongan Tetap (Rp)</SelectItem>
-                    <SelectItem value="bogo">Beli X Dapat Y</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -691,7 +687,7 @@ function toggleProductTarget(id: number | string) {
                 <label class="text-xs font-semibold" style="color: var(--pos-text-secondary);">
                   Nilai *
                   <span style="color: var(--pos-text-muted);">
-                    ({{ form.type === 'percentage' ? '%' : form.type === 'bogo' ? 'jumlah gratis' : 'Rupiah' }})
+                    ({{ form.type === 'percentage' ? '%' : 'Rupiah' }})
                   </span>
                 </label>
                 <Input v-model.number="form.value" type="number" min="0" class="h-9 tabular-nums" required />

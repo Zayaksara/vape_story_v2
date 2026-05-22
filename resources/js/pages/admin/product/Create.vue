@@ -35,7 +35,6 @@ const form = useForm({
     flavor:                '',
     nicotine_strength:     '',
     size_ml:               '',
-    description:           '',
     is_active:             true,
     min_stock:             0,
     image:                 null as File | null,
@@ -57,6 +56,21 @@ function onBrandAdded(brand: { id: string; name: string }) {
     if (!brandsList.value.find(b => b.id === brand.id)) {
         brandsList.value.push(brand)
     }
+}
+
+function onCategoryUpdated(cat: { id: string; name: string }) {
+    const i = categoriesList.value.findIndex(c => c.id === cat.id)
+    if (i >= 0) categoriesList.value[i] = { ...categoriesList.value[i], ...cat }
+}
+function onCategoryDeleted(id: string) {
+    categoriesList.value = categoriesList.value.filter(c => c.id !== id)
+}
+function onBrandUpdated(brand: { id: string; name: string }) {
+    const i = brandsList.value.findIndex(b => b.id === brand.id)
+    if (i >= 0) brandsList.value[i] = { ...brandsList.value[i], ...brand }
+}
+function onBrandDeleted(id: string) {
+    brandsList.value = brandsList.value.filter(b => b.id !== id)
 }
 
 function submit() {
@@ -89,7 +103,11 @@ function submit() {
                         :brands="brandsList"
                         mode="create"
                         @category-added="onCategoryAdded"
+                        @category-updated="onCategoryUpdated"
+                        @category-deleted="onCategoryDeleted"
                         @brand-added="onBrandAdded"
+                        @brand-updated="onBrandUpdated"
+                        @brand-deleted="onBrandDeleted"
                     />
 
                     <!-- ── Stok Awal ──────────────────────────────────────── -->

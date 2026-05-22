@@ -79,9 +79,29 @@ const flashType = ref<'success' | 'error'>('success')
 const form = useForm({
   sale_id: 0,
   reason: '',
-  notes: '',
   items: [] as { sale_item_id: number; quantity: number }[],
 })
+
+// Saat user pilih "Lainnya", field reason berubah jadi input bebas.
+// Nilai `reason` di form akan diisi langsung dari teks custom-nya supaya
+// riwayat return mencatat alasan asli (bukan literal "Lainnya").
+const reasonMode = ref<'preset' | 'custom'>('preset')
+const customReason = ref('')
+
+function onReasonChange(val: string) {
+  if (val === '__custom__') {
+    reasonMode.value = 'custom'
+    form.reason = customReason.value
+  } else {
+    reasonMode.value = 'preset'
+    form.reason = val
+  }
+}
+
+function onCustomReasonInput(val: string) {
+  customReason.value = val
+  form.reason = val
+}
 
 const paymentMethodLabels: Record<string, string> = {
   cash: 'Tunai',
@@ -130,11 +150,28 @@ const selectedSale = computed<SaleRow | null>(() => {
   return props.sales.find((s) => s.id === selectedSaleId.value) ?? null
 })
 
+/**
+ * Faktor diskon transaksi: total_amount (net dibayar) / SUM(items.total) (gross).
+ * Dipakai agar refund per unit selaras dengan yang benar-benar customer bayar.
+ */
+const saleDiscountFactor = computed(() => {
+  if (!selectedSale.value) return 1
+  const gross = selectedSale.value.items.reduce((s, it) => s + (it.total ?? 0), 0)
+  if (gross <= 0) return 1
+  return selectedSale.value.total_amount / gross
+})
+
+function effectiveUnitPrice(item: SaleItem): number {
+  // Pakai item.total/qty (memperhitungkan diskon per-baris), lalu kalikan faktor diskon transaksi.
+  const perUnit = item.quantity > 0 ? (item.total ?? item.unit_price * item.quantity) / item.quantity : item.unit_price
+  return perUnit * saleDiscountFactor.value
+}
+
 const returnTotal = computed(() => {
   if (!selectedSale.value) return 0
   return selectedSale.value.items.reduce((sum, item) => {
     const q = returnQty.value[item.id] ?? 0
-    return sum + q * item.unit_price
+    return sum + q * effectiveUnitPrice(item)
   }, 0)
 })
 
@@ -154,7 +191,8 @@ function selectSale(sale: SaleRow) {
     returnQty.value[item.id] = 0
   }
   form.reason = ''
-  form.notes = ''
+  reasonMode.value = 'preset'
+  customReason.value = ''
   flashMessage.value = ''
 }
 
@@ -162,7 +200,8 @@ function clearSelection() {
   selectedSaleId.value = null
   returnQty.value = {}
   form.reason = ''
-  form.notes = ''
+  reasonMode.value = 'preset'
+  customReason.value = ''
 }
 
 function adjustQty(itemId: number, delta: number, max: number) {
@@ -210,7 +249,9 @@ function submitReturn() {
   if (!selectedSale.value) return
   if (!form.reason.trim()) {
     flashType.value = 'error'
-    flashMessage.value = 'Alasan return wajib diisi.'
+    flashMessage.value = reasonMode.value === 'custom'
+      ? 'Tuliskan alasan return custom.'
+      : 'Alasan return wajib diisi.'
     return
   }
   const items = Object.entries(returnQty.value)
@@ -242,6 +283,20 @@ function submitReturn() {
 
 const isViewingToday = computed(() => currentDate.value === props.today)
 const canGoNext = computed(() => currentDate.value < props.today)
+
+// ─── Riwayat return: pagination client-side ──────────────────────────────
+const historyPage = ref(1)
+const historyPerPage = 10
+const historyTotalPages = computed(() =>
+  Math.max(1, Math.ceil(props.returns.length / historyPerPage)),
+)
+const pagedReturns = computed(() => {
+  const start = (historyPage.value - 1) * historyPerPage
+  return props.returns.slice(start, start + historyPerPage)
+})
+function goHistory(p: number) {
+  historyPage.value = Math.max(1, Math.min(historyTotalPages.value, p))
+}
 
 function selectedDateLabel(): string {
   const [y, m, d] = currentDate.value.split('-').map(Number)
@@ -466,7 +521,12 @@ function selectedDateLabel(): string {
                         </div>
                       </TableCell>
                       <TableCell class="py-2 text-right text-xs" style="color: var(--pos-text-secondary);">
-                        {{ formatPrice(item.unit_price) }}
+                        {{ formatPrice(effectiveUnitPrice(item)) }}
+                        <span
+                          v-if="Math.abs(effectiveUnitPrice(item) - item.unit_price) > 0.5"
+                          class="block text-[10px] line-through"
+                          style="color: var(--pos-text-light);"
+                        >{{ formatPrice(item.unit_price) }}</span>
                       </TableCell>
                       <TableCell class="py-2 text-center text-xs" style="color: var(--pos-text-secondary);">
                         {{ item.quantity }}
@@ -497,38 +557,53 @@ function selectedDateLabel(): string {
                         </div>
                       </TableCell>
                       <TableCell class="py-2 text-right text-xs font-semibold" style="color: var(--pos-text-primary);">
-                        {{ formatPrice((returnQty[item.id] ?? 0) * item.unit_price) }}
+                        {{ formatPrice((returnQty[item.id] ?? 0) * effectiveUnitPrice(item)) }}
                       </TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
               </div>
 
-              <!-- Reason + notes -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <!-- Reason -->
+              <div class="grid grid-cols-1 gap-3">
                 <div>
-                  <label class="text-xs font-semibold" style="color: var(--pos-text-secondary);">
-                    Alasan Return <span style="color: var(--pos-danger-text);">*</span>
+                  <label class="text-xs font-semibold flex items-center justify-between" style="color: var(--pos-text-secondary);">
+                    <span>Alasan Return <span style="color: var(--pos-danger-text);">*</span></span>
+                    <button
+                      v-if="reasonMode === 'custom'"
+                      type="button"
+                      class="text-[10px] hover:underline"
+                      style="color: var(--pos-brand-primary);"
+                      @click="onReasonChange('')"
+                    >
+                      ← Pilih dari daftar
+                    </button>
                   </label>
+
                   <select
-                    v-model="form.reason"
+                    v-if="reasonMode === 'preset'"
+                    :value="form.reason"
                     class="mt-1 h-9 w-full rounded-md border px-2 text-sm"
                     :style="'border-color: var(--pos-border); background: var(--pos-bg-primary); color: var(--pos-text-primary);'"
+                    @change="onReasonChange(($event.target as HTMLSelectElement).value)"
                   >
                     <option value="">Pilih alasan...</option>
                     <option value="Barang rusak">Barang rusak</option>
                     <option value="Barang cacat produksi">Barang cacat produksi</option>
                     <option value="Salah produk">Salah produk</option>
                     <option value="Customer berubah pikiran">Customer berubah pikiran</option>
-                    <option value="Lainnya">Lainnya</option>
+                    <option value="__custom__">Lainnya (tulis sendiri)…</option>
                   </select>
-                </div>
-                <div>
-                  <label class="text-xs font-semibold" style="color: var(--pos-text-secondary);">Catatan (opsional)</label>
-                  <Input
-                    v-model="form.notes"
-                    placeholder="Detail tambahan..."
-                    class="mt-1 h-9 text-sm"
+
+                  <input
+                    v-else
+                    v-model="customReason"
+                    type="text"
+                    placeholder="Tulis alasan return…"
+                    class="mt-1 h-9 w-full rounded-md border px-3 text-sm outline-none"
+                    :style="'border-color: var(--pos-border); background: var(--pos-bg-primary); color: var(--pos-text-primary);'"
+                    autofocus
+                    @input="form.reason = customReason"
                   />
                 </div>
               </div>
@@ -587,7 +662,7 @@ function selectedDateLabel(): string {
                     Belum ada riwayat return.
                   </TableCell>
                 </TableRow>
-                <TableRow v-for="r in props.returns" :key="r.id">
+                <TableRow v-for="r in pagedReturns" :key="r.id">
                   <TableCell class="py-2 text-xs font-mono font-semibold" style="color: var(--pos-text-primary);">
                     {{ r.return_number }}
                   </TableCell>
@@ -618,6 +693,47 @@ function selectedDateLabel(): string {
               </TableBody>
             </Table>
           </div>
+
+          <!-- Pagination -->
+          <div
+            v-if="props.returns.length > historyPerPage"
+            class="mt-3 flex items-center justify-between text-xs"
+            style="color: var(--pos-text-muted);"
+          >
+            <span>
+              Hal. {{ historyPage }} / {{ historyTotalPages }} ·
+              menampilkan {{ pagedReturns.length }} dari {{ props.returns.length }}
+            </span>
+            <div class="flex items-center gap-1">
+              <button
+                class="flex h-7 w-7 items-center justify-center rounded border disabled:opacity-40"
+                :style="'border-color: var(--pos-border);'"
+                :disabled="historyPage === 1"
+                @click="goHistory(historyPage - 1)"
+              >
+                <ChevronLeft class="h-3.5 w-3.5" />
+              </button>
+              <button
+                v-for="p in historyTotalPages"
+                :key="p"
+                class="flex h-7 min-w-7 items-center justify-center rounded border px-2 text-xs font-semibold"
+                :style="p === historyPage
+                  ? 'background: var(--pos-brand-primary); color: #fff; border-color: var(--pos-brand-primary);'
+                  : 'border-color: var(--pos-border); color: var(--pos-text-secondary);'"
+                @click="goHistory(p)"
+              >
+                {{ p }}
+              </button>
+              <button
+                class="flex h-7 w-7 items-center justify-center rounded border disabled:opacity-40"
+                :style="'border-color: var(--pos-border);'"
+                :disabled="historyPage === historyTotalPages"
+                @click="goHistory(historyPage + 1)"
+              >
+                <ChevronRight class="h-3.5 w-3.5" />
+              </button>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </main>
@@ -626,8 +742,8 @@ function selectedDateLabel(): string {
 
 <style scoped>
 .pos-return-container {
-  min-height: 100vh;
   background: var(--pos-bg-secondary);
+  padding-bottom: 2rem;
 }
 
 .pos-return-header {

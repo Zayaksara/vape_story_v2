@@ -34,6 +34,7 @@ import {
 } from '@/components/ui/tooltip'
 
 import AdminLayout from '@/layouts/admin/AdminLayout.vue'
+import ConfirmModal from '@/components/admin/ConfirmModal.vue'
 import { index as adminProductsRoute, create as createRoute, destroy as destroyRoute } from '@/routes/admin/products'
 import { index as adminDashboardRoute } from '@/routes/admin/dashboard'
 
@@ -157,10 +158,26 @@ function goToEdit(product: Product) {
     router.get(`/admin/products/${product.id}/edit`)
 }
 
+const confirmDeleteProductOpen = ref(false)
+const pendingDeleteProduct    = ref<Product | null>(null)
+const deletingProduct         = ref(false)
+
 function confirmDelete(product: Product) {
-    if (!confirm(`Hapus produk "${product.name}"? Tindakan ini tidak dapat dibatalkan.`)) return
-    router.delete(destroyRoute.url(product.id), {
+    pendingDeleteProduct.value = product
+    confirmDeleteProductOpen.value = true
+}
+
+function confirmDeleteProduct() {
+    const p = pendingDeleteProduct.value
+    if (!p) return
+    deletingProduct.value = true
+    router.delete(destroyRoute.url(p.id), {
         preserveScroll: true,
+        onFinish: () => {
+            deletingProduct.value = false
+            confirmDeleteProductOpen.value = false
+            pendingDeleteProduct.value = null
+        },
     })
 }
 
@@ -172,7 +189,7 @@ watch([categorySlug, brandSlug], applyFilters)
 
 type SortKey =
     | 'sku' | 'name' | 'brand' | 'category' | 'flavor'
-    | 'nicotine' | 'size' | 'base_price' | 'stock' | 'status'
+    | 'nicotine' | 'size' | 'cukai' | 'base_price' | 'stock' | 'status'
 type SortDir = 'asc' | 'desc'
 
 const sortKey = ref<SortKey | null>(null)
@@ -200,6 +217,7 @@ function sortValue(p: Product, key: SortKey): string | number {
         case 'flavor':     return a.flavor ?? ''
         case 'nicotine':   return Number(a.nicotine_strength ?? -1)
         case 'size':       return Number(a.size_ml ?? -1)
+        case 'cukai':      return Number((a.cukai_years ?? [])[0] ?? -1)
         case 'base_price': return Number(a.base_price ?? p.price ?? 0)
         case 'stock':      return Number(p.stock ?? 0)
         case 'status':     return p.stock === 0 ? 0 : (Number((p as any).min_stock ?? 0) > 0 && p.stock <= Number((p as any).min_stock)) ? 1 : 2
@@ -382,6 +400,7 @@ function stockInfo(stock: number, minStock: number = 0): StockInfo {
                                 { key: 'flavor',     label: 'Flavor' },
                                 { key: 'nicotine',   label: 'Nicotine' },
                                 { key: 'size',       label: 'Size (ml)' },
+                                { key: 'cukai',      label: 'Cukai' },
                                 { key: 'base_price', label: 'Selling Price' },
                                 { key: 'stock',      label: 'Stock' },
                                 { key: 'status',     label: 'Status' },
@@ -415,6 +434,7 @@ function stockInfo(stock: number, minStock: number = 0): StockInfo {
                             <TableCell><Skeleton class="h-4 w-20" /></TableCell>
                             <TableCell><Skeleton class="h-4 w-12" /></TableCell>
                             <TableCell><Skeleton class="h-4 w-12" /></TableCell>
+                            <TableCell><Skeleton class="h-4 w-14" /></TableCell>
                             <TableCell><Skeleton class="h-4 w-24" /></TableCell>
                             <TableCell><Skeleton class="h-4 w-12" /></TableCell>
                             <TableCell><Skeleton class="h-5 w-16 rounded-full" /></TableCell>
@@ -471,6 +491,26 @@ function stockInfo(stock: number, minStock: number = 0): StockInfo {
                             </TableCell>
 
                             <TableCell>
+                                <div class="flex flex-wrap gap-1.5">
+                                    <span
+                                        v-for="y in ((product as any).cukai_years ?? []) as number[]"
+                                        :key="y"
+                                        class="rounded-md px-2 py-1 text-sm font-semibold tabular-nums"
+                                        :style="y < new Date().getFullYear()
+                                            ? 'background: #fef3c7; color: #b45309;'
+                                            : 'background: var(--pos-brand-light); color: var(--pos-brand-dark);'"
+                                    >
+                                        {{ y }}
+                                    </span>
+                                    <span
+                                        v-if="!((product as any).cukai_years ?? []).length"
+                                        class="text-sm"
+                                        style="color: var(--pos-text-light);"
+                                    >—</span>
+                                </div>
+                            </TableCell>
+
+                            <TableCell>
                                 <span class="text-sm font-semibold tabular-nums" style="color: var(--pos-text-secondary);">
                                     {{ formatPrice((product as any).base_price ?? product.price) }}
                                 </span>
@@ -483,6 +523,15 @@ function stockInfo(stock: number, minStock: number = 0): StockInfo {
                             <TableCell>
                                 <div class="flex flex-wrap items-center gap-1">
                                     <span
+                                        v-if="product.is_active === false"
+                                        class="rounded-full px-2.5 py-0.5 text-xs font-semibold"
+                                        style="background: #e5e7eb; color: #4b5563;"
+                                        title="Produk nonaktif — tidak tampil di POS"
+                                    >
+                                        Nonaktif
+                                    </span>
+                                    <span
+                                        v-else
                                         class="rounded-full px-2.5 py-0.5 text-xs font-semibold"
                                         :style="product.stock === 0
                                             ? 'background: var(--pos-danger-bg); color: var(--pos-danger-text);'
@@ -638,6 +687,7 @@ function stockInfo(stock: number, minStock: number = 0): StockInfo {
 
                     <div class="flex flex-col divide-y rounded-lg border" style="border-color: var(--pos-border);">
                         <div v-for="(row, i) in [
+                            { label: 'Status', value: selectedProduct.is_active === false ? 'Nonaktif' : 'Aktif' },
                             { label: 'Kode Produk', value: selectedProduct.sku },
                             { label: 'Harga Jual', value: formatPrice((selectedProduct as any).base_price ?? selectedProduct.price) },
                             { label: 'Stok',        value: String(selectedProduct.stock) + ' unit' },
@@ -673,6 +723,17 @@ function stockInfo(stock: number, minStock: number = 0): StockInfo {
                 </div>
             </SheetContent>
         </Sheet>
+
+        <ConfirmModal
+            :open="confirmDeleteProductOpen"
+            title="Hapus Produk?"
+            message="Produk akan dihapus permanen beserta riwayat batch-nya. Tindakan ini tidak bisa dibatalkan."
+            :detail="pendingDeleteProduct ? pendingDeleteProduct.name : null"
+            confirm-label="Ya, Hapus Produk"
+            :processing="deletingProduct"
+            @confirm="confirmDeleteProduct"
+            @cancel="confirmDeleteProductOpen = false"
+        />
 
     </div>
     </TooltipProvider>

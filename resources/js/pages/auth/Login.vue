@@ -42,15 +42,6 @@ const computedDescription = computed(() => descriptionProp ?? storeTagline.value
     <CustomAuthSplitLayout :title="computedTitle" :description="computedDescription">
         <Head title="Log in" />
 
-        <div v-if="storeLogo" class="mb-4 flex items-center gap-3">
-            <img
-                :src="storeLogo"
-                :alt="`Logo ${storeName}`"
-                class="h-12 w-12 rounded-lg object-contain"
-            />
-            <span class="text-sm font-semibold text-foreground">{{ storeName }}</span>
-        </div>
-
         <div
             v-if="status"
             class="mb-4 rounded-md bg-destructive/10 p-3 text-sm text-destructive"

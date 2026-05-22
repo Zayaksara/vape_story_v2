@@ -25,6 +25,8 @@ class ProductController extends Controller
     public function index(Request $request): Response
     {
         $filters = $request->only(['search', 'category', 'brand', 'stock_status']);
+        // Admin list harus menampilkan produk nonaktif juga (dengan badge status).
+        $filters['include_inactive'] = true;
 
         $categories = $this->productService->getCategories();
         $brands     = Brand::orderBy('name')->get(['id', 'name', 'slug']);

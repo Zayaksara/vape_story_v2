@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Form, Head, Link, usePage } from '@inertiajs/vue3';
+import { Form, Head, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import DeleteUser from '@/components/DeleteUser.vue';
@@ -9,13 +9,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import SettingsRoleLayout from '@/layouts/SettingsRoleLayout.vue';
-
-type Props = {
-    mustVerifyEmail: boolean;
-    status?: string;
-};
-
-defineProps<Props>();
 
 defineOptions({
     layout: SettingsRoleLayout,

@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { Palette, ShieldCheck, Store, UserCog, type LucideIcon } from 'lucide-vue-next';
+import { ShieldCheck, Store, UserCog, type LucideIcon } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { Separator } from '@/components/ui/separator';
 import { useCurrentUrl } from '@/composables/useCurrentUrl';
 import { toUrl } from '@/lib/utils';
-import { edit as editAppearance } from '@/routes/appearance';
 import { edit as editProfile } from '@/routes/profile';
 import { edit as editSecurity } from '@/routes/security';
 
@@ -26,7 +25,6 @@ const sidebarNavItems = computed<SettingsNavItem[]>(() => {
     const items: SettingsNavItem[] = [
         { title: 'Profil', description: 'Nama & email akun', href: editProfile(), icon: UserCog },
         { title: 'Keamanan', description: 'Password & 2FA', href: editSecurity(), icon: ShieldCheck },
-        { title: 'Tampilan', description: 'Tema aplikasi', href: editAppearance(), icon: Palette },
     ];
     if (isAdmin.value) {
         items.push({ title: 'Toko', description: 'Identitas & struk', href: '/settings/store', icon: Store });

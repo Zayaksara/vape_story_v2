@@ -176,6 +176,8 @@ export function usePos(initialTrxId: string) {
         total_amount: total.value,
         paid_amount: paymentMethod.value === 'cash' ? cashReceived.value : total.value,
         discount_amount: discountAmount.value,
+        discount_code: discount.value?.code ?? null,
+        discount_label: discount.value?.label ?? null,
         tax_amount: 0,
         payment_method: paymentMethod.value,
       }

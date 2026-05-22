@@ -10,43 +10,30 @@ defineProps<{
 const page = usePage();
 const storeName = computed(() => (page.props.storeName as string | undefined) ?? 'Story Vape');
 const storeLogo = computed(() => (page.props.storeLogo as string | null | undefined) ?? '/storage/images/logo.png');
-const storeTagline = computed(() => (page.props.storeTagline as string | null | undefined) ?? 'Selamat datang');
-const carouselImages = computed<string[]>(() => (page.props.storeCarouselImages as string[] | undefined) ?? []);
+const storeTagline = computed(() => (page.props.storeTagline as string | null | undefined) ?? 'premium vape sejak 2020');
 
-const SPLASH_DURATION = 1500;
+const SPLASH_DURATION = 1800;
 
 const showSplash = ref(true);
-const logoLoaded = ref(false);
 const fadeOut = ref(false);
 const isMounted = ref(false);
-const bgImage = computed<string | null>(() => {
-    if (carouselImages.value.length === 0) return null;
-    return carouselImages.value[Math.floor(Math.random() * carouselImages.value.length)];
-});
 
 let splashTimer: ReturnType<typeof setTimeout> | null = null;
 let fadeTimer: ReturnType<typeof setTimeout> | null = null;
+
+// Pecah brand name jadi karakter agar bisa stagger reveal
+const brandChars = computed(() => Array.from(storeName.value.toUpperCase()));
 
 function handleSplashComplete() {
     fadeOut.value = true;
     fadeTimer = setTimeout(() => {
         showSplash.value = false;
         router.visit(login());
-    }, 600);
+    }, 500);
 }
 
 onMounted(() => {
     isMounted.value = true;
-
-    const img = new Image();
-    img.src = storeLogo.value;
-    img.onload = () => {
-        logoLoaded.value = true;
-    };
-    img.onerror = () => {
-        logoLoaded.value = true; // tetap lanjut walaupun logo gagal
-    };
-
     splashTimer = setTimeout(handleSplashComplete, SPLASH_DURATION);
 });
 
@@ -60,67 +47,45 @@ onUnmounted(() => {
     <Head :title="storeName" />
 
     <Transition
-        enter-active-class="transition-opacity duration-700"
-        leave-active-class="transition-opacity duration-500"
+        enter-active-class="transition-opacity duration-500 ease-out"
+        leave-active-class="transition-opacity duration-500 ease-in"
         enter-from-class="opacity-0"
-        enter-to-class="opacity-100"
-        leave-from-class="opacity-100"
         leave-to-class="opacity-0"
     >
         <div
             v-if="showSplash"
-            class="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black"
+            class="splash-root fixed inset-0 z-50 flex flex-col items-center justify-center"
         >
-            <!-- Carousel background (kalau owner sudah upload) -->
-            <div v-if="isMounted && bgImage" class="absolute inset-0">
-                <img
-                    :src="bgImage"
-                    alt=""
-                    class="absolute inset-0 h-full w-full scale-110 object-cover blur-sm"
-                />
-                <div class="absolute inset-0 bg-black/70"></div>
-            </div>
+            <!-- Vignette halus di tepi (bukan gradient warna, hanya kontras) -->
+            <div class="vignette pointer-events-none absolute inset-0" />
 
-            <div class="relative z-10 flex flex-col items-center justify-center">
-                <div
-                    class="relative transform transition-all duration-700 ease-out"
-                    :class="logoLoaded ? 'scale-100 opacity-100' : 'scale-75 opacity-0'"
-                >
-                    <div
-                        class="absolute -inset-8 animate-pulse rounded-full bg-gradient-to-r from-blue-600 to-purple-600 opacity-20 blur-2xl"
-                    ></div>
-
+            <div class="relative z-10 flex flex-col items-center" :class="{ 'is-mounted': isMounted }">
+                <!-- Logo: clip-path reveal dari bawah ke atas -->
+                <div class="logo-wrapper">
                     <img
-                        v-if="logoLoaded"
                         :src="storeLogo"
                         :alt="`Logo ${storeName}`"
-                        class="floating-logo relative z-10 h-56 w-56 object-contain md:h-72 md:w-72"
+                        class="logo h-60 w-60 object-contain md:h-72 md:w-72"
+                        draggable="false"
                     />
-
-                    <div
-                        v-else
-                        class="flex h-56 w-56 items-center justify-center md:h-72 md:w-72"
-                    >
-                        <div class="spinner h-16 w-16 rounded-full border-4 border-blue-500 border-t-transparent"></div>
-                    </div>
                 </div>
 
-                <div
-                    class="mt-6 transform text-center transition-all delay-200 duration-700"
-                    :class="logoLoaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
-                >
-                    <h1 class="text-3xl font-bold tracking-wide text-white md:text-4xl">
-                        {{ storeName }}
-                    </h1>
-                    <p class="mt-2 text-sm text-gray-300 md:text-base">
-                        {{ storeTagline }}
-                    </p>
-                </div>
+                <!-- Brand name: letter-by-letter reveal -->
+                <h1 class="brand mt-20 flex select-none">
+                    <span
+                        v-for="(ch, i) in brandChars"
+                        :key="i"
+                        class="brand-char"
+                        :style="{ animationDelay: `${300 + i * 55}ms` }"
+                    >{{ ch === ' ' ? ' ' : ch }}</span>
+                </h1>
 
-                <div class="mt-6 h-1 w-40 overflow-hidden rounded-full bg-gray-700 md:w-56">
-                    <div
-                        class="progress-bar h-full rounded-full bg-gradient-to-r from-blue-500 to-purple-500"
-                    ></div>
+                <!-- Tagline -->
+                <p class="tagline mt-9">{{ storeTagline }}</p>
+
+                <!-- Progress underline tipis -->
+                <div class="progress-track mt-28">
+                    <div class="progress-fill" />
                 </div>
             </div>
         </div>
@@ -128,29 +93,140 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
+.splash-root {
+    background: #0a0a0a;
+    color: #f5f5f4;
 }
 
-@keyframes progress {
-    0% { width: 0%; }
-    100% { width: 100%; }
+/* Vignette ringan supaya pusat tampak lebih fokus, tanpa gradient warna */
+.vignette {
+    background: radial-gradient(
+        ellipse at center,
+        transparent 0%,
+        transparent 55%,
+        rgba(0, 0, 0, 0.55) 100%
+    );
 }
 
-@keyframes spin {
-    to { transform: rotate(360deg); }
+/* ── Logo: clip-path reveal (Razer-style mask wipe) ───────────────────────── */
+.logo-wrapper {
+    overflow: hidden;
+    line-height: 0;
 }
 
-.floating-logo {
-    animation: float 3s ease-in-out infinite;
+.logo {
+    opacity: 0;
+    clip-path: inset(100% 0 0 0);
+    transform: translateY(8px);
+    will-change: clip-path, opacity, transform;
 }
 
-.progress-bar {
-    animation: progress 1.5s linear forwards;
+.is-mounted .logo {
+    animation: logo-reveal 900ms cubic-bezier(0.65, 0, 0.35, 1) 100ms forwards;
 }
 
-.spinner {
-    animation: spin 1s linear infinite;
+@keyframes logo-reveal {
+    0% {
+        opacity: 0;
+        clip-path: inset(100% 0 0 0);
+        transform: translateY(8px);
+    }
+    60% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+        clip-path: inset(0 0 0 0);
+        transform: translateY(0);
+    }
+}
+
+/* ── Brand name: letter stagger ───────────────────────────────────────────── */
+.brand {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 2.10rem;
+    letter-spacing: 0.55em;
+    color: #fafaf9;
+    padding-left: 0.55em;
+}
+
+.brand-char {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(6px);
+}
+
+.is-mounted .brand-char {
+    animation: char-reveal 600ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    /* animation-delay di-pass via inline style per karakter (stagger) */
+}
+
+@keyframes char-reveal {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Tagline: simple fade-in setelah brand ────────────────────────────────── */
+.tagline {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: lowercase;
+    color: #a8a29e;
+    opacity: 0;
+}
+
+.is-mounted .tagline {
+    animation: fade-up 700ms cubic-bezier(0.22, 1, 0.36, 1) 1100ms forwards;
+}
+
+@keyframes fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Progress underline tipis ─────────────────────────────────────────────── */
+.progress-track {
+    position: relative;
+    height: 3px;
+    width: 360px;
+    background: rgba(245, 245, 244, 0.08);
+    overflow: hidden;
+}
+
+.progress-fill {
+    position: absolute;
+    inset: 0 100% 0 0;
+    background: #fafaf9;
+    transform-origin: left center;
+    opacity: 0;
+}
+
+.is-mounted .progress-fill {
+    animation: progress-grow 1300ms cubic-bezier(0.65, 0, 0.35, 1) 400ms forwards;
+}
+
+@keyframes progress-grow {
+    0% {
+        right: 100%;
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    100% {
+        right: 0%;
+        opacity: 1;
+    }
 }
 </style>

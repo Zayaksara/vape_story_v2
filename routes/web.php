@@ -16,9 +16,9 @@ Route::get('/dashboard', function () {
     }
 
     return redirect()->route('pos.dashboard.index');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     // Admin routes - admin only access
     Route::prefix('admin')->name('admin.')->middleware(['admin'])->group(function () {
         Route::get('dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard.index');
@@ -28,8 +28,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('products/{product}/edit', [App\Http\Controllers\Admin\ProductController::class, 'edit'])->name('products.edit');
         Route::put('products/{product}', [App\Http\Controllers\Admin\ProductController::class, 'update'])->name('products.update');
         Route::delete('products/{product}', [App\Http\Controllers\Admin\ProductController::class, 'destroy'])->name('products.destroy');
-        Route::post('categories', [App\Http\Controllers\Admin\CategoryController::class, 'store'])->name('categories.store');
-        Route::post('brands', [App\Http\Controllers\Admin\BrandController::class, 'store'])->name('brands.store');
+        Route::post('categories',                  [App\Http\Controllers\Admin\CategoryController::class, 'store'])->name('categories.store');
+        Route::put('categories/{category}',        [App\Http\Controllers\Admin\CategoryController::class, 'update'])->name('categories.update');
+        Route::delete('categories/{category}',     [App\Http\Controllers\Admin\CategoryController::class, 'destroy'])->name('categories.destroy');
+        Route::post('brands',                      [App\Http\Controllers\Admin\BrandController::class, 'store'])->name('brands.store');
+        Route::put('brands/{brand}',               [App\Http\Controllers\Admin\BrandController::class, 'update'])->name('brands.update');
+        Route::delete('brands/{brand}',            [App\Http\Controllers\Admin\BrandController::class, 'destroy'])->name('brands.destroy');
         Route::post('products/{product}/batches', [App\Http\Controllers\Admin\BatchController::class, 'store'])->name('products.batches.store');
         Route::put('products/{product}/batches/{batch}', [App\Http\Controllers\Admin\BatchController::class, 'update'])->name('products.batches.update');
         Route::delete('products/{product}/batches/{batch}', [App\Http\Controllers\Admin\BatchController::class, 'destroy'])->name('products.batches.destroy');

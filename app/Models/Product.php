@@ -21,17 +21,12 @@ class Product extends Model
         'code',
         'name',
         'category_id',
-        'brand_id',           // ← BARU
+        'brand_id',
         'base_price',
         'nicotine_strength',
         'flavor',
         'size_ml',
-        'battery_mah',
-        'coil_type',
-        'pod_type',
-        'resistance_ohm',
-        'description',
-        'image',              // ← BARU
+        'image',
         'is_active',
         'min_stock',
     ];
@@ -40,7 +35,6 @@ class Product extends Model
         'base_price' => 'decimal:2',
         'nicotine_strength' => 'decimal:2',
         'size_ml' => 'decimal:2',
-        'resistance_ohm' => 'decimal:2',
         'is_active' => 'boolean',
         'min_stock' => 'integer',
     ];
@@ -60,7 +54,7 @@ class Product extends Model
      * Append custom attributes to JSON/array serialization.
      * These are computed accessors needed by the frontend.
      */
-    protected $appends = ['price', 'stock', 'sku', 'image_url', 'volume', 'promo_price', 'promo_stock'];
+    protected $appends = ['price', 'stock', 'sku', 'image_url', 'volume', 'promo_price', 'promo_stock', 'cukai_years'];
 
     // ==================== RELATIONSHIPS ====================
     public function category()
@@ -150,6 +144,28 @@ class Product extends Model
         return $price !== null ? (float) $price : null;
     }
 
+    /**
+     * Daftar tahun cukai unik dari batch yang masih ada stok-nya,
+     * diurut menurun (terbaru dulu).
+     *
+     * @return array<int, int>
+     */
+    public function getCukaiYearsAttribute(): array
+    {
+        $batches = $this->relationLoaded('batches')
+            ? $this->batches
+            : $this->batches()->get();
+
+        return $batches
+            ->filter(fn ($b) => ! is_null($b->cukai_year) && (int) $b->stock_quantity > 0)
+            ->pluck('cukai_year')
+            ->map(fn ($y) => (int) $y)
+            ->unique()
+            ->sortDesc()
+            ->values()
+            ->all();
+    }
+
     public function getSkuAttribute()
     {
         return $this->code ?? '';
@@ -171,10 +187,6 @@ class Product extends Model
 
             // Format: integer values without decimal, e.g., "60ml"; floats keep decimals
             return $value == (int) $value ? (int) $value.'ml' : $value.'ml';
-        }
-
-        if ($this->battery_mah) {
-            return (int) $this->battery_mah.'mAh';
         }
 
         return null;

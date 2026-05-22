@@ -15,239 +15,18 @@
                     backgroundColor: 'var(--pos-border-focus, #14b8a6)',
                 }"
             >
-                <!-- Receipt content -->
-                <div
-                    :style="{ backgroundColor: 'var(--pos-bg-primary, #1e293b)' }"
-                    class="receipt-body p-5"
-                >
-                    <!-- Store Header -->
-                    <div class="mb-3 text-center">
-                        <img
-                            v-if="showLogoOnReceipt && storeLogo"
-                            :src="storeLogo"
-                            :alt="`Logo ${storeName}`"
-                            class="mx-auto mb-2 h-12 w-12 rounded object-contain"
-                        />
-                        <p
-                            v-if="storeName"
-                            class="text-sm font-bold"
-                            :style="{ color: 'var(--pos-text-primary)' }"
-                        >
-                            {{ storeName }}
-                        </p>
-                        <p
-                            v-if="storeAddress"
-                            class="text-[10px] leading-snug"
-                            :style="{ color: 'var(--pos-text-primary)' }"
-                        >
-                            {{ storeAddress }}
-                        </p>
-                        <p
-                            v-if="storePhone"
-                            class="text-[10px]"
-                            :style="{ color: 'var(--pos-text-primary)' }"
-                        >
-                            {{ storePhone }}
-                        </p>
-                        <p
-                            v-if="receiptHeader"
-                            class="mt-1 whitespace-pre-line text-[10px] leading-snug"
-                            :style="{ color: 'var(--pos-text-primary)' }"
-                        >
-                            {{ receiptHeader }}
-                        </p>
-                    </div>
-
-                    <!-- Success indicator -->
-                    <div class="mb-3 text-center">
-                        <div
-                            class="mx-auto mb-1 h-7 w-7 rounded-full"
-                            :style="{ backgroundColor: 'var(--pos-brand-primary)' }"
-                        >
-                            <svg
-                                class="h-full w-full p-1.5"
-                                :style="{ color: 'var(--pos-text-inverse)' }"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                />
-                            </svg>
-                        </div>
-                        <h2
-                            id="receipt-title"
-                            class="text-sm font-bold"
-                            :style="{ color: 'var(--pos-text-primary)' }"
-                        >
-                            Pembayaran Berhasil
-                        </h2>
-                        <p
-                            class="text-xs"
-                            :style="{ color: 'var(--pos-text-primary)' }"
-                        >
-                            {{ formatTransactionDateTime(transaction?.created_at) }}
-                        </p>
-                        <p
-                            class="font-mono text-xs"
-                            :style="{ color: 'var(--pos-text-primary)' }"
-                        >
-                            Invoice: {{ resolveInvoiceNumber() }}
-                        </p>
-                        <p
-                            class="font-mono text-xs"
-                            :style="{ color: 'var(--pos-text-primary)' }"
-                        >
-                            No. Transaksi: {{ transaction?.id ?? '-' }}
-                        </p>
-                    </div>
-
-                    <!-- Items -->
-                    <div
-                        class="space-y-2 py-4"
-                        :style="{
-                            borderTop: '1px solid var(--pos-border)',
-                            borderBottom: '1px solid var(--pos-border)',
-                        }"
-                    >
-                        <div
-                            v-for="item in transaction?.items || []"
-                            :key="item.product.id"
-                            class="flex items-start gap-2"
-                        >
-                            <div
-                                class="flex h-8 w-8 shrink-0 items-center justify-center rounded text-[10px]"
-                                :style="{
-                                    backgroundColor: 'var(--pos-bg-secondary)',
-                                    color: 'var(--pos-text-secondary)',
-                                }"
-                            >
-                                {{ item.quantity }}
-                            </div>
-                            <div class="min-w-0 flex-1">
-                                <p
-                                    class="truncate text-xs font-medium"
-                                    :style="{
-                                        color: 'var(--pos-text-primary)',
-                                    }"
-                                >
-                                    {{ item.product.name }}
-                                </p>
-                                <p
-                                    class="text-[10px]"
-                                    :style="{ color: 'var(--pos-text-primary)' }"
-                                >
-                                    {{ formatPrice(item.product.price) }} ×
-                                    {{ item.quantity }}
-                                </p>
-                            </div>
-                            <span
-                                class="shrink-0 text-xs font-medium"
-                                :style="{ color: 'var(--pos-text-primary)' }"
-                                >{{ formatPrice(item.subtotal) }}</span
-                            >
-                        </div>
-                    </div>
-
-                    <!-- Summary -->
-                    <div class="space-y-1.5 py-4">
-                        <div class="flex justify-between text-xs">
-                            <span :style="{ color: 'var(--pos-text-primary)' }"
-                                >Subtotal</span
-                            >
-                            <span>{{
-                                formatPrice(transaction?.subtotal || 0)
-                            }}</span>
-                        </div>
-                        <div
-                            v-if="(transaction?.discount_amount || 0) > 0"
-                            class="flex justify-between text-xs"
-                        >
-                            <span :style="{ color: 'var(--pos-text-primary)' }"
-                                >Diskon</span
-                            >
-                            <span :style="{ color: 'var(--pos-danger-text)' }"
-                                >-{{
-                                    formatPrice(
-                                        transaction?.discount_amount || 0,
-                                    )
-                                }}</span
-                            >
-                        </div>
-                        <div class="flex justify-between text-xs">
-                            <span :style="{ color: 'var(--pos-text-primary)' }"
-                                >Metode</span
-                            >
-                            <span class="capitalize">{{
-                                transaction?.payment_method
-                            }}</span>
-                        </div>
-                        <div
-                            v-if="transaction?.payment_method === 'cash'"
-                            class="flex justify-between text-xs"
-                        >
-                            <span :style="{ color: 'var(--pos-text-primary)' }"
-                                >Dibayar</span
-                            >
-                            <span>{{
-                                formatPrice(transaction?.cash_received || 0)
-                            }}</span>
-                        </div>
-                        <div
-                            v-if="transaction?.payment_method === 'cash'"
-                            class="flex justify-between text-xs"
-                        >
-                            <span :style="{ color: 'var(--pos-text-primary)' }"
-                                >Kembalian</span
-                            >
-                            <span>{{
-                                formatPrice(transaction?.change || 0)
-                            }}</span>
-                        </div>
-                        <div
-                            class="my-2 border-t"
-                            :style="{ borderTopColor: 'var(--pos-border)' }"
-                        />
-                        <div class="flex justify-between">
-                            <span
-                                class="font-medium"
-                                :style="{ color: 'var(--pos-text-primary)' }"
-                                >Total</span
-                            >
-                            <span
-                                class="text-lg font-bold"
-                                :style="{ color: 'var(--pos-brand-primary)' }"
-                                >{{
-                                    formatPrice(transaction?.total || 0)
-                                }}</span
-                            >
-                        </div>
-                    </div>
-
-                    <!-- Cashier -->
-                    <div
-                        class="rounded-lg p-3 text-center text-xs"
-                        :style="{
-                            backgroundColor: 'var(--pos-bg-primary)',
-                            color: 'var(--pos-text-primary)',
-                        }"
-                    >
-                        Kasir: {{ transaction?.cashier_name }}
-                    </div>
-
-                    <!-- Custom receipt footer -->
-                    <p
-                        v-if="receiptFooter"
-                        class="mt-3 whitespace-pre-line text-center text-[10px] leading-snug"
-                        :style="{ color: 'var(--pos-text-primary)' }"
-                    >
-                        {{ receiptFooter }}
-                    </p>
-                </div>
+                <!-- Receipt body (shared dengan live preview di Settings) -->
+                <ReceiptPreview
+                    :store-name="storeName"
+                    :store-logo="storeLogo"
+                    :store-address="storeAddress"
+                    :store-phone="storePhone"
+                    :receipt-header="receiptHeader"
+                    :receipt-footer="receiptFooter"
+                    :show-logo-on-receipt="showLogoOnReceipt"
+                    :options="receiptOptions"
+                    :transaction="transaction ?? null"
+                />
 
                 <!-- Footer -->
                 <div
@@ -308,6 +87,7 @@
 import { usePage } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 import type { Transaction } from '@/types/pos';
+import ReceiptPreview from '@/components/pos/ReceiptPreview.vue';
 
 const props = defineProps<{
     modelValue: boolean;
@@ -322,6 +102,7 @@ const storePhone = computed(() => (page.props.storePhone as string | null | unde
 const receiptHeader = computed(() => (page.props.storeReceiptHeader as string | null | undefined) ?? null);
 const receiptFooter = computed(() => (page.props.storeReceiptFooter as string | null | undefined) ?? null);
 const showLogoOnReceipt = computed(() => Boolean(page.props.storeShowLogoOnReceipt));
+const receiptOptions = computed(() => (page.props.storeReceiptOptions as Record<string, boolean> | undefined) ?? {});
 
 const emit = defineEmits<{
     (e: 'update:modelValue', value: boolean): void;
@@ -331,38 +112,6 @@ const printMode = ref<'58' | '80'>('58');
 
 function close() {
     emit('update:modelValue', false);
-}
-
-function resolveInvoiceNumber(): string {
-    if (props.transaction?.invoice_number) {
-        return props.transaction.invoice_number;
-    }
-
-    if (props.transaction?.id) {
-        return `INV-${String(props.transaction.id).slice(-8).toUpperCase()}`;
-    }
-
-    return '-';
-}
-
-function formatTransactionDateTime(dateTime?: string): string {
-    if (!dateTime) {
-        return '-';
-    }
-
-    const parsed = new Date(dateTime);
-    if (Number.isNaN(parsed.getTime())) {
-        return '-';
-    }
-
-    const datePart = parsed.toLocaleDateString('id-ID');
-    const timePart = parsed.toLocaleTimeString('id-ID', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-    });
-
-    return `${datePart} ${timePart}`;
 }
 
 function printReceipt(): void {
@@ -381,18 +130,6 @@ function printReceipt(): void {
     }, 300);
 }
 
-function formatPrice(price: number): string {
-    if (typeof price !== 'number' || isNaN(price)) {
-        return 'Rp 0';
-    }
-
-    return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-    }).format(price);
-}
 </script>
 
 <style scoped>

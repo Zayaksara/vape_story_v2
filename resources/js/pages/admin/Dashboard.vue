@@ -120,10 +120,10 @@ function trendClass(pct: number): string {
 }
 
 const statCards = computed(() => [
-    { title: 'Total Pendapatan', value: formatCurrency(props.stats.revenue.current),      change: props.stats.revenue.change_pct,       icon: DollarSign,  colorVar: '--primary'  },
-    { title: 'Total Transaksi',  value: formatNumber(props.stats.transactions.current),   change: props.stats.transactions.change_pct,  icon: ShoppingCart, colorVar: '--chart-3' },
-    { title: 'Total Keuntungan', value: formatCurrency(props.stats.profit.current),       change: props.stats.profit.change_pct,        icon: Banknote,    colorVar: '--chart-5'  },
-    { title: 'Produk Terjual',   value: formatNumber(props.stats.products_sold.current),  change: props.stats.products_sold.change_pct, icon: Package,     colorVar: '--chart-1'  },
+    { title: 'Total Pendapatan', raw: props.stats.revenue.current,       value: formatCurrency(props.stats.revenue.current),      change: props.stats.revenue.change_pct,       icon: DollarSign,  colorVar: '--primary'  },
+    { title: 'Total Transaksi',  raw: props.stats.transactions.current,  value: formatNumber(props.stats.transactions.current),   change: props.stats.transactions.change_pct,  icon: ShoppingCart, colorVar: '--chart-3' },
+    { title: 'Total Keuntungan', raw: props.stats.profit.current,        value: formatCurrency(props.stats.profit.current),       change: props.stats.profit.change_pct,        icon: Banknote,    colorVar: '--chart-5'  },
+    { title: 'Produk Terjual',   raw: props.stats.products_sold.current, value: formatNumber(props.stats.products_sold.current),  change: props.stats.products_sold.change_pct, icon: Package,     colorVar: '--chart-1'  },
 ])
 
 const chartTheme = computed(() => isDark.value ? 'dark' : 'light')
@@ -447,7 +447,10 @@ const comparisonRows = computed(() => [
                         />
                     </div>
                 </div>
-                <p class="stat-card__value">{{ card.value }}</p>
+                <p
+                    class="stat-card__value"
+                    :style="card.raw < 0 ? { color: '#dc2626' } : {}"
+                >{{ card.value }}</p>
                 <div class="stat-card__trend" :class="trendClass(card.change)">
                     <TrendingUp   v-if="card.change > 0"  :size="13" />
                     <TrendingDown v-else-if="card.change < 0" :size="13" />

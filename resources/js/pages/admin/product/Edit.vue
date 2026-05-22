@@ -8,6 +8,7 @@ import { index as adminDashboardRoute } from '@/routes/admin/dashboard'
 import type { Product } from '@/types/pos'
 import ProductFormFields from '@/pages/admin/product/ProductFormFields.vue'
 import CurrencyInput from '@/components/admin/CurrencyInput.vue'
+import ConfirmModal from '@/components/admin/ConfirmModal.vue'
 
 defineOptions({
     layout: (h: any, page: any) => h(AdminLayout, {
@@ -30,7 +31,7 @@ interface Batch {
 }
 
 const props = defineProps<{
-    product:    Product & { base_price: number; flavor?: string; nicotine_strength?: number; size_ml?: number; description?: string; is_active: boolean; batches?: Batch[] }
+    product:    Product & { base_price: number; flavor?: string; nicotine_strength?: number; size_ml?: number; is_active: boolean; batches?: Batch[] }
     categories: { id: string; name: string }[]
     brands:     { id: string; name: string }[]
 }>()
@@ -49,7 +50,6 @@ const form = useForm({
     flavor:            props.product.flavor ?? '',
     nicotine_strength: props.product.nicotine_strength ? String(props.product.nicotine_strength) : '',
     size_ml:           props.product.size_ml ? String(props.product.size_ml) : '',
-    description:       props.product.description ?? '',
     is_active:         props.product.is_active,
     min_stock:         (props.product as any).min_stock ?? 0,
     image:             null as File | null,
@@ -66,6 +66,21 @@ function onBrandAdded(brand: { id: string; name: string }) {
     if (!brandsList.value.find(b => b.id === brand.id)) {
         brandsList.value.push(brand)
     }
+}
+
+function onCategoryUpdated(cat: { id: string; name: string }) {
+    const i = categoriesList.value.findIndex(c => c.id === cat.id)
+    if (i >= 0) categoriesList.value[i] = { ...categoriesList.value[i], ...cat }
+}
+function onCategoryDeleted(id: string) {
+    categoriesList.value = categoriesList.value.filter(c => c.id !== id)
+}
+function onBrandUpdated(brand: { id: string; name: string }) {
+    const i = brandsList.value.findIndex(b => b.id === brand.id)
+    if (i >= 0) brandsList.value[i] = { ...brandsList.value[i], ...brand }
+}
+function onBrandDeleted(id: string) {
+    brandsList.value = brandsList.value.filter(b => b.id !== id)
 }
 
 function submit() {
@@ -132,9 +147,27 @@ function addBatch() {
     })
 }
 
+const confirmDeleteBatchOpen = ref(false)
+const pendingDeleteBatch = ref<Batch | null>(null)
+const deletingBatch = ref(false)
+
 function deleteBatch(batch: Batch) {
-    if (!confirm(`Hapus batch "${batch.lot_number}" (stok: ${batch.stock_quantity})?`)) return
-    router.delete(`/admin/products/${props.product.id}/batches/${batch.id}`, { preserveScroll: true })
+    pendingDeleteBatch.value = batch
+    confirmDeleteBatchOpen.value = true
+}
+
+function confirmDeleteBatch() {
+    const batch = pendingDeleteBatch.value
+    if (!batch) return
+    deletingBatch.value = true
+    router.delete(`/admin/products/${props.product.id}/batches/${batch.id}`, {
+        preserveScroll: true,
+        onFinish: () => {
+            deletingBatch.value = false
+            confirmDeleteBatchOpen.value = false
+            pendingDeleteBatch.value = null
+        },
+    })
 }
 
 function formatPrice(n: number) {
@@ -166,7 +199,11 @@ function formatPrice(n: number) {
                         :initial-image-url="product.image_url ?? null"
                         mode="edit"
                         @category-added="onCategoryAdded"
+                        @category-updated="onCategoryUpdated"
+                        @category-deleted="onCategoryDeleted"
                         @brand-added="onBrandAdded"
+                        @brand-updated="onBrandUpdated"
+                        @brand-deleted="onBrandDeleted"
                     />
 
                     <div class="flex justify-end gap-2 border-t pt-4" style="border-color: var(--pos-border);">
@@ -321,5 +358,16 @@ function formatPrice(n: number) {
             </div>
 
         </div>
+
+        <ConfirmModal
+            :open="confirmDeleteBatchOpen"
+            title="Hapus Batch?"
+            message="Stok pada batch ini akan ikut hilang. Tindakan tidak bisa dibatalkan."
+            :detail="pendingDeleteBatch ? `${pendingDeleteBatch.lot_number} · stok ${pendingDeleteBatch.stock_quantity}` : null"
+            confirm-label="Ya, Hapus Batch"
+            :processing="deletingBatch"
+            @confirm="confirmDeleteBatch"
+            @cancel="confirmDeleteBatchOpen = false"
+        />
     </div>
 </template>

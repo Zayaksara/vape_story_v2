@@ -28,8 +28,9 @@ class StoreController extends Controller
             'tagline' => 'nullable|string|max:100',
             'receipt_header' => 'nullable|string|max:1000',
             'receipt_footer' => 'nullable|string|max:1000',
-            'show_logo_on_receipt' => 'boolean',
             'logo' => 'nullable|image|max:2048',
+            'receipt_options' => 'nullable|array',
+            'receipt_options.*' => 'boolean',
         ]);
 
         $store = StoreSetting::current();
@@ -39,6 +40,19 @@ class StoreController extends Controller
                 Storage::disk('public')->delete($store->logo_path);
             }
             $validated['logo_path'] = $request->file('logo')->store('store/logo', 'public');
+        }
+
+        // Hanya simpan key yang dikenal dari DEFAULT_RECEIPT_OPTIONS — tolak key liar.
+        if (isset($validated['receipt_options'])) {
+            $validated['receipt_options'] = array_intersect_key(
+                $validated['receipt_options'],
+                StoreSetting::DEFAULT_RECEIPT_OPTIONS,
+            );
+
+            // Sinkron kolom legacy `show_logo_on_receipt` agar tidak drift.
+            if (array_key_exists('show_logo', $validated['receipt_options'])) {
+                $validated['show_logo_on_receipt'] = (bool) $validated['receipt_options']['show_logo'];
+            }
         }
 
         unset($validated['logo']);

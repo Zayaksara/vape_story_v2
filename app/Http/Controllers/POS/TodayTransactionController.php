@@ -119,6 +119,8 @@ class TodayTransactionController extends Controller
                 'total_amount' => $totalAmount,
                 'subtotal' => $subtotal,
                 'discount_amount' => $discountAmount,
+                'discount_code'   => $sale->discount_code,
+                'discount_label'  => $sale->discount_label,
                 'has_discount' => $discountAmount > 0,
                 'created_at' => $sale->created_at?->toISOString(),
                 'cashier' => $sale->user ? [

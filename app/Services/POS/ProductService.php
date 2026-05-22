@@ -43,9 +43,13 @@ class ProductService
 
     private function buildFilteredQuery(array $filters): Builder
     {
-        $query = Product::query()
-            ->where('is_active', 1)
-            ->orderBy('name');
+        $query = Product::query()->orderBy('name');
+
+        // Default: hanya produk aktif (untuk POS). Admin bisa kirim
+        // include_inactive=true agar produk nonaktif tetap muncul di list.
+        if (empty($filters['include_inactive'])) {
+            $query->where('is_active', 1);
+        }
 
         $this->applyCategoryFilter($query, $filters);
         $this->applyBrandFilter($query, $filters);
@@ -104,15 +108,7 @@ class ProductService
             ->pluck('size_ml')
             ->map(fn ($v) => ($v == (int) $v ? (int) $v : (float) $v).'ml');
 
-        $batteryUnits = Product::where('is_active', 1)
-            ->whereNotNull('battery_mah')
-            ->where('battery_mah', '>', 0)
-            ->distinct()
-            ->pluck('battery_mah')
-            ->map(fn ($v) => (int) $v.'mAh');
-
         return $sizeUnits
-            ->merge($batteryUnits)
             ->unique()
             ->sort()
             ->values()
@@ -208,7 +204,6 @@ class ProductService
         $query->where(function ($q) use ($numericValue, $unitType) {
             match ($unitType) {
                 'ml' => $q->where('size_ml', $numericValue),
-                'mAh' => $q->where('battery_mah', $numericValue),
                 default => null,
             };
         });

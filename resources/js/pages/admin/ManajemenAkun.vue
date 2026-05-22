@@ -4,7 +4,7 @@ import { router, usePage } from '@inertiajs/vue3'
 import { toast } from 'vue-sonner'
 import {
   Search, X, Plus, Pencil, Trash2, Eye,
-  Users, ShieldCheck, UserCog, BadgeCheck, BadgeX, Mail, KeyRound,
+  Users, ShieldCheck, UserCog, Mail, KeyRound,
 } from 'lucide-vue-next'
 
 import { Input } from '@/components/ui/input'
@@ -47,7 +47,6 @@ interface UserRow {
   name: string
   email: string
   role: RoleValue
-  email_verified_at: string | null
   created_at: string | null
 }
 
@@ -58,7 +57,6 @@ interface UserForm {
   role: RoleValue
   password: string
   password_confirmation: string
-  verified: boolean
 }
 
 interface Props {
@@ -83,7 +81,6 @@ const isSubmitting = ref(false)
 
 const search = ref('')
 const roleFilter = ref<RoleValue | 'all'>('all')
-const statusFilter = ref<'all' | 'verified' | 'unverified'>('all')
 
 const selectedUser = ref<UserRow | null>(null)
 const detailOpen = ref(false)
@@ -103,14 +100,13 @@ function emptyForm(): UserForm {
     role: 'cashier',
     password: '',
     password_confirmation: '',
-    verified: true,
   }
 }
 
 // ── Derived ───────────────────────────────────────────────────────────────────
 
 const hasActiveFilters = computed(() =>
-  !!(search.value || roleFilter.value !== 'all' || statusFilter.value !== 'all'),
+  !!(search.value || roleFilter.value !== 'all'),
 )
 
 const filteredUsers = computed(() => {
@@ -120,20 +116,16 @@ const filteredUsers = computed(() => {
       u.name.toLowerCase().includes(q) ||
       u.email.toLowerCase().includes(q)
     const matchRole = roleFilter.value === 'all' || u.role === roleFilter.value
-    const matchStatus = statusFilter.value === 'all'
-      || (statusFilter.value === 'verified'   && !!u.email_verified_at)
-      || (statusFilter.value === 'unverified' &&  !u.email_verified_at)
-    return matchSearch && matchRole && matchStatus
+    return matchSearch && matchRole
   })
 })
 
 const stats = computed(() => {
   const all = users.value
   return {
-    total:    all.length,
-    admin:    all.filter(u => u.role === 'admin').length,
-    cashier:  all.filter(u => u.role === 'cashier').length,
-    verified: all.filter(u => !!u.email_verified_at).length,
+    total:   all.length,
+    admin:   all.filter(u => u.role === 'admin').length,
+    cashier: all.filter(u => u.role === 'cashier').length,
   }
 })
 
@@ -181,17 +173,15 @@ function openEdit(u: UserRow) {
     role: u.role,
     password: '',
     password_confirmation: '',
-    verified: !!u.email_verified_at,
   }
   formOpen.value = true
 }
 
 function buildPayload(f: UserForm) {
   const payload: Record<string, any> = {
-    name:     f.name.trim(),
-    email:    f.email.trim().toLowerCase(),
-    role:     f.role,
-    verified: !!f.verified,
+    name:  f.name.trim(),
+    email: f.email.trim().toLowerCase(),
+    role:  f.role,
   }
   if (f.password) {
     payload.password = f.password
@@ -268,7 +258,6 @@ function executeDelete() {
 function resetFilters() {
   search.value = ''
   roleFilter.value = 'all'
-  statusFilter.value = 'all'
 }
 </script>
 
@@ -277,7 +266,7 @@ function resetFilters() {
     <div class="adm-page px-6 py-5">
 
       <!-- ── Summary Cards ──────────────────────────────────────────────── -->
-      <div class="mb-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div class="mb-5 grid grid-cols-1 gap-3 md:grid-cols-3">
         <div class="flex items-center gap-3 rounded-lg border bg-white p-4" style="border-color: var(--pos-border);">
           <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg" style="background: var(--pos-brand-light);">
             <Users class="h-5 w-5" style="color: var(--pos-brand-primary);" />
@@ -314,17 +303,6 @@ function resetFilters() {
           </div>
         </div>
 
-        <div class="flex items-center gap-3 rounded-lg border bg-white p-4" style="border-color: var(--pos-border);">
-          <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg" style="background: var(--pos-bg-success);">
-            <BadgeCheck class="h-5 w-5" style="color: var(--pos-success-text);" />
-          </div>
-          <div>
-            <p class="text-2xl font-bold leading-none" style="color: var(--pos-text-secondary);">
-              {{ stats.verified }}<span class="text-sm font-semibold"> Verified</span>
-            </p>
-            <p class="mt-0.5 text-xs" style="color: var(--pos-text-muted);">Email terverifikasi</p>
-          </div>
-        </div>
       </div>
 
       <!-- ── Table Card ──────────────────────────────────────────────────── -->
@@ -365,17 +343,6 @@ function resetFilters() {
             </SelectContent>
           </Select>
 
-          <Select v-model="statusFilter">
-            <SelectTrigger class="h-8 w-40 border text-xs cursor-pointer" style="border-color: var(--pos-border);">
-              <SelectValue placeholder="Semua Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Semua Status</SelectItem>
-              <SelectItem value="verified">Terverifikasi</SelectItem>
-              <SelectItem value="unverified">Belum Verifikasi</SelectItem>
-            </SelectContent>
-          </Select>
-
           <span
             v-if="hasActiveFilters"
             class="cursor-pointer rounded-full px-2 py-0.5 text-xs font-semibold"
@@ -405,7 +372,6 @@ function resetFilters() {
                 <TableHead class="text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Pengguna</TableHead>
                 <TableHead class="text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Email</TableHead>
                 <TableHead class="text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Role</TableHead>
-                <TableHead class="text-xs font-bold uppercase tracking-wide text-center" style="color: var(--pos-text-muted);">Status Email</TableHead>
                 <TableHead class="text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Bergabung</TableHead>
                 <TableHead class="w-24 pr-4 text-xs font-bold uppercase tracking-wide" style="color: var(--pos-text-muted);">Aksi</TableHead>
               </TableRow>
@@ -449,24 +415,6 @@ function resetFilters() {
                       {{ roleLabel(user.role) }}
                     </span>
                   </TableCell>
-                  <TableCell class="text-center">
-                    <span
-                      v-if="user.email_verified_at"
-                      class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold"
-                      style="background: var(--pos-bg-success); color: var(--pos-success-text);"
-                    >
-                      <BadgeCheck class="h-3 w-3" />
-                      Verified
-                    </span>
-                    <span
-                      v-else
-                      class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold"
-                      style="background: var(--pos-bg-warning); color: var(--pos-warning-text);"
-                    >
-                      <BadgeX class="h-3 w-3" />
-                      Belum
-                    </span>
-                  </TableCell>
                   <TableCell>
                     <span class="text-xs" style="color: var(--pos-text-secondary);">{{ formatDate(user.created_at) }}</span>
                   </TableCell>
@@ -507,7 +455,7 @@ function resetFilters() {
               </template>
 
               <TableRow v-else>
-                <TableCell colspan="6" class="py-16 text-center">
+                <TableCell colspan="5" class="py-16 text-center">
                   <Users class="mx-auto mb-2 h-10 w-10" style="color: var(--pos-text-muted); opacity: 0.3;" />
                   <p class="text-sm font-medium" style="color: var(--pos-text-muted);">Belum ada akun</p>
                   <p class="mt-1 text-xs" style="color: var(--pos-text-light);">Klik "Tambah Akun" untuk membuat akun baru</p>
@@ -573,7 +521,6 @@ function resetFilters() {
                 { label: 'Nama',         value: selectedUser.name },
                 { label: 'Email',        value: selectedUser.email },
                 { label: 'Role',         value: roleLabel(selectedUser.role) },
-                { label: 'Status Email', value: selectedUser.email_verified_at ? 'Terverifikasi' : 'Belum Diverifikasi' },
                 { label: 'Bergabung',    value: formatDate(selectedUser.created_at) },
                 { label: 'ID',           value: selectedUser.id },
               ]" :key="i" class="flex items-center justify-between px-4 py-2.5">
@@ -638,16 +585,6 @@ function resetFilters() {
                   <SelectTrigger class="h-9 cursor-pointer"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem v-for="r in props.roles" :key="r.value" :value="r.value">{{ r.label }}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div class="space-y-1.5">
-                <label class="text-xs font-semibold">Status Email</label>
-                <Select :model-value="form.verified ? '1' : '0'" @update:model-value="(v: any) => form.verified = v === '1'">
-                  <SelectTrigger class="h-9 cursor-pointer"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1">Tandai Terverifikasi</SelectItem>
-                    <SelectItem value="0">Belum Diverifikasi</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

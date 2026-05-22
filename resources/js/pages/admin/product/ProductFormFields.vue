@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { Upload, X, Plus } from 'lucide-vue-next'
+import { Upload, X, Plus, Pencil, Trash2 } from 'lucide-vue-next'
 import axios from '@/lib/axios'
 import { toast } from 'vue-sonner'
 import CurrencyInput from '@/components/admin/CurrencyInput.vue'
+import ConfirmModal from '@/components/admin/ConfirmModal.vue'
 
 interface Category { id: string; name: string }
 interface Brand    { id: string; name: string }
@@ -22,8 +23,12 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  'category-added': [category: Category]
-  'brand-added':    [brand: Brand]
+  'category-added':   [category: Category]
+  'category-updated': [category: Category]
+  'category-deleted': [id: string]
+  'brand-added':      [brand: Brand]
+  'brand-updated':    [brand: Brand]
+  'brand-deleted':    [id: string]
 }>()
 
 // ── Image ─────────────────────────────────────────────────────────────────────
@@ -63,81 +68,187 @@ const sizeMode = computed({
   },
 })
 
-// ── Category create modal ────────────────────────────────────────────────────
+// ── Category modal (create / edit) ───────────────────────────────────────────
 
 const categoryModalOpen = ref(false)
+const categoryModalMode = ref<'create' | 'edit'>('create')
+const editingCategoryId = ref<string | null>(null)
 const newCategoryName = ref('')
-const newCategoryDesc = ref('')
-const creatingCategory = ref(false)
+const savingCategory = ref(false)
 
 function openCategoryModal() {
+  categoryModalMode.value = 'create'
+  editingCategoryId.value = null
   newCategoryName.value = ''
-  newCategoryDesc.value = ''
   categoryModalOpen.value = true
 }
 
-async function submitNewCategory() {
+function openEditCategoryModal() {
+  const cat = props.categories.find(c => c.id === props.form.category_id)
+  if (!cat) {
+    toast.error('Pilih kategori dulu untuk diedit')
+    return
+  }
+  categoryModalMode.value = 'edit'
+  editingCategoryId.value = cat.id
+  newCategoryName.value = cat.name
+  categoryModalOpen.value = true
+}
+
+async function submitCategory() {
   if (!newCategoryName.value.trim()) {
     toast.error('Nama kategori wajib diisi')
     return
   }
 
-  creatingCategory.value = true
+  savingCategory.value = true
   try {
-    const { data } = await axios.post<Category>('/admin/categories', {
-      name: newCategoryName.value.trim(),
-      description: newCategoryDesc.value.trim() || null,
-    })
-    emit('category-added', data)
-    props.form.category_id = data.id
+    if (categoryModalMode.value === 'create') {
+      const { data } = await axios.post<Category>('/admin/categories', {
+        name: newCategoryName.value.trim(),
+      })
+      emit('category-added', data)
+      props.form.category_id = data.id
+      toast.success(`Kategori "${data.name}" dibuat`)
+    } else if (editingCategoryId.value) {
+      const { data } = await axios.put<Category>(`/admin/categories/${editingCategoryId.value}`, {
+        name: newCategoryName.value.trim(),
+      })
+      emit('category-updated', data)
+      toast.success(`Kategori diperbarui menjadi "${data.name}"`)
+    }
     categoryModalOpen.value = false
-    toast.success(`Kategori "${data.name}" dibuat`)
   } catch (err: any) {
     const msg = err?.response?.data?.errors?.name?.[0]
       ?? err?.response?.data?.message
-      ?? 'Gagal membuat kategori'
+      ?? 'Gagal menyimpan kategori'
     toast.error(msg)
   } finally {
-    creatingCategory.value = false
+    savingCategory.value = false
   }
 }
 
-// ── Brand create modal ───────────────────────────────────────────────────────
+const confirmDeleteCategoryOpen = ref(false)
+const deletingCategory = ref(false)
+const pendingDeleteCategory = ref<Category | null>(null)
+
+function deleteCategory() {
+  const cat = props.categories.find(c => c.id === props.form.category_id)
+  if (!cat) {
+    toast.error('Pilih kategori dulu untuk dihapus')
+    return
+  }
+  pendingDeleteCategory.value = cat
+  confirmDeleteCategoryOpen.value = true
+}
+
+async function confirmDeleteCategory() {
+  const cat = pendingDeleteCategory.value
+  if (!cat) return
+  deletingCategory.value = true
+  try {
+    await axios.delete(`/admin/categories/${cat.id}`)
+    emit('category-deleted', cat.id)
+    if (props.form.category_id === cat.id) props.form.category_id = ''
+    toast.success(`Kategori "${cat.name}" dihapus`)
+    confirmDeleteCategoryOpen.value = false
+    pendingDeleteCategory.value = null
+  } catch (err: any) {
+    toast.error(err?.response?.data?.message ?? 'Gagal menghapus kategori')
+  } finally {
+    deletingCategory.value = false
+  }
+}
+
+// ── Brand modal (create / edit) ──────────────────────────────────────────────
 
 const brandModalOpen = ref(false)
+const brandModalMode = ref<'create' | 'edit'>('create')
+const editingBrandId = ref<string | null>(null)
 const newBrandName = ref('')
-const newBrandDesc = ref('')
-const creatingBrand = ref(false)
+const savingBrand = ref(false)
 
 function openBrandModal() {
+  brandModalMode.value = 'create'
+  editingBrandId.value = null
   newBrandName.value = ''
-  newBrandDesc.value = ''
   brandModalOpen.value = true
 }
 
-async function submitNewBrand() {
+function openEditBrandModal() {
+  const brand = props.brands.find(b => b.id === props.form.brand_id)
+  if (!brand) {
+    toast.error('Pilih brand dulu untuk diedit')
+    return
+  }
+  brandModalMode.value = 'edit'
+  editingBrandId.value = brand.id
+  newBrandName.value = brand.name
+  brandModalOpen.value = true
+}
+
+async function submitBrand() {
   if (!newBrandName.value.trim()) {
     toast.error('Nama brand wajib diisi')
     return
   }
 
-  creatingBrand.value = true
+  savingBrand.value = true
   try {
-    const { data } = await axios.post<Brand>('/admin/brands', {
-      name: newBrandName.value.trim(),
-      description: newBrandDesc.value.trim() || null,
-    })
-    emit('brand-added', data)
-    props.form.brand_id = data.id
+    if (brandModalMode.value === 'create') {
+      const { data } = await axios.post<Brand>('/admin/brands', {
+        name: newBrandName.value.trim(),
+      })
+      emit('brand-added', data)
+      props.form.brand_id = data.id
+      toast.success(`Brand "${data.name}" dibuat`)
+    } else if (editingBrandId.value) {
+      const { data } = await axios.put<Brand>(`/admin/brands/${editingBrandId.value}`, {
+        name: newBrandName.value.trim(),
+      })
+      emit('brand-updated', data)
+      toast.success(`Brand diperbarui menjadi "${data.name}"`)
+    }
     brandModalOpen.value = false
-    toast.success(`Brand "${data.name}" dibuat`)
   } catch (err: any) {
     const msg = err?.response?.data?.errors?.name?.[0]
       ?? err?.response?.data?.message
-      ?? 'Gagal membuat brand'
+      ?? 'Gagal menyimpan brand'
     toast.error(msg)
   } finally {
-    creatingBrand.value = false
+    savingBrand.value = false
+  }
+}
+
+const confirmDeleteBrandOpen = ref(false)
+const deletingBrand = ref(false)
+const pendingDeleteBrand = ref<Brand | null>(null)
+
+function deleteBrand() {
+  const brand = props.brands.find(b => b.id === props.form.brand_id)
+  if (!brand) {
+    toast.error('Pilih brand dulu untuk dihapus')
+    return
+  }
+  pendingDeleteBrand.value = brand
+  confirmDeleteBrandOpen.value = true
+}
+
+async function confirmDeleteBrand() {
+  const brand = pendingDeleteBrand.value
+  if (!brand) return
+  deletingBrand.value = true
+  try {
+    await axios.delete(`/admin/brands/${brand.id}`)
+    emit('brand-deleted', brand.id)
+    if (props.form.brand_id === brand.id) props.form.brand_id = ''
+    toast.success(`Brand "${brand.name}" dihapus`)
+    confirmDeleteBrandOpen.value = false
+    pendingDeleteBrand.value = null
+  } catch (err: any) {
+    toast.error(err?.response?.data?.message ?? 'Gagal menghapus brand')
+  } finally {
+    deletingBrand.value = false
   }
 }
 </script>
@@ -203,12 +314,32 @@ async function submitNewBrand() {
         </select>
         <button
           type="button"
-          class="flex shrink-0 cursor-pointer items-center gap-1 rounded-md px-3 text-xs font-semibold transition hover:opacity-90"
+          class="flex shrink-0 cursor-pointer items-center justify-center rounded-md px-2.5 text-xs font-semibold transition hover:opacity-90"
           style="background: var(--pos-brand-primary); color: #fff;"
           title="Tambah kategori baru"
           @click="openCategoryModal"
         >
           <Plus class="h-3.5 w-3.5" />
+        </button>
+        <button
+          type="button"
+          :disabled="!form.category_id"
+          class="flex shrink-0 cursor-pointer items-center justify-center rounded-md border px-2.5 text-xs transition hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+          style="border-color: var(--pos-border); color: var(--pos-text-muted);"
+          title="Edit kategori terpilih"
+          @click="openEditCategoryModal"
+        >
+          <Pencil class="h-3.5 w-3.5" />
+        </button>
+        <button
+          type="button"
+          :disabled="!form.category_id"
+          class="flex shrink-0 cursor-pointer items-center justify-center rounded-md border px-2.5 text-xs transition hover:bg-red-50 disabled:opacity-40 disabled:cursor-not-allowed"
+          style="border-color: var(--pos-border); color: var(--pos-danger-text);"
+          title="Hapus kategori terpilih"
+          @click="deleteCategory"
+        >
+          <Trash2 class="h-3.5 w-3.5" />
         </button>
       </div>
       <p v-if="form.errors.category_id" class="mt-1 text-xs text-red-500">{{ form.errors.category_id }}</p>
@@ -226,12 +357,32 @@ async function submitNewBrand() {
         </select>
         <button
           type="button"
-          class="flex shrink-0 cursor-pointer items-center gap-1 rounded-md px-3 text-xs font-semibold transition hover:opacity-90"
+          class="flex shrink-0 cursor-pointer items-center justify-center rounded-md px-2.5 text-xs font-semibold transition hover:opacity-90"
           style="background: var(--pos-brand-primary); color: #fff;"
           title="Tambah brand baru"
           @click="openBrandModal"
         >
           <Plus class="h-3.5 w-3.5" />
+        </button>
+        <button
+          type="button"
+          :disabled="!form.brand_id"
+          class="flex shrink-0 cursor-pointer items-center justify-center rounded-md border px-2.5 text-xs transition hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+          style="border-color: var(--pos-border); color: var(--pos-text-muted);"
+          title="Edit brand terpilih"
+          @click="openEditBrandModal"
+        >
+          <Pencil class="h-3.5 w-3.5" />
+        </button>
+        <button
+          type="button"
+          :disabled="!form.brand_id"
+          class="flex shrink-0 cursor-pointer items-center justify-center rounded-md border px-2.5 text-xs transition hover:bg-red-50 disabled:opacity-40 disabled:cursor-not-allowed"
+          style="border-color: var(--pos-border); color: var(--pos-danger-text);"
+          title="Hapus brand terpilih"
+          @click="deleteBrand"
+        >
+          <Trash2 class="h-3.5 w-3.5" />
         </button>
       </div>
       <p v-if="form.errors.brand_id" class="mt-1 text-xs text-red-500">{{ form.errors.brand_id }}</p>
@@ -312,18 +463,6 @@ async function submitNewBrand() {
     </div>
   </div>
 
-  <!-- Description -->
-  <div>
-    <label class="mb-1.5 block text-xs font-semibold" style="color: var(--pos-text-muted);">Deskripsi</label>
-    <textarea
-      v-model="form.description"
-      rows="3"
-      placeholder="Deskripsi produk (opsional)"
-      class="w-full resize-none rounded-md border px-3 py-2 text-sm outline-none transition focus:ring-2"
-      style="border-color: var(--pos-border); color: var(--pos-text-secondary);"
-    />
-  </div>
-
   <!-- Active toggle -->
   <div class="flex items-center gap-3">
     <input id="is_active" v-model="form.is_active" type="checkbox" class="h-4 w-4 rounded" />
@@ -348,8 +487,12 @@ async function submitNewBrand() {
           style="border-color: var(--pos-border); background: var(--pos-brand-light);"
         >
           <div>
-            <h3 class="text-sm font-bold" style="color: var(--pos-brand-dark);">Kategori Baru</h3>
-            <p class="text-[11px]" style="color: var(--pos-text-secondary);">Tambah kategori produk</p>
+            <h3 class="text-sm font-bold" style="color: var(--pos-brand-dark);">
+              {{ categoryModalMode === 'edit' ? 'Edit Kategori' : 'Kategori Baru' }}
+            </h3>
+            <p class="text-[11px]" style="color: var(--pos-text-secondary);">
+              {{ categoryModalMode === 'edit' ? 'Perbarui nama kategori' : 'Tambah kategori produk' }}
+            </p>
           </div>
           <button
             class="cursor-pointer rounded-full p-1.5 transition-colors hover:bg-white/60"
@@ -360,7 +503,7 @@ async function submitNewBrand() {
           </button>
         </div>
 
-        <form class="space-y-4 p-5" @submit.prevent="submitNewCategory">
+        <form class="space-y-4 p-5" @submit.prevent="submitCategory">
           <div>
             <label class="mb-1.5 block text-xs font-semibold" style="color: var(--pos-text-muted);">Nama Kategori <span class="text-red-500">*</span></label>
             <input
@@ -370,16 +513,6 @@ async function submitNewBrand() {
               autofocus
               placeholder="cth: Liquid Salt Nic"
               class="w-full rounded-md border px-3 py-2 text-sm outline-none transition focus:ring-2"
-              style="border-color: var(--pos-border); color: var(--pos-text-secondary);"
-            />
-          </div>
-          <div>
-            <label class="mb-1.5 block text-xs font-semibold" style="color: var(--pos-text-muted);">Deskripsi (opsional)</label>
-            <textarea
-              v-model="newCategoryDesc"
-              rows="2"
-              placeholder="Keterangan singkat"
-              class="w-full resize-none rounded-md border px-3 py-2 text-sm outline-none transition focus:ring-2"
               style="border-color: var(--pos-border); color: var(--pos-text-secondary);"
             />
           </div>
@@ -395,17 +528,41 @@ async function submitNewBrand() {
             </button>
             <button
               type="submit"
-              :disabled="creatingCategory"
+              :disabled="savingCategory"
               class="cursor-pointer rounded-md px-4 py-2 text-xs font-semibold disabled:opacity-60"
               style="background: var(--pos-brand-primary); color: #fff;"
             >
-              {{ creatingCategory ? 'Menyimpan…' : 'Simpan Kategori' }}
+              {{ savingCategory ? 'Menyimpan…' : (categoryModalMode === 'edit' ? 'Simpan Perubahan' : 'Simpan Kategori') }}
             </button>
           </div>
         </form>
       </div>
     </div>
   </Teleport>
+
+  <!-- ── Konfirmasi hapus kategori ────────────────────────────────────────── -->
+  <ConfirmModal
+    :open="confirmDeleteCategoryOpen"
+    title="Hapus Kategori?"
+    message="Tindakan ini tidak bisa dibatalkan. Kategori akan dihapus permanen."
+    :detail="pendingDeleteCategory ? pendingDeleteCategory.name : null"
+    confirm-label="Ya, Hapus"
+    :processing="deletingCategory"
+    @confirm="confirmDeleteCategory"
+    @cancel="confirmDeleteCategoryOpen = false"
+  />
+
+  <!-- ── Konfirmasi hapus brand ───────────────────────────────────────────── -->
+  <ConfirmModal
+    :open="confirmDeleteBrandOpen"
+    title="Hapus Brand?"
+    message="Tindakan ini tidak bisa dibatalkan. Brand akan dihapus permanen."
+    :detail="pendingDeleteBrand ? pendingDeleteBrand.name : null"
+    confirm-label="Ya, Hapus"
+    :processing="deletingBrand"
+    @confirm="confirmDeleteBrand"
+    @cancel="confirmDeleteBrandOpen = false"
+  />
 
   <!-- ── Brand create modal ───────────────────────────────────────────────── -->
   <Teleport to="body">
@@ -425,8 +582,12 @@ async function submitNewBrand() {
           style="border-color: var(--pos-border); background: var(--pos-brand-light);"
         >
           <div>
-            <h3 class="text-sm font-bold" style="color: var(--pos-brand-dark);">Brand Baru</h3>
-            <p class="text-[11px]" style="color: var(--pos-text-secondary);">Tambah merek produk</p>
+            <h3 class="text-sm font-bold" style="color: var(--pos-brand-dark);">
+              {{ brandModalMode === 'edit' ? 'Edit Brand' : 'Brand Baru' }}
+            </h3>
+            <p class="text-[11px]" style="color: var(--pos-text-secondary);">
+              {{ brandModalMode === 'edit' ? 'Perbarui nama brand' : 'Tambah merek produk' }}
+            </p>
           </div>
           <button
             class="cursor-pointer rounded-full p-1.5 transition-colors hover:bg-white/60"
@@ -437,7 +598,7 @@ async function submitNewBrand() {
           </button>
         </div>
 
-        <form class="space-y-4 p-5" @submit.prevent="submitNewBrand">
+        <form class="space-y-4 p-5" @submit.prevent="submitBrand">
           <div>
             <label class="mb-1.5 block text-xs font-semibold" style="color: var(--pos-text-muted);">Nama Brand <span class="text-red-500">*</span></label>
             <input
@@ -447,16 +608,6 @@ async function submitNewBrand() {
               autofocus
               placeholder="cth: SMOK, Voopoo, Lost Vape"
               class="w-full rounded-md border px-3 py-2 text-sm outline-none transition focus:ring-2"
-              style="border-color: var(--pos-border); color: var(--pos-text-secondary);"
-            />
-          </div>
-          <div>
-            <label class="mb-1.5 block text-xs font-semibold" style="color: var(--pos-text-muted);">Deskripsi (opsional)</label>
-            <textarea
-              v-model="newBrandDesc"
-              rows="2"
-              placeholder="Keterangan singkat"
-              class="w-full resize-none rounded-md border px-3 py-2 text-sm outline-none transition focus:ring-2"
               style="border-color: var(--pos-border); color: var(--pos-text-secondary);"
             />
           </div>
@@ -472,11 +623,11 @@ async function submitNewBrand() {
             </button>
             <button
               type="submit"
-              :disabled="creatingBrand"
+              :disabled="savingBrand"
               class="cursor-pointer rounded-md px-4 py-2 text-xs font-semibold disabled:opacity-60"
               style="background: var(--pos-brand-primary); color: #fff;"
             >
-              {{ creatingBrand ? 'Menyimpan…' : 'Simpan Brand' }}
+              {{ savingBrand ? 'Menyimpan…' : (brandModalMode === 'edit' ? 'Simpan Perubahan' : 'Simpan Brand') }}
             </button>
           </div>
         </form>

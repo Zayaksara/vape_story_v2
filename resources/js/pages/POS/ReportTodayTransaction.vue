@@ -644,15 +644,18 @@ function handleExport() {
                     <TableCell class="py-3 px-3">
                       <span class="text-xs font-medium" style="color: var(--pos-text-muted);">{{ formatTime(transaction.created_at) }}</span>
                     </TableCell>
-                    <TableCell class="py-3 px-3">
-                      <div class="flex items-center gap-1.5">
-                        <span class="text-xs font-mono font-semibold" style="color: var(--pos-text-primary);">{{ transaction.invoice_number }}</span>
+                    <TableCell class="py-3 px-3 align-top">
+                      <div class="flex flex-col gap-0.5 min-w-0">
+                        <span class="text-xs font-mono font-semibold truncate" style="color: var(--pos-text-primary);">{{ transaction.invoice_number }}</span>
                         <span
                           v-if="(transaction as any).discount_amount > 0"
-                          class="rounded-full px-1.5 py-0.5 text-[10px] font-bold"
+                          class="inline-flex max-w-[180px] items-center gap-1 self-start rounded-full px-1.5 py-0.5 text-[10px] font-semibold truncate"
                           style="background: #fee2e2; color: #dc2626;"
+                          :title="`${(transaction as any).discount_label ?? (transaction as any).discount_code ?? 'Diskon'} − ${formatPrice((transaction as any).discount_amount)}`"
                         >
-                          DISKON -{{ formatPrice((transaction as any).discount_amount) }}
+                          
+                          {{ (transaction as any).discount_label ?? (transaction as any).discount_code ?? 'Diskon' }}
+                          <span class="font-bold">−{{ formatPrice((transaction as any).discount_amount) }}</span>
                         </span>
                       </div>
                     </TableCell>
@@ -727,7 +730,15 @@ function handleExport() {
                             <span>{{ formatPrice((transaction as any).subtotal || 0) }}</span>
                           </div>
                           <div v-if="(transaction as any).discount_amount > 0" class="flex justify-between font-semibold" style="color: #dc2626;">
-                            <span>Diskon</span>
+                            <span>
+                              Diskon
+                              <span
+                                v-if="(transaction as any).discount_label || (transaction as any).discount_code"
+                                class="ml-1 text-[10px] font-normal opacity-80"
+                              >
+                                ({{ (transaction as any).discount_label ?? (transaction as any).discount_code }})
+                              </span>
+                            </span>
                             <span>-{{ formatPrice((transaction as any).discount_amount) }}</span>
                           </div>
                           <div class="flex justify-between text-sm font-bold" style="color: var(--pos-brand-primary);">

@@ -100,17 +100,25 @@ class DashboardController extends Controller
             ->selectRaw('COUNT(*) as transactions, COALESCE(SUM(total_amount), 0) as revenue')
             ->first();
 
+        // Faktor diskon per sale: total_amount (net) / SUM(sale_items.total) (gross).
+        // Selaras dengan ReportSale agar profit memperhitungkan diskon transaksi.
+        $factorSub = DB::table('sales')
+            ->join('sale_items', 'sale_items.sale_id', '=', 'sales.id')
+            ->groupBy('sales.id', 'sales.total_amount')
+            ->selectRaw('sales.id as sale_id, CASE WHEN SUM(sale_items.total) > 0 THEN sales.total_amount / SUM(sale_items.total) ELSE 1 END as factor');
+
         $itemRow = DB::table('sale_items as si')
             ->join('sales as s', 'si.sale_id', '=', 's.id')
             ->leftJoin(
                 DB::raw('(SELECT product_id, AVG(cost_price)::numeric AS avg_cost FROM batches GROUP BY product_id) AS b'),
                 'b.product_id', '=', 'si.product_id'
             )
+            ->leftJoinSub($factorSub, 'sf', 'sf.sale_id', '=', 's.id')
             ->whereBetween('s.created_at', [$start, $end])
             ->where('s.status', 'completed')
             ->selectRaw('
                 COALESCE(SUM(si.quantity), 0) AS products_sold,
-                COALESCE(SUM(si.total - COALESCE(b.avg_cost, 0) * si.quantity), 0) AS profit
+                COALESCE(SUM(si.total * COALESCE(sf.factor, 1) - COALESCE(b.avg_cost, 0) * si.quantity), 0) AS profit
             ')
             ->first();
 
@@ -150,6 +158,13 @@ class DashboardController extends Controller
 
         $current  = $this->fetchTrendSeries($start, $end, $period, $truncUnit, $labelFormat, $carbonStep);
         $previous = $this->fetchTrendSeries($prevStart, $prevEnd, $period, $truncUnit, $labelFormat, $carbonStep);
+
+        // Tandai bucket yang benar-benar di masa depan (lebih besar dari "now") agar
+        // forecast tidak menimpa periode lampau yang memang nol.
+        $nowKey = Carbon::now('Asia/Jakarta')->format($this->pgFormatToPhpFormat($labelFormat));
+        foreach ($current as $i => $b) {
+            $current[$i]['is_future'] = $b['period'] > $nowKey;
+        }
 
         // Align previous to same bucket count as current (so they overlay on the same X axis).
         $bucketCount = count($current);
@@ -225,7 +240,7 @@ class DashboardController extends Controller
         $count    = count($current);
 
         foreach ($current as $i => $bucket) {
-            $isFuture = $bucket['revenue'] === 0.0 && $bucket['transactions'] === 0;
+            $isFuture = ($bucket['is_future'] ?? false) === true;
             $start    = max(0, $i - $window);
             $sliceRev = array_slice($values, $start, $i - $start);
             $sliceTx  = array_slice($txValues, $start, $i - $start);

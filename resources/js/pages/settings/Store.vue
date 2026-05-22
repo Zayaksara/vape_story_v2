@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Head, useForm } from '@inertiajs/vue3';
 import { ImagePlus } from 'lucide-vue-next';
+import { computed, onBeforeUnmount, ref } from 'vue';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
@@ -8,6 +9,65 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import SettingsRoleLayout from '@/layouts/SettingsRoleLayout.vue';
+import ReceiptPreview from '@/components/pos/ReceiptPreview.vue';
+import type { Transaction } from '@/types/pos';
+
+type ReceiptOptions = Record<string, boolean>;
+
+const DEFAULT_RECEIPT_OPTIONS: ReceiptOptions = {
+    show_logo: false,
+    show_store_name: true,
+    show_address: true,
+    show_phone: true,
+    show_status_badge: true,
+    show_datetime: true,
+    show_invoice_number: true,
+    show_transaction_id: true,
+    show_item_unit_line: true,
+    show_subtotal: true,
+    show_discount_row: true,
+    show_payment_method: true,
+    show_cash_received: true,
+    show_change: true,
+    show_cashier: true,
+    show_header_text: true,
+    show_footer_text: true,
+};
+
+const RECEIPT_OPTION_GROUPS = [
+    {
+        title: 'Header Toko',
+        items: [
+            { key: 'show_logo', label: 'Logo toko' },
+            { key: 'show_store_name', label: 'Nama toko' },
+            { key: 'show_address', label: 'Alamat' },
+            { key: 'show_phone', label: 'Nomor telepon' },
+            { key: 'show_header_text', label: 'Teks header tambahan' },
+        ],
+    },
+    {
+        title: 'Info Transaksi',
+        items: [
+            { key: 'show_status_badge', label: 'Status LUNAS' },
+            { key: 'show_datetime', label: 'Tanggal & waktu' },
+            { key: 'show_invoice_number', label: 'Nomor invoice' },
+            { key: 'show_transaction_id', label: 'Nomor transaksi' },
+            { key: 'show_cashier', label: 'Nama kasir' },
+        ],
+    },
+    {
+        title: 'Detail Item & Total',
+        items: [
+            { key: 'show_item_unit_line', label: 'Harga × qty per item' },
+            { key: 'show_subtotal', label: 'Baris subtotal' },
+            { key: 'show_discount_row', label: 'Baris diskon' },
+            { key: 'show_payment_method', label: 'Metode pembayaran' },
+            { key: 'show_cash_received', label: 'Jumlah dibayar (tunai)' },
+            { key: 'show_change', label: 'Kembalian (tunai)' },
+            { key: 'show_footer_text', label: 'Teks footer' },
+        ],
+    },
+] as const;
 
 type StoreSetting = {
     id: number;
@@ -19,6 +79,7 @@ type StoreSetting = {
     receipt_header: string | null;
     receipt_footer: string | null;
     show_logo_on_receipt: boolean;
+    receipt_options_resolved: ReceiptOptions;
 };
 
 const props = defineProps<{
@@ -37,9 +98,32 @@ const form = useForm({
     tagline: props.store.tagline ?? '',
     receipt_header: props.store.receipt_header ?? '',
     receipt_footer: props.store.receipt_footer ?? '',
-    show_logo_on_receipt: !!props.store.show_logo_on_receipt,
+    receipt_options: { ...DEFAULT_RECEIPT_OPTIONS, ...(props.store.receipt_options_resolved ?? {}) } as ReceiptOptions,
     logo: null as File | null,
 });
+
+function toggleAllReceiptOptions(value: boolean) {
+    for (const key of Object.keys(form.receipt_options)) {
+        form.receipt_options[key] = value;
+    }
+}
+
+const printMode = ref<'58' | '80'>('58');
+const previewRef = ref<HTMLElement | null>(null);
+
+function handleTestPrint() {
+    const node = previewRef.value;
+    if (!node) return;
+    node.dataset.printMode = printMode.value;
+    document.body.dataset.thermalPrint = printMode.value;
+    document.body.dataset.receiptPreviewPrint = 'true';
+    window.print();
+    window.setTimeout(() => {
+        if (node) delete node.dataset.printMode;
+        delete document.body.dataset.thermalPrint;
+        delete document.body.dataset.receiptPreviewPrint;
+    }, 300);
+}
 
 function submit() {
     form.post('/settings/store', {
@@ -48,9 +132,61 @@ function submit() {
     });
 }
 
+// ── Live preview state ──────────────────────────────────────────
+const localLogoUrl = ref<string | null>(null);
+
 function onLogoChange(e: Event) {
-    form.logo = (e.target as HTMLInputElement).files?.[0] ?? null;
+    const file = (e.target as HTMLInputElement).files?.[0] ?? null;
+    form.logo = file;
+
+    if (localLogoUrl.value) {
+        URL.revokeObjectURL(localLogoUrl.value);
+        localLogoUrl.value = null;
+    }
+    if (file) {
+        localLogoUrl.value = URL.createObjectURL(file);
+    }
 }
+
+onBeforeUnmount(() => {
+    if (localLogoUrl.value) URL.revokeObjectURL(localLogoUrl.value);
+});
+
+const previewLogoUrl = computed<string | null>(() => {
+    if (localLogoUrl.value) return localLogoUrl.value;
+    if (props.store.logo_path) return `/storage/${props.store.logo_path}`;
+    return null;
+});
+
+// Dummy transaksi untuk simulasi tampilan struk
+const sampleTransaction = computed<Transaction>(() => ({
+    id: 'PREVIEW',
+    invoice_number: 'INV-PREVIEW-001',
+    cashier_id: 1,
+    cashier_name: 'Kasir Demo',
+    items: [
+        {
+            product: { id: '1', name: 'Liquid Mango Ice 30ml', sku: 'LMI-30', price: 95000, stock: 10, category_id: '1' },
+            quantity: 1,
+            subtotal: 95000,
+        },
+        {
+            product: { id: '2', name: 'Coil RBA 0.3 ohm', sku: 'CRBA-03', price: 45000, stock: 20, category_id: '2' },
+            quantity: 2,
+            subtotal: 90000,
+        },
+    ],
+    discount: null,
+    subtotal: 185000,
+    discount_amount: 10000,
+    tax_amount: 0,
+    total: 175000,
+    payment_method: 'cash',
+    cash_received: 200000,
+    change: 25000,
+    created_at: new Date().toISOString(),
+    status: 'success',
+})) as unknown as import('vue').ComputedRef<Transaction>;
 </script>
 
 <template>
@@ -145,18 +281,184 @@ function onLogoChange(e: Event) {
                 <InputError :message="form.errors.receipt_footer" />
             </div>
 
-            <label class="flex items-center gap-2 text-sm text-foreground">
-                <input
-                    v-model="form.show_logo_on_receipt"
-                    type="checkbox"
-                    class="h-4 w-4 rounded border-input text-primary focus:ring-ring"
-                />
-                Tampilkan logo di struk
-            </label>
+            <Separator />
+
+            <!-- ── Konten Struk ─────────────────────────────────────── -->
+            <div class="space-y-4">
+                <div class="flex items-start justify-between gap-3">
+                    <Heading
+                        variant="small"
+                        title="Konten Struk"
+                        description="Centang bagian yang ingin ditampilkan di struk pembayaran."
+                    />
+                    <div class="flex shrink-0 items-center gap-2">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            class="h-8 text-xs"
+                            @click="toggleAllReceiptOptions(true)"
+                        >
+                            Centang semua
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            class="h-8 text-xs"
+                            @click="toggleAllReceiptOptions(false)"
+                        >
+                            Hapus semua
+                        </Button>
+                    </div>
+                </div>
+
+                <div class="grid gap-5 sm:grid-cols-3">
+                    <div
+                        v-for="group in RECEIPT_OPTION_GROUPS"
+                        :key="group.title"
+                        class="space-y-2 rounded-lg border bg-card p-4"
+                    >
+                        <p class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                            {{ group.title }}
+                        </p>
+                        <div class="space-y-2 pt-1">
+                            <label
+                                v-for="item in group.items"
+                                :key="item.key"
+                                class="flex items-center gap-2 text-sm text-foreground"
+                            >
+                                <input
+                                    v-model="form.receipt_options[item.key]"
+                                    type="checkbox"
+                                    class="h-4 w-4 rounded border-input text-primary focus:ring-ring"
+                                />
+                                <span class="leading-tight">{{ item.label }}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="flex justify-end pt-2">
                 <Button :disabled="form.processing">Simpan perubahan</Button>
             </div>
         </form>
+
+        <Separator />
+
+        <!-- ── Live Preview Struk ─────────────────────────────────────── -->
+        <div class="flex flex-wrap items-start justify-between gap-3">
+            <Heading
+                variant="small"
+                title="Pratinjau Struk"
+                description="Tampilan struk diperbarui otomatis saat kamu mengetik. Belum tersimpan sampai klik Simpan."
+            />
+            <div class="flex shrink-0 items-center gap-2">
+                <div
+                    class="flex h-8 overflow-hidden rounded-md border"
+                    role="group"
+                    aria-label="Ukuran kertas"
+                >
+                    <button
+                        type="button"
+                        class="px-3 text-xs font-semibold transition"
+                        :class="printMode === '58'
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-background text-muted-foreground hover:bg-muted'"
+                        @click="printMode = '58'"
+                    >
+                        58 mm
+                    </button>
+                    <button
+                        type="button"
+                        class="border-l px-3 text-xs font-semibold transition"
+                        :class="printMode === '80'
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-background text-muted-foreground hover:bg-muted'"
+                        @click="printMode = '80'"
+                    >
+                        80 mm
+                    </button>
+                </div>
+                <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    class="h-8 text-xs"
+                    @click="handleTestPrint"
+                >
+                    Cetak Pratinjau
+                </Button>
+            </div>
+        </div>
+
+        <div class="rounded-lg border bg-muted/30 p-6">
+            <div
+                ref="previewRef"
+                class="receipt-content mx-auto w-full max-w-sm overflow-hidden rounded-2xl border bg-background shadow-sm"
+            >
+                <ReceiptPreview
+                    :store-name="form.name || 'Nama Toko'"
+                    :store-logo="previewLogoUrl"
+                    :store-address="form.address || null"
+                    :store-phone="form.phone || null"
+                    :receipt-header="form.receipt_header || null"
+                    :receipt-footer="form.receipt_footer || null"
+                    :options="form.receipt_options"
+                    :transaction="sampleTransaction"
+                    invoice-fallback="INV-PREVIEW-001"
+                />
+            </div>
+            <p class="mt-3 text-center text-xs text-muted-foreground">
+                Data transaksi di atas hanya contoh — bukan transaksi nyata.
+                <span class="block">Klik "Cetak Pratinjau" untuk tes ke printer dengan data dummy.</span>
+            </p>
+        </div>
     </section>
 </template>
+
+<style>
+@media print {
+    body[data-receipt-preview-print='true'] * {
+        visibility: hidden !important;
+    }
+
+    body[data-receipt-preview-print='true'] .receipt-content,
+    body[data-receipt-preview-print='true'] .receipt-content * {
+        visibility: visible !important;
+        color: #000 !important;
+        background: #fff !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+        filter: grayscale(100%) !important;
+        -webkit-print-color-adjust: economy !important;
+        print-color-adjust: economy !important;
+    }
+
+    body[data-receipt-preview-print='true'] .receipt-content {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        margin: 0 auto !important;
+        border-radius: 0 !important;
+        border: 0 !important;
+        box-shadow: none !important;
+    }
+
+    body[data-receipt-preview-print='true'][data-thermal-print='58'] .receipt-content {
+        width: 58mm !important;
+        max-width: 58mm !important;
+    }
+
+    body[data-receipt-preview-print='true'][data-thermal-print='80'] .receipt-content {
+        width: 80mm !important;
+        max-width: 80mm !important;
+    }
+
+    @page {
+        margin: 8mm;
+        size: auto;
+    }
+}
+</style>

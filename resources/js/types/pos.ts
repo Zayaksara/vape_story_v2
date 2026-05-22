@@ -23,6 +23,7 @@ export interface Product {
   brand_logo?: string
   volume?: string
   image_url?: string
+  is_active?: boolean
 }
 
 export interface CartItem {

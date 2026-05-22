@@ -53,8 +53,8 @@ class ReturnController extends Controller
 
         $returns = ProductReturn::with(['sale', 'cashier', 'returnItems'])
             ->whereNotNull('sale_id')
+            ->whereDate('created_at', $date)
             ->latest()
-            ->limit(50)
             ->get()
             ->map(function (ProductReturn $r) {
                 return [
@@ -100,7 +100,6 @@ class ReturnController extends Controller
         $data = $request->validate([
             'sale_id' => 'required|integer|exists:sales,id',
             'reason' => 'required|string|max:500',
-            'notes' => 'nullable|string|max:1000',
             'items' => 'required|array|min:1',
             'items.*.sale_item_id' => 'required|integer|exists:sale_items,id',
             'items.*.quantity' => 'required|integer|min:1',

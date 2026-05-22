@@ -43,7 +43,6 @@ class ProductRequest extends FormRequest
             'brand_id' => ['nullable', 'uuid', Rule::exists('brands', 'id')],
             'base_price' => ['required', 'numeric', 'min:0'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
-            'description' => ['nullable', 'string', 'max:1000'],
             'is_active' => ['boolean'],
             'min_stock' => ['nullable', 'integer', 'min:0'],
             // Liquid / Device specific

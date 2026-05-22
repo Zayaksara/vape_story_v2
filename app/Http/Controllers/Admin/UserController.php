@@ -23,14 +23,13 @@ class UserController extends Controller
 
         $users = User::query()
             ->orderByDesc('created_at')
-            ->get(['id', 'name', 'email', 'role', 'email_verified_at', 'created_at'])
+            ->get(['id', 'name', 'email', 'role', 'created_at'])
             ->map(fn (User $u) => [
-                'id'                => $u->id,
-                'name'              => $u->name,
-                'email'             => $u->email,
-                'role'              => $u->role instanceof UserRole ? $u->role->value : (string) $u->role,
-                'email_verified_at' => $u->email_verified_at?->toIso8601String(),
-                'created_at'        => $u->created_at?->toIso8601String(),
+                'id'         => $u->id,
+                'name'       => $u->name,
+                'email'      => $u->email,
+                'role'       => $u->role instanceof UserRole ? $u->role->value : (string) $u->role,
+                'created_at' => $u->created_at?->toIso8601String(),
             ]);
 
         return Inertia::render('admin/ManajemenAkun', [
@@ -51,15 +50,13 @@ class UserController extends Controller
             'email'    => ['required', 'email:rfc,dns', 'max:255', Rule::unique('users', 'email')],
             'role'     => ['required', Rule::in(array_column(UserRole::cases(), 'value'))],
             'password' => ['required', 'confirmed', $this->strongPassword()],
-            'verified' => ['nullable', 'boolean'],
         ]);
 
         $user = User::create([
-            'name'              => $data['name'],
-            'email'             => $data['email'],
-            'role'              => $data['role'],
-            'password'          => Hash::make($data['password']),
-            'email_verified_at' => ($data['verified'] ?? false) ? now() : null,
+            'name'     => $data['name'],
+            'email'    => $data['email'],
+            'role'     => $data['role'],
+            'password' => Hash::make($data['password']),
         ]);
 
         Log::channel(config('logging.default'))->info('admin.users.created', [
@@ -81,7 +78,6 @@ class UserController extends Controller
             'email'    => ['required', 'email:rfc,dns', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'role'     => ['required', Rule::in(array_column(UserRole::cases(), 'value'))],
             'password' => ['nullable', 'confirmed', $this->strongPassword()],
-            'verified' => ['nullable', 'boolean'],
         ]);
 
         $actor = $request->user();
@@ -89,10 +85,6 @@ class UserController extends Controller
 
         if ($isSelf && $data['role'] !== UserRole::ADMIN->value) {
             return back()->withErrors(['role' => 'Anda tidak dapat menurunkan role akun sendiri.']);
-        }
-
-        if ($isSelf && array_key_exists('verified', $data) && ! $data['verified']) {
-            return back()->withErrors(['verified' => 'Anda tidak dapat membatalkan verifikasi akun sendiri.']);
         }
 
         $currentRole = $user->role instanceof UserRole ? $user->role->value : (string) $user->role;
@@ -110,10 +102,6 @@ class UserController extends Controller
 
         if (! empty($data['password'])) {
             $payload['password'] = Hash::make($data['password']);
-        }
-
-        if (array_key_exists('verified', $data)) {
-            $payload['email_verified_at'] = $data['verified'] ? ($user->email_verified_at ?? now()) : null;
         }
 
         $user->update($payload);

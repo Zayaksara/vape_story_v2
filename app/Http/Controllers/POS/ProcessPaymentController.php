@@ -26,6 +26,8 @@ class ProcessPaymentController extends Controller
             'total_amount' => 'required|numeric',
             'paid_amount' => 'required|numeric',
             'discount_amount' => 'required|numeric',
+            'discount_code' => 'nullable|string|max:64',
+            'discount_label' => 'nullable|string|max:120',
             'tax_amount' => 'required|numeric',
             'payment_method' => 'required|string|in:cash,bank_transfer,qris,e_wallet',
         ]);
@@ -38,6 +40,8 @@ class ProcessPaymentController extends Controller
                 'total_amount' => 0, // direkalkulasi setelah konsumsi batch
                 'paid_amount' => $validated['paid_amount'],
                 'discount_amount' => $validated['discount_amount'],
+                'discount_code'   => $validated['discount_code']  ?? null,
+                'discount_label'  => $validated['discount_label'] ?? null,
                 'tax_amount' => $validated['tax_amount'],
                 'payment_method' => $validated['payment_method'],
                 'status' => 'completed',

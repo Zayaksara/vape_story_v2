@@ -53,6 +53,7 @@ class HandleInertiaRequests extends Middleware
             'storeReceiptHeader' => $store?->receipt_header,
             'storeReceiptFooter' => $store?->receipt_footer,
             'storeShowLogoOnReceipt' => (bool) ($store?->show_logo_on_receipt ?? false),
+            'storeReceiptOptions' => $store?->receipt_options_resolved ?? \App\Models\StoreSetting::DEFAULT_RECEIPT_OPTIONS,
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }
