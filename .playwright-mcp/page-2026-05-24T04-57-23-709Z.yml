@@ -1,0 +1,104 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - img [ref=e8]
+        - generic [ref=e10]:
+          - paragraph [ref=e11]: Story Vape
+          - paragraph [ref=e12]: Admin Panel
+      - navigation [ref=e13]:
+        - link "Dashboard" [ref=e14] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - img [ref=e15]
+          - generic [ref=e20]: Dashboard
+        - link "Manajemen Produk" [ref=e21] [cursor=pointer]:
+          - /url: /admin/products
+          - img [ref=e22]
+          - generic [ref=e26]: Manajemen Produk
+        - link "Laporan Penjualan" [ref=e27] [cursor=pointer]:
+          - /url: /admin/reports/sales
+          - img [ref=e28]
+          - generic [ref=e30]: Laporan Penjualan
+        - link "History Pembayaran" [ref=e31] [cursor=pointer]:
+          - /url: /admin/transactions/today
+          - img [ref=e32]
+          - generic [ref=e35]: History Pembayaran
+        - link "Kelola Akun" [ref=e36] [cursor=pointer]:
+          - /url: /admin/users
+          - img [ref=e37]
+          - generic [ref=e42]: Kelola Akun
+        - link "Promo & Diskon" [ref=e43] [cursor=pointer]:
+          - /url: /admin/promotions
+          - img [ref=e44]
+          - generic [ref=e47]: Promo & Diskon
+      - generic [ref=e48]:
+        - link "Pengaturan Profil" [ref=e49] [cursor=pointer]:
+          - /url: /settings/profile
+          - img [ref=e50]
+          - generic [ref=e62]: Pengaturan Profil
+        - button "Logout" [ref=e63] [cursor=pointer]:
+          - img [ref=e64]
+          - generic [ref=e67]: Logout
+  - generic [ref=e68]:
+    - banner [ref=e69]:
+      - generic [ref=e70]:
+        - button "Toggle navigation menu" [expanded] [ref=e71] [cursor=pointer]
+        - heading "Admin Panel" [level=1] [ref=e72]
+      - button "Selamat datang, Admin User" [ref=e75] [cursor=pointer]:
+        - generic [ref=e76]: Selamat datang, Admin User
+    - main [ref=e77]:
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - heading "Pengaturan" [level=1] [ref=e80]
+          - paragraph [ref=e81]: Kelola profil, keamanan, dan preferensi akun Anda.
+        - generic [ref=e82]:
+          - complementary [ref=e83]:
+            - navigation "Settings" [ref=e84]:
+              - link "Profil Nama & email akun" [ref=e85] [cursor=pointer]:
+                - /url: /settings/profile
+                - img [ref=e87]
+                - generic [ref=e99]:
+                  - generic [ref=e100]: Profil
+                  - generic [ref=e101]: Nama & email akun
+              - link "Keamanan Password & 2FA" [ref=e102] [cursor=pointer]:
+                - /url: /settings/security
+                - img [ref=e103]
+                - generic [ref=e106]:
+                  - generic [ref=e107]: Keamanan
+                  - generic [ref=e108]: Password & 2FA
+              - link "Toko Identitas & struk" [ref=e109] [cursor=pointer]:
+                - /url: /settings/store
+                - img [ref=e110]
+                - generic [ref=e115]:
+                  - generic [ref=e116]: Toko
+                  - generic [ref=e117]: Identitas & struk
+          - generic [ref=e120]:
+            - heading "Pengaturan Profil" [level=1] [ref=e121]
+            - generic [ref=e122]:
+              - generic [ref=e123]:
+                - heading "Informasi Profil" [level=2] [ref=e124]
+                - paragraph [ref=e125]: Perbarui nama dan alamat email Anda
+              - generic [ref=e126]:
+                - generic [ref=e127]:
+                  - generic [ref=e128]: Nama
+                  - textbox "Nama" [ref=e129]:
+                    - /placeholder: Nama lengkap
+                    - text: Admin User
+                - generic [ref=e130]:
+                  - generic [ref=e131]: Alamat email
+                  - textbox "Alamat email" [ref=e132]: admin@vape.com
+                - button "Simpan" [ref=e134]
+            - generic [ref=e135]:
+              - generic [ref=e136]:
+                - heading "Hapus Akun" [level=2] [ref=e137]
+                - paragraph [ref=e138]: Hapus akun Anda beserta seluruh datanya
+              - generic [ref=e139]:
+                - generic [ref=e140]:
+                  - paragraph [ref=e141]: Peringatan
+                  - paragraph [ref=e142]: Harap berhati-hati, tindakan ini tidak dapat dibatalkan.
+                - button "Hapus Akun" [ref=e143]
+  - region "Notifications alt+T":
+    - list
+  - button "Buka AI Asisten" [ref=e144] [cursor=pointer]:
+    - img [ref=e146]
+    - generic [ref=e149]: AI

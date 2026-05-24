@@ -108,13 +108,10 @@ function extractPageFromUrl(url: string | null): number | null {
         return null
     }
 
-    try {
-        const parsed = new URL(url, window.location.origin)
-        const page = Number(parsed.searchParams.get('page'))
-        return Number.isFinite(page) ? page : null
-    } catch {
-        return null
-    }
+    // Parse tanpa `window` agar hasil identik di SSR & client (hindari hydration
+    // mismatch yang membuat tombol nomor halaman ter-disable permanen).
+    const match = url.match(/[?&]page=(\d+)/)
+    return match ? Number(match[1]) : null
 }
 
 function goToPage(page: number) {

@@ -221,7 +221,9 @@ class ReturnService
                         'product_name' => $saleItem->product->name ?? '-',
                         'quantity'     => $back,
                         'unit_price'   => $alloc->unit_price,
-                        'subtotal'     => $back * (float) $alloc->unit_price,
+                        // Refund tunai dibulatkan ke Rp100 (pecahan tak praktis di laci kas);
+                        // non-tunai (transfer/QRIS/e-wallet) eksak ke rupiah utuh.
+                        'subtotal'     => $this->roundRefund($back * (float) $alloc->unit_price, $refundMethod),
                     ]);
 
                     StockMutation::create([
@@ -245,14 +247,32 @@ class ReturnService
                 throw new \RuntimeException('Tidak ada item dengan jumlah return yang valid.');
             }
 
-            // Hitung total qty asli (loop semua sale items, bukan hanya yg di-return)
-            $allOriginalQty = (int) $sale->items->sum('quantity');
+            // Status berdasarkan AKUMULASI retur (lintas beberapa transaksi retur),
+            // bukan hanya retur kali ini — agar transaksi yang habis diretur bertahap
+            // tetap menjadi 'returned'.
+            $allOriginalQty   = (int) $sale->items->sum('quantity');
+            $totalReturnedAll = (int) $sale->items()->with('allocations')->get()
+                ->sum(fn ($i) => $i->allocations->sum('returned_quantity'));
             $sale->update([
-                'status' => $totalReturnedQty >= $allOriginalQty ? 'returned' : 'partial_return',
+                'status' => $totalReturnedAll >= $allOriginalQty ? 'returned' : 'partial_return',
             ]);
 
             return $productReturn->load('returnItems');
         });
+    }
+
+    /**
+     * Bulatkan nilai refund sesuai metode pengembalian.
+     *  - Tunai (cash): ke kelipatan Rp100 terdekat (pecahan < Rp100 tak praktis di laci).
+     *  - Non-tunai (transfer/QRIS/e-wallet): eksak, cukup rupiah utuh.
+     */
+    private function roundRefund(float $amount, string $refundMethod): float
+    {
+        if ($refundMethod === 'cash') {
+            return round($amount / 100) * 100;
+        }
+
+        return round($amount);
     }
 
     /**

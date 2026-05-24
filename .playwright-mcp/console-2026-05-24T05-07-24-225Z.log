@@ -1,0 +1,5 @@
+[     476ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://127.0.0.1:8000/_boost/browser-logs @ http://127.0.0.1:8000/login:47
+[  143702ms] TypeError: cashInput.value?.focus is not a function
+    at http://[::1]:5173/resources/js/components/pos/modals/PaymentModal.vue?t=1779598377251:39:37
+[  170955ms] TypeError: cashInput.value?.focus is not a function
+    at http://[::1]:5173/resources/js/components/pos/modals/PaymentModal.vue?t=1779598377251:94:36

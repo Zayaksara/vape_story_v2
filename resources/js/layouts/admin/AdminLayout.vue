@@ -124,7 +124,7 @@
                 '--tw-ring-color': 'var(--pos-brand-primary)',
               }"
             >
-              <span class="hidden md:block text-sm font-medium">Welcome, {{ user.name }}</span>
+              <span class="hidden md:block text-sm font-medium">Selamat datang, {{ user.name }}</span>
             </button>
           </div>
         </div>

@@ -429,10 +429,23 @@ const trendChartOptions = computed<ApexOptions>(() => ({
 
 function getStatusColor(status: string): { bg: string; text: string } {
   switch (status) {
-    case 'success': return { bg: 'bg-green-100', text: 'text-green-700' }
-    case 'pending': return { bg: 'bg-amber-100', text: 'text-amber-700' }
-    case 'failed':  return { bg: 'bg-red-100',   text: 'text-red-700' }
-    default:        return { bg: 'bg-gray-100',  text: 'text-gray-700' }
+    case 'success':        return { bg: 'bg-green-100', text: 'text-green-700' }
+    case 'pending':        return { bg: 'bg-amber-100', text: 'text-amber-700' }
+    case 'failed':         return { bg: 'bg-red-100',   text: 'text-red-700' }
+    case 'partial_return': return { bg: 'bg-amber-100', text: 'text-amber-700' }
+    case 'returned':       return { bg: 'bg-red-100',   text: 'text-red-700' }
+    default:               return { bg: 'bg-gray-100',  text: 'text-gray-700' }
+  }
+}
+
+function statusLabel(status: string): string {
+  switch (status) {
+    case 'success':        return 'Berhasil'
+    case 'partial_return': return 'Diretur sebagian'
+    case 'returned':       return 'Diretur penuh'
+    case 'pending':        return 'Tertunda'
+    case 'failed':         return 'Gagal'
+    default:               return status
   }
 }
 
@@ -832,9 +845,9 @@ function handleExport() {
                       <TableCell class="py-3 px-3 text-center">
                         <span
                           class="rounded-full px-2.5 py-0.5 text-xs font-semibold"
-                          :style="getStatusColor(transaction.status)"
+                          :class="[getStatusColor(transaction.status).bg, getStatusColor(transaction.status).text]"
                         >
-                          {{ transaction.status }}
+                          {{ statusLabel(transaction.status) }}
                         </span>
                       </TableCell>
                       <TableCell class="py-3 px-1 text-center">

@@ -1,0 +1,161 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - img [ref=e8]
+        - generic [ref=e10]:
+          - paragraph [ref=e11]: Story Vape
+          - paragraph [ref=e12]: Admin Panel
+      - navigation [ref=e13]:
+        - link "Dashboard" [ref=e14] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - img [ref=e15]
+          - generic [ref=e20]: Dashboard
+        - link "Manajemen Produk" [ref=e21] [cursor=pointer]:
+          - /url: /admin/products
+          - img [ref=e22]
+          - generic [ref=e26]: Manajemen Produk
+        - link "Laporan Penjualan" [ref=e27] [cursor=pointer]:
+          - /url: /admin/reports/sales
+          - img [ref=e28]
+          - generic [ref=e30]: Laporan Penjualan
+        - link "History Pembayaran" [ref=e31] [cursor=pointer]:
+          - /url: /admin/transactions/today
+          - img [ref=e32]
+          - generic [ref=e35]: History Pembayaran
+        - link "Kelola Akun" [ref=e36] [cursor=pointer]:
+          - /url: /admin/users
+          - img [ref=e37]
+          - generic [ref=e42]: Kelola Akun
+        - link "Promo & Diskon" [ref=e43] [cursor=pointer]:
+          - /url: /admin/promotions
+          - img [ref=e44]
+          - generic [ref=e47]: Promo & Diskon
+      - generic [ref=e48]:
+        - link "Pengaturan Profil" [ref=e49] [cursor=pointer]:
+          - /url: /settings/profile
+          - img [ref=e50]
+          - generic [ref=e62]: Pengaturan Profil
+        - button "Logout" [ref=e63] [cursor=pointer]:
+          - img [ref=e64]
+          - generic [ref=e67]: Logout
+  - generic [ref=e68]:
+    - banner [ref=e69]:
+      - generic [ref=e70]:
+        - button "Toggle navigation menu" [expanded] [ref=e71] [cursor=pointer]
+        - heading "Admin Panel" [level=1] [ref=e72]
+      - button "Welcome, Admin User" [ref=e75] [cursor=pointer]:
+        - generic [ref=e76]: Welcome, Admin User
+    - main [ref=e77]:
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - generic [ref=e80]:
+            - img [ref=e82]
+            - generic [ref=e85]:
+              - paragraph [ref=e86]: 2 Promo
+              - paragraph [ref=e87]: Total promo
+          - generic [ref=e88]:
+            - img [ref=e90]
+            - generic [ref=e93]:
+              - paragraph [ref=e94]: 1 Aktif
+              - paragraph [ref=e95]: Sedang berjalan
+          - generic [ref=e96]:
+            - img [ref=e98]
+            - generic [ref=e101]:
+              - paragraph [ref=e102]: 0 Promo
+              - paragraph [ref=e103]: Akan datang
+          - generic [ref=e104]:
+            - img [ref=e106]
+            - generic [ref=e110]:
+              - paragraph [ref=e111]: 1 Promo
+              - paragraph [ref=e112]: Sudah berakhir
+        - generic [ref=e113]:
+          - generic [ref=e114]:
+            - generic [ref=e116]:
+              - img
+              - textbox "Cari kode atau nama promo…" [ref=e117]
+            - combobox [ref=e118] [cursor=pointer]:
+              - generic: Semua Status
+              - img
+            - combobox [ref=e119] [cursor=pointer]:
+              - generic: Semua Tipe
+              - img
+            - button "Tambah Promo" [ref=e121] [cursor=pointer]:
+              - img [ref=e122]
+              - text: Tambah Promo
+          - table [ref=e125]:
+            - rowgroup [ref=e126]:
+              - row "Kode Nama Promo Tipe Nilai Target Periode Pemakaian Status Aksi" [ref=e127]:
+                - columnheader "Kode" [ref=e128]
+                - columnheader "Nama Promo" [ref=e129]
+                - columnheader "Tipe" [ref=e130]
+                - columnheader "Nilai" [ref=e131]
+                - columnheader "Target" [ref=e132]
+                - columnheader "Periode" [ref=e133]
+                - columnheader "Pemakaian" [ref=e134]
+                - columnheader "Status" [ref=e135]
+                - columnheader "Aksi" [ref=e136]
+            - rowgroup [ref=e137]:
+              - row "MLAA WELCOME TO YA Potongan Tetap Rp 10.000 Semua Produk 23 Mei 2026 – 23 Mei 2026 0 / ∞ Berakhir" [ref=e138] [cursor=pointer]:
+                - cell "MLAA" [ref=e139]
+                - cell "WELCOME TO YA" [ref=e140]:
+                  - generic [ref=e142]: WELCOME TO YA
+                - cell "Potongan Tetap" [ref=e143]:
+                  - generic [ref=e144]:
+                    - img [ref=e145]
+                    - text: Potongan Tetap
+                - cell "Rp 10.000" [ref=e148]
+                - cell "Semua Produk" [ref=e149]
+                - cell "23 Mei 2026 – 23 Mei 2026" [ref=e150]:
+                  - generic [ref=e151]:
+                    - img [ref=e152]
+                    - text: 23 Mei 2026 – 23 Mei 2026
+                - cell "0 / ∞" [ref=e154]:
+                  - generic [ref=e155]: 0 / ∞
+                - cell "Berakhir" [ref=e156]:
+                  - button "Berakhir" [ref=e157]
+                - cell [ref=e158]:
+                  - generic [ref=e159]:
+                    - button [ref=e160]:
+                      - img [ref=e161]
+                    - button [ref=e164]:
+                      - img [ref=e165]
+                    - button [ref=e168]:
+                      - img [ref=e169]
+              - row "INDOESIA WELCOME TO CLUB Persentase 10% Semua Produk 23 Mei 2026 – 24 Mei 2026 0 / ∞ Aktif" [ref=e172] [cursor=pointer]:
+                - cell "INDOESIA" [ref=e173]
+                - cell "WELCOME TO CLUB" [ref=e174]:
+                  - generic [ref=e176]: WELCOME TO CLUB
+                - cell "Persentase" [ref=e177]:
+                  - generic [ref=e178]:
+                    - img [ref=e179]
+                    - text: Persentase
+                - cell "10%" [ref=e183]
+                - cell "Semua Produk" [ref=e184]
+                - cell "23 Mei 2026 – 24 Mei 2026" [ref=e185]:
+                  - generic [ref=e186]:
+                    - img [ref=e187]
+                    - text: 23 Mei 2026 – 24 Mei 2026
+                - cell "0 / ∞" [ref=e189]:
+                  - generic [ref=e190]: 0 / ∞
+                - cell "Aktif" [ref=e191]:
+                  - button "Aktif" [ref=e192]
+                - cell [ref=e193]:
+                  - generic [ref=e194]:
+                    - button [ref=e195]:
+                      - img [ref=e196]
+                    - button [ref=e199]:
+                      - img [ref=e200]
+                    - button [ref=e203]:
+                      - img [ref=e204]
+          - paragraph [ref=e208]:
+            - text: Menampilkan
+            - strong [ref=e209]: "2"
+            - text: dari
+            - strong [ref=e210]: "2"
+            - text: promo
+  - region "Notifications alt+T":
+    - list
+  - button "Buka AI Asisten" [ref=e211] [cursor=pointer]:
+    - img [ref=e213]
+    - generic [ref=e216]: AI

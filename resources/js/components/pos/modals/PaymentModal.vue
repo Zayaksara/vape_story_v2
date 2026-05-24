@@ -292,7 +292,19 @@ const emit = defineEmits<{
   'confirm': [{ method: PaymentMethod; cashReceived?: number }]
 }>()
 
-const cashInput = ref<HTMLInputElement | null>(null)
+// Ref menempel pada komponen shadcn <Input> (instance Vue), bukan elemen native.
+// Resolusi ke <input> asli agar .focus() tidak melempar TypeError.
+const cashInput = ref<any>(null)
+
+function focusCashInput() {
+  const ref = cashInput.value
+  const el: HTMLElement | null = ref?.$el ?? ref ?? null
+  if (el instanceof HTMLInputElement) {
+    el.focus()
+  } else {
+    el?.querySelector?.('input')?.focus()
+  }
+}
 const localMethod = ref<PaymentMethod>('cash')
 const localCashReceived = ref<number>(0)
 const showQrisImage = ref(true)
@@ -303,7 +315,7 @@ watch(
   (open) => {
     if (open) {
       localCashReceived.value = 0
-      nextTick(() => cashInput.value?.focus())
+      nextTick(() => focusCashInput())
     } else {
       localCashReceived.value = 0
     }
@@ -369,7 +381,7 @@ function emitUpdate(value: boolean) {
 
 function setCashReceived(preset: number) {
   localCashReceived.value = preset
-  nextTick(() => cashInput.value?.focus())
+  nextTick(() => focusCashInput())
 }
 
 const formattedCashReceived = computed(() =>

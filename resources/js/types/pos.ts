@@ -114,8 +114,8 @@ export interface ProductPageProps {
     links: Array<{ url: string | null; label: string; active: boolean }>
   }
   categories: Category[]
-  all_products: Product[]
-  units: string[]
+  all_products?: Product[]
+  units?: string[]
   selectedCategory?: Category | null
   selectedStockStatus?: string | null
   selectedUnit?: string | null

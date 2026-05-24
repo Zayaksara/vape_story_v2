@@ -1,0 +1,532 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - img [ref=e8]
+        - generic [ref=e10]:
+          - paragraph [ref=e11]: Story Vape
+          - paragraph [ref=e12]: Admin Panel
+      - navigation [ref=e13]:
+        - link "Dashboard" [ref=e14] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - img [ref=e15]
+          - generic [ref=e20]: Dashboard
+        - link "Manajemen Produk" [ref=e21] [cursor=pointer]:
+          - /url: /admin/products
+          - img [ref=e22]
+          - generic [ref=e26]: Manajemen Produk
+        - link "Laporan Penjualan" [ref=e27] [cursor=pointer]:
+          - /url: /admin/reports/sales
+          - img [ref=e28]
+          - generic [ref=e30]: Laporan Penjualan
+        - link "History Pembayaran" [ref=e31] [cursor=pointer]:
+          - /url: /admin/transactions/today
+          - img [ref=e32]
+          - generic [ref=e35]: History Pembayaran
+        - link "Kelola Akun" [ref=e36] [cursor=pointer]:
+          - /url: /admin/users
+          - img [ref=e37]
+          - generic [ref=e42]: Kelola Akun
+        - link "Promo & Diskon" [ref=e43] [cursor=pointer]:
+          - /url: /admin/promotions
+          - img [ref=e44]
+          - generic [ref=e47]: Promo & Diskon
+      - generic [ref=e48]:
+        - link "Pengaturan Profil" [ref=e49] [cursor=pointer]:
+          - /url: /settings/profile
+          - img [ref=e50]
+          - generic [ref=e62]: Pengaturan Profil
+        - button "Logout" [ref=e63] [cursor=pointer]:
+          - img [ref=e64]
+          - generic [ref=e67]: Logout
+  - generic [ref=e68]:
+    - banner [ref=e69]:
+      - generic [ref=e70]:
+        - button "Toggle navigation menu" [expanded] [ref=e71] [cursor=pointer]
+        - heading "Admin Panel" [level=1] [ref=e72]
+      - button "Selamat datang, Admin User" [ref=e75] [cursor=pointer]:
+        - generic [ref=e76]: Selamat datang, Admin User
+    - main [ref=e77]:
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - generic [ref=e80]:
+            - img [ref=e82]
+            - generic [ref=e85]:
+              - paragraph [ref=e86]: 61 Jenis
+              - paragraph [ref=e87]: Total produk
+          - generic [ref=e88]:
+            - img [ref=e90]
+            - generic [ref=e94]:
+              - paragraph [ref=e95]: 10 Jenis
+              - paragraph [ref=e96]: Stok habis
+          - generic [ref=e97]:
+            - img [ref=e99]
+            - generic [ref=e102]:
+              - paragraph [ref=e103]: 6 Kategori
+              - paragraph [ref=e104]: Total kategori
+        - generic [ref=e105]:
+          - generic [ref=e106]:
+            - generic [ref=e107]:
+              - generic [ref=e108]:
+                - img
+                - textbox "Cari produk, kode, flavor…" [ref=e109]
+              - button "Cari" [ref=e110]
+            - combobox [ref=e111]:
+              - generic: Semua Kategori
+              - img
+            - combobox [ref=e112]:
+              - generic: Semua Merek
+              - img
+            - button "Tambah Produk" [ref=e114]:
+              - img [ref=e115]
+              - text: Tambah Produk
+          - table [ref=e118]:
+            - rowgroup [ref=e119]:
+              - row "Image Code Name Brand Category Flavor Nicotine Size (ml) Cukai Selling Price Stock Status Aksi" [ref=e120]:
+                - columnheader "Image" [ref=e121]
+                - columnheader "Code" [ref=e122] [cursor=pointer]:
+                  - generic [ref=e123]:
+                    - text: Code
+                    - img [ref=e124]
+                - columnheader "Name" [ref=e127] [cursor=pointer]:
+                  - generic [ref=e128]:
+                    - text: Name
+                    - img [ref=e129]
+                - columnheader "Brand" [ref=e132] [cursor=pointer]:
+                  - generic [ref=e133]:
+                    - text: Brand
+                    - img [ref=e134]
+                - columnheader "Category" [ref=e137] [cursor=pointer]:
+                  - generic [ref=e138]:
+                    - text: Category
+                    - img [ref=e139]
+                - columnheader "Flavor" [ref=e142] [cursor=pointer]:
+                  - generic [ref=e143]:
+                    - text: Flavor
+                    - img [ref=e144]
+                - columnheader "Nicotine" [ref=e147] [cursor=pointer]:
+                  - generic [ref=e148]:
+                    - text: Nicotine
+                    - img [ref=e149]
+                - columnheader "Size (ml)" [ref=e152] [cursor=pointer]:
+                  - generic [ref=e153]:
+                    - text: Size (ml)
+                    - img [ref=e154]
+                - columnheader "Cukai" [ref=e157] [cursor=pointer]:
+                  - generic [ref=e158]:
+                    - text: Cukai
+                    - img [ref=e159]
+                - columnheader "Selling Price" [ref=e162] [cursor=pointer]:
+                  - generic [ref=e163]:
+                    - text: Selling Price
+                    - img [ref=e164]
+                - columnheader "Stock" [ref=e167] [cursor=pointer]:
+                  - generic [ref=e168]:
+                    - text: Stock
+                    - img [ref=e169]
+                - columnheader "Status" [ref=e172] [cursor=pointer]:
+                  - generic [ref=e173]:
+                    - text: Status
+                    - img [ref=e174]
+                - columnheader "Aksi" [ref=e177]
+            - rowgroup [ref=e178]:
+              - row "GC GEEKVAPE-0049 Geekvape Cola K1 Geekvape Coil & Accessories Device Only 0.00 mg 0.00 ml 2026 Rp 50.000 321 Tersedia" [ref=e179] [cursor=pointer]:
+                - cell "GC" [ref=e180]:
+                  - generic [ref=e182]: GC
+                - cell "GEEKVAPE-0049" [ref=e183]
+                - cell "Geekvape Cola K1" [ref=e184]
+                - cell "Geekvape" [ref=e185]
+                - cell "Coil & Accessories" [ref=e186]
+                - cell "Device Only" [ref=e187]
+                - cell "0.00 mg" [ref=e188]
+                - cell "0.00 ml" [ref=e189]
+                - cell "2026" [ref=e190]:
+                  - generic [ref=e192]: "2026"
+                - cell "Rp 50.000" [ref=e193]
+                - cell "321" [ref=e194]
+                - cell "Tersedia" [ref=e195]:
+                  - generic [ref=e197]: Tersedia
+                - cell [ref=e198]:
+                  - generic [ref=e199]:
+                    - button [ref=e200]:
+                      - img [ref=e201]
+                    - button [ref=e204]:
+                      - img [ref=e205]
+                    - button [ref=e208]:
+                      - img [ref=e209]
+              - row "GC GEEKVAPE-0059 Geekvape Crystal VM Geekvape Disposable Tobacco 35.00 mg 14.00 ml 2026 2025 Rp 200.000 169 Tersedia CUKAI LAMA" [ref=e212] [cursor=pointer]:
+                - cell "GC" [ref=e213]:
+                  - generic [ref=e215]: GC
+                - cell "GEEKVAPE-0059" [ref=e216]
+                - cell "Geekvape Crystal VM" [ref=e217]
+                - cell "Geekvape" [ref=e218]
+                - cell "Disposable" [ref=e219]
+                - cell "Tobacco" [ref=e220]
+                - cell "35.00 mg" [ref=e221]
+                - cell "14.00 ml" [ref=e222]
+                - cell "2026 2025" [ref=e223]:
+                  - generic [ref=e224]:
+                    - generic [ref=e225]: "2026"
+                    - generic [ref=e226]: "2025"
+                - cell "Rp 200.000" [ref=e227]
+                - cell "169" [ref=e228]
+                - cell "Tersedia CUKAI LAMA" [ref=e229]:
+                  - generic [ref=e230]:
+                    - generic [ref=e231]: Tersedia
+                    - generic "Memiliki stok cukai lama" [ref=e232]: CUKAI LAMA
+                - cell [ref=e233]:
+                  - generic [ref=e234]:
+                    - button [ref=e235]:
+                      - img [ref=e236]
+                    - button [ref=e239]:
+                      - img [ref=e240]
+                    - button [ref=e243]:
+                      - img [ref=e244]
+              - row "GD GEEKVAPE-0053 Geekvape Drag QA Geekvape Mod Device Device Only 0.00 mg 0.00 ml 2026 Rp 820.000 14 Tersedia" [ref=e247] [cursor=pointer]:
+                - cell "GD" [ref=e248]:
+                  - generic [ref=e250]: GD
+                - cell "GEEKVAPE-0053" [ref=e251]
+                - cell "Geekvape Drag QA" [ref=e252]
+                - cell "Geekvape" [ref=e253]
+                - cell "Mod Device" [ref=e254]
+                - cell "Device Only" [ref=e255]
+                - cell "0.00 mg" [ref=e256]
+                - cell "0.00 ml" [ref=e257]
+                - cell "2026" [ref=e258]:
+                  - generic [ref=e260]: "2026"
+                - cell "Rp 820.000" [ref=e261]
+                - cell "14" [ref=e262]
+                - cell "Tersedia" [ref=e263]:
+                  - generic [ref=e265]: Tersedia
+                - cell [ref=e266]:
+                  - generic [ref=e267]:
+                    - button [ref=e268]:
+                      - img [ref=e269]
+                    - button [ref=e272]:
+                      - img [ref=e273]
+                    - button [ref=e276]:
+                      - img [ref=e277]
+              - row "GD GEEKVAPE-0033 Geekvape Dragon Fruit MA Geekvape Coil & Accessories Device Only 0.00 mg 0.00 ml 2026 2025 Rp 50.000 350 Tersedia CUKAI LAMA" [ref=e280] [cursor=pointer]:
+                - cell "GD" [ref=e281]:
+                  - generic [ref=e283]: GD
+                - cell "GEEKVAPE-0033" [ref=e284]
+                - cell "Geekvape Dragon Fruit MA" [ref=e285]
+                - cell "Geekvape" [ref=e286]
+                - cell "Coil & Accessories" [ref=e287]
+                - cell "Device Only" [ref=e288]
+                - cell "0.00 mg" [ref=e289]
+                - cell "0.00 ml" [ref=e290]
+                - cell "2026 2025" [ref=e291]:
+                  - generic [ref=e292]:
+                    - generic [ref=e293]: "2026"
+                    - generic [ref=e294]: "2025"
+                - cell "Rp 50.000" [ref=e295]
+                - cell "350" [ref=e296]
+                - cell "Tersedia CUKAI LAMA" [ref=e297]:
+                  - generic [ref=e298]:
+                    - generic [ref=e299]: Tersedia
+                    - generic "Memiliki stok cukai lama" [ref=e300]: CUKAI LAMA
+                - cell [ref=e301]:
+                  - generic [ref=e302]:
+                    - button [ref=e303]:
+                      - img [ref=e304]
+                    - button [ref=e307]:
+                      - img [ref=e308]
+                    - button [ref=e311]:
+                      - img [ref=e312]
+              - row "HA HQD-0010 HQD Argus 3O HQD Pod Device Device Only 0.00 mg 0.00 ml 2026 2025 Rp 260.000 40 Tersedia CUKAI LAMA" [ref=e315] [cursor=pointer]:
+                - cell "HA" [ref=e316]:
+                  - generic [ref=e318]: HA
+                - cell "HQD-0010" [ref=e319]
+                - cell "HQD Argus 3O" [ref=e320]
+                - cell "HQD" [ref=e321]
+                - cell "Pod Device" [ref=e322]
+                - cell "Device Only" [ref=e323]
+                - cell "0.00 mg" [ref=e324]
+                - cell "0.00 ml" [ref=e325]
+                - cell "2026 2025" [ref=e326]:
+                  - generic [ref=e327]:
+                    - generic [ref=e328]: "2026"
+                    - generic [ref=e329]: "2025"
+                - cell "Rp 260.000" [ref=e330]
+                - cell "40" [ref=e331]
+                - cell "Tersedia CUKAI LAMA" [ref=e332]:
+                  - generic [ref=e333]:
+                    - generic [ref=e334]: Tersedia
+                    - generic "Memiliki stok cukai lama" [ref=e335]: CUKAI LAMA
+                - cell [ref=e336]:
+                  - generic [ref=e337]:
+                    - button [ref=e338]:
+                      - img [ref=e339]
+                    - button [ref=e342]:
+                      - img [ref=e343]
+                    - button [ref=e346]:
+                      - img [ref=e347]
+              - row "HC HQD-0021 HQD Centaurus IF HQD Pod Device Device Only 0.00 mg 0.00 ml 2026 Rp 435.000 432 Tersedia" [ref=e350] [cursor=pointer]:
+                - cell "HC" [ref=e351]:
+                  - generic [ref=e353]: HC
+                - cell "HQD-0021" [ref=e354]
+                - cell "HQD Centaurus IF" [ref=e355]
+                - cell "HQD" [ref=e356]
+                - cell "Pod Device" [ref=e357]
+                - cell "Device Only" [ref=e358]
+                - cell "0.00 mg" [ref=e359]
+                - cell "0.00 ml" [ref=e360]
+                - cell "2026" [ref=e361]:
+                  - generic [ref=e363]: "2026"
+                - cell "Rp 435.000" [ref=e364]
+                - cell "432" [ref=e365]
+                - cell "Tersedia" [ref=e366]:
+                  - generic [ref=e368]: Tersedia
+                - cell [ref=e369]:
+                  - generic [ref=e370]:
+                    - button [ref=e371]:
+                      - img [ref=e372]
+                    - button [ref=e375]:
+                      - img [ref=e376]
+                    - button [ref=e379]:
+                      - img [ref=e380]
+              - row "HD HQD-0001 HQD Drag BK HQD Mod Device Device Only 0.00 mg 0.00 ml 2026 Rp 1.175.000 246 Tersedia" [ref=e383] [cursor=pointer]:
+                - cell "HD" [ref=e384]:
+                  - generic [ref=e386]: HD
+                - cell "HQD-0001" [ref=e387]
+                - cell "HQD Drag BK" [ref=e388]
+                - cell "HQD" [ref=e389]
+                - cell "Mod Device" [ref=e390]
+                - cell "Device Only" [ref=e391]
+                - cell "0.00 mg" [ref=e392]
+                - cell "0.00 ml" [ref=e393]
+                - cell "2026" [ref=e394]:
+                  - generic [ref=e396]: "2026"
+                - cell "Rp 1.175.000" [ref=e397]
+                - cell "246" [ref=e398]
+                - cell "Tersedia" [ref=e399]:
+                  - generic [ref=e401]: Tersedia
+                - cell [ref=e402]:
+                  - generic [ref=e403]:
+                    - button [ref=e404]:
+                      - img [ref=e405]
+                    - button [ref=e408]:
+                      - img [ref=e409]
+                    - button [ref=e412]:
+                      - img [ref=e413]
+              - row "HP HQD-0032 HQD Peach Ice BZ HQD Nicotine Salt Peach Ice 50.00 mg 30.00 ml 2026 Rp 120.000 1 Stok Tipis" [ref=e416] [cursor=pointer]:
+                - cell "HP" [ref=e417]:
+                  - generic [ref=e419]: HP
+                - cell "HQD-0032" [ref=e420]
+                - cell "HQD Peach Ice BZ" [ref=e421]
+                - cell "HQD" [ref=e422]
+                - cell "Nicotine Salt" [ref=e423]
+                - cell "Peach Ice" [ref=e424]
+                - cell "50.00 mg" [ref=e425]
+                - cell "30.00 ml" [ref=e426]
+                - cell "2026" [ref=e427]:
+                  - generic [ref=e429]: "2026"
+                - cell "Rp 120.000" [ref=e430]
+                - cell "1" [ref=e431]
+                - cell "Stok Tipis" [ref=e432]:
+                  - generic [ref=e434]: Stok Tipis
+                - cell [ref=e435]:
+                  - generic [ref=e436]:
+                    - button [ref=e437]:
+                      - img [ref=e438]
+                    - button [ref=e441]:
+                      - img [ref=e442]
+                    - button [ref=e445]:
+                      - img [ref=e446]
+              - row "HT HQD-0043 HQD T200 NW HQD Mod Device Device Only 0.00 mg 0.00 ml 2026 Rp 610.000 72 Tersedia" [ref=e449] [cursor=pointer]:
+                - cell "HT" [ref=e450]:
+                  - generic [ref=e452]: HT
+                - cell "HQD-0043" [ref=e453]
+                - cell "HQD T200 NW" [ref=e454]
+                - cell "HQD" [ref=e455]
+                - cell "Mod Device" [ref=e456]
+                - cell "Device Only" [ref=e457]
+                - cell "0.00 mg" [ref=e458]
+                - cell "0.00 ml" [ref=e459]
+                - cell "2026" [ref=e460]:
+                  - generic [ref=e462]: "2026"
+                - cell "Rp 610.000" [ref=e463]
+                - cell "72" [ref=e464]
+                - cell "Tersedia" [ref=e465]:
+                  - generic [ref=e467]: Tersedia
+                - cell [ref=e468]:
+                  - generic [ref=e469]:
+                    - button [ref=e470]:
+                      - img [ref=e471]
+                    - button [ref=e474]:
+                      - img [ref=e475]
+                    - button [ref=e478]:
+                      - img [ref=e479]
+              - row "IA INNOKIN-0042 Innokin Aegis FF Innokin Pod Device Device Only 0.00 mg 0.00 ml 2025 Rp 400.000 28 Tersedia CUKAI LAMA" [ref=e482] [cursor=pointer]:
+                - cell "IA" [ref=e483]:
+                  - generic [ref=e485]: IA
+                - cell "INNOKIN-0042" [ref=e486]
+                - cell "Innokin Aegis FF" [ref=e487]
+                - cell "Innokin" [ref=e488]
+                - cell "Pod Device" [ref=e489]
+                - cell "Device Only" [ref=e490]
+                - cell "0.00 mg" [ref=e491]
+                - cell "0.00 ml" [ref=e492]
+                - cell "2025" [ref=e493]:
+                  - generic [ref=e495]: "2025"
+                - cell "Rp 400.000" [ref=e496]
+                - cell "28" [ref=e497]
+                - cell "Tersedia CUKAI LAMA" [ref=e498]:
+                  - generic [ref=e499]:
+                    - generic [ref=e500]: Tersedia
+                    - generic "Memiliki stok cukai lama" [ref=e501]: CUKAI LAMA
+                - cell [ref=e502]:
+                  - generic [ref=e503]:
+                    - button [ref=e504]:
+                      - img [ref=e505]
+                    - button [ref=e508]:
+                      - img [ref=e509]
+                    - button [ref=e512]:
+                      - img [ref=e513]
+              - row "JJ JUSTJUICE-0024 Just Juice Meloso CZ Just Juice Disposable Mixed Berry 37.00 mg 20.00 ml 2026 Rp 160.000 62 Tersedia" [ref=e516] [cursor=pointer]:
+                - cell "JJ" [ref=e517]:
+                  - generic [ref=e519]: JJ
+                - cell "JUSTJUICE-0024" [ref=e520]
+                - cell "Just Juice Meloso CZ" [ref=e521]
+                - cell "Just Juice" [ref=e522]
+                - cell "Disposable" [ref=e523]
+                - cell "Mixed Berry" [ref=e524]
+                - cell "37.00 mg" [ref=e525]
+                - cell "20.00 ml" [ref=e526]
+                - cell "2026" [ref=e527]:
+                  - generic [ref=e529]: "2026"
+                - cell "Rp 160.000" [ref=e530]
+                - cell "62" [ref=e531]
+                - cell "Tersedia" [ref=e532]:
+                  - generic [ref=e534]: Tersedia
+                - cell [ref=e535]:
+                  - generic [ref=e536]:
+                    - button [ref=e537]:
+                      - img [ref=e538]
+                    - button [ref=e541]:
+                      - img [ref=e542]
+                    - button [ref=e545]:
+                      - img [ref=e546]
+              - row "LV LOSTVAPE-0012 Lost Vape Energy Drink XX Lost Vape Freebase Energy Drink 3.00 mg 60.00 ml 2026 2025 Rp 120.000 243 Tersedia CUKAI LAMA" [ref=e549] [cursor=pointer]:
+                - cell "LV" [ref=e550]:
+                  - generic [ref=e552]: LV
+                - cell "LOSTVAPE-0012" [ref=e553]
+                - cell "Lost Vape Energy Drink XX" [ref=e554]
+                - cell "Lost Vape" [ref=e555]
+                - cell "Freebase" [ref=e556]
+                - cell "Energy Drink" [ref=e557]
+                - cell "3.00 mg" [ref=e558]
+                - cell "60.00 ml" [ref=e559]
+                - cell "2026 2025" [ref=e560]:
+                  - generic [ref=e561]:
+                    - generic [ref=e562]: "2026"
+                    - generic [ref=e563]: "2025"
+                - cell "Rp 120.000" [ref=e564]
+                - cell "243" [ref=e565]
+                - cell "Tersedia CUKAI LAMA" [ref=e566]:
+                  - generic [ref=e567]:
+                    - generic [ref=e568]: Tersedia
+                    - generic "Memiliki stok cukai lama" [ref=e569]: CUKAI LAMA
+                - cell [ref=e570]:
+                  - generic [ref=e571]:
+                    - button [ref=e572]:
+                      - img [ref=e573]
+                    - button [ref=e576]:
+                      - img [ref=e577]
+                    - button [ref=e580]:
+                      - img [ref=e581]
+              - row "NJ NASTYJUICE-0007 Nasty Juice Lemon Mint RZ Nasty Juice Freebase Lemon Mint 5.00 mg 97.00 ml 2026 Rp 145.000 97 Tersedia" [ref=e584] [cursor=pointer]:
+                - cell "NJ" [ref=e585]:
+                  - generic [ref=e587]: NJ
+                - cell "NASTYJUICE-0007" [ref=e588]
+                - cell "Nasty Juice Lemon Mint RZ" [ref=e589]
+                - cell "Nasty Juice" [ref=e590]
+                - cell "Freebase" [ref=e591]
+                - cell "Lemon Mint" [ref=e592]
+                - cell "5.00 mg" [ref=e593]
+                - cell "97.00 ml" [ref=e594]
+                - cell "2026" [ref=e595]:
+                  - generic [ref=e597]: "2026"
+                - cell "Rp 145.000" [ref=e598]
+                - cell "97" [ref=e599]
+                - cell "Tersedia" [ref=e600]:
+                  - generic [ref=e602]: Tersedia
+                - cell [ref=e603]:
+                  - generic [ref=e604]:
+                    - button [ref=e605]:
+                      - img [ref=e606]
+                    - button [ref=e609]:
+                      - img [ref=e610]
+                    - button [ref=e613]:
+                      - img [ref=e614]
+              - row "NJ NASTYJUICE-0017 Nasty Juice Luxe W9 Nasty Juice Pod Device Device Only 0.00 mg 0.00 ml 2026 Rp 255.000 180 Tersedia" [ref=e617] [cursor=pointer]:
+                - cell "NJ" [ref=e618]:
+                  - generic [ref=e620]: NJ
+                - cell "NASTYJUICE-0017" [ref=e621]
+                - cell "Nasty Juice Luxe W9" [ref=e622]
+                - cell "Nasty Juice" [ref=e623]
+                - cell "Pod Device" [ref=e624]
+                - cell "Device Only" [ref=e625]
+                - cell "0.00 mg" [ref=e626]
+                - cell "0.00 ml" [ref=e627]
+                - cell "2026" [ref=e628]:
+                  - generic [ref=e630]: "2026"
+                - cell "Rp 255.000" [ref=e631]
+                - cell "180" [ref=e632]
+                - cell "Tersedia" [ref=e633]:
+                  - generic [ref=e635]: Tersedia
+                - cell [ref=e636]:
+                  - generic [ref=e637]:
+                    - button [ref=e638]:
+                      - img [ref=e639]
+                    - button [ref=e642]:
+                      - img [ref=e643]
+                    - button [ref=e646]:
+                      - img [ref=e647]
+              - row "O6 OXVA-0020 OXVA 6000 JV OXVA Disposable Orange 42.00 mg 11.00 ml 2026 Rp 275.000 82 Tersedia" [ref=e650] [cursor=pointer]:
+                - cell "O6" [ref=e651]:
+                  - generic [ref=e653]: O6
+                - cell "OXVA-0020" [ref=e654]
+                - cell "OXVA 6000 JV" [ref=e655]
+                - cell "OXVA" [ref=e656]
+                - cell "Disposable" [ref=e657]
+                - cell "Orange" [ref=e658]
+                - cell "42.00 mg" [ref=e659]
+                - cell "11.00 ml" [ref=e660]
+                - cell "2026" [ref=e661]:
+                  - generic [ref=e663]: "2026"
+                - cell "Rp 275.000" [ref=e664]
+                - cell "82" [ref=e665]
+                - cell "Tersedia" [ref=e666]:
+                  - generic [ref=e668]: Tersedia
+                - cell [ref=e669]:
+                  - generic [ref=e670]:
+                    - button [ref=e671]:
+                      - img [ref=e672]
+                    - button [ref=e675]:
+                      - img [ref=e676]
+                    - button [ref=e679]:
+                      - img [ref=e680]
+          - generic [ref=e683]:
+            - paragraph [ref=e684]:
+              - text: Menampilkan
+              - strong [ref=e685]: "30"
+              - text: dari
+              - strong [ref=e686]: "61"
+              - text: produk
+            - generic [ref=e687]:
+              - button [ref=e688]:
+                - img [ref=e689]
+              - button "1" [ref=e691]
+              - button "2" [ref=e692]
+              - button "3" [ref=e693]
+              - button "4" [ref=e694]
+              - button "5" [ref=e695]
+              - button [ref=e696]:
+                - img [ref=e697]
+  - region "Notifications alt+T":
+    - list
+  - button "Buka AI Asisten" [ref=e699] [cursor=pointer]:
+    - img [ref=e701]
+    - generic [ref=e704]: AI

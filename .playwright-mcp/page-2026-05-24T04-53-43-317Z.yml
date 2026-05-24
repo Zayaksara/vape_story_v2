@@ -1,0 +1,175 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - img [ref=e8]
+        - generic [ref=e10]:
+          - paragraph [ref=e11]: Story Vape
+          - paragraph [ref=e12]: Admin Panel
+      - navigation [ref=e13]:
+        - link "Dashboard" [ref=e14] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - img [ref=e15]
+          - generic [ref=e20]: Dashboard
+        - link "Manajemen Produk" [ref=e21] [cursor=pointer]:
+          - /url: /admin/products
+          - img [ref=e22]
+          - generic [ref=e26]: Manajemen Produk
+        - link "Laporan Penjualan" [ref=e27] [cursor=pointer]:
+          - /url: /admin/reports/sales
+          - img [ref=e28]
+          - generic [ref=e30]: Laporan Penjualan
+        - link "History Pembayaran" [ref=e31] [cursor=pointer]:
+          - /url: /admin/transactions/today
+          - img [ref=e32]
+          - generic [ref=e35]: History Pembayaran
+        - link "Kelola Akun" [ref=e36] [cursor=pointer]:
+          - /url: /admin/users
+          - img [ref=e37]
+          - generic [ref=e42]: Kelola Akun
+        - link "Promo & Diskon" [ref=e43] [cursor=pointer]:
+          - /url: /admin/promotions
+          - img [ref=e44]
+          - generic [ref=e47]: Promo & Diskon
+      - generic [ref=e48]:
+        - link "Pengaturan Profil" [ref=e49] [cursor=pointer]:
+          - /url: /settings/profile
+          - img [ref=e50]
+          - generic [ref=e62]: Pengaturan Profil
+        - button "Logout" [ref=e63] [cursor=pointer]:
+          - img [ref=e64]
+          - generic [ref=e67]: Logout
+  - generic [ref=e68]:
+    - banner [ref=e69]:
+      - generic [ref=e70]:
+        - button "Toggle navigation menu" [expanded] [ref=e71] [cursor=pointer]
+        - heading "Admin Panel" [level=1] [ref=e72]
+      - button "Welcome, Admin User" [ref=e75] [cursor=pointer]:
+        - generic [ref=e76]: Welcome, Admin User
+    - main [ref=e77]:
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - generic [ref=e80]:
+            - img [ref=e82]
+            - generic [ref=e87]:
+              - paragraph [ref=e88]: 4 Akun
+              - paragraph [ref=e89]: Total pengguna
+          - generic [ref=e90]:
+            - img [ref=e92]
+            - generic [ref=e95]:
+              - paragraph [ref=e96]: 1 Admin
+              - paragraph [ref=e97]: Hak akses penuh
+          - generic [ref=e98]:
+            - img [ref=e100]
+            - generic [ref=e112]:
+              - paragraph [ref=e113]: 3 Cashier
+              - paragraph [ref=e114]: Akses POS
+        - generic [ref=e115]:
+          - generic [ref=e116]:
+            - generic [ref=e118]:
+              - img
+              - textbox "Cari nama atau email…" [ref=e119]
+            - combobox [ref=e120] [cursor=pointer]:
+              - generic: Semua Role
+              - img
+            - button "Tambah Akun" [ref=e122] [cursor=pointer]:
+              - img [ref=e123]
+              - text: Tambah Akun
+          - table [ref=e126]:
+            - rowgroup [ref=e127]:
+              - row "Pengguna Email Role Bergabung Aksi" [ref=e128]:
+                - columnheader "Pengguna" [ref=e129]
+                - columnheader "Email" [ref=e130]
+                - columnheader "Role" [ref=e131]
+                - columnheader "Bergabung" [ref=e132]
+                - columnheader "Aksi" [ref=e133]
+            - rowgroup [ref=e134]:
+              - row "B budi budi@vape.com Cashier 23 Mei 2026" [ref=e135] [cursor=pointer]:
+                - cell "B budi" [ref=e136]:
+                  - generic [ref=e137]:
+                    - generic [ref=e138]: B
+                    - generic [ref=e140]: budi
+                - cell "budi@vape.com" [ref=e141]
+                - cell "Cashier" [ref=e142]:
+                  - generic [ref=e143]:
+                    - img [ref=e144]
+                    - text: Cashier
+                - cell "23 Mei 2026" [ref=e156]
+                - cell [ref=e157]:
+                  - generic [ref=e158]:
+                    - button [ref=e159]:
+                      - img [ref=e160]
+                    - button [ref=e163]:
+                      - img [ref=e164]
+                    - button [ref=e167]:
+                      - img [ref=e168]
+              - row "AU Admin User (Anda) admin@vape.com Admin 23 Mei 2026" [ref=e171] [cursor=pointer]:
+                - cell "AU Admin User (Anda)" [ref=e172]:
+                  - generic [ref=e173]:
+                    - generic [ref=e174]: AU
+                    - generic [ref=e175]:
+                      - generic [ref=e176]: Admin User
+                      - generic [ref=e177]: (Anda)
+                - cell "admin@vape.com" [ref=e178]
+                - cell "Admin" [ref=e179]:
+                  - generic [ref=e180]:
+                    - img [ref=e181]
+                    - text: Admin
+                - cell "23 Mei 2026" [ref=e184]
+                - cell [ref=e185]:
+                  - generic [ref=e186]:
+                    - button [ref=e187]:
+                      - img [ref=e188]
+                    - button [ref=e191]:
+                      - img [ref=e192]
+                    - button [disabled] [ref=e195]:
+                      - img [ref=e196]
+              - row "C Cashier cashier@vape.com Cashier 23 Mei 2026" [ref=e199] [cursor=pointer]:
+                - cell "C Cashier" [ref=e200]:
+                  - generic [ref=e201]:
+                    - generic [ref=e202]: C
+                    - generic [ref=e204]: Cashier
+                - cell "cashier@vape.com" [ref=e205]
+                - cell "Cashier" [ref=e206]:
+                  - generic [ref=e207]:
+                    - img [ref=e208]
+                    - text: Cashier
+                - cell "23 Mei 2026" [ref=e220]
+                - cell [ref=e221]:
+                  - generic [ref=e222]:
+                    - button [ref=e223]:
+                      - img [ref=e224]
+                    - button [ref=e227]:
+                      - img [ref=e228]
+                    - button [ref=e231]:
+                      - img [ref=e232]
+              - row "KU Kasir User kasir@vape.com Cashier 23 Mei 2026" [ref=e235] [cursor=pointer]:
+                - cell "KU Kasir User" [ref=e236]:
+                  - generic [ref=e237]:
+                    - generic [ref=e238]: KU
+                    - generic [ref=e240]: Kasir User
+                - cell "kasir@vape.com" [ref=e241]
+                - cell "Cashier" [ref=e242]:
+                  - generic [ref=e243]:
+                    - img [ref=e244]
+                    - text: Cashier
+                - cell "23 Mei 2026" [ref=e256]
+                - cell [ref=e257]:
+                  - generic [ref=e258]:
+                    - button [ref=e259]:
+                      - img [ref=e260]
+                    - button [ref=e263]:
+                      - img [ref=e264]
+                    - button [ref=e267]:
+                      - img [ref=e268]
+          - paragraph [ref=e272]:
+            - text: Menampilkan
+            - strong [ref=e273]: "4"
+            - text: dari
+            - strong [ref=e274]: "4"
+            - text: akun
+  - region "Notifications alt+T":
+    - list
+  - button "Buka AI Asisten" [ref=e275] [cursor=pointer]:
+    - img [ref=e277]
+    - generic [ref=e280]: AI

@@ -1,0 +1,279 @@
+- generic [ref=e4]:
+  - generic [ref=e7]:
+    - list [ref=e9]:
+      - listitem [ref=e10]:
+        - link "Vape Story Vape Story" [ref=e11] [cursor=pointer]:
+          - /url: /pos/dashboard
+          - img "Vape Story" [ref=e13]
+          - generic:
+            - generic: Vape Story
+    - generic [ref=e20]:
+      - generic [ref=e21]: Menu Utama
+      - list [ref=e23]:
+        - listitem [ref=e24]:
+          - link "Dashboard POS" [ref=e25] [cursor=pointer]:
+            - /url: /pos/dashboard
+            - img [ref=e26]
+            - generic: Dashboard POS
+        - listitem [ref=e31]:
+          - link "Katalog Produk" [ref=e32] [cursor=pointer]:
+            - /url: /pos/products
+            - img [ref=e33]
+            - generic: Katalog Produk
+        - listitem [ref=e37]:
+          - link "Riwayat Transaksi" [ref=e38] [cursor=pointer]:
+            - /url: /pos/transactions/today
+            - img [ref=e39]
+            - generic: Riwayat Transaksi
+        - listitem [ref=e42]:
+          - link "Pengembalian Barang" [ref=e43] [cursor=pointer]:
+            - /url: /pos/returns
+            - img [ref=e44]
+            - generic: Pengembalian Barang
+    - list [ref=e48]:
+      - listitem [ref=e49]:
+        - button "C Cashier" [ref=e50]:
+          - generic [ref=e52]: C
+          - generic:
+            - generic: Cashier
+          - img [ref=e53]
+    - button "Toggle sidebar" [ref=e56]
+  - main [ref=e57]:
+    - generic [ref=e58]:
+      - generic [ref=e59]:
+        - button "Toggle sidebar" [ref=e60]:
+          - img [ref=e61]
+        - img "Story Vape Logo" [ref=e64]
+        - heading "Vape Story" [level=1] [ref=e66]
+      - generic [ref=e67]:
+        - generic [ref=e68]: Min, 24 Mei 2026 12:12:14
+        - generic [ref=e69]: Selamat datang, Cashier
+    - generic [ref=e71]:
+      - heading "Produk" [level=1] [ref=e73]
+      - tabpanel [ref=e76]:
+        - generic [ref=e78]:
+          - generic [ref=e79]:
+            - img [ref=e81]
+            - generic [ref=e84]:
+              - paragraph [ref=e85]: 61 Jenis
+              - paragraph [ref=e86]: Stok tersedia
+          - generic [ref=e87]:
+            - img [ref=e89]
+            - generic [ref=e93]:
+              - paragraph [ref=e94]: 10 Jenis
+              - paragraph [ref=e95]: Stok habis
+          - generic [ref=e96]:
+            - img [ref=e98]
+            - generic [ref=e101]:
+              - paragraph [ref=e102]: 6 Kategori
+              - paragraph [ref=e103]: Total kategori
+        - generic [ref=e104]:
+          - generic [ref=e105]:
+            - generic [ref=e106]:
+              - generic [ref=e107]:
+                - img
+                - textbox "Cari produk, kode, flavor…" [ref=e108]
+              - button "Cari" [ref=e109]
+            - combobox [ref=e110]:
+              - generic: Semua Kategori
+              - img
+            - combobox [ref=e111]:
+              - generic: Semua Merek
+              - img
+          - table [ref=e114]:
+            - rowgroup [ref=e115]:
+              - row "Image Code Name Brand Category Flavor Nicotine Size (ml) Selling Price Stock Status" [ref=e116]:
+                - columnheader "Image" [ref=e117]
+                - columnheader "Code" [ref=e118]
+                - columnheader "Name" [ref=e119]
+                - columnheader "Brand" [ref=e120]
+                - columnheader "Category" [ref=e121]
+                - columnheader "Flavor" [ref=e122]
+                - columnheader "Nicotine" [ref=e123]
+                - columnheader "Size (ml)" [ref=e124]
+                - columnheader "Selling Price" [ref=e125]
+                - columnheader "Stock" [ref=e126]
+                - columnheader "Status" [ref=e127]
+                - columnheader [ref=e128]
+            - rowgroup [ref=e129]:
+              - row "AA ASPIRE-0050 Aspire Argus AO Aspire Pod Device Device Only 0.00 mg 0.00 ml Rp 300.000 123 Tersedia" [ref=e130] [cursor=pointer]:
+                - cell "AA" [ref=e131]:
+                  - generic [ref=e133]: AA
+                - cell "ASPIRE-0050" [ref=e134]
+                - cell "Aspire Argus AO" [ref=e135]
+                - cell "Aspire" [ref=e136]
+                - cell "Pod Device" [ref=e137]
+                - cell "Device Only" [ref=e138]
+                - cell "0.00 mg" [ref=e139]
+                - cell "0.00 ml" [ref=e140]
+                - cell "Rp 300.000" [ref=e141]
+                - cell "123" [ref=e142]
+                - cell "Tersedia" [ref=e143]
+                - cell [ref=e144]:
+                  - button [ref=e145]:
+                    - img [ref=e146]
+              - row "AP ASPIRE-0002 Aspire Pineapple 60 Aspire Freebase Pineapple 6.00 mg 100.00 ml Rp 165.000 37 Tersedia" [ref=e149] [cursor=pointer]:
+                - cell "AP" [ref=e150]:
+                  - generic [ref=e152]: AP
+                - cell "ASPIRE-0002" [ref=e153]
+                - cell "Aspire Pineapple 60" [ref=e154]
+                - cell "Aspire" [ref=e155]
+                - cell "Freebase" [ref=e156]
+                - cell "Pineapple" [ref=e157]
+                - cell "6.00 mg" [ref=e158]
+                - cell "100.00 ml" [ref=e159]
+                - cell "Rp 165.000" [ref=e160]
+                - cell "37" [ref=e161]
+                - cell "Tersedia" [ref=e162]
+                - cell [ref=e163]:
+                  - button [ref=e164]:
+                    - img [ref=e165]
+              - row "AP ASPIRE-0014 Aspire Pineapple FB Aspire Nicotine Salt Pineapple 20.00 mg 30.00 ml Rp 135.000 0 Habis" [ref=e168] [cursor=pointer]:
+                - cell "AP" [ref=e169]:
+                  - generic [ref=e171]: AP
+                - cell "ASPIRE-0014" [ref=e172]
+                - cell "Aspire Pineapple FB" [ref=e173]
+                - cell "Aspire" [ref=e174]
+                - cell "Nicotine Salt" [ref=e175]
+                - cell "Pineapple" [ref=e176]
+                - cell "20.00 mg" [ref=e177]
+                - cell "30.00 ml" [ref=e178]
+                - cell "Rp 135.000" [ref=e179]
+                - cell "0" [ref=e180]
+                - cell "Habis" [ref=e181]
+                - cell [ref=e182]:
+                  - button [ref=e183]:
+                    - img [ref=e184]
+              - row "C6 CALIBURN-0016 Caliburn 6000 ZE Caliburn Disposable Mixed Berry 35.00 mg 10.00 ml Rp 145.000 203 Tersedia" [ref=e187] [cursor=pointer]:
+                - cell "C6" [ref=e188]:
+                  - generic [ref=e190]: C6
+                - cell "CALIBURN-0016" [ref=e191]
+                - cell "Caliburn 6000 ZE" [ref=e192]
+                - cell "Caliburn" [ref=e193]
+                - cell "Disposable" [ref=e194]
+                - cell "Mixed Berry" [ref=e195]
+                - cell "35.00 mg" [ref=e196]
+                - cell "10.00 ml" [ref=e197]
+                - cell "Rp 145.000" [ref=e198]
+                - cell "203" [ref=e199]
+                - cell "Tersedia" [ref=e200]
+                - cell [ref=e201]:
+                  - button [ref=e202]:
+                    - img [ref=e203]
+              - row "CC CALIBURN-0054 Caliburn Centaurus SU Caliburn Mod Device Device Only 0.00 mg 0.00 ml Rp 525.000 363 Tersedia" [ref=e206] [cursor=pointer]:
+                - cell "CC" [ref=e207]:
+                  - generic [ref=e209]: CC
+                - cell "CALIBURN-0054" [ref=e210]
+                - cell "Caliburn Centaurus SU" [ref=e211]
+                - cell "Caliburn" [ref=e212]
+                - cell "Mod Device" [ref=e213]
+                - cell "Device Only" [ref=e214]
+                - cell "0.00 mg" [ref=e215]
+                - cell "0.00 ml" [ref=e216]
+                - cell "Rp 525.000" [ref=e217]
+                - cell "363" [ref=e218]
+                - cell "Tersedia" [ref=e219]
+                - cell [ref=e220]:
+                  - button [ref=e221]:
+                    - img [ref=e222]
+              - row "CM CALIBURN-0048 Caliburn Menthol LE Caliburn Freebase Menthol 3.00 mg 96.00 ml Rp 150.000 312 Tersedia" [ref=e225] [cursor=pointer]:
+                - cell "CM" [ref=e226]:
+                  - generic [ref=e228]: CM
+                - cell "CALIBURN-0048" [ref=e229]
+                - cell "Caliburn Menthol LE" [ref=e230]
+                - cell "Caliburn" [ref=e231]
+                - cell "Freebase" [ref=e232]
+                - cell "Menthol" [ref=e233]
+                - cell "3.00 mg" [ref=e234]
+                - cell "96.00 ml" [ref=e235]
+                - cell "Rp 150.000" [ref=e236]
+                - cell "312" [ref=e237]
+                - cell "Tersedia" [ref=e238]
+                - cell [ref=e239]:
+                  - button [ref=e240]:
+                    - img [ref=e241]
+              - row "DL DINNERLADY-0004 Dinner Lady Crystal EB Dinner Lady Disposable Mixed Berry 50.00 mg 20.00 ml Rp 255.000 0 Habis" [ref=e244] [cursor=pointer]:
+                - cell "DL" [ref=e245]:
+                  - generic [ref=e247]: DL
+                - cell "DINNERLADY-0004" [ref=e248]
+                - cell "Dinner Lady Crystal EB" [ref=e249]
+                - cell "Dinner Lady" [ref=e250]
+                - cell "Disposable" [ref=e251]
+                - cell "Mixed Berry" [ref=e252]
+                - cell "50.00 mg" [ref=e253]
+                - cell "20.00 ml" [ref=e254]
+                - cell "Rp 255.000" [ref=e255]
+                - cell "0" [ref=e256]
+                - cell "Habis" [ref=e257]
+                - cell [ref=e258]:
+                  - button [ref=e259]:
+                    - img [ref=e260]
+              - row "DL DINNERLADY-0029 Dinner Lady Tobacco VO Dinner Lady Nicotine Salt Tobacco 20.00 mg 50.00 ml Rp 125.000 119 Tersedia" [ref=e263] [cursor=pointer]:
+                - cell "DL" [ref=e264]:
+                  - generic [ref=e266]: DL
+                - cell "DINNERLADY-0029" [ref=e267]
+                - cell "Dinner Lady Tobacco VO" [ref=e268]
+                - cell "Dinner Lady" [ref=e269]
+                - cell "Nicotine Salt" [ref=e270]
+                - cell "Tobacco" [ref=e271]
+                - cell "20.00 mg" [ref=e272]
+                - cell "50.00 ml" [ref=e273]
+                - cell "Rp 125.000" [ref=e274]
+                - cell "119" [ref=e275]
+                - cell "Tersedia" [ref=e276]
+                - cell [ref=e277]:
+                  - button [ref=e278]:
+                    - img [ref=e279]
+              - row "DL DINNERLADY-0013 Dinner Lady Watermelon TD Dinner Lady Nicotine Salt Watermelon 33.00 mg 47.00 ml Rp 130.000 131 Tersedia" [ref=e282] [cursor=pointer]:
+                - cell "DL" [ref=e283]:
+                  - generic [ref=e285]: DL
+                - cell "DINNERLADY-0013" [ref=e286]
+                - cell "Dinner Lady Watermelon TD" [ref=e287]
+                - cell "Dinner Lady" [ref=e288]
+                - cell "Nicotine Salt" [ref=e289]
+                - cell "Watermelon" [ref=e290]
+                - cell "33.00 mg" [ref=e291]
+                - cell "47.00 ml" [ref=e292]
+                - cell "Rp 130.000" [ref=e293]
+                - cell "131" [ref=e294]
+                - cell "Tersedia" [ref=e295]
+                - cell [ref=e296]:
+                  - button [ref=e297]:
+                    - img [ref=e298]
+              - row "EB ELFBAR-0028 Elf Bar Banana RZ Elf Bar Nicotine Salt Banana 20.00 mg 30.00 ml Rp 125.000 47 Tersedia" [ref=e301] [cursor=pointer]:
+                - cell "EB" [ref=e302]:
+                  - generic [ref=e304]: EB
+                - cell "ELFBAR-0028" [ref=e305]
+                - cell "Elf Bar Banana RZ" [ref=e306]
+                - cell "Elf Bar" [ref=e307]
+                - cell "Nicotine Salt" [ref=e308]
+                - cell "Banana" [ref=e309]
+                - cell "20.00 mg" [ref=e310]
+                - cell "30.00 ml" [ref=e311]
+                - cell "Rp 125.000" [ref=e312]
+                - cell "47" [ref=e313]
+                - cell "Tersedia" [ref=e314]
+                - cell [ref=e315]:
+                  - button [ref=e316]:
+                    - img [ref=e317]
+          - generic [ref=e320]:
+            - paragraph [ref=e321]:
+              - text: Menampilkan
+              - strong [ref=e322]: "10"
+              - text: dari
+              - strong [ref=e323]: "61"
+              - text: produk
+            - generic [ref=e324]:
+              - button [disabled] [ref=e325]:
+                - img [ref=e326]
+              - button "1" [disabled] [ref=e328]
+              - button "2" [disabled] [ref=e329]
+              - button "3" [disabled] [ref=e330]
+              - button "4" [disabled] [ref=e331]
+              - button "5" [disabled] [ref=e332]
+              - button "6" [disabled] [ref=e333]
+              - button "7" [disabled] [ref=e334]
+              - button [ref=e335]:
+                - img [ref=e336]
+  - region "Notifications alt+T":
+    - list

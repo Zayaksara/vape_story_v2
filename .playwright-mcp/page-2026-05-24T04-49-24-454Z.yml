@@ -1,0 +1,13 @@
+- generic [ref=e4]:
+  - img "Logo Story Vape" [ref=e6]
+  - heading "S T O R Y V A P E" [level=1] [ref=e7]:
+    - generic [ref=e8]: S
+    - generic [ref=e9]: T
+    - generic [ref=e10]: O
+    - generic [ref=e11]: R
+    - generic [ref=e12]: "Y"
+    - generic [ref=e14]: V
+    - generic [ref=e15]: A
+    - generic [ref=e16]: P
+    - generic [ref=e17]: E
+  - paragraph [ref=e18]: premium vape sejak 2020

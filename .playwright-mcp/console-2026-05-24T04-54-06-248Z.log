@@ -1,0 +1,14 @@
+[    1136ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://127.0.0.1:8000/_boost/browser-logs @ http://127.0.0.1:8000/settings/profile:47
+[  144308ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://[::1]:5173/resources/js/actions/App/Http/Controllers/Settings/ProfileController.ts?t=1779598589708:0
+[  144351ms] [ERROR] [vite] Failed to reload /@id/D:/story_vape/resources/js/pages/settings/Profile.vue. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:8000/settings/profile:106
+[  144382ms] [ERROR] [vite] Failed to reload /resources/js/components/DeleteUser.vue. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:8000/settings/profile:106
+[  151356ms] [WARNING] [Vue warn]: Extraneous non-props attributes (errors, name, auth, storeName, storeLogo, storeTagline, storeAddress, storePhone, storeReceiptHeader, storeReceiptFooter, storeShowLogoOnReceipt, storeReceiptOptions, sidebarOpen, status) were passed to component but could not be automatically inherited because component renders fragment or text or teleport root nodes. 
+  at <Profile errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Layout> 
+  at <AdminLayout> 
+  at <SettingsRoleLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: settings/Profile, props: Object, url: /settings/profile, version: 02e07617efef4265c5a600d61bf591dc, sharedProps: Array(13)} initialComponent= {layout: Object, __name: Profile, setup: , __hmrId: bde55255, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/settings/profile:106
+[  154464ms] [ERROR] Failed to send logs: TypeError: Failed to fetch
+    at flushLogs (http://127.0.0.1:8000/settings/profile:84:9) @ http://127.0.0.1:8000/settings/profile:92
+[  154705ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://127.0.0.1:8000/_boost/browser-logs @ http://127.0.0.1:8000/settings/profile:47

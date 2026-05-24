@@ -1,0 +1,12 @@
+[    1020ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://127.0.0.1:8000/_boost/browser-logs @ http://127.0.0.1:8000/admin/products?page=2:47
+[    1767ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <ConfirmModal open=false title="Hapus Produk?" message="Produk akan dihapus permanen beserta riwayat batch-nya. Tindakan ini tidak bisa dibatalkan."  ... > 
+  at <TooltipProvider delayDuration=0 disableHoverableContent=false disableClosingTrigger=false  ... > 
+  at <TooltipProvider> 
+  at <ManajemenProduct errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <AdminLayout breadcrumbs= [Object, Object] > 
+  at <Inertia initialPage= {component: admin/ManajemenProduct, props: Object, url: /admin/products?page=2, version: 2b535e78d25b021b2d2f4c0265050d25, sharedProps: Array(13)} initialComponent= {layout: , __name: ManajemenProduct, props: Object, setup: , __hmrId: 3e683bac} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/admin/products?page=2:106
+[    1774ms] [ERROR] Hydration completed but contains mismatches. @ http://127.0.0.1:8000/admin/products?page=2:106

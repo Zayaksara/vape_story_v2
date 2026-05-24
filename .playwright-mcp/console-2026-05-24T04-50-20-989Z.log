@@ -1,0 +1,109 @@
+[    6204ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://127.0.0.1:8000/_boost/browser-logs @ http://127.0.0.1:8000/admin/products:47
+[    7151ms] [WARNING] [Vue warn]: Missing required prop: "all_products" 
+  at <ManajemenProduct errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <AdminLayout breadcrumbs= [Object, Object] > 
+  at <Inertia initialPage= {component: admin/ManajemenProduct, props: Object, url: /admin/products, version: 02e07617efef4265c5a600d61bf591dc, sharedProps: Array(13)} initialComponent= {layout: , __name: ManajemenProduct, props: Object, setup: , __hmrId: 3e683bac} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/admin/products:106
+[    7167ms] [WARNING] [Vue warn]: Missing required prop: "units" 
+  at <ManajemenProduct errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <AdminLayout breadcrumbs= [Object, Object] > 
+  at <Inertia initialPage= {component: admin/ManajemenProduct, props: Object, url: /admin/products, version: 02e07617efef4265c5a600d61bf591dc, sharedProps: Array(13)} initialComponent= {layout: , __name: ManajemenProduct, props: Object, setup: , __hmrId: 3e683bac} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/admin/products:106
+[    7473ms] [WARNING] [Vue warn]: Hydration attribute mismatch on JSHandle@node 
+  - rendered on server: disabled="true"
+  - expected on client: (not rendered)
+  Note: this mismatch is check-only. The DOM will not be rectified in production due to performance overhead.
+  You should fix the source of the mismatch. 
+  at <TooltipProvider delayDuration=0 disableHoverableContent=false disableClosingTrigger=false  ... > 
+  at <TooltipProvider> 
+  at <ManajemenProduct errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <AdminLayout breadcrumbs= [Object, Object] > 
+  at <Inertia initialPage= {component: admin/ManajemenProduct, props: Object, url: /admin/products, version: 02e07617efef4265c5a600d61bf591dc, sharedProps: Array(13)} initialComponent= {layout: , __name: ManajemenProduct, props: Object, setup: , __hmrId: 3e683bac} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/admin/products:106
+[    7476ms] [ERROR] Hydration completed but contains mismatches. @ http://127.0.0.1:8000/admin/products:106
+[    7477ms] [WARNING] [Vue warn]: Hydration attribute mismatch on JSHandle@node 
+  - rendered on server: disabled="true"
+  - expected on client: (not rendered)
+  Note: this mismatch is check-only. The DOM will not be rectified in production due to performance overhead.
+  You should fix the source of the mismatch. 
+  at <TooltipProvider delayDuration=0 disableHoverableContent=false disableClosingTrigger=false  ... > 
+  at <TooltipProvider> 
+  at <ManajemenProduct errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <AdminLayout breadcrumbs= [Object, Object] > 
+  at <Inertia initialPage= {component: admin/ManajemenProduct, props: Object, url: /admin/products, version: 02e07617efef4265c5a600d61bf591dc, sharedProps: Array(13)} initialComponent= {layout: , __name: ManajemenProduct, props: Object, setup: , __hmrId: 3e683bac} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/admin/products:106
+[    7480ms] [WARNING] [Vue warn]: Hydration attribute mismatch on JSHandle@node 
+  - rendered on server: disabled="true"
+  - expected on client: (not rendered)
+  Note: this mismatch is check-only. The DOM will not be rectified in production due to performance overhead.
+  You should fix the source of the mismatch. 
+  at <TooltipProvider delayDuration=0 disableHoverableContent=false disableClosingTrigger=false  ... > 
+  at <TooltipProvider> 
+  at <ManajemenProduct errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <AdminLayout breadcrumbs= [Object, Object] > 
+  at <Inertia initialPage= {component: admin/ManajemenProduct, props: Object, url: /admin/products, version: 02e07617efef4265c5a600d61bf591dc, sharedProps: Array(13)} initialComponent= {layout: , __name: ManajemenProduct, props: Object, setup: , __hmrId: 3e683bac} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/admin/products:106
+[    7483ms] [WARNING] [Vue warn]: Hydration attribute mismatch on JSHandle@node 
+  - rendered on server: disabled="true"
+  - expected on client: (not rendered)
+  Note: this mismatch is check-only. The DOM will not be rectified in production due to performance overhead.
+  You should fix the source of the mismatch. 
+  at <TooltipProvider delayDuration=0 disableHoverableContent=false disableClosingTrigger=false  ... > 
+  at <TooltipProvider> 
+  at <ManajemenProduct errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <AdminLayout breadcrumbs= [Object, Object] > 
+  at <Inertia initialPage= {component: admin/ManajemenProduct, props: Object, url: /admin/products, version: 02e07617efef4265c5a600d61bf591dc, sharedProps: Array(13)} initialComponent= {layout: , __name: ManajemenProduct, props: Object, setup: , __hmrId: 3e683bac} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/admin/products:106
+[    7488ms] [WARNING] [Vue warn]: Hydration attribute mismatch on JSHandle@node 
+  - rendered on server: disabled="true"
+  - expected on client: (not rendered)
+  Note: this mismatch is check-only. The DOM will not be rectified in production due to performance overhead.
+  You should fix the source of the mismatch. 
+  at <TooltipProvider delayDuration=0 disableHoverableContent=false disableClosingTrigger=false  ... > 
+  at <TooltipProvider> 
+  at <ManajemenProduct errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <AdminLayout breadcrumbs= [Object, Object] > 
+  at <Inertia initialPage= {component: admin/ManajemenProduct, props: Object, url: /admin/products, version: 02e07617efef4265c5a600d61bf591dc, sharedProps: Array(13)} initialComponent= {layout: , __name: ManajemenProduct, props: Object, setup: , __hmrId: 3e683bac} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/admin/products:106
+[    7498ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <ConfirmModal open=false title="Hapus Produk?" message="Produk akan dihapus permanen beserta riwayat batch-nya. Tindakan ini tidak bisa dibatalkan."  ... > 
+  at <TooltipProvider delayDuration=0 disableHoverableContent=false disableClosingTrigger=false  ... > 
+  at <TooltipProvider> 
+  at <ManajemenProduct errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <AdminLayout breadcrumbs= [Object, Object] > 
+  at <Inertia initialPage= {component: admin/ManajemenProduct, props: Object, url: /admin/products, version: 02e07617efef4265c5a600d61bf591dc, sharedProps: Array(13)} initialComponent= {layout: , __name: ManajemenProduct, props: Object, setup: , __hmrId: 3e683bac} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/admin/products:106
+[   64959ms] [WARNING] [Vue warn]: Missing required prop: "all_products" 
+  at <ManajemenProduct errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <AdminLayout breadcrumbs= [Object, Object] > 
+  at <Inertia initialPage= {component: admin/ManajemenProduct, props: Object, url: /admin/products, version: 02e07617efef4265c5a600d61bf591dc, sharedProps: Array(13)} initialComponent= {layout: , __name: ManajemenProduct, props: Object, setup: , __hmrId: 3e683bac} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/admin/products:106
+[   64974ms] [WARNING] [Vue warn]: Missing required prop: "units" 
+  at <ManajemenProduct errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <AdminLayout breadcrumbs= [Object, Object] > 
+  at <Inertia initialPage= {component: admin/ManajemenProduct, props: Object, url: /admin/products, version: 02e07617efef4265c5a600d61bf591dc, sharedProps: Array(13)} initialComponent= {layout: , __name: ManajemenProduct, props: Object, setup: , __hmrId: 3e683bac} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/admin/products:106
+[  148213ms] [WARNING] [Vue warn]: Missing required prop: "all_products" 
+  at <ManajemenProduct errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <AdminLayout breadcrumbs= [Object, Object] > 
+  at <Inertia initialPage= {component: admin/ManajemenProduct, props: Object, url: /admin/products, version: 02e07617efef4265c5a600d61bf591dc, sharedProps: Array(13)} initialComponent= {layout: , __name: ManajemenProduct, props: Object, setup: , __hmrId: 3e683bac} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/admin/products:106
+[  148233ms] [WARNING] [Vue warn]: Missing required prop: "units" 
+  at <ManajemenProduct errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <AdminLayout breadcrumbs= [Object, Object] > 
+  at <Inertia initialPage= {component: admin/ManajemenProduct, props: Object, url: /admin/products, version: 02e07617efef4265c5a600d61bf591dc, sharedProps: Array(13)} initialComponent= {layout: , __name: ManajemenProduct, props: Object, setup: , __hmrId: 3e683bac} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/admin/products:106
+[  160659ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://127.0.0.1:8000/_boost/browser-logs @ http://127.0.0.1:8000/admin/products?page=2:47
+[  162868ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <ConfirmModal open=false title="Hapus Produk?" message="Produk akan dihapus permanen beserta riwayat batch-nya. Tindakan ini tidak bisa dibatalkan."  ... > 
+  at <TooltipProvider delayDuration=0 disableHoverableContent=false disableClosingTrigger=false  ... > 
+  at <TooltipProvider> 
+  at <ManajemenProduct errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <AdminLayout breadcrumbs= [Object, Object] > 
+  at <Inertia initialPage= {component: admin/ManajemenProduct, props: Object, url: /admin/products?page=2, version: 02e07617efef4265c5a600d61bf591dc, sharedProps: Array(13)} initialComponent= {layout: , __name: ManajemenProduct, props: Object, setup: , __hmrId: 3e683bac} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/admin/products?page=2:106
+[  162882ms] [ERROR] Hydration completed but contains mismatches. @ http://127.0.0.1:8000/admin/products?page=2:106

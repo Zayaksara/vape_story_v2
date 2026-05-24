@@ -125,13 +125,11 @@ function resetFilters() {
 
 function extractPageFromUrl(url: string | null): number | null {
     if (!url) return null
-    try {
-        const parsed = new URL(url, window.location.origin)
-        const page = Number(parsed.searchParams.get('page'))
-        return Number.isFinite(page) ? page : null
-    } catch {
-        return null
-    }
+    // Parse tanpa `window` agar hasil identik di SSR & client.
+    // Hydration mismatch sebelumnya membuat tombol nomor halaman ter-disable permanen
+    // di build production (Vue tidak merektifikasi atribut saat mismatch).
+    const match = url.match(/[?&]page=(\d+)/)
+    return match ? Number(match[1]) : null
 }
 
 function goToPage(page: number) {

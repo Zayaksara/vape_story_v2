@@ -1,0 +1,449 @@
+- generic [ref=e46]:
+  - complementary [ref=e47]:
+    - generic [ref=e48]:
+      - generic [ref=e49]:
+        - img [ref=e51]
+        - generic [ref=e53]:
+          - paragraph [ref=e54]: Story Vape
+          - paragraph [ref=e55]: Admin Panel
+      - navigation [ref=e56]:
+        - link "Dashboard" [ref=e57] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - img [ref=e58]
+          - generic [ref=e63]: Dashboard
+        - link "Manajemen Produk" [ref=e64] [cursor=pointer]:
+          - /url: /admin/products
+          - img [ref=e65]
+          - generic [ref=e69]: Manajemen Produk
+        - link "Laporan Penjualan" [ref=e70] [cursor=pointer]:
+          - /url: /admin/reports/sales
+          - img [ref=e71]
+          - generic [ref=e73]: Laporan Penjualan
+        - link "History Pembayaran" [ref=e74] [cursor=pointer]:
+          - /url: /admin/transactions/today
+          - img [ref=e75]
+          - generic [ref=e78]: History Pembayaran
+        - link "Kelola Akun" [ref=e79] [cursor=pointer]:
+          - /url: /admin/users
+          - img [ref=e80]
+          - generic [ref=e85]: Kelola Akun
+        - link "Promo & Diskon" [ref=e86] [cursor=pointer]:
+          - /url: /admin/promotions
+          - img [ref=e87]
+          - generic [ref=e90]: Promo & Diskon
+      - generic [ref=e91]:
+        - link "Pengaturan Profil" [ref=e92] [cursor=pointer]:
+          - /url: /settings/profile
+          - img [ref=e93]
+          - generic [ref=e105]: Pengaturan Profil
+        - button "Logout" [ref=e106] [cursor=pointer]:
+          - img [ref=e107]
+          - generic [ref=e110]: Logout
+  - generic [ref=e111]:
+    - banner [ref=e112]:
+      - generic [ref=e113]:
+        - button "Toggle navigation menu" [expanded] [ref=e114] [cursor=pointer]
+        - heading "Admin Panel" [level=1] [ref=e115]
+      - button "Welcome, Admin User" [ref=e118] [cursor=pointer]:
+        - generic [ref=e119]: Welcome, Admin User
+    - main [ref=e120]:
+      - generic [ref=e121]:
+        - generic [ref=e123]:
+          - button "Hari Ini" [ref=e124] [cursor=pointer]
+          - button "Minggu Ini" [ref=e125] [cursor=pointer]
+          - button "Bulan Ini" [ref=e126] [cursor=pointer]
+          - button "Kuartal Ini" [ref=e127] [cursor=pointer]
+          - button "Tahun Ini" [ref=e128] [cursor=pointer]
+          - button "Kustom" [ref=e129] [cursor=pointer]
+        - paragraph [ref=e130]: 2026-05-24 – 2026-05-24 vs Kemarin (2026-05-22 – 2026-05-23)
+        - generic [ref=e131]:
+          - generic [ref=e132]:
+            - generic [ref=e133]:
+              - generic [ref=e134]: Total Pendapatan
+              - img [ref=e136]
+            - paragraph [ref=e138]: Rp 10.620.000
+            - generic [ref=e139]:
+              - img [ref=e140]
+              - generic [ref=e143]: "-57.1%"
+              - generic [ref=e144]: vs Kemarin
+          - generic [ref=e145]:
+            - generic [ref=e146]:
+              - generic [ref=e147]: Total Transaksi
+              - img [ref=e149]
+            - paragraph [ref=e153]: "18"
+            - generic [ref=e154]:
+              - img [ref=e155]
+              - generic [ref=e158]: "-43.8%"
+              - generic [ref=e159]: vs Kemarin
+          - generic [ref=e160]:
+            - generic [ref=e161]:
+              - generic [ref=e162]: Total Keuntungan
+              - img [ref=e164]
+            - paragraph [ref=e167]: Rp 2.798.550
+            - generic [ref=e168]:
+              - img [ref=e169]
+              - generic [ref=e172]: "-56.9%"
+              - generic [ref=e173]: vs Kemarin
+          - generic [ref=e174]:
+            - generic [ref=e175]:
+              - generic [ref=e176]: Produk Terjual
+              - img [ref=e178]
+            - paragraph [ref=e182]: "50"
+            - generic [ref=e183]:
+              - img [ref=e184]
+              - generic [ref=e187]: "-46.8%"
+              - generic [ref=e188]: vs Kemarin
+        - generic [ref=e189]:
+          - generic [ref=e190]:
+            - generic [ref=e191]:
+              - heading "Tren Pendapatan" [level=3] [ref=e192]
+              - text: Jam • Masa Lalu vs Masa Sekarang vs Prediksi
+            - generic [ref=e193]:
+              - generic [ref=e194]:
+                - generic [ref=e195]: Tertinggi
+                - generic [ref=e196]: Rp 2.8 jt
+                - generic [ref=e197]: "15.00"
+              - generic [ref=e198]:
+                - generic [ref=e199]: Rata-rata
+                - generic [ref=e200]: Rp 1.2 jt
+                - generic [ref=e201]: per jam
+              - generic [ref=e202]:
+                - generic [ref=e203]: Total Transaksi
+                - generic [ref=e204]: "18"
+                - generic [ref=e205]: Rp 10.6 jt
+          - generic [ref=e207]:
+            - 'application "area chart with 3 data series: Masa Lalu, Masa Sekarang, Prediksi (MA)" [ref=e208]':
+              - generic [ref=e210]:
+                - generic [ref=e214]:
+                  - generic:
+                    - generic:
+                      - generic: Rp 1.0 jt
+                    - generic:
+                      - generic: Rp 940 rb
+                    - generic:
+                      - generic: Rp 2.0 jt
+                    - generic:
+                      - generic: Rp 2.8 jt
+                    - generic:
+                      - generic: Rp 1.2 jt
+                    - generic:
+                      - generic: Rp 355 rb
+                    - generic:
+                      - generic: Rp 424 rb
+                    - generic:
+                      - generic: Rp 1.5 jt
+                - generic [ref=e290]:
+                  - generic [ref=e291]:
+                    - generic "00:00" [ref=e292]
+                    - generic "01:00" [ref=e293]
+                    - generic "02:00" [ref=e294]
+                    - generic "03:00" [ref=e295]
+                    - generic "04:00" [ref=e296]
+                    - generic "05:00" [ref=e297]
+                    - generic "06:00" [ref=e298]
+                    - generic "07:00" [ref=e299]
+                    - generic "08:00" [ref=e300]
+                    - generic "09:00" [ref=e301]
+                    - generic "10:00" [ref=e302]
+                    - generic "11:00" [ref=e303]
+                    - generic "12:00" [ref=e304]
+                    - generic "13:00" [ref=e305]
+                    - generic "14:00" [ref=e306]
+                    - generic "15:00" [ref=e307]
+                    - generic "16:00" [ref=e308]
+                    - generic "17:00" [ref=e309]
+                    - generic "18:00" [ref=e310]
+                    - generic "19:00" [ref=e311]
+                    - generic "20:00" [ref=e312]
+                    - generic "21:00" [ref=e313]
+                    - generic "22:00" [ref=e314]
+                    - generic "23:00" [ref=e315]
+                  - generic [ref=e317]: Jam
+                - generic [ref=e318]:
+                  - generic: Rata-rata Rp 1.2 jt
+                  - generic: Tertinggi Rp 2.8 jt
+              - generic [ref=e321]:
+                - generic [ref=e322]:
+                  - generic "Rp 5.0 jt" [ref=e323]
+                  - generic "Rp 4.0 jt" [ref=e324]
+                  - generic "Rp 3.0 jt" [ref=e325]
+                  - generic "Rp 2.0 jt" [ref=e326]
+                  - generic "Rp 1.0 jt" [ref=e327]
+                  - generic "Rp 0" [ref=e328]
+                - generic [ref=e330]: Pendapatan (Rp)
+            - generic [ref=e331]:
+              - button "Masa Lalu, visible. Press Enter or Space to toggle." [ref=e332] [cursor=pointer]:
+                - generic [ref=e333]:
+                  - img
+                - generic [ref=e334]: Masa Lalu
+              - button "Masa Sekarang, visible. Press Enter or Space to toggle." [ref=e335] [cursor=pointer]:
+                - generic [ref=e336]:
+                  - img
+                - generic [ref=e337]: Masa Sekarang
+              - button "Prediksi (MA), visible. Press Enter or Space to toggle." [ref=e338] [cursor=pointer]:
+                - generic [ref=e339]:
+                  - img
+                - generic [ref=e340]: Prediksi (MA)
+            - status [ref=e341]
+            - tooltip: ● ● ●
+        - generic [ref=e342]:
+          - generic [ref=e343]:
+            - generic [ref=e344]:
+              - heading "Perbandingan Periode" [level=3] [ref=e345]
+              - generic [ref=e346]: vs Kemarin
+            - table [ref=e347]:
+              - rowgroup [ref=e348]:
+                - row "Metrik Periode Ini Periode Lalu Selisih" [ref=e349]:
+                  - columnheader "Metrik" [ref=e350]
+                  - columnheader "Periode Ini" [ref=e351]
+                  - columnheader "Periode Lalu" [ref=e352]
+                  - columnheader "Selisih" [ref=e353]
+              - rowgroup [ref=e354]:
+                - row "Pendapatan Rp 10.620.000 Rp 24.748.000 -57.1%" [ref=e355]:
+                  - cell "Pendapatan" [ref=e356]
+                  - cell "Rp 10.620.000" [ref=e357]
+                  - cell "Rp 24.748.000" [ref=e358]
+                  - cell "-57.1%" [ref=e359]
+                - row "Transaksi 18 32 -43.8%" [ref=e360]:
+                  - cell "Transaksi" [ref=e361]
+                  - cell "18" [ref=e362]
+                  - cell "32" [ref=e363]
+                  - cell "-43.8%" [ref=e364]
+                - row "Keuntungan Rp 2.798.550 Rp 6.487.900 -56.9%" [ref=e365]:
+                  - cell "Keuntungan" [ref=e366]
+                  - cell "Rp 2.798.550" [ref=e367]
+                  - cell "Rp 6.487.900" [ref=e368]
+                  - cell "-56.9%" [ref=e369]
+                - row "Produk Terjual 50 94 -46.8%" [ref=e370]:
+                  - cell "Produk Terjual" [ref=e371]
+                  - cell "50" [ref=e372]
+                  - cell "94" [ref=e373]
+                  - cell "-46.8%" [ref=e374]
+          - generic [ref=e375]:
+            - generic [ref=e376]:
+              - heading "Pembayaran Populer" [level=3] [ref=e377]
+              - generic [ref=e378]: Distribusi metode pembayaran
+            - generic [ref=e380]:
+              - application "donut chart with 4 data series" [ref=e381]:
+                - generic [ref=e384]:
+                  - generic [ref=e387]:
+                    - generic:
+                      - generic: 39%
+                    - generic:
+                      - generic: 17%
+                    - generic:
+                      - generic: 28%
+                    - generic:
+                      - generic: 17%
+                  - generic [ref=e390]:
+                    - generic: Transaksi
+                    - generic: "18"
+              - generic [ref=e391]:
+                - button "Tunai, visible. Press Enter or Space to toggle." [ref=e392] [cursor=pointer]:
+                  - generic [ref=e393]:
+                    - img
+                  - generic [ref=e394]: Tunai
+                - button "Transfer Bank, visible. Press Enter or Space to toggle." [ref=e395] [cursor=pointer]:
+                  - generic [ref=e396]:
+                    - img
+                  - generic [ref=e397]: Transfer Bank
+                - button "QRIS, visible. Press Enter or Space to toggle." [ref=e398] [cursor=pointer]:
+                  - generic [ref=e399]:
+                    - img
+                  - generic [ref=e400]: QRIS
+                - button "E-Wallet, visible. Press Enter or Space to toggle." [ref=e401] [cursor=pointer]:
+                  - generic [ref=e402]:
+                    - img
+                  - generic [ref=e403]: E-Wallet
+              - status [ref=e404]
+              - tooltip: ● ● ● ●
+        - generic [ref=e405]:
+          - generic [ref=e406]:
+            - generic [ref=e407]:
+              - heading "Top 5 Produk" [level=3] [ref=e408]
+              - generic [ref=e409]: Berdasarkan pendapatan
+            - generic [ref=e411]:
+              - 'application "bar chart with 1 data series: Pendapatan" [ref=e412]':
+                - generic [ref=e414]:
+                  - generic [ref=e418]:
+                    - generic:
+                      - generic:
+                        - generic: Rp 2.5 jt
+                      - generic:
+                        - generic: Rp 1.3 jt
+                      - generic:
+                        - generic: Rp 1.0 jt
+                      - generic:
+                        - generic: Rp 614 rb
+                      - generic:
+                        - generic: Rp 580 rb
+                  - generic [ref=e422]:
+                    - generic "Elf Bar Target JW" [ref=e423]
+                    - generic "Caliburn Centaurus SU" [ref=e424]
+                    - generic "Geekvape Centaurus PC" [ref=e425]
+                    - generic "Smok Target ER" [ref=e426]
+                    - generic "Vuse Centaurus 7Z" [ref=e427]
+                  - generic [ref=e428]:
+                    - generic [ref=e429]:
+                      - generic "Rp 3.0 jt" [ref=e430]
+                      - generic "Rp 2.5 jt" [ref=e431]
+                      - generic "Rp 2.0 jt" [ref=e432]
+                      - generic "Rp 1.5 jt" [ref=e433]
+                      - generic "Rp 1.0 jt" [ref=e434]
+                      - generic "Rp 500 rb" [ref=e435]
+                      - generic "Rp 0" [ref=e436]
+                    - generic [ref=e438]: Pendapatan (Rp)
+              - status [ref=e439]
+              - tooltip: ●
+            - table [ref=e441]:
+              - rowgroup [ref=e442]:
+                - row "# Produk Qty Pendapatan" [ref=e443]:
+                  - columnheader "#" [ref=e444]
+                  - columnheader "Produk" [ref=e445]
+                  - columnheader "Qty" [ref=e446]
+                  - columnheader "Pendapatan" [ref=e447]
+              - rowgroup [ref=e448]:
+                - row "1 Elf Bar Target JW 3 Rp 2.523.000" [ref=e449]:
+                  - cell "1" [ref=e450]
+                  - cell "Elf Bar Target JW" [ref=e451]
+                  - cell "3" [ref=e452]
+                  - cell "Rp 2.523.000" [ref=e453]
+                - row "2 Caliburn Centaurus SU 3 Rp 1.346.000" [ref=e454]:
+                  - cell "2" [ref=e455]
+                  - cell "Caliburn Centaurus SU" [ref=e456]
+                  - cell "3" [ref=e457]
+                  - cell "Rp 1.346.000" [ref=e458]
+                - row "3 Geekvape Centaurus PC 3 Rp 1.018.000" [ref=e459]:
+                  - cell "3" [ref=e460]
+                  - cell "Geekvape Centaurus PC" [ref=e461]
+                  - cell "3" [ref=e462]
+                  - cell "Rp 1.018.000" [ref=e463]
+                - row "4 Smok Target ER 1 Rp 614.000" [ref=e464]:
+                  - cell "4" [ref=e465]
+                  - cell "Smok Target ER" [ref=e466]
+                  - cell "1" [ref=e467]
+                  - cell "Rp 614.000" [ref=e468]
+                - row "5 Vuse Centaurus 7Z 2 Rp 580.000" [ref=e469]:
+                  - cell "5" [ref=e470]
+                  - cell "Vuse Centaurus 7Z" [ref=e471]
+                  - cell "2" [ref=e472]
+                  - cell "Rp 580.000" [ref=e473]
+          - generic [ref=e474]:
+            - generic [ref=e475]:
+              - heading "Top 5 Kategori" [level=3] [ref=e476]
+              - generic [ref=e477]: Distribusi pendapatan per kategori
+            - generic [ref=e479]:
+              - application "donut chart with 5 data series" [ref=e480]:
+                - generic [ref=e483]:
+                  - generic [ref=e486]:
+                    - generic:
+                      - generic: 44%
+                    - generic:
+                      - generic: 24%
+                    - generic:
+                      - generic: 12%
+                    - generic:
+                      - generic: 10%
+                    - generic:
+                      - generic: 10%
+                  - generic [ref=e489]:
+                    - generic: Total
+                    - generic: Rp 10.1 jt
+              - generic [ref=e490]:
+                - button "Mod Device, visible. Press Enter or Space to toggle." [ref=e491] [cursor=pointer]:
+                  - generic [ref=e492]:
+                    - img
+                  - generic [ref=e493]: Mod Device
+                - button "Pod Device, visible. Press Enter or Space to toggle." [ref=e494] [cursor=pointer]:
+                  - generic [ref=e495]:
+                    - img
+                  - generic [ref=e496]: Pod Device
+                - button "Coil & Accessories, visible. Press Enter or Space to toggle." [ref=e497] [cursor=pointer]:
+                  - generic [ref=e498]:
+                    - img
+                  - generic [ref=e499]: Coil & Accessories
+                - button "Nicotine Salt, visible. Press Enter or Space to toggle." [ref=e500] [cursor=pointer]:
+                  - generic [ref=e501]:
+                    - img
+                  - generic [ref=e502]: Nicotine Salt
+                - button "Disposable, visible. Press Enter or Space to toggle." [ref=e503] [cursor=pointer]:
+                  - generic [ref=e504]:
+                    - img
+                  - generic [ref=e505]: Disposable
+              - status [ref=e506]
+              - tooltip: ● ● ● ● ●
+            - table [ref=e508]:
+              - rowgroup [ref=e509]:
+                - row "# Kategori Qty Pendapatan" [ref=e510]:
+                  - columnheader "#" [ref=e511]
+                  - columnheader "Kategori" [ref=e512]
+                  - columnheader "Qty" [ref=e513]
+                  - columnheader "Pendapatan" [ref=e514]
+              - rowgroup [ref=e515]:
+                - row "1 Mod Device 7 Rp 4.483.000" [ref=e516]:
+                  - cell "1" [ref=e517]
+                  - cell "Mod Device" [ref=e518]
+                  - cell "7" [ref=e519]
+                  - cell "Rp 4.483.000" [ref=e520]
+                - row "2 Pod Device 7 Rp 2.377.000" [ref=e521]:
+                  - cell "2" [ref=e522]
+                  - cell "Pod Device" [ref=e523]
+                  - cell "7" [ref=e524]
+                  - cell "Rp 2.377.000" [ref=e525]
+                - row "3 Coil & Accessories 19 Rp 1.190.000" [ref=e526]:
+                  - cell "3" [ref=e527]
+                  - cell "Coil & Accessories" [ref=e528]
+                  - cell "19" [ref=e529]
+                  - cell "Rp 1.190.000" [ref=e530]
+                - row "4 Nicotine Salt 8 Rp 1.050.000" [ref=e531]:
+                  - cell "4" [ref=e532]
+                  - cell "Nicotine Salt" [ref=e533]
+                  - cell "8" [ref=e534]
+                  - cell "Rp 1.050.000" [ref=e535]
+                - row "5 Disposable 5 Rp 985.000" [ref=e536]:
+                  - cell "5" [ref=e537]
+                  - cell "Disposable" [ref=e538]
+                  - cell "5" [ref=e539]
+                  - cell "Rp 985.000" [ref=e540]
+        - generic [ref=e541]:
+          - generic [ref=e542]:
+            - heading "Top 5 Merek" [level=3] [ref=e543]
+            - generic [ref=e544]: Merek dengan pendapatan tertinggi
+          - generic [ref=e546]:
+            - 'application "bar chart with 1 data series: Pendapatan" [ref=e547]':
+              - generic [ref=e549]:
+                - generic [ref=e553]:
+                  - generic:
+                    - generic:
+                      - generic: Rp 3.0 jt
+                    - generic:
+                      - generic: Rp 1.9 jt
+                    - generic:
+                      - generic: Rp 1.5 jt
+                    - generic:
+                      - generic: Rp 900 rb
+                    - generic:
+                      - generic: Rp 866 rb
+                - generic [ref=e558]:
+                  - generic "Elf Bar" [ref=e559]
+                  - generic "Caliburn" [ref=e560]
+                  - generic "Geekvape" [ref=e561]
+                  - generic "Vuse" [ref=e562]
+                  - generic "OXVA" [ref=e563]
+                - generic [ref=e564]:
+                  - generic [ref=e565]:
+                    - generic "Rp 3.0 jt" [ref=e566]
+                    - generic "Rp 2.5 jt" [ref=e567]
+                    - generic "Rp 2.0 jt" [ref=e568]
+                    - generic "Rp 1.5 jt" [ref=e569]
+                    - generic "Rp 1.0 jt" [ref=e570]
+                    - generic "Rp 500 rb" [ref=e571]
+                    - generic "Rp 0" [ref=e572]
+                  - generic [ref=e574]: Pendapatan (Rp)
+            - status [ref=e575]
+            - tooltip: ●
+  - region "Notifications alt+T":
+    - list
+  - button "Buka AI Asisten" [ref=e576] [cursor=pointer]:
+    - img [ref=e578]
+    - generic [ref=e581]: AI

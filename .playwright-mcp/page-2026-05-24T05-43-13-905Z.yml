@@ -1,0 +1,408 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - img [ref=e8]
+        - generic [ref=e10]:
+          - paragraph [ref=e11]: Story Vape
+          - paragraph [ref=e12]: Admin Panel
+      - navigation [ref=e13]:
+        - link "Dashboard" [ref=e14] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - img [ref=e15]
+          - generic [ref=e20]: Dashboard
+        - link "Manajemen Produk" [ref=e21] [cursor=pointer]:
+          - /url: /admin/products
+          - img [ref=e22]
+          - generic [ref=e26]: Manajemen Produk
+        - link "Laporan Penjualan" [ref=e27] [cursor=pointer]:
+          - /url: /admin/reports/sales
+          - img [ref=e28]
+          - generic [ref=e30]: Laporan Penjualan
+        - link "History Pembayaran" [ref=e31] [cursor=pointer]:
+          - /url: /admin/transactions/today
+          - img [ref=e32]
+          - generic [ref=e35]: History Pembayaran
+        - link "Kelola Akun" [ref=e36] [cursor=pointer]:
+          - /url: /admin/users
+          - img [ref=e37]
+          - generic [ref=e42]: Kelola Akun
+        - link "Promo & Diskon" [ref=e43] [cursor=pointer]:
+          - /url: /admin/promotions
+          - img [ref=e44]
+          - generic [ref=e47]: Promo & Diskon
+      - generic [ref=e48]:
+        - link "Pengaturan Profil" [ref=e49] [cursor=pointer]:
+          - /url: /settings/profile
+          - img [ref=e50]
+          - generic [ref=e62]: Pengaturan Profil
+        - button "Logout" [ref=e63] [cursor=pointer]:
+          - img [ref=e64]
+          - generic [ref=e67]: Logout
+  - generic [ref=e68]:
+    - banner [ref=e69]:
+      - generic [ref=e70]:
+        - button "Toggle navigation menu" [expanded] [ref=e71] [cursor=pointer]
+        - heading "Admin Panel" [level=1] [ref=e72]
+      - button "Selamat datang, Admin User" [ref=e75] [cursor=pointer]:
+        - generic [ref=e76]: Selamat datang, Admin User
+    - main [ref=e77]:
+      - generic [ref=e79]:
+        - generic [ref=e81]:
+          - generic [ref=e82]:
+            - heading "Riwayat Penjualan" [level=1] [ref=e83]
+            - paragraph [ref=e84]: "Periode: Minggu, 24 Mei 2026"
+            - paragraph [ref=e85]: "Tampilan diperbarui: Minggu, 24 Mei 2026 12:43 WIB"
+            - generic [ref=e86]:
+              - button "Harian" [ref=e87] [cursor=pointer]
+              - button "Mingguan" [ref=e88] [cursor=pointer]
+              - button "Bulanan" [ref=e89] [cursor=pointer]
+              - button "Quarter" [ref=e90] [cursor=pointer]
+              - button "Tahunan" [ref=e91] [cursor=pointer]
+              - button "Kustom" [ref=e92] [cursor=pointer]
+            - generic [ref=e93]:
+              - button "Hari sebelumnya" [ref=e94]:
+                - img
+              - generic [ref=e95]:
+                - img [ref=e96]
+                - textbox "Pilih tanggal transaksi" [ref=e98]: 2026-05-24
+              - button "Hari berikutnya" [disabled]:
+                - img
+          - generic [ref=e99]:
+            - button "Cetak" [ref=e100] [cursor=pointer]:
+              - img [ref=e101]
+              - text: Cetak
+            - button "Export" [ref=e105] [cursor=pointer]:
+              - img [ref=e106]
+              - text: Export
+        - main [ref=e109]:
+          - generic [ref=e110]:
+            - generic [ref=e112]:
+              - img [ref=e114]
+              - generic [ref=e118]:
+                - paragraph [ref=e119]: Total Transaksi
+                - paragraph [ref=e120]: "19"
+                - paragraph [ref=e121]: transaksi hari ini
+            - generic [ref=e123]:
+              - img [ref=e125]
+              - generic [ref=e127]:
+                - paragraph [ref=e128]: Total Penjualan
+                - paragraph [ref=e129]: Rp 10.735.000
+                - paragraph [ref=e130]: Rata-rata Rp 565.000/trx
+            - generic [ref=e132]:
+              - img [ref=e134]
+              - generic [ref=e137]:
+                - paragraph [ref=e138]: Tunai Masuk
+                - paragraph [ref=e139]: Rp 4.259.000
+                - paragraph [ref=e140]: 8 transaksi
+            - generic [ref=e142]:
+              - img [ref=e144]
+              - generic [ref=e148]:
+                - paragraph [ref=e149]: Item Terjual
+                - paragraph [ref=e150]: "51"
+                - paragraph [ref=e151]: total item
+          - generic [ref=e153]:
+            - generic [ref=e154]:
+              - generic [ref=e155]:
+                - heading "Total Penjualan vs Kemarin" [level=3] [ref=e156]
+                - paragraph [ref=e157]: Minggu, 24 Mei 2026 vs Jumat, 22 Mei 2026 – Sabtu, 23 Mei 2026
+              - generic [ref=e158]:
+                - generic [ref=e159]:
+                  - paragraph [ref=e160]: Periode Ini
+                  - paragraph [ref=e161]: Rp 10.735.000
+                - generic [ref=e162]:
+                  - paragraph [ref=e163]: Periode Lalu
+                  - paragraph [ref=e164]: Rp 24.748.000
+                - generic [ref=e165]:
+                  - img [ref=e166]
+                  - generic [ref=e169]: "-56.6%"
+            - generic [ref=e171]:
+              - 'application "area chart with 2 data series: Periode Ini, Periode Lalu" [ref=e172]':
+                - generic [ref=e182]:
+                  - generic "10:00" [ref=e183]
+                  - generic "12:00" [ref=e184]
+                  - generic "14:00" [ref=e185]
+                  - generic "15:00" [ref=e186]
+                  - generic "16:00" [ref=e187]
+                  - generic "17:00" [ref=e188]
+                  - generic "18:00" [ref=e189]
+                  - generic "19:00" [ref=e190]
+                  - generic "20:00" [ref=e191]
+                  - generic "11:00" [ref=e192]
+                  - generic "12:00" [ref=e193]
+                  - generic "13:00" [ref=e194]
+                  - generic "15:00" [ref=e195]
+                  - generic "16:00" [ref=e196]
+                  - generic "17:00" [ref=e197]
+                  - generic "18:00" [ref=e198]
+                  - generic "19:00" [ref=e199]
+                  - generic "20:00" [ref=e200]
+                - generic [ref=e202]:
+                  - generic "Rp 5.000.000" [ref=e203]
+                  - generic "Rp 4.000.000" [ref=e204]
+                  - generic "Rp 3.000.000" [ref=e205]
+                  - generic "Rp 2.000.000" [ref=e206]
+                  - generic "Rp 1.000.000" [ref=e207]
+                  - generic "Rp 0" [ref=e208]
+              - generic [ref=e209]:
+                - button "Periode Ini, visible. Press Enter or Space to toggle." [ref=e210] [cursor=pointer]:
+                  - generic [ref=e211]:
+                    - img
+                  - generic [ref=e212]: Periode Ini
+                - button "Periode Lalu, visible. Press Enter or Space to toggle." [ref=e213] [cursor=pointer]:
+                  - generic [ref=e214]:
+                    - img
+                  - generic [ref=e215]: Periode Lalu
+              - status [ref=e216]
+              - tooltip: ● ●
+          - generic [ref=e218]:
+            - generic [ref=e219]:
+              - heading "Daftar Transaksi" [level=2] [ref=e220]
+              - generic [ref=e221]:
+                - generic [ref=e222]:
+                  - img [ref=e223]
+                  - textbox "Cari struk / kasir..." [ref=e226]
+                - combobox [ref=e227] [cursor=pointer]:
+                  - option "Semua" [selected]
+                  - option "Tunai"
+                  - option "QRIS"
+                  - option "Transfer"
+                  - option "E-Wallet"
+            - table [ref=e230]:
+              - rowgroup [ref=e231]:
+                - row "Jam No. Struk Pembayaran Kasir Jumlah Status" [ref=e232]:
+                  - columnheader "Jam" [ref=e233]
+                  - columnheader "No. Struk" [ref=e234]
+                  - columnheader "Pembayaran" [ref=e235]
+                  - columnheader "Kasir" [ref=e236]
+                  - columnheader "Jumlah" [ref=e237]
+                  - columnheader "Status" [ref=e238]
+                  - columnheader [ref=e239]
+              - rowgroup [ref=e240]:
+                - row "20.21 SALE-001118 Tunai Kasir User Rp 1.471.000 Berhasil" [ref=e241] [cursor=pointer]:
+                  - cell "20.21" [ref=e242]
+                  - cell "SALE-001118" [ref=e243]:
+                    - generic [ref=e245]: SALE-001118
+                  - cell "Tunai" [ref=e246]:
+                    - generic [ref=e248]: Tunai
+                  - cell "Kasir User" [ref=e249]
+                  - cell "Rp 1.471.000" [ref=e250]
+                  - cell "Berhasil" [ref=e251]
+                  - cell [ref=e252]:
+                    - img [ref=e253]
+                - row "19.34 SALE-001102 Diskon -Rp 10.000 QRIS Kasir User Rp 64.000 Berhasil" [ref=e255] [cursor=pointer]:
+                  - cell "19.34" [ref=e256]
+                  - cell "SALE-001102 Diskon -Rp 10.000" [ref=e257]:
+                    - generic [ref=e258]:
+                      - generic [ref=e259]: SALE-001102
+                      - generic "Diskon -Rp 10.000" [ref=e260]
+                  - cell "QRIS" [ref=e261]:
+                    - generic [ref=e263]: QRIS
+                  - cell "Kasir User" [ref=e264]
+                  - cell "Rp 64.000" [ref=e265]
+                  - cell "Berhasil" [ref=e266]
+                  - cell [ref=e267]:
+                    - img [ref=e268]
+                - row "19.11 SALE-001116 QRIS Kasir User Rp 360.000 Berhasil" [ref=e270] [cursor=pointer]:
+                  - cell "19.11" [ref=e271]
+                  - cell "SALE-001116" [ref=e272]:
+                    - generic [ref=e274]: SALE-001116
+                  - cell "QRIS" [ref=e275]:
+                    - generic [ref=e277]: QRIS
+                  - cell "Kasir User" [ref=e278]
+                  - cell "Rp 360.000" [ref=e279]
+                  - cell "Berhasil" [ref=e280]
+                  - cell [ref=e281]:
+                    - img [ref=e282]
+                - row "18.57 SALE-001109 Diskon -Rp 5.000 E-Wallet Kasir User Rp 81.000 Berhasil" [ref=e284] [cursor=pointer]:
+                  - cell "18.57" [ref=e285]
+                  - cell "SALE-001109 Diskon -Rp 5.000" [ref=e286]:
+                    - generic [ref=e287]:
+                      - generic [ref=e288]: SALE-001109
+                      - generic "Diskon -Rp 5.000" [ref=e289]
+                  - cell "E-Wallet" [ref=e290]:
+                    - generic [ref=e292]: E-Wallet
+                  - cell "Kasir User" [ref=e293]
+                  - cell "Rp 81.000" [ref=e294]
+                  - cell "Berhasil" [ref=e295]
+                  - cell [ref=e296]:
+                    - img [ref=e297]
+                - row "18.20 SALE-001104 Diskon -Rp 25.000 QRIS Kasir User Rp 434.000 Berhasil" [ref=e299] [cursor=pointer]:
+                  - cell "18.20" [ref=e300]
+                  - cell "SALE-001104 Diskon -Rp 25.000" [ref=e301]:
+                    - generic [ref=e302]:
+                      - generic [ref=e303]: SALE-001104
+                      - generic "Diskon -Rp 25.000" [ref=e304]
+                  - cell "QRIS" [ref=e305]:
+                    - generic [ref=e307]: QRIS
+                  - cell "Kasir User" [ref=e308]
+                  - cell "Rp 434.000" [ref=e309]
+                  - cell "Berhasil" [ref=e310]
+                  - cell [ref=e311]:
+                    - img [ref=e312]
+                - row "17.12 SALE-001103 E-Wallet Cashier Rp 230.000 Berhasil" [ref=e314] [cursor=pointer]:
+                  - cell "17.12" [ref=e315]
+                  - cell "SALE-001103" [ref=e316]:
+                    - generic [ref=e318]: SALE-001103
+                  - cell "E-Wallet" [ref=e319]:
+                    - generic [ref=e321]: E-Wallet
+                  - cell "Cashier" [ref=e322]
+                  - cell "Rp 230.000" [ref=e323]
+                  - cell "Berhasil" [ref=e324]
+                  - cell [ref=e325]:
+                    - img [ref=e326]
+                - row "17.01 SALE-001113 Tunai Kasir User Rp 125.000 Berhasil" [ref=e328] [cursor=pointer]:
+                  - cell "17.01" [ref=e329]
+                  - cell "SALE-001113" [ref=e330]:
+                    - generic [ref=e332]: SALE-001113
+                  - cell "Tunai" [ref=e333]:
+                    - generic [ref=e335]: Tunai
+                  - cell "Kasir User" [ref=e336]
+                  - cell "Rp 125.000" [ref=e337]
+                  - cell "Berhasil" [ref=e338]
+                  - cell [ref=e339]:
+                    - img [ref=e340]
+                - row "16.51 SALE-001108 Tunai Cashier Rp 614.000 Berhasil" [ref=e342] [cursor=pointer]:
+                  - cell "16.51" [ref=e343]
+                  - cell "SALE-001108" [ref=e344]:
+                    - generic [ref=e346]: SALE-001108
+                  - cell "Tunai" [ref=e347]:
+                    - generic [ref=e349]: Tunai
+                  - cell "Cashier" [ref=e350]
+                  - cell "Rp 614.000" [ref=e351]
+                  - cell "Berhasil" [ref=e352]
+                  - cell [ref=e353]:
+                    - img [ref=e354]
+                - row "16.45 SALE-001110 E-Wallet Admin User Rp 550.000 Berhasil" [ref=e356] [cursor=pointer]:
+                  - cell "16.45" [ref=e357]
+                  - cell "SALE-001110" [ref=e358]:
+                    - generic [ref=e360]: SALE-001110
+                  - cell "E-Wallet" [ref=e361]:
+                    - generic [ref=e363]: E-Wallet
+                  - cell "Admin User" [ref=e364]
+                  - cell "Rp 550.000" [ref=e365]
+                  - cell "Berhasil" [ref=e366]
+                  - cell [ref=e367]:
+                    - img [ref=e368]
+                - row "15.52 SALE-001106 Transfer Admin User Rp 2.688.000 Berhasil" [ref=e370] [cursor=pointer]:
+                  - cell "15.52" [ref=e371]
+                  - cell "SALE-001106" [ref=e372]:
+                    - generic [ref=e374]: SALE-001106
+                  - cell "Transfer" [ref=e375]:
+                    - generic [ref=e377]: Transfer
+                  - cell "Admin User" [ref=e378]
+                  - cell "Rp 2.688.000" [ref=e379]
+                  - cell "Berhasil" [ref=e380]
+                  - cell [ref=e381]:
+                    - img [ref=e382]
+                - row "15.32 SALE-001107 Diskon -Rp 10.000 Tunai Cashier Rp 75.000 Berhasil" [ref=e384] [cursor=pointer]:
+                  - cell "15.32" [ref=e385]
+                  - cell "SALE-001107 Diskon -Rp 10.000" [ref=e386]:
+                    - generic [ref=e387]:
+                      - generic [ref=e388]: SALE-001107
+                      - generic "Diskon -Rp 10.000" [ref=e389]
+                  - cell "Tunai" [ref=e390]:
+                    - generic [ref=e392]: Tunai
+                  - cell "Cashier" [ref=e393]
+                  - cell "Rp 75.000" [ref=e394]
+                  - cell "Berhasil" [ref=e395]
+                  - cell [ref=e396]:
+                    - img [ref=e397]
+                - row "14.57 SALE-001114 Tunai Admin User Rp 1.249.000 Berhasil" [ref=e399] [cursor=pointer]:
+                  - cell "14.57" [ref=e400]
+                  - cell "SALE-001114" [ref=e401]:
+                    - generic [ref=e403]: SALE-001114
+                  - cell "Tunai" [ref=e404]:
+                    - generic [ref=e406]: Tunai
+                  - cell "Admin User" [ref=e407]
+                  - cell "Rp 1.249.000" [ref=e408]
+                  - cell "Berhasil" [ref=e409]
+                  - cell [ref=e410]:
+                    - img [ref=e411]
+                - row "14.11 SALE-001112 Tunai Kasir User Rp 395.000 Berhasil" [ref=e413] [cursor=pointer]:
+                  - cell "14.11" [ref=e414]
+                  - cell "SALE-001112" [ref=e415]:
+                    - generic [ref=e417]: SALE-001112
+                  - cell "Tunai" [ref=e418]:
+                    - generic [ref=e420]: Tunai
+                  - cell "Kasir User" [ref=e421]
+                  - cell "Rp 395.000" [ref=e422]
+                  - cell "Berhasil" [ref=e423]
+                  - cell [ref=e424]:
+                    - img [ref=e425]
+                - row "14.05 SALE-001105 QRIS budi Rp 324.000 Berhasil" [ref=e427] [cursor=pointer]:
+                  - cell "14.05" [ref=e428]
+                  - cell "SALE-001105" [ref=e429]:
+                    - generic [ref=e431]: SALE-001105
+                  - cell "QRIS" [ref=e432]:
+                    - generic [ref=e434]: QRIS
+                  - cell "budi" [ref=e435]
+                  - cell "Rp 324.000" [ref=e436]
+                  - cell "Berhasil" [ref=e437]
+                  - cell [ref=e438]:
+                    - img [ref=e439]
+                - row "12.34 SALE-001115 Transfer Kasir User Rp 725.000 Berhasil" [ref=e441] [cursor=pointer]:
+                  - cell "12.34" [ref=e442]
+                  - cell "SALE-001115" [ref=e443]:
+                    - generic [ref=e445]: SALE-001115
+                  - cell "Transfer" [ref=e446]:
+                    - generic [ref=e448]: Transfer
+                  - cell "Kasir User" [ref=e449]
+                  - cell "Rp 725.000" [ref=e450]
+                  - cell "Berhasil" [ref=e451]
+                  - cell [ref=e452]:
+                    - img [ref=e453]
+                - row "12.10 SALE-001119 Tunai Cashier Rp 115.000 Diretur sebagian" [ref=e455] [cursor=pointer]:
+                  - cell "12.10" [ref=e456]
+                  - cell "SALE-001119" [ref=e457]:
+                    - generic [ref=e459]: SALE-001119
+                  - cell "Tunai" [ref=e460]:
+                    - generic [ref=e462]: Tunai
+                  - cell "Cashier" [ref=e463]
+                  - cell "Rp 115.000" [ref=e464]
+                  - cell "Diretur sebagian" [ref=e465]
+                  - cell [ref=e466]:
+                    - img [ref=e467]
+                - row "12.05 SALE-001111 Tunai budi Rp 215.000 Berhasil" [ref=e469] [cursor=pointer]:
+                  - cell "12.05" [ref=e470]
+                  - cell "SALE-001111" [ref=e471]:
+                    - generic [ref=e473]: SALE-001111
+                  - cell "Tunai" [ref=e474]:
+                    - generic [ref=e476]: Tunai
+                  - cell "budi" [ref=e477]
+                  - cell "Rp 215.000" [ref=e478]
+                  - cell "Berhasil" [ref=e479]
+                  - cell [ref=e480]:
+                    - img [ref=e481]
+                - row "10.46 SALE-001101 Transfer Cashier Rp 125.000 Berhasil" [ref=e483] [cursor=pointer]:
+                  - cell "10.46" [ref=e484]
+                  - cell "SALE-001101" [ref=e485]:
+                    - generic [ref=e487]: SALE-001101
+                  - cell "Transfer" [ref=e488]:
+                    - generic [ref=e490]: Transfer
+                  - cell "Cashier" [ref=e491]
+                  - cell "Rp 125.000" [ref=e492]
+                  - cell "Berhasil" [ref=e493]
+                  - cell [ref=e494]:
+                    - img [ref=e495]
+                - row "10.11 SALE-001117 Diskon -Rp 25.000 QRIS Kasir User Rp 895.000 Berhasil" [ref=e497] [cursor=pointer]:
+                  - cell "10.11" [ref=e498]
+                  - cell "SALE-001117 Diskon -Rp 25.000" [ref=e499]:
+                    - generic [ref=e500]:
+                      - generic [ref=e501]: SALE-001117
+                      - generic "Diskon -Rp 25.000" [ref=e502]
+                  - cell "QRIS" [ref=e503]:
+                    - generic [ref=e505]: QRIS
+                  - cell "Kasir User" [ref=e506]
+                  - cell "Rp 895.000" [ref=e507]
+                  - cell "Berhasil" [ref=e508]
+                  - cell [ref=e509]:
+                    - img [ref=e510]
+            - generic [ref=e512]:
+              - generic [ref=e513]: Menampilkan 19 dari 19 transaksi
+              - generic [ref=e514]: "Total: Rp 10.735.000"
+  - region "Notifications alt+T":
+    - list
+  - button "Buka AI Asisten" [ref=e515] [cursor=pointer]:
+    - img [ref=e517]
+    - generic [ref=e520]: AI

@@ -22,9 +22,10 @@ class TodayTransactionController extends Controller
             ? Carbon::parse($request->query('date'))
             : now();
 
-        $sales = Sale::with(['items.product', 'items.allocations', 'user'])
+        // Termasuk transaksi yang sebagian/seluruhnya di-return — selaras Dashboard & admin.
+        $sales = Sale::with(['items.product', 'items.allocations', 'user', 'productReturns.returnItems'])
             ->whereDate('created_at', $date)
-            ->where('status', 'completed')
+            ->whereIn('status', ['completed', 'partial_return', 'returned'])
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -33,9 +34,7 @@ class TodayTransactionController extends Controller
         $summary = [
             'total_transactions' => $transactions->count(),
             'total_sales' => $transactions->sum('total_amount'),
-            'total_items' => $transactions->sum(function ($t) {
-                return collect($t['items'] ?? [])->sum('quantity');
-            }),
+            'total_items' => $transactions->sum('net_quantity'),
             'payment_methods' => [
                 'cash' => $transactions->where('payment_method', 'cash')->sum('total_amount'),
                 'bank_transfer' => $transactions->where('payment_method', 'bank_transfer')->sum('total_amount'),
@@ -67,9 +66,10 @@ class TodayTransactionController extends Controller
             ? Carbon::parse($request->query('date'))
             : now();
 
-        $sales = Sale::with(['items.product', 'items.allocations', 'user'])
+        // Termasuk transaksi yang sebagian/seluruhnya di-return — selaras Dashboard & admin.
+        $sales = Sale::with(['items.product', 'items.allocations', 'user', 'productReturns.returnItems'])
             ->whereDate('created_at', $date)
-            ->where('status', 'completed')
+            ->whereIn('status', ['completed', 'partial_return', 'returned'])
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -78,9 +78,7 @@ class TodayTransactionController extends Controller
         $summary = [
             'total_transactions' => $transactions->count(),
             'total_sales' => $transactions->sum('total_amount'),
-            'total_items' => $transactions->sum(function ($t) {
-                return collect($t['items'] ?? [])->sum('quantity');
-            }),
+            'total_items' => $transactions->sum('net_quantity'),
             'payment_methods' => [
                 'cash' => $transactions->where('payment_method', 'cash')->sum('total_amount'),
                 'bank_transfer' => $transactions->where('payment_method', 'bank_transfer')->sum('total_amount'),
@@ -102,18 +100,34 @@ class TodayTransactionController extends Controller
     {
         return $sales->map(function (Sale $sale) {
             $discountAmount = (float) $sale->discount_amount;
-            $totalAmount    = (float) $sale->total_amount;
+            $grossAmount    = (float) $sale->total_amount;
             $itemsSubtotal  = (float) $sale->items->sum(fn ($i) => (float) $i->total);
-            $subtotal       = $itemsSubtotal > 0 ? $itemsSubtotal : ($totalAmount + $discountAmount);
-            $discountFactor = $subtotal > 0 ? ($totalAmount / $subtotal) : 1.0;
+            $subtotal       = $itemsSubtotal > 0 ? $itemsSubtotal : ($grossAmount + $discountAmount);
+            $discountFactor = $subtotal > 0 ? ($grossAmount / $subtotal) : 1.0;
+
+            // Nilai refund tercatat (return_items.subtotal, sudah dibulatkan) dari retur non-rejected.
+            $refundTotal  = (float) $sale->productReturns
+                ->filter(fn ($r) => (is_object($r->status) ? $r->status->value : $r->status) !== 'rejected')
+                ->sum(fn ($r) => (float) $r->returnItems->sum('subtotal'));
+            $returnedQty  = (int) $sale->items->sum(
+                fn ($i) => $i->allocations->sum(fn ($a) => (int) $a->returned_quantity)
+            );
+            // Pembulatan ke rupiah utuh (tidak ada pecahan sen di transaksi nyata).
+            $netAmount    = max(0, (float) round($grossAmount - $refundTotal));
+            $netQuantity  = max(0, (int) $sale->items->sum(fn ($i) => (int) $i->quantity) - $returnedQty);
+            $isReturned   = in_array($sale->status, ['partial_return', 'returned'], true);
 
             return [
                 'id' => (string) $sale->id,
                 'invoice_number' => 'SALE-'.str_pad((string) $sale->id, 6, '0', STR_PAD_LEFT),
                 'payment_method' => $sale->payment_method,
-                'status' => 'success',
-                'tax_amount' => $totalAmount,
-                'total_amount' => $totalAmount,
+                'status' => $isReturned ? $sale->status : 'success',
+                'is_returned' => $isReturned,
+                'tax_amount' => $netAmount,
+                'total_amount' => $netAmount,
+                'gross_amount' => round($grossAmount),
+                'returned_amount' => round($refundTotal),
+                'net_quantity' => $netQuantity,
                 'subtotal' => $subtotal,
                 'discount_amount' => $discountAmount,
                 'discount_code'   => $sale->discount_code,
@@ -127,15 +141,21 @@ class TodayTransactionController extends Controller
                 'items' => $sale->items->map(function ($item) use ($discountFactor) {
                     $lineTotal    = (float) $item->total;
                     $quantity     = (int) $item->quantity;
-                    $hppTotal     = (float) $item->allocations->sum(fn ($a) => (float) $a->unit_cost * (int) $a->quantity);
-                    $hppTotal     = round($hppTotal, 0);
-                    $netRevenue   = round($lineTotal * $discountFactor, 0);
-                    $itemDiscount = round($lineTotal - $netRevenue, 0);
-                    $profit       = round($netRevenue - $hppTotal, 0);
+                    $returnedQty  = (int) $item->allocations->sum(fn ($a) => (int) $a->returned_quantity);
+                    $hppTotal     = round((float) $item->allocations->sum(
+                        fn ($a) => (float) $a->unit_cost * ((int) $a->quantity - (int) $a->returned_quantity)
+                    ));
+                    $refundItem   = round((float) $item->allocations->sum(
+                        fn ($a) => (float) $a->unit_price * (int) $a->returned_quantity
+                    ));
+                    $netRevenue   = max(0, round($lineTotal * $discountFactor) - $refundItem);
+                    $itemDiscount = round($lineTotal - round($lineTotal * $discountFactor));
+                    $profit       = round($netRevenue - $hppTotal);
 
                     return [
                         'id' => (string) $item->id,
                         'quantity' => $quantity,
+                        'returned_quantity' => $returnedQty,
                         'unit_price' => (float) $item->unit_price,
                         'discount' => (float) ($item->discount ?? 0) + $itemDiscount,
                         'promo_discount' => (float) ($item->promo_discount ?? 0),

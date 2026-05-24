@@ -19,15 +19,15 @@ const user = computed(() => page.props.auth.user);
 </script>
 
 <template>
-    <Head title="Profile settings" />
+    <Head title="Pengaturan Profil" />
 
-    <h1 class="sr-only">Profile settings</h1>
+    <h1 class="sr-only">Pengaturan Profil</h1>
 
     <div class="flex flex-col space-y-6">
         <Heading
             variant="small"
-            title="Profile information"
-            description="Update your name and email address"
+            title="Informasi Profil"
+            description="Perbarui nama dan alamat email Anda"
         />
 
         <Form
@@ -36,7 +36,7 @@ const user = computed(() => page.props.auth.user);
             v-slot="{ errors, processing }"
         >
             <div class="grid gap-2">
-                <Label for="name">Name</Label>
+                <Label for="name">Nama</Label>
                 <Input
                     id="name"
                     class="mt-1 block w-full"
@@ -44,13 +44,13 @@ const user = computed(() => page.props.auth.user);
                     :default-value="user.name"
                     required
                     autocomplete="name"
-                    placeholder="Full name"
+                    placeholder="Nama lengkap"
                 />
                 <InputError class="mt-2" :message="errors.name" />
             </div>
 
             <div class="grid gap-2">
-                <Label for="email">Email address</Label>
+                <Label for="email">Alamat email</Label>
                 <Input
                     id="email"
                     type="email"
@@ -59,7 +59,7 @@ const user = computed(() => page.props.auth.user);
                     :default-value="user.email"
                     required
                     autocomplete="username"
-                    placeholder="Email address"
+                    placeholder="Alamat email"
                 />
                 <InputError class="mt-2" :message="errors.email" />
             </div>
@@ -68,7 +68,7 @@ const user = computed(() => page.props.auth.user);
 
             <div class="flex items-center gap-4">
                 <Button :disabled="processing" data-test="update-profile-button"
-                    >Save</Button
+                    >Simpan</Button
                 >
             </div>
         </Form>
