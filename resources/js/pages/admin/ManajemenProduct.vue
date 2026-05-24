@@ -62,6 +62,8 @@ const props = defineProps<
         brands?: BrandRef[]
         selectedBrand?: BrandRef | null
         stats?: ProductStats
+        sortKey?: string | null
+        sortDir?: 'asc' | 'desc'
     }
 >()
 
@@ -100,6 +102,8 @@ function applyFilters() {
                 search: search.value || undefined,
                 category: categorySlug.value === 'all' ? undefined : categorySlug.value,
                 brand: brandSlug.value === 'all' ? undefined : brandSlug.value,
+                sort: sortKey.value ?? undefined,
+                dir: sortKey.value ? sortDir.value : undefined,
             },
         }),
         {},
@@ -139,6 +143,8 @@ function goToPage(page: number) {
                 search: search.value || undefined,
                 category: categorySlug.value === 'all' ? undefined : categorySlug.value,
                 brand: brandSlug.value === 'all' ? undefined : brandSlug.value,
+                sort: sortKey.value ?? undefined,
+                dir: sortKey.value ? sortDir.value : undefined,
             },
         }),
         {},
@@ -185,16 +191,21 @@ const debouncedSearch = useDebounceFn(applyFilters, 400)
 watch(search, debouncedSearch)
 watch([categorySlug, brandSlug], applyFilters)
 
-// ── Sorting (client-side, current page) ───────────────────────────────────────
+// ── Sorting (server-side, seluruh dataset lintas halaman) ──────────────────────
 
 type SortKey =
     | 'sku' | 'name' | 'brand' | 'category' | 'flavor'
     | 'nicotine' | 'size' | 'cukai' | 'base_price' | 'stock' | 'status'
 type SortDir = 'asc' | 'desc'
 
-const sortKey = ref<SortKey | null>(null)
-const sortDir = ref<SortDir>('asc')
+const sortKey = ref<SortKey | null>((props.sortKey as SortKey) ?? null)
+const sortDir = ref<SortDir>(props.sortDir ?? 'asc')
 
+/**
+ * Tiga state per kolom: asc → desc → tanpa sort. Karena pengurutan terjadi di
+ * server (seluruh produk, bukan hanya halaman ini), setiap klik memanggil
+ * applyFilters() agar query diulang dengan param sort/dir.
+ */
 function toggleSort(key: SortKey) {
     if (sortKey.value !== key) {
         sortKey.value = key
@@ -205,37 +216,10 @@ function toggleSort(key: SortKey) {
         sortKey.value = null
         sortDir.value = 'asc'
     }
+    applyFilters()
 }
 
-function sortValue(p: Product, key: SortKey): string | number {
-    const a = p as any
-    switch (key) {
-        case 'sku':        return p.sku ?? ''
-        case 'name':       return p.name ?? ''
-        case 'brand':      return p.brand?.name ?? ''
-        case 'category':   return p.category?.name ?? ''
-        case 'flavor':     return a.flavor ?? ''
-        case 'nicotine':   return Number(a.nicotine_strength ?? -1)
-        case 'size':       return Number(a.size_ml ?? -1)
-        case 'cukai':      return Number((a.cukai_years ?? [])[0] ?? -1)
-        case 'base_price': return Number(a.base_price ?? p.price ?? 0)
-        case 'stock':      return Number(p.stock ?? 0)
-        case 'status':     return p.stock === 0 ? 0 : (Number((p as any).min_stock ?? 0) > 0 && p.stock <= Number((p as any).min_stock)) ? 1 : 2
-    }
-}
-
-const sortedProducts = computed<Product[]>(() => {
-    const list = [...props.products.data]
-    if (!sortKey.value) return list
-    const k = sortKey.value
-    const dir = sortDir.value === 'asc' ? 1 : -1
-    return list.sort((a, b) => {
-        const av = sortValue(a, k)
-        const bv = sortValue(b, k)
-        if (typeof av === 'number' && typeof bv === 'number') return (av - bv) * dir
-        return String(av).localeCompare(String(bv), 'id', { sensitivity: 'base' }) * dir
-    })
-})
+const sortedProducts = computed<Product[]>(() => props.products.data)
 
 // ── Derived stats ─────────────────────────────────────────────────────────────
 
@@ -608,7 +592,7 @@ function stockInfo(stock: number, minStock: number = 0): StockInfo {
             <div class="flex items-center justify-between border-t px-4 py-3" style="border-color: var(--pos-border); background: #f8fafc;">
                 <p class="text-xs" style="color: var(--pos-text-muted);">
                     Menampilkan
-                    <strong style="color: var(--pos-text-secondary);">{{ products.data.length }}</strong>
+                    <strong style="color: var(--pos-text-secondary);">{{ products.to ?? products.data.length }}</strong>
                     dari
                     <strong style="color: var(--pos-text-secondary);">{{ products.total }}</strong>
                     produk

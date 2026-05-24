@@ -16,7 +16,6 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             StoreSettingSeeder::class,
             PosDemoSeeder::class,
-            PosWorkflowSeeder::class,
         ]);
     }
 }

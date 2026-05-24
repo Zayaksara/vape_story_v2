@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Batch;
 use App\Models\Sale;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -31,7 +30,7 @@ class TodayTransactionController extends Controller
             $period, $singleDate, $customStart, $customEnd
         );
 
-        $sales = Sale::with(['items.product', 'user'])
+        $sales = Sale::with(['items.product', 'items.allocations', 'user'])
             ->whereBetween('created_at', [$start, $end])
             ->where('status', 'completed')
             ->orderBy('created_at', 'desc')
@@ -205,7 +204,7 @@ class TodayTransactionController extends Controller
             ? Carbon::parse($request->query('date'))
             : now();
 
-        $sales = Sale::with(['items.product', 'user'])
+        $sales = Sale::with(['items.product', 'items.allocations', 'user'])
             ->whereDate('created_at', $date)
             ->where('status', 'completed')
             ->orderBy('created_at', 'desc')
@@ -238,14 +237,11 @@ class TodayTransactionController extends Controller
      */
     private function mapSalesToTransactions(EloquentCollection $sales)
     {
-        $avgCostByProduct = $this->averageBatchCostByProductId($sales);
-
-        return $sales->map(function (Sale $sale) use ($avgCostByProduct) {
+        return $sales->map(function (Sale $sale) {
             $discountAmount = (float) $sale->discount_amount;
             $totalAmount    = (float) $sale->total_amount;
             $itemsSubtotal  = (float) $sale->items->sum(fn ($i) => (float) $i->total);
             $subtotal       = $itemsSubtotal > 0 ? $itemsSubtotal : ($totalAmount + $discountAmount);
-            // Faktor pembagi diskon transaksi ke tiap item (proporsional terhadap kontribusi item).
             $discountFactor = $subtotal > 0 ? ($totalAmount / $subtotal) : 1.0;
 
             return [
@@ -263,11 +259,12 @@ class TodayTransactionController extends Controller
                     'id' => (string) $sale->user->id,
                     'name' => $sale->user->name,
                 ] : null,
-                'items' => $sale->items->map(function ($item) use ($avgCostByProduct, $discountFactor) {
-                    $unitCost     = (float) ($avgCostByProduct[(string) $item->product_id] ?? 0);
+                'items' => $sale->items->map(function ($item) use ($discountFactor) {
                     $lineTotal    = (float) $item->total;
                     $quantity     = (int) $item->quantity;
-                    $hppTotal     = round($unitCost * $quantity, 0);
+                    // HPP dari snapshot alokasi FIFO; fallback ke 0 jika belum ada (legacy).
+                    $hppTotal     = (float) $item->allocations->sum(fn ($a) => (float) $a->unit_cost * (int) $a->quantity);
+                    $hppTotal     = round($hppTotal, 0);
                     // Pendapatan efektif setelah dialokasikan diskon transaksi.
                     $netRevenue   = round($lineTotal * $discountFactor, 0);
                     $itemDiscount = round($lineTotal - $netRevenue, 0);
@@ -295,35 +292,4 @@ class TodayTransactionController extends Controller
         })->values();
     }
 
-    /**
-     * @return array<string, float>
-     */
-    private function averageBatchCostByProductId(EloquentCollection $sales): array
-    {
-        $productIds = [];
-        foreach ($sales as $sale) {
-            foreach ($sale->items as $item) {
-                if ($item->product_id) {
-                    $productIds[(string) $item->product_id] = true;
-                }
-            }
-        }
-        $ids = array_keys($productIds);
-        if ($ids === []) {
-            return [];
-        }
-
-        $rows = Batch::query()
-            ->whereIn('product_id', $ids)
-            ->groupBy('product_id')
-            ->selectRaw('product_id, AVG(cost_price)::numeric as avg_cost')
-            ->get();
-
-        $out = [];
-        foreach ($rows as $row) {
-            $out[(string) $row->product_id] = (float) $row->avg_cost;
-        }
-
-        return $out;
-    }
 }

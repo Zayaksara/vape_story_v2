@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { router } from '@inertiajs/vue3'
 import VueApexCharts from 'vue3-apexcharts'
+import type { ApexOptions } from 'apexcharts'
 import {
   Printer,
   Download,
@@ -390,7 +391,7 @@ const trendChartSeries = computed(() => [
   { name: 'Periode Lalu', data: props.trend?.previous ?? [] },
 ])
 
-const trendChartOptions = computed(() => ({
+const trendChartOptions = computed<ApexOptions>(() => ({
   chart: {
     id: 'admin-report-trend',
     type: 'area',
@@ -811,9 +812,9 @@ function handleExport() {
                             v-if="(transaction as any).discount_amount > 0"
                             class="rounded-full px-1.5 py-0.5 text-[10px] font-bold"
                             style="background: #fee2e2; color: #dc2626;"
-                            :title="`Diskon ${formatPrice((transaction as any).discount_amount)}`"
+                            :title="`${(transaction as any).discount_label ?? (transaction as any).discount_code ?? 'Diskon'} -${formatPrice((transaction as any).discount_amount)}`"
                           >
-                            DISKON -{{ formatPrice((transaction as any).discount_amount) }}
+                            {{ (transaction as any).discount_label ?? (transaction as any).discount_code ?? 'Diskon' }} -{{ formatPrice((transaction as any).discount_amount) }}
                           </span>
                         </div>
                       </TableCell>

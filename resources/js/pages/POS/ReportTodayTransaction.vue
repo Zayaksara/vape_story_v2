@@ -651,11 +651,10 @@ function handleExport() {
                           v-if="(transaction as any).discount_amount > 0"
                           class="inline-flex max-w-[180px] items-center gap-1 self-start rounded-full px-1.5 py-0.5 text-[10px] font-semibold truncate"
                           style="background: #fee2e2; color: #dc2626;"
-                          :title="`${(transaction as any).discount_label ?? (transaction as any).discount_code ?? 'Diskon'} − ${formatPrice((transaction as any).discount_amount)}`"
+                          :title="`${(transaction as any).discount_label ?? (transaction as any).discount_code ?? 'Diskon'} -${formatPrice((transaction as any).discount_amount)}`"
                         >
-                          
                           {{ (transaction as any).discount_label ?? (transaction as any).discount_code ?? 'Diskon' }}
-                          <span class="font-bold">−{{ formatPrice((transaction as any).discount_amount) }}</span>
+                          <span class="font-bold">-{{ formatPrice((transaction as any).discount_amount) }}</span>
                         </span>
                       </div>
                     </TableCell>

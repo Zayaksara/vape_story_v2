@@ -312,8 +312,8 @@ function stockInfo(stock: number, minStock: number = 0): StockInfo {
                             <!-- Category -->
                             <Select v-model="categorySlug">
                                 <SelectTrigger
-                                    class="h-8 w-40 border text-xs"
-                                    style="border-color: var(--pos-border);"
+                                    class="h-8 w-40 border text-xs data-[placeholder]:text-slate-700 data-[placeholder]:font-medium"
+                                    style="border-color: var(--pos-border); background: #fff; color: var(--pos-text-secondary);"
                                 >
                                     <SelectValue placeholder="Semua Kategori" />
                                 </SelectTrigger>
@@ -328,8 +328,8 @@ function stockInfo(stock: number, minStock: number = 0): StockInfo {
                             <!-- Brand filter -->
                             <Select v-model="brandSlug">
                                 <SelectTrigger
-                                    class="h-8 w-40 border text-xs"
-                                    style="border-color: var(--pos-border);"
+                                    class="h-8 w-40 border text-xs data-[placeholder]:text-slate-700 data-[placeholder]:font-medium"
+                                    style="border-color: var(--pos-border); background: #fff; color: var(--pos-text-secondary);"
                                 >
                                     <SelectValue placeholder="Semua Merek" />
                                 </SelectTrigger>

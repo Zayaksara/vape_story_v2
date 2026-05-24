@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\ProductReturn;
 use App\Models\ReturnItem;
 use App\Models\Sale;
+use App\Models\SaleItemBatch;
 use App\Models\StockMutation;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -135,9 +136,9 @@ class ReturnService
     {
         return DB::transaction(function () use ($sale, $cashier, $data) {
             if ($sale->status === 'returned') {
-                throw new \RuntimeException('Transaksi ini sudah di-return.');
+                throw new \RuntimeException('Semua item transaksi ini sudah di-return.');
             }
-            if ($sale->status !== 'completed') {
+            if (! in_array($sale->status, ['completed', 'partial_return'], true)) {
                 throw new \RuntimeException('Hanya transaksi completed yang bisa di-return.');
             }
             if (empty($data['items'])) {
@@ -146,10 +147,15 @@ class ReturnService
 
             $saleItems = $sale->items()->with('product')->get()->keyBy('id');
 
+            // Default metode refund = sama dengan metode bayar sale aslinya.
+            // Kasir bisa pilih beda (mis. sale via QRIS tapi refund cash dari laci).
+            $refundMethod = $data['refund_method'] ?? $sale->payment_method;
+
             $productReturn = ProductReturn::create([
                 'return_number' => $this->generateReturnNumber(),
                 'sale_id' => $sale->id,
                 'cashier_id' => $cashier->id,
+                'refund_method' => $refundMethod,
                 'reason' => $data['reason'],
                 'status' => ReturnStatus::PROCESSED,
                 'approved_by' => $cashier->id,
@@ -177,35 +183,62 @@ class ReturnService
                 $totalOriginalQty += (int) $saleItem->quantity;
                 $totalReturnedQty += $qty;
 
-                // Kembalikan stok ke batch terlama (urut created_at) untuk produk ini.
-                $batch = Batch::where('product_id', $saleItem->product_id)
-                    ->orderBy('created_at', 'asc')
+                // Ambil alokasi batch yang masih ada sisa, LIFO (yang terakhir dikonsumsi dikembalikan duluan).
+                $allocations = SaleItemBatch::where('sale_item_id', $saleItem->id)
+                    ->orderByDesc('id')
                     ->lockForUpdate()
-                    ->first();
+                    ->get();
 
-                if (! $batch) {
-                    throw new \RuntimeException('Tidak ada batch tujuan untuk produk '.($saleItem->product->name ?? '').'.');
+                if ($allocations->isEmpty()) {
+                    throw new \RuntimeException(
+                        'Item transaksi ini tidak memiliki alokasi batch (kemungkinan transaksi legacy sebelum FIFO tracking diaktifkan).'
+                    );
                 }
 
-                $batch->increment('stock_quantity', $qty);
+                $remainingReturn = $qty;
+                foreach ($allocations as $alloc) {
+                    if ($remainingReturn <= 0) {
+                        break;
+                    }
+                    $available = (int) $alloc->quantity - (int) $alloc->returned_quantity;
+                    if ($available <= 0) {
+                        continue;
+                    }
 
-                ReturnItem::create([
-                    'return_id' => $productReturn->id,
-                    'batch_id' => $batch->id,
-                    'product_name' => $saleItem->product->name ?? '-',
-                    'quantity' => $qty,
-                    'unit_price' => $saleItem->unit_price,
-                    'subtotal' => $qty * (float) $saleItem->unit_price,
-                ]);
+                    $back = min($remainingReturn, $available);
+                    $batch = Batch::where('id', $alloc->batch_id)->lockForUpdate()->first();
 
-                StockMutation::create([
-                    'batch_id' => $batch->id,
-                    'mutation_type' => MutationType::RETURN,
-                    'quantity' => $qty,
-                    'reference_type' => ProductReturn::class,
-                    'reference_id' => $productReturn->id,
-                    'notes' => 'Return POS #'.$productReturn->return_number,
-                ]);
+                    if (! $batch) {
+                        throw new \RuntimeException('Batch asal sudah terhapus, tidak bisa restore stok.');
+                    }
+
+                    $batch->increment('stock_quantity', $back);
+                    $alloc->increment('returned_quantity', $back);
+
+                    ReturnItem::create([
+                        'return_id'    => $productReturn->id,
+                        'batch_id'     => $batch->id,
+                        'product_name' => $saleItem->product->name ?? '-',
+                        'quantity'     => $back,
+                        'unit_price'   => $alloc->unit_price,
+                        'subtotal'     => $back * (float) $alloc->unit_price,
+                    ]);
+
+                    StockMutation::create([
+                        'batch_id'       => $batch->id,
+                        'mutation_type'  => MutationType::RETURN,
+                        'quantity'       => $back,
+                        'reference_type' => ProductReturn::class,
+                        'reference_id'   => $productReturn->id,
+                        'notes'          => 'Return POS #'.$productReturn->return_number,
+                    ]);
+
+                    $remainingReturn -= $back;
+                }
+
+                if ($remainingReturn > 0) {
+                    throw new \RuntimeException('Jumlah return melebihi sisa alokasi batch yang belum dikembalikan.');
+                }
             }
 
             if ($totalReturnedQty === 0) {

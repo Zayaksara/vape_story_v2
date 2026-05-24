@@ -27,11 +27,18 @@ class ReportSaleController extends Controller
         $byStock    = $this->aggregateStock($start, $end);
         $byReturns  = $this->aggregateReturns($start, $end);
 
+        $refundTotal = (float) DB::table('returns')
+            ->join('return_items', 'return_items.return_id', '=', 'returns.id')
+            ->whereBetween('returns.created_at', [$start, $end])
+            ->where('returns.status', '!=', 'rejected')
+            ->sum('return_items.subtotal');
+
         $summary = [
-            'total_revenue'      => (float) $byPayment->sum('revenue'),
+            'total_revenue'      => (float) $byPayment->sum('revenue') - $refundTotal,
             'total_profit'       => (float) $byCategory->sum('profit'),
             'total_items'        => (int)   $byCategory->sum('qty'),
             'total_transactions' => (int)   $byPayment->sum('transactions'),
+            'total_refund'       => $refundTotal,
         ];
 
         return Inertia::render('admin/ReportSale', [
@@ -137,7 +144,7 @@ class ReportSaleController extends Controller
                 ->leftJoin('brands', 'brands.id', '=', 'products.brand_id')
                 ->leftJoinSub($stockSub, 'ps', 'ps.product_id', '=', 'sale_items.product_id')
                 ->whereBetween('sales.created_at', [$start, $end])
-                ->where('sales.status', 'completed')
+                ->whereIn('sales.status', ['completed', 'partial_return', 'returned'])
                 ->where(DB::raw('COALESCE(ps.stock, 0)'), '>', 0); // exclude stok habis
 
             if (! empty($categoryIds)) {
@@ -268,7 +275,7 @@ class ReportSaleController extends Controller
 
     private function aggregateByCategory(Carbon $start, Carbon $end): Collection
     {
-        $avgCostSub = $this->avgCostSubquery();
+        $hppSub     = $this->fifoHppSubquery();
         $stockSub   = $this->productStockSubquery();
         $factorSub  = $this->saleFactorSubquery();
 
@@ -276,17 +283,17 @@ class ReportSaleController extends Controller
             ->join('sales', 'sales.id', '=', 'sale_items.sale_id')
             ->join('products', 'products.id', '=', 'sale_items.product_id')
             ->join('categories', 'categories.id', '=', 'products.category_id')
-            ->leftJoinSub($avgCostSub, 'ac', 'ac.product_id', '=', 'sale_items.product_id')
+            ->leftJoinSub($hppSub, 'hpp', 'hpp.sale_item_id', '=', 'sale_items.id')
             ->leftJoinSub($factorSub, 'sf', 'sf.sale_id', '=', 'sales.id')
             ->whereBetween('sales.created_at', [$start, $end])
-            ->where('sales.status', 'completed')
+            ->whereIn('sales.status', ['completed', 'partial_return', 'returned'])
             ->groupBy('categories.id', 'categories.name')
             ->select([
                 'categories.id',
                 'categories.name',
-                DB::raw('SUM(sale_items.quantity)::int as qty'),
-                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1))::numeric as revenue'),
-                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1) - (sale_items.quantity * COALESCE(ac.avg_cost, 0)))::numeric as profit'),
+                DB::raw('SUM(sale_items.quantity - COALESCE(hpp.returned_qty, 0))::int as qty'),
+                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1) - COALESCE(hpp.refund, 0))::numeric as revenue'),
+                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1) - COALESCE(hpp.refund, 0) - COALESCE(hpp.hpp, 0))::numeric as profit'),
             ])
             ->orderByDesc('revenue')
             ->get();
@@ -311,7 +318,7 @@ class ReportSaleController extends Controller
 
     private function aggregateByBrand(Carbon $start, Carbon $end): Collection
     {
-        $avgCostSub = $this->avgCostSubquery();
+        $hppSub     = $this->fifoHppSubquery();
         $stockSub   = $this->productStockSubquery();
         $factorSub  = $this->saleFactorSubquery();
 
@@ -319,17 +326,17 @@ class ReportSaleController extends Controller
             ->join('sales', 'sales.id', '=', 'sale_items.sale_id')
             ->join('products', 'products.id', '=', 'sale_items.product_id')
             ->join('brands', 'brands.id', '=', 'products.brand_id')
-            ->leftJoinSub($avgCostSub, 'ac', 'ac.product_id', '=', 'sale_items.product_id')
+            ->leftJoinSub($hppSub, 'hpp', 'hpp.sale_item_id', '=', 'sale_items.id')
             ->leftJoinSub($factorSub, 'sf', 'sf.sale_id', '=', 'sales.id')
             ->whereBetween('sales.created_at', [$start, $end])
-            ->where('sales.status', 'completed')
+            ->whereIn('sales.status', ['completed', 'partial_return', 'returned'])
             ->groupBy('brands.id', 'brands.name')
             ->select([
                 'brands.id',
                 'brands.name',
-                DB::raw('SUM(sale_items.quantity)::int as qty'),
-                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1))::numeric as revenue'),
-                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1) - (sale_items.quantity * COALESCE(ac.avg_cost, 0)))::numeric as profit'),
+                DB::raw('SUM(sale_items.quantity - COALESCE(hpp.returned_qty, 0))::int as qty'),
+                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1) - COALESCE(hpp.refund, 0))::numeric as revenue'),
+                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1) - COALESCE(hpp.refund, 0) - COALESCE(hpp.hpp, 0))::numeric as profit'),
             ])
             ->orderByDesc('revenue')
             ->get();
@@ -354,7 +361,7 @@ class ReportSaleController extends Controller
 
     private function aggregateByProduct(Carbon $start, Carbon $end): Collection
     {
-        $avgCostSub = $this->avgCostSubquery();
+        $hppSub     = $this->fifoHppSubquery();
         $stockSub   = $this->productStockSubquery();
         $factorSub  = $this->saleFactorSubquery();
 
@@ -363,11 +370,11 @@ class ReportSaleController extends Controller
             ->join('products', 'products.id', '=', 'sale_items.product_id')
             ->leftJoin('categories', 'categories.id', '=', 'products.category_id')
             ->leftJoin('brands', 'brands.id', '=', 'products.brand_id')
-            ->leftJoinSub($avgCostSub, 'ac', 'ac.product_id', '=', 'sale_items.product_id')
+            ->leftJoinSub($hppSub, 'hpp', 'hpp.sale_item_id', '=', 'sale_items.id')
             ->leftJoinSub($stockSub, 'ps', 'ps.product_id', '=', 'sale_items.product_id')
             ->leftJoinSub($factorSub, 'sf', 'sf.sale_id', '=', 'sales.id')
             ->whereBetween('sales.created_at', [$start, $end])
-            ->where('sales.status', 'completed')
+            ->whereIn('sales.status', ['completed', 'partial_return', 'returned'])
             ->groupBy('products.id', 'products.code', 'products.name', 'categories.name', 'brands.name', 'ps.stock')
             ->select([
                 'products.id',
@@ -375,9 +382,9 @@ class ReportSaleController extends Controller
                 'products.name',
                 DB::raw('categories.name as category_name'),
                 DB::raw('brands.name as brand_name'),
-                DB::raw('SUM(sale_items.quantity)::int as qty'),
-                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1))::numeric as revenue'),
-                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1) - (sale_items.quantity * COALESCE(ac.avg_cost, 0)))::numeric as profit'),
+                DB::raw('SUM(sale_items.quantity - COALESCE(hpp.returned_qty, 0))::int as qty'),
+                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1) - COALESCE(hpp.refund, 0))::numeric as revenue'),
+                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1) - COALESCE(hpp.refund, 0) - COALESCE(hpp.hpp, 0))::numeric as profit'),
                 DB::raw('COALESCE(ps.stock, 0)::int as stock'),
             ])
             ->orderByDesc('revenue')
@@ -400,7 +407,7 @@ class ReportSaleController extends Controller
     {
         $rows = DB::table('sales')
             ->whereBetween('created_at', [$start, $end])
-            ->where('status', 'completed')
+            ->whereIn('status', ['completed', 'partial_return', 'returned'])
             ->groupBy('payment_method')
             ->select([
                 'payment_method',
@@ -436,7 +443,7 @@ class ReportSaleController extends Controller
         // Total revenue periode (net setelah diskon transaksi)
         $totalRevenue = (float) DB::table('sales')
             ->whereBetween('created_at', [$start, $end])
-            ->where('status', 'completed')
+            ->whereIn('status', ['completed', 'partial_return', 'returned'])
             ->sum('total_amount') ?: 1.0;
 
         $topSelling = DB::table('sale_items')
@@ -446,8 +453,9 @@ class ReportSaleController extends Controller
             ->leftJoin('brands', 'brands.id', '=', 'products.brand_id')
             ->leftJoinSub($stockSub, 'ps', 'ps.product_id', '=', 'sale_items.product_id')
             ->leftJoinSub($factorSub, 'sf', 'sf.sale_id', '=', 'sales.id')
+            ->leftJoinSub($this->fifoHppSubquery(), 'hpp', 'hpp.sale_item_id', '=', 'sale_items.id')
             ->whereBetween('sales.created_at', [$start, $end])
-            ->where('sales.status', 'completed')
+            ->whereIn('sales.status', ['completed', 'partial_return', 'returned'])
             ->groupBy('products.id', 'products.code', 'products.name', 'products.min_stock', 'categories.name', 'brands.name', 'ps.stock')
             ->select([
                 'products.id',
@@ -456,8 +464,8 @@ class ReportSaleController extends Controller
                 'products.min_stock',
                 DB::raw('categories.name as category_name'),
                 DB::raw('brands.name as brand_name'),
-                DB::raw('SUM(sale_items.quantity)::int as qty_sold'),
-                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1))::numeric as revenue'),
+                DB::raw('SUM(sale_items.quantity - COALESCE(hpp.returned_qty, 0))::int as qty_sold'),
+                DB::raw('SUM(sale_items.total * COALESCE(sf.factor, 1) - COALESCE(hpp.refund, 0))::numeric as revenue'),
                 DB::raw('COALESCE(ps.stock, 0)::int as stock_remaining'),
             ])
             ->orderByDesc('revenue')
@@ -479,7 +487,7 @@ class ReportSaleController extends Controller
         // Last sold timestamp per product (subquery)
         $lastSoldSub = DB::table('sale_items')
             ->join('sales', 'sales.id', '=', 'sale_items.sale_id')
-            ->where('sales.status', 'completed')
+            ->whereIn('sales.status', ['completed', 'partial_return', 'returned'])
             ->groupBy('sale_items.product_id')
             ->select('sale_items.product_id', DB::raw('MAX(sales.created_at) as last_sold_at'));
 
@@ -599,11 +607,32 @@ class ReportSaleController extends Controller
 
     // ─── Subqueries ───────────────────────────────────────────────────────────
 
-    private function avgCostSubquery()
+    /**
+     * Per sale_item dari alokasi FIFO aktual (sale_item_batches):
+     *  - hpp           = HPP BERSIH (cost × unit yg masih di customer).
+     *  - refund        = jumlah uang yg dikembalikan dari item ini
+     *                    (= unit_price × returned_qty per alokasi).
+     *  - returned_qty  = total unit yg sudah di-return.
+     *
+     * Dipakai aggregator untuk hitung revenue & profit BERSIH dengan formula:
+     *   net_revenue = (si.total × factor_voucher) − refund_item
+     *   net_hpp     = hpp_item
+     *   profit      = net_revenue − net_hpp
+     *
+     * Formula ini SELARAS dengan AuditController (revenue − refund) dan
+     * menangkap over-refund (refund > harga net per unit) yang terjadi
+     * karena voucher/manual-discount tidak ikut dikembalikan saat retur.
+     */
+    private function fifoHppSubquery()
     {
-        return DB::table('batches')
-            ->groupBy('product_id')
-            ->select('product_id', DB::raw('AVG(cost_price)::numeric as avg_cost'));
+        return DB::table('sale_item_batches')
+            ->groupBy('sale_item_id')
+            ->select(
+                'sale_item_id',
+                DB::raw('SUM(unit_cost * (quantity - returned_quantity))::numeric as hpp'),
+                DB::raw('SUM(unit_price * returned_quantity)::numeric as refund'),
+                DB::raw('SUM(returned_quantity)::int as returned_qty')
+            );
     }
 
     private function productStockSubquery()

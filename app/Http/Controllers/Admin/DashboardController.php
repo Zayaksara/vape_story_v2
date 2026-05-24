@@ -94,11 +94,22 @@ class DashboardController extends Controller
 
     private function querySaleStats(Carbon $start, Carbon $end): array
     {
+        // Sales yang sudah selesai di kasir, termasuk yang sebagian/seluruhnya di-return
+        // (status berubah jadi partial_return/returned, tapi transaksinya tetap terjadi).
+        $completedStatuses = ['completed', 'partial_return', 'returned'];
+
         $saleRow = DB::table('sales')
             ->whereBetween('created_at', [$start, $end])
-            ->where('status', 'completed')
+            ->whereIn('status', $completedStatuses)
             ->selectRaw('COUNT(*) as transactions, COALESCE(SUM(total_amount), 0) as revenue')
             ->first();
+
+        // Total refund pada periode (retur bukan-rejected).
+        $refundTotal = (float) DB::table('returns')
+            ->join('return_items', 'return_items.return_id', '=', 'returns.id')
+            ->whereBetween('returns.created_at', [$start, $end])
+            ->where('returns.status', '!=', 'rejected')
+            ->sum('return_items.subtotal');
 
         // Faktor diskon per sale: total_amount (net) / SUM(sale_items.total) (gross).
         // Selaras dengan ReportSale agar profit memperhitungkan diskon transaksi.
@@ -107,23 +118,35 @@ class DashboardController extends Controller
             ->groupBy('sales.id', 'sales.total_amount')
             ->selectRaw('sales.id as sale_id, CASE WHEN SUM(sale_items.total) > 0 THEN sales.total_amount / SUM(sale_items.total) ELSE 1 END as factor');
 
+        // Per sale_item dari sale_item_batches:
+        //   hpp           = HPP bersih (cost × unit yg masih di customer).
+        //   refund        = uang yg dikembalikan dari item ini (unit_price × returned_qty).
+        //   returned_qty  = total unit yg sudah di-return.
+        // Formula profit identik dengan Audit & ReportSale:
+        //   profit = (si.total × factor_voucher) − refund_item − hpp_item
+        $hppSub = DB::table('sale_item_batches')
+            ->groupBy('sale_item_id')
+            ->selectRaw('
+                sale_item_id,
+                SUM(unit_cost * (quantity - returned_quantity))::numeric AS hpp,
+                SUM(unit_price * returned_quantity)::numeric AS refund,
+                SUM(returned_quantity)::int AS returned_qty
+            ');
+
         $itemRow = DB::table('sale_items as si')
             ->join('sales as s', 'si.sale_id', '=', 's.id')
-            ->leftJoin(
-                DB::raw('(SELECT product_id, AVG(cost_price)::numeric AS avg_cost FROM batches GROUP BY product_id) AS b'),
-                'b.product_id', '=', 'si.product_id'
-            )
+            ->leftJoinSub($hppSub, 'hpp', 'hpp.sale_item_id', '=', 'si.id')
             ->leftJoinSub($factorSub, 'sf', 'sf.sale_id', '=', 's.id')
             ->whereBetween('s.created_at', [$start, $end])
-            ->where('s.status', 'completed')
-            ->selectRaw('
-                COALESCE(SUM(si.quantity), 0) AS products_sold,
-                COALESCE(SUM(si.total * COALESCE(sf.factor, 1) - COALESCE(b.avg_cost, 0) * si.quantity), 0) AS profit
-            ')
+            ->whereIn('s.status', $completedStatuses)
+            ->selectRaw("
+                COALESCE(SUM(si.quantity - COALESCE(hpp.returned_qty, 0)), 0) AS products_sold,
+                COALESCE(SUM(si.total * COALESCE(sf.factor, 1) - COALESCE(hpp.refund, 0) - COALESCE(hpp.hpp, 0)), 0) AS profit
+            ")
             ->first();
 
         return [
-            'revenue'       => (float) ($saleRow->revenue       ?? 0),
+            'revenue'       => (float) ($saleRow->revenue ?? 0) - $refundTotal,
             'transactions'  => (int)   ($saleRow->transactions  ?? 0),
             'products_sold' => (int)   ($itemRow->products_sold ?? 0),
             'profit'        => (float) ($itemRow->profit        ?? 0),
@@ -195,7 +218,7 @@ class DashboardController extends Controller
 
         $rows = DB::table('sales')
             ->whereBetween('created_at', [$start, $end])
-            ->where('status', 'completed')
+            ->whereIn('status', ['completed', 'partial_return', 'returned'])
             ->selectRaw("
                 {$labelExpr} AS period,
                 COALESCE(SUM(total_amount), 0) AS revenue,
@@ -375,7 +398,7 @@ class DashboardController extends Controller
             ->join('sales as s', 'si.sale_id', '=', 's.id')
             ->join('products as p', 'si.product_id', '=', 'p.id')
             ->whereBetween('s.created_at', [$start, $end])
-            ->where('s.status', 'completed')
+            ->whereIn('s.status', ['completed', 'partial_return', 'returned'])
             ->selectRaw('p.name, COALESCE(SUM(si.total), 0) AS revenue, COALESCE(SUM(si.quantity), 0) AS qty')
             ->groupBy('p.id', 'p.name')
             ->orderByRaw('revenue DESC')
@@ -398,7 +421,7 @@ class DashboardController extends Controller
             ->join('products as p', 'si.product_id', '=', 'p.id')
             ->join('categories as c', 'p.category_id', '=', 'c.id')
             ->whereBetween('s.created_at', [$start, $end])
-            ->where('s.status', 'completed')
+            ->whereIn('s.status', ['completed', 'partial_return', 'returned'])
             ->selectRaw('c.name, COALESCE(SUM(si.total), 0) AS revenue, COALESCE(SUM(si.quantity), 0) AS qty')
             ->groupBy('c.id', 'c.name')
             ->orderByRaw('revenue DESC')
@@ -421,7 +444,7 @@ class DashboardController extends Controller
             ->join('products as p', 'si.product_id', '=', 'p.id')
             ->join('brands as b', 'p.brand_id', '=', 'b.id')
             ->whereBetween('s.created_at', [$start, $end])
-            ->where('s.status', 'completed')
+            ->whereIn('s.status', ['completed', 'partial_return', 'returned'])
             ->selectRaw('b.name, COALESCE(SUM(si.total), 0) AS revenue, COALESCE(SUM(si.quantity), 0) AS qty')
             ->groupBy('b.id', 'b.name')
             ->orderByRaw('revenue DESC')
@@ -441,7 +464,7 @@ class DashboardController extends Controller
     {
         $rows = DB::table('sales')
             ->whereBetween('created_at', [$start, $end])
-            ->where('status', 'completed')
+            ->whereIn('status', ['completed', 'partial_return', 'returned'])
             ->selectRaw('payment_method AS method, COUNT(*) AS count, COALESCE(SUM(total_amount), 0) AS revenue')
             ->groupBy('payment_method')
             ->orderByRaw('revenue DESC')

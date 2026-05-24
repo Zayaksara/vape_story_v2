@@ -24,7 +24,7 @@ class ProductController extends Controller
 
     public function index(Request $request): Response
     {
-        $filters = $request->only(['search', 'category', 'brand', 'stock_status']);
+        $filters = $request->only(['search', 'category', 'brand', 'stock_status', 'sort', 'dir']);
         // Admin list harus menampilkan produk nonaktif juga (dengan badge status).
         $filters['include_inactive'] = true;
 
@@ -52,6 +52,8 @@ class ProductController extends Controller
             'selectedCategory'    => $selectedCategory,
             'selectedBrand'       => $selectedBrand,
             'selectedStockStatus' => $filters['stock_status'] ?? null,
+            'sortKey'             => $filters['sort'] ?? null,
+            'sortDir'             => $filters['dir'] ?? 'asc',
         ]);
     }
 

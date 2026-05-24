@@ -7,6 +7,7 @@ use App\Models\Batch;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleItem;
+use App\Models\SaleItemBatch;
 use App\Models\StockMutation;
 use App\Enums\MutationType;
 use Illuminate\Http\Request;
@@ -70,6 +71,7 @@ class ProcessPaymentController extends Controller
 
                 $actualRevenue = 0.0; // total dibayar customer untuk item ini (mixed pricing)
                 $promoUnits    = 0;   // berapa unit yang diambil dari batch promo
+                $allocations   = []; // snapshot per-batch untuk dicatat ke sale_item_batches
 
                 foreach ($batches as $batch) {
                     if ($remaining <= 0) {
@@ -84,11 +86,20 @@ class ProcessPaymentController extends Controller
                     // Harga unit yang berlaku saat batch ini di-konsumsi.
                     $isPromoBatch = (bool) $batch->is_promo && $batch->promo_price !== null;
                     $unitPriceForBatch = $isPromoBatch ? (float) $batch->promo_price : $basePrice;
+                    $unitCostForBatch  = (float) ($batch->cost_price ?? 0);
 
                     $actualRevenue += $unitPriceForBatch * $take;
                     if ($isPromoBatch) {
                         $promoUnits += $take;
                     }
+
+                    $allocations[] = [
+                        'batch_id'   => $batch->id,
+                        'quantity'   => $take,
+                        'unit_cost'  => $unitCostForBatch,
+                        'unit_price' => $unitPriceForBatch,
+                        'is_promo'   => $isPromoBatch,
+                    ];
 
                     $batch->decrement('stock_quantity', $take);
 
@@ -115,7 +126,7 @@ class ProcessPaymentController extends Controller
                 $itemTotal = round($actualRevenue - $manualDiscount, 2);
                 $saleSubtotal += $itemTotal;
 
-                SaleItem::create([
+                $saleItem = SaleItem::create([
                     'sale_id'        => $sale->id,
                     'product_id'     => $item['product_id'],
                     'quantity'       => $quantity,
@@ -125,6 +136,17 @@ class ProcessPaymentController extends Controller
                     'promo_units'    => $promoUnits,
                     'total'          => $itemTotal,
                 ]);
+
+                foreach ($allocations as $alloc) {
+                    SaleItemBatch::create([
+                        'sale_item_id' => $saleItem->id,
+                        'batch_id'     => $alloc['batch_id'],
+                        'quantity'     => $alloc['quantity'],
+                        'unit_cost'    => $alloc['unit_cost'],
+                        'unit_price'   => $alloc['unit_price'],
+                        'is_promo'     => $alloc['is_promo'],
+                    ]);
+                }
             }
 
             // total_amount = subtotal item (sudah include promo cukai) − diskon transaksi.

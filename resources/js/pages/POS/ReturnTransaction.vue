@@ -32,6 +32,8 @@ interface SaleItem {
   product_name: string
   product_code: string | null
   quantity: number
+  returned_quantity: number
+  remaining_quantity: number
   unit_price: number
   total: number
 }
@@ -44,6 +46,7 @@ interface SaleRow {
   payment_method: string
   created_at: string
   has_return: boolean
+  is_fully_returned: boolean
   cashier: { id: string; name: string } | null
   items: SaleItem[]
 }
@@ -79,6 +82,7 @@ const flashType = ref<'success' | 'error'>('success')
 const form = useForm({
   sale_id: 0,
   reason: '',
+  refund_method: '' as '' | 'cash' | 'bank_transfer' | 'qris' | 'e_wallet',
   items: [] as { sale_item_id: number; quantity: number }[],
 })
 
@@ -180,9 +184,9 @@ const hasReturnItems = computed(() =>
 )
 
 function selectSale(sale: SaleRow) {
-  if (sale.has_return) {
+  if (sale.is_fully_returned) {
     flashType.value = 'error'
-    flashMessage.value = 'Transaksi ini sudah pernah di-return.'
+    flashMessage.value = 'Semua item transaksi ini sudah di-return.'
     return
   }
   selectedSaleId.value = sale.id
@@ -191,6 +195,8 @@ function selectSale(sale: SaleRow) {
     returnQty.value[item.id] = 0
   }
   form.reason = ''
+  // Default refund method = metode bayar sale aslinya (kasir bisa override).
+  form.refund_method = sale.payment_method as typeof form.refund_method
   reasonMode.value = 'preset'
   customReason.value = ''
   flashMessage.value = ''
@@ -425,7 +431,7 @@ function selectedDateLabel(): string {
                 :style="selectedSaleId === sale.id
                   ? 'background: var(--pos-brand-light); border-color: var(--pos-brand-primary);'
                   : 'background: var(--pos-bg-secondary); border-color: var(--pos-border);'"
-                :disabled="sale.has_return"
+                :disabled="sale.is_fully_returned"
                 @click="selectSale(sale)"
               >
                 <div class="flex items-center justify-between">
@@ -433,7 +439,7 @@ function selectedDateLabel(): string {
                     {{ sale.invoice_number }}
                   </span>
                   <span
-                    v-if="sale.has_return"
+                    v-if="sale.is_fully_returned"
                     class="rounded-full px-2 py-0.5 text-[10px] font-semibold"
                     style="background: var(--pos-warning-bg); color: var(--pos-warning-text);"
                   >Returned</span>
@@ -529,30 +535,40 @@ function selectedDateLabel(): string {
                         >{{ formatPrice(item.unit_price) }}</span>
                       </TableCell>
                       <TableCell class="py-2 text-center text-xs" style="color: var(--pos-text-secondary);">
-                        {{ item.quantity }}
+                        <div>{{ item.quantity }}</div>
+                        <div
+                          v-if="item.returned_quantity > 0"
+                          class="text-[10px]"
+                          style="color: var(--pos-warning-text);"
+                        >
+                          sudah return: {{ item.returned_quantity }}
+                        </div>
                       </TableCell>
                       <TableCell class="py-2">
                         <div class="flex items-center justify-center gap-1">
                           <button
                             type="button"
-                            class="h-7 w-7 rounded border text-sm"
+                            class="h-7 w-7 rounded border text-sm disabled:opacity-40"
                             :style="'border-color: var(--pos-border); color: var(--pos-text-secondary);'"
-                            @click="adjustQty(item.id, -1, item.quantity)"
+                            :disabled="item.remaining_quantity === 0"
+                            @click="adjustQty(item.id, -1, item.remaining_quantity)"
                           >−</button>
                           <input
                             type="number"
                             min="0"
-                            :max="item.quantity"
+                            :max="item.remaining_quantity"
                             :value="returnQty[item.id] ?? 0"
-                            class="h-7 w-12 rounded border text-center text-xs"
+                            :disabled="item.remaining_quantity === 0"
+                            class="h-7 w-12 rounded border text-center text-xs disabled:opacity-40"
                             :style="'border-color: var(--pos-border); color: var(--pos-text-primary);'"
-                            @input="setQty(item.id, ($event.target as HTMLInputElement).value, item.quantity)"
+                            @input="setQty(item.id, ($event.target as HTMLInputElement).value, item.remaining_quantity)"
                           >
                           <button
                             type="button"
-                            class="h-7 w-7 rounded border text-sm"
+                            class="h-7 w-7 rounded border text-sm disabled:opacity-40"
                             :style="'border-color: var(--pos-border); color: var(--pos-text-secondary);'"
-                            @click="adjustQty(item.id, 1, item.quantity)"
+                            :disabled="item.remaining_quantity === 0"
+                            @click="adjustQty(item.id, 1, item.remaining_quantity)"
                           >+</button>
                         </div>
                       </TableCell>
@@ -605,6 +621,28 @@ function selectedDateLabel(): string {
                     autofocus
                     @input="form.reason = customReason"
                   />
+                </div>
+
+                <!-- Refund method — default mengikuti payment method sale, kasir bisa ubah -->
+                <div>
+                  <label class="text-xs font-semibold flex items-center justify-between" style="color: var(--pos-text-secondary);">
+                    <span>Metode Pengembalian Uang <span style="color: var(--pos-danger-text);">*</span></span>
+                    <span
+                      v-if="selectedSale && form.refund_method !== selectedSale.payment_method"
+                      class="text-[10px] font-semibold"
+                      style="color: var(--pos-warning-text);"
+                    >Berbeda dari metode bayar awal ({{ paymentMethodLabels[selectedSale.payment_method] ?? selectedSale.payment_method }})</span>
+                  </label>
+                  <select
+                    v-model="form.refund_method"
+                    class="mt-1 h-9 w-full rounded-md border px-2 text-sm"
+                    :style="'border-color: var(--pos-border); background: var(--pos-bg-primary); color: var(--pos-text-primary);'"
+                  >
+                    <option value="cash">Tunai</option>
+                    <option value="bank_transfer">Transfer Bank</option>
+                    <option value="qris">QRIS</option>
+                    <option value="e_wallet">E-Wallet</option>
+                  </select>
                 </div>
               </div>
 

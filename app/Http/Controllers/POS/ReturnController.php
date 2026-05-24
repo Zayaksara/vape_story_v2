@@ -21,12 +21,32 @@ class ReturnController extends Controller
             ? Carbon::parse($request->query('date'))
             : now();
 
-        $sales = Sale::with(['items.product', 'user', 'productReturns'])
+        $sales = Sale::with(['items.product', 'items.allocations', 'user', 'productReturns'])
             ->whereDate('created_at', $date)
             ->orderBy('created_at', 'desc')
             ->get();
 
         $eligibleSales = $sales->map(function (Sale $sale) {
+            $items = $sale->items->map(function ($it) {
+                $returnedQty = (int) $it->allocations->sum('returned_quantity');
+                $remaining   = max(0, (int) $it->quantity - $returnedQty);
+
+                return [
+                    'id' => (int) $it->id,
+                    'product_id' => (string) $it->product_id,
+                    'product_name' => $it->product?->name ?? '-',
+                    'product_code' => $it->product?->code ?? null,
+                    'quantity' => (int) $it->quantity,
+                    'returned_quantity' => $returnedQty,
+                    'remaining_quantity' => $remaining,
+                    'unit_price' => (float) $it->unit_price,
+                    'total' => (float) $it->total,
+                ];
+            })->values()->all();
+
+            $isFullyReturned = $sale->status === 'returned'
+                || collect($items)->every(fn ($it) => $it['remaining_quantity'] === 0);
+
             return [
                 'id' => (int) $sale->id,
                 'invoice_number' => 'SALE-'.str_pad((string) $sale->id, 6, '0', STR_PAD_LEFT),
@@ -35,19 +55,12 @@ class ReturnController extends Controller
                 'payment_method' => $sale->payment_method,
                 'created_at' => $sale->created_at?->toISOString(),
                 'has_return' => $sale->productReturns->isNotEmpty(),
+                'is_fully_returned' => $isFullyReturned,
                 'cashier' => $sale->user ? [
                     'id' => (string) $sale->user->id,
                     'name' => $sale->user->name,
                 ] : null,
-                'items' => $sale->items->map(fn ($it) => [
-                    'id' => (int) $it->id,
-                    'product_id' => (string) $it->product_id,
-                    'product_name' => $it->product?->name ?? '-',
-                    'product_code' => $it->product?->code ?? null,
-                    'quantity' => (int) $it->quantity,
-                    'unit_price' => (float) $it->unit_price,
-                    'total' => (float) $it->total,
-                ])->values()->all(),
+                'items' => $items,
             ];
         })->values();
 
@@ -100,6 +113,7 @@ class ReturnController extends Controller
         $data = $request->validate([
             'sale_id' => 'required|integer|exists:sales,id',
             'reason' => 'required|string|max:500',
+            'refund_method' => 'nullable|in:cash,bank_transfer,qris,e_wallet',
             'items' => 'required|array|min:1',
             'items.*.sale_item_id' => 'required|integer|exists:sale_items,id',
             'items.*.quantity' => 'required|integer|min:1',

@@ -54,12 +54,17 @@ const { isCurrentOrParentUrl } = useCurrentUrl();
                         :key="toUrl(item.href)"
                         :href="item.href"
                         :class="[
-                            'group flex items-start gap-3 rounded-lg border px-3 py-2.5 transition-colors',
+                            'group relative flex items-start gap-3 rounded-lg border px-3 py-2.5 transition-colors',
                             isCurrentOrParentUrl(item.href)
-                                ? 'border-primary/30 bg-primary/10 text-foreground shadow-sm'
-                                : 'border-transparent text-muted-foreground hover:border-border hover:bg-muted hover:text-foreground',
+                                ? 'border-border bg-muted/70 text-foreground'
+                                : 'border-transparent text-muted-foreground hover:border-border hover:bg-muted/40 hover:text-foreground',
                         ]"
                     >
+                        <span
+                            v-if="isCurrentOrParentUrl(item.href)"
+                            class="absolute inset-y-2 left-0 w-1 rounded-r-full bg-primary"
+                            aria-hidden="true"
+                        />
                         <component
                             :is="item.icon"
                             :class="[
@@ -85,7 +90,7 @@ const { isCurrentOrParentUrl } = useCurrentUrl();
             <Separator class="lg:hidden" />
 
             <div class="flex-1 min-w-0">
-                <div class="rounded-xl border bg-card text-card-foreground shadow-sm">
+                <div class="settings-card rounded-xl border bg-card text-card-foreground shadow-sm">
                     <div class="space-y-8 p-5 sm:p-6">
                         <slot />
                     </div>
@@ -94,3 +99,32 @@ const { isCurrentOrParentUrl } = useCurrentUrl();
         </div>
     </div>
 </template>
+
+<style scoped>
+/* Tombol aksi dalam form Settings: bedakan dari kartu & sidebar aktif
+   supaya tidak "nyatu" dengan latar di layout POS yang serba-putih. */
+.settings-card :deep(button[type='submit']),
+.settings-card :deep(button[data-test$='-button']),
+.settings-card :deep([data-slot='button'][type='submit']) {
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(20, 184, 166, 0.18);
+    font-weight: 600;
+}
+
+.settings-card :deep(button[type='submit']:hover),
+.settings-card :deep(button[data-test$='-button']:hover) {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.1), 0 6px 14px rgba(20, 184, 166, 0.22);
+}
+
+.settings-card :deep(button[type='submit']:active),
+.settings-card :deep(button[data-test$='-button']:active) {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.1);
+}
+
+/* Buang efek hover saat disabled (processing). */
+.settings-card :deep(button[disabled]) {
+    transform: none !important;
+    box-shadow: none !important;
+}
+</style>

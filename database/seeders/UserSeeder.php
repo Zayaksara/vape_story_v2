@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Admin User',
                 'email' => 'admin@vape.com',
-                'password' => bcrypt('password'),
+                'password' => bcrypt('12345'),
                 'role' => UserRole::ADMIN,
                 'two_factor_secret' => null,
                 'two_factor_recovery_codes' => null,
@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Kasir User',
                 'email' => 'kasir@vape.com',
-                'password' => bcrypt('password'),
+                'password' => bcrypt('12345'),
                 'role' => UserRole::CASHIER,
                 'two_factor_secret' => null,
                 'two_factor_recovery_codes' => null,

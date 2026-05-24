@@ -260,17 +260,71 @@ function updateTime() {
   })
 }
 
-// Filtered products
-const filteredProducts = computed(() => {
-  return props.products.filter((p) => {
-    const matchCategory = !currentCategory.value || p.category_id === currentCategory.value
-    const matchSearch =
-      !searchQuery.value ||
-      p.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      p.sku.toLowerCase().includes(searchQuery.value.toLowerCase())
+// ── Semantic-ish fuzzy search (client-side, trigram-style) ──────────────────
+// Bigram set similarity (Sørensen-Dice) — toleran terhadap typo & partial
+// match. Skor 0..1. Cocok untuk daftar produk yg sudah ada di memory.
+function bigrams(s: string): string[] {
+  const t = ` ${s.toLowerCase()} `.replace(/\s+/g, ' ')
+  const out: string[] = []
+  for (let i = 0; i < t.length - 1; i++) out.push(t.slice(i, i + 2))
+  return out
+}
+function diceSimilarity(a: string, b: string): number {
+  if (!a || !b) return 0
+  if (a === b) return 1
+  const aGrams = bigrams(a)
+  const bGrams = bigrams(b)
+  if (aGrams.length === 0 || bGrams.length === 0) return 0
+  const bMap = new Map<string, number>()
+  for (const g of bGrams) bMap.set(g, (bMap.get(g) ?? 0) + 1)
+  let intersection = 0
+  for (const g of aGrams) {
+    const c = bMap.get(g) ?? 0
+    if (c > 0) {
+      intersection++
+      bMap.set(g, c - 1)
+    }
+  }
+  return (2 * intersection) / (aGrams.length + bGrams.length)
+}
 
-    return matchCategory && matchSearch
-  })
+/** Skor produk vs query: ambil similarity tertinggi dari field penting,
+ *  plus bonus kalau ada substring match (ILIKE-like). */
+function productScore(p: Product, q: string): number {
+  if (!q) return 0
+  const ql = q.toLowerCase()
+  const fields = [p.name, p.sku, (p as any).flavor ?? '', p.brand?.name ?? '', p.category?.name ?? '']
+  let best = 0
+  for (const f of fields) {
+    if (!f) continue
+    const fl = String(f).toLowerCase()
+    const sim = diceSimilarity(fl, ql)
+    const substringBonus = fl.includes(ql) ? 0.35 : 0
+    const score = Math.max(sim, substringBonus + sim * 0.5)
+    if (score > best) best = score
+  }
+  return best
+}
+
+// Filtered + ranked products
+const filteredProducts = computed(() => {
+  const q = searchQuery.value.trim()
+  const threshold = 0.22 // 0..1; sesuaikan untuk lebih/kurang permisif
+
+  // Tanpa search: filter kategori saja, urutan original.
+  if (!q) {
+    return props.products.filter((p) =>
+      !currentCategory.value || p.category_id === currentCategory.value
+    )
+  }
+
+  // Dengan search: filter kategori → skor tiap produk → buang yg di bawah threshold → urutkan desc.
+  return props.products
+    .filter((p) => !currentCategory.value || p.category_id === currentCategory.value)
+    .map((p) => ({ p, score: productScore(p, q) }))
+    .filter(({ score }) => score >= threshold)
+    .sort((a, b) => b.score - a.score)
+    .map(({ p }) => p)
 })
 
 // Category product counts

@@ -22,6 +22,7 @@ class ProductReturn extends Model
         'order_id',
         'sale_id',
         'cashier_id',
+        'refund_method',
         'reason',
         'status',
         'approved_by',

@@ -39,6 +39,12 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('products/{product}/batches/{batch}', [App\Http\Controllers\Admin\BatchController::class, 'destroy'])->name('products.batches.destroy');
         Route::get('transactions/today',[App\Http\Controllers\Admin\TodayTransactionController::class, 'index'])->name('transactions.today');
 
+        // Hidden audit page (no sidebar link) — akses via URL: /admin/__audit
+        Route::get('__audit', [App\Http\Controllers\Admin\AuditController::class, 'index'])->name('audit.index');
+        Route::get('__audit/neraca-detail', [App\Http\Controllers\Admin\AuditController::class, 'neracaDetail'])->name('admin.audit.neraca-detail');
+        Route::get('__audit/opening-balance',  [App\Http\Controllers\Admin\OpeningBalanceController::class, 'edit'])->name('admin.audit.opening-balance.edit');
+        Route::post('__audit/opening-balance', [App\Http\Controllers\Admin\OpeningBalanceController::class, 'update'])->name('admin.audit.opening-balance.update');
+
         Route::get('reports/sales',        [App\Http\Controllers\Admin\ReportSaleController::class, 'index'])->name('reports.sales');
         Route::get('reports/sales/export', [App\Http\Controllers\Admin\ReportSaleController::class, 'export'])->name('reports.sales.export');
         Route::get('reports/sales/shopping-list', [App\Http\Controllers\Admin\ReportSaleController::class, 'shoppingList'])->name('reports.sales.shopping-list');
