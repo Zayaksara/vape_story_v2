@@ -1,0 +1,270 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - img [ref=e8]
+        - generic [ref=e10]:
+          - paragraph [ref=e11]: Story Vape
+          - paragraph [ref=e12]: Admin Panel
+      - navigation [ref=e13]:
+        - link "Dashboard" [ref=e14] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - img [ref=e15]
+          - generic [ref=e20]: Dashboard
+        - link "Manajemen Produk" [ref=e21] [cursor=pointer]:
+          - /url: /admin/products
+          - img [ref=e22]
+          - generic [ref=e26]: Manajemen Produk
+        - link "Laporan Penjualan" [ref=e27] [cursor=pointer]:
+          - /url: /admin/reports/sales
+          - img [ref=e28]
+          - generic [ref=e30]: Laporan Penjualan
+        - link "History Pembayaran" [ref=e31] [cursor=pointer]:
+          - /url: /admin/transactions/today
+          - img [ref=e32]
+          - generic [ref=e35]: History Pembayaran
+        - link "Kelola Akun" [ref=e36] [cursor=pointer]:
+          - /url: /admin/users
+          - img [ref=e37]
+          - generic [ref=e42]: Kelola Akun
+        - link "Promo & Diskon" [ref=e43] [cursor=pointer]:
+          - /url: /admin/promotions
+          - img [ref=e44]
+          - generic [ref=e47]: Promo & Diskon
+      - generic [ref=e48]:
+        - link "Pengaturan Profil" [ref=e49] [cursor=pointer]:
+          - /url: /settings/profile
+          - img [ref=e50]
+          - generic [ref=e62]: Pengaturan Profil
+        - button "Logout" [ref=e63] [cursor=pointer]:
+          - img [ref=e64]
+          - generic [ref=e67]: Logout
+  - generic [ref=e68]:
+    - banner [ref=e69]:
+      - generic [ref=e70]:
+        - button "Toggle navigation menu" [expanded] [ref=e71] [cursor=pointer]
+        - heading "Admin Panel" [level=1] [ref=e72]
+      - button "Selamat datang, Admin User" [ref=e75] [cursor=pointer]:
+        - generic [ref=e76]: Selamat datang, Admin User
+    - main [ref=e77]:
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - generic [ref=e80]:
+            - heading "Audit Keuangan" [level=1] [ref=e81]
+            - paragraph [ref=e82]:
+              - text: Halaman tersembunyi — akses lewat URL
+              - code [ref=e83]: /admin/__audit
+              - text: . Untuk verifikasi pendapatan, HPP, profit, diskon, promo cukai, return, dan mutasi stok.
+          - generic [ref=e84]:
+            - generic [ref=e85]: Dari
+            - textbox [ref=e86]: 2026-05-24
+            - generic [ref=e87]: Sampai
+            - textbox [ref=e88]: 2026-05-24
+            - button "Terapkan" [ref=e89]
+        - generic [ref=e90]:
+          - paragraph [ref=e91]:
+            - text: Klik
+            - img [ref=e92]
+            - text: di tiap kartu untuk melihat rumus & metode perhitungannya.
+          - button "Buka semua rumus" [ref=e94]:
+            - img [ref=e95]
+            - text: Buka semua rumus
+        - generic [ref=e97]:
+          - generic [ref=e98]:
+            - generic [ref=e99]:
+              - paragraph [ref=e100]: Gross Revenue (sebelum diskon txn)
+              - button "Lihat rumus & metode" [ref=e101]:
+                - img [ref=e102]
+            - paragraph [ref=e104]: Rp 10.925.000
+          - generic [ref=e105]:
+            - generic [ref=e106]:
+              - paragraph [ref=e107]: Diskon Transaksi (voucher)
+              - button "Lihat rumus & metode" [ref=e108]:
+                - img [ref=e109]
+            - paragraph [ref=e111]: −Rp 75.000
+            - generic [ref=e113]:
+              - img [ref=e114]
+              - text: Laporan Penjualan · tab Return
+          - generic [ref=e117]:
+            - generic [ref=e118]:
+              - paragraph [ref=e119]: Diskon Manual per Item
+              - button "Lihat rumus & metode" [ref=e120]:
+                - img [ref=e121]
+            - paragraph [ref=e123]: −Rp 40.000
+          - generic [ref=e124]:
+            - generic [ref=e125]:
+              - paragraph [ref=e126]: Penghematan Promo Cukai
+              - button "Lihat rumus & metode" [ref=e127]:
+                - img [ref=e128]
+            - paragraph [ref=e130]: −Rp 925.000
+            - generic [ref=e132]:
+              - img [ref=e133]
+              - text: POS Transaksi Hari Ini · cukai lama
+          - generic [ref=e136]:
+            - generic [ref=e137]:
+              - paragraph [ref=e138]: Net Revenue (sebelum refund)
+              - button "Lihat rumus & metode" [ref=e139]:
+                - img [ref=e140]
+            - paragraph [ref=e142]: Rp 10.850.000
+            - generic [ref=e144]:
+              - img [ref=e145]
+              - text: Laporan Penjualan · Total Revenue (gross)
+          - generic [ref=e148]:
+            - generic [ref=e149]:
+              - paragraph [ref=e150]: Total Pendapatan (setelah refund)
+              - button "Lihat rumus & metode" [ref=e151]:
+                - img [ref=e152]
+            - paragraph [ref=e154]: Rp 10.620.000
+            - generic [ref=e155]:
+              - generic [ref=e156]:
+                - img [ref=e157]
+                - text: Dashboard · Total Pendapatan
+              - generic [ref=e160]:
+                - img [ref=e161]
+                - text: Laporan Penjualan · Total Revenue
+          - generic [ref=e164]:
+            - generic [ref=e165]:
+              - paragraph [ref=e166]: Total HPP (FIFO bruto)
+              - button "Lihat rumus & metode" [ref=e167]:
+                - img [ref=e168]
+            - paragraph [ref=e170]: Rp 8.000.850
+          - generic [ref=e171]:
+            - generic [ref=e172]:
+              - paragraph [ref=e173]: HPP Dikembalikan (Return)
+              - button "Lihat rumus & metode" [ref=e174]:
+                - img [ref=e175]
+            - paragraph [ref=e177]: −Rp 179.400
+          - generic [ref=e178]:
+            - generic [ref=e179]:
+              - paragraph [ref=e180]: Refund ke Customer
+              - button "Lihat rumus & metode" [ref=e181]:
+                - img [ref=e182]
+            - paragraph [ref=e184]: −Rp 230.000
+            - generic [ref=e186]:
+              - img [ref=e187]
+              - text: Laporan Penjualan · tab Return · Total Nilai Return
+          - generic [ref=e190]:
+            - generic [ref=e191]:
+              - paragraph [ref=e192]: Profit Kotor (nilai jual − modal)
+              - button "Lihat rumus & metode" [ref=e193]:
+                - img [ref=e194]
+            - paragraph [ref=e196]: Rp 2.913.550
+          - generic [ref=e197]:
+            - generic [ref=e198]:
+              - paragraph [ref=e199]: Total Keuntungan (Profit Bersih)
+              - button "Lihat rumus & metode" [ref=e200]:
+                - img [ref=e201]
+            - paragraph [ref=e203]: Rp 2.798.550
+            - generic [ref=e204]:
+              - generic [ref=e205]:
+                - img [ref=e206]
+                - text: Dashboard · Total Keuntungan
+              - generic [ref=e209]:
+                - img [ref=e210]
+                - text: Laporan Penjualan · Total Profit
+          - generic [ref=e213]:
+            - generic [ref=e214]:
+              - paragraph [ref=e215]: Pajak Tercatat
+              - button "Lihat rumus & metode" [ref=e216]:
+                - img [ref=e217]
+            - paragraph [ref=e219]: Rp 0
+          - generic [ref=e220]:
+            - generic [ref=e221]:
+              - paragraph [ref=e222]: Nilai Persediaan (live)
+              - button "Lihat rumus & metode" [ref=e223]:
+                - img [ref=e224]
+            - paragraph [ref=e226]: Rp 1.544.357.350
+            - generic [ref=e227]:
+              - generic [ref=e228]:
+                - img [ref=e229]
+                - text: Manajemen Produk · nilai stok
+              - generic [ref=e232]:
+                - img [ref=e233]
+                - text: Neraca · Aset Lancar · Persediaan
+          - generic [ref=e236]:
+            - generic [ref=e237]:
+              - paragraph [ref=e238]: Total Transaksi
+              - button "Lihat rumus & metode" [ref=e239]:
+                - img [ref=e240]
+            - paragraph [ref=e242]: "19"
+            - generic [ref=e243]:
+              - generic [ref=e244]:
+                - img [ref=e245]
+                - text: Dashboard · Total Transaksi
+              - generic [ref=e248]:
+                - img [ref=e249]
+                - text: Laporan Penjualan · Total Transaksi
+          - generic [ref=e252]:
+            - generic [ref=e253]:
+              - paragraph [ref=e254]: Produk Terjual (net)
+              - button "Lihat rumus & metode" [ref=e255]:
+                - img [ref=e256]
+            - paragraph [ref=e258]: "50"
+            - generic [ref=e259]:
+              - generic [ref=e260]:
+                - img [ref=e261]
+                - text: Dashboard · Produk Terjual
+              - generic [ref=e264]:
+                - img [ref=e265]
+                - text: Laporan Penjualan · Item Terjual
+          - generic [ref=e268]:
+            - generic [ref=e269]:
+              - paragraph [ref=e270]: Jumlah Return
+              - button "Lihat rumus & metode" [ref=e271]:
+                - img [ref=e272]
+            - paragraph [ref=e274]: "2"
+            - generic [ref=e276]:
+              - img [ref=e277]
+              - text: Laporan Penjualan · tab Return · Total Return
+        - generic [ref=e280]:
+          - button "Neraca" [ref=e281] [cursor=pointer]
+          - button "Sales (19)" [ref=e282] [cursor=pointer]
+          - button "Returns (2)" [active] [ref=e283] [cursor=pointer]
+          - button "Stock Mutations (34)" [ref=e284] [cursor=pointer]
+          - button "Batches (173)" [ref=e285] [cursor=pointer]
+        - table [ref=e729]:
+          - rowgroup [ref=e730]:
+            - row "No. Return Invoice Waktu Kasir Status Alasan Total" [ref=e731]:
+              - columnheader "No. Return" [ref=e732]
+              - columnheader "Invoice" [ref=e733]
+              - columnheader "Waktu" [ref=e734]
+              - columnheader "Kasir" [ref=e735]
+              - columnheader "Status" [ref=e736]
+              - columnheader "Alasan" [ref=e737]
+              - columnheader "Total" [ref=e738]
+          - rowgroup [ref=e739]:
+            - row "RET-202605-0003 SALE-001119 24 Mei 2026, 12.44 Admin User processed Customer berubah pikiran Rp 115.000" [ref=e740]:
+              - cell "RET-202605-0003" [ref=e741]
+              - cell "SALE-001119" [ref=e742]
+              - cell "24 Mei 2026, 12.44" [ref=e743]
+              - cell "Admin User" [ref=e744]
+              - cell "processed" [ref=e745]
+              - cell "Customer berubah pikiran" [ref=e746]
+              - cell "Rp 115.000" [ref=e747]
+            - row "• Geekvape Blue Razz AO ×1 @ Rp 115.000 → kembali ke batch LOT-9N9XNYSP = Rp 115.000" [ref=e748]:
+              - cell "• Geekvape Blue Razz AO ×1 @ Rp 115.000 → kembali ke batch LOT-9N9XNYSP = Rp 115.000" [ref=e749]:
+                - generic [ref=e750]:
+                  - text: •
+                  - strong [ref=e751]: Geekvape Blue Razz AO
+                  - text: ×1 @ Rp 115.000 → kembali ke batch LOT-9N9XNYSP =
+                  - strong [ref=e752]: Rp 115.000
+            - row "RET-202605-0002 SALE-001119 24 Mei 2026, 12.13 Cashier processed Barang rusak Rp 115.000" [ref=e753]:
+              - cell "RET-202605-0002" [ref=e754]
+              - cell "SALE-001119" [ref=e755]
+              - cell "24 Mei 2026, 12.13" [ref=e756]
+              - cell "Cashier" [ref=e757]
+              - cell "processed" [ref=e758]
+              - cell "Barang rusak" [ref=e759]
+              - cell "Rp 115.000" [ref=e760]
+            - row "• Geekvape Blue Razz AO ×1 @ Rp 115.000 → kembali ke batch LOT-9N9XNYSP = Rp 115.000" [ref=e761]:
+              - cell "• Geekvape Blue Razz AO ×1 @ Rp 115.000 → kembali ke batch LOT-9N9XNYSP = Rp 115.000" [ref=e762]:
+                - generic [ref=e763]:
+                  - text: •
+                  - strong [ref=e764]: Geekvape Blue Razz AO
+                  - text: ×1 @ Rp 115.000 → kembali ke batch LOT-9N9XNYSP =
+                  - strong [ref=e765]: Rp 115.000
+  - region "Notifications alt+T":
+    - list
+  - button "Buka AI Asisten" [ref=e385] [cursor=pointer]:
+    - img [ref=e387]
+    - generic [ref=e390]: AI

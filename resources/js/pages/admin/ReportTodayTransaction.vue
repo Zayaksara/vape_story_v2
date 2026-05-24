@@ -121,6 +121,14 @@ function formatTimeDot(dateString: string): string {
   return `${h}.${m}`
 }
 
+/** Tanggal ringkas untuk tabel cetak (mis. 24/05/2026). */
+function formatDateShort(dateString: string): string {
+  const date = new Date(dateString)
+  const d = String(date.getDate()).padStart(2, '0')
+  const mo = String(date.getMonth() + 1).padStart(2, '0')
+  return `${d}/${mo}/${date.getFullYear()}`
+}
+
 function ymdFromDate(d: Date): string {
   const pad = (n: number) => String(n).padStart(2, '0')
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
@@ -292,10 +300,18 @@ const reportMetaAddress = computed(
     'Jl. Raya Kedawung No.02, Panembahan, Kec. Plered, Kabupaten Cirebon, Jawa Barat 45154',
 )
 
-const reportPrintPeriodLine = computed(() => `Periode transaksi: ${reportSelectedDateLabel.value}`)
+const periodTypeLabel = computed(
+  () => periodOptions.find(o => o.value === selectedPeriod.value)?.label ?? 'Harian',
+)
+
+const reportPrintPeriodLine = computed(() => {
+  const range = periodRangeLabel.value || reportSelectedDateLabel.value
+  return range ? `Laporan ${periodTypeLabel.value} ${range}` : `Laporan ${periodTypeLabel.value}`
+})
 const printSheetGeneratedLine = ref('')
 
 interface PrintLineRow {
+  date: string
   time: string
   productName: string
   quantity: number
@@ -319,6 +335,7 @@ const dailyPrintRows = computed<PrintLineRow[]>(() => {
         : Math.round((item.total ?? 0) - hpp)
 
       rows.push({
+        date: formatDateShort(t.created_at),
         time: formatTimeDot(t.created_at),
         productName: item.product?.name ?? '-',
         quantity: item.quantity,
@@ -335,17 +352,19 @@ const dailyPrintRows = computed<PrintLineRow[]>(() => {
 
 const dailyPrintTotals = computed(() => {
   const rows = dailyPrintRows.value
+  let quantity = 0
   let selling = 0
   let discount = 0
   let hpp = 0
   let profit = 0
   for (const r of rows) {
+    quantity += r.quantity
     selling += r.sellingTotal
     discount += r.discount
     hpp += r.hppTotal
     profit += r.profit
   }
-  return { selling, discount, hpp, profit }
+  return { quantity, selling, discount, hpp, profit }
 })
 
 const dailyPrintTotalDiscount = computed(() =>
@@ -461,11 +480,16 @@ function updateTime() {
 
 async function handlePrint() {
   printSheetGeneratedLine.value = `Dicetak: ${formatIdLongDateTime(new Date())} WIB`
+  // Ganti judul dokumen agar header cetak browser memakai nama laporan, bukan URL/"VapeStory".
+  const prevTitle = document.title
+  const range = periodRangeLabel.value || reportSelectedDateLabel.value
+  document.title = `Laporan ${periodTypeLabel.value} ${range}`
   document.body.dataset.reportPrint = 'true'
   await nextTick()
   window.print()
   window.setTimeout(() => {
     delete document.body.dataset.reportPrint
+    document.title = prevTitle
   }, 300)
 }
 
@@ -878,6 +902,13 @@ function handleExport() {
                                 >
                                   -{{ formatPrice((item as any).discount) }}
                                 </span>
+                                <span
+                                  v-if="(item.returned_quantity ?? 0) > 0"
+                                  class="ml-1 rounded px-1 text-[10px] font-bold"
+                                  style="background: #fee2e2; color: #dc2626;"
+                                >
+                                  Diretur {{ item.returned_quantity }}x
+                                </span>
                               </span>
                               <span class="font-medium">{{ formatPrice(item.total || 0) }}</span>
                             </div>
@@ -903,8 +934,16 @@ function handleExport() {
                               <span>Diskon</span>
                               <span>-{{ formatPrice((transaction as any).discount_amount) }}</span>
                             </div>
+                            <div v-if="(transaction as any).returned_amount > 0" class="flex justify-between">
+                              <span>Penjualan kotor</span>
+                              <span>{{ formatPrice((transaction as any).gross_amount || 0) }}</span>
+                            </div>
+                            <div v-if="(transaction as any).returned_amount > 0" class="flex justify-between font-semibold" style="color: #dc2626;">
+                              <span>Retur barang</span>
+                              <span>-{{ formatPrice((transaction as any).returned_amount) }}</span>
+                            </div>
                             <div class="flex justify-between text-sm font-bold" style="color: var(--pos-brand-primary);">
-                              <span>Total Dibayar</span>
+                              <span>{{ (transaction as any).returned_amount > 0 ? 'Penjualan bersih' : 'Total Dibayar' }}</span>
                               <span>{{ formatPrice(transaction.tax_amount || 0) }}</span>
                             </div>
                           </div>
@@ -940,8 +979,20 @@ function handleExport() {
       </div>
 
       <table class="daily-print-table w-full border-collapse text-center text-xs">
+        <colgroup>
+          <col style="width: 9%" />
+          <col style="width: 6%" />
+          <col style="width: 19%" />
+          <col style="width: 6%" />
+          <col style="width: 14%" />
+          <col style="width: 12%" />
+          <col style="width: 10%" />
+          <col style="width: 12%" />
+          <col style="width: 12%" />
+        </colgroup>
         <thead>
           <tr>
+            <th class="border border-black px-2 py-1.5 font-bold">Tanggal</th>
             <th class="border border-black px-2 py-1.5 font-bold">Waktu</th>
             <th class="border border-black px-2 py-1.5 font-bold">Barang</th>
             <th class="border border-black px-2 py-1.5 font-bold">Jumlah</th>
@@ -954,11 +1005,12 @@ function handleExport() {
         </thead>
         <tbody>
           <tr v-if="dailyPrintRows.length === 0">
-            <td colspan="8" class="border border-black px-2 py-8 text-gray-600">
-              Tidak ada penjualan pada tanggal ini
+            <td colspan="9" class="border border-black px-2 py-8 text-gray-600">
+              Tidak ada penjualan pada periode ini
             </td>
           </tr>
           <tr v-for="(row, idx) in dailyPrintRows" :key="idx">
+            <td class="border border-black px-2 py-1">{{ row.date }}</td>
             <td class="border border-black px-2 py-1">{{ row.time }}</td>
             <td class="border border-black px-2 py-1 text-left">{{ row.productName }}</td>
             <td class="border border-black px-2 py-1">{{ row.quantity }}</td>
@@ -972,8 +1024,9 @@ function handleExport() {
         <tfoot v-if="dailyPrintRows.length > 0">
           <tr>
             <td colspan="3" class="border border-black px-2 py-2 font-bold uppercase">TOTAL PENJUALAN</td>
+            <td class="border border-black px-2 py-2 font-bold">{{ dailyPrintTotals.quantity }}</td>
             <td class="border border-black px-2 py-2 font-bold">{{ formatPrice(dailyPrintTotals.selling) }}</td>
-            <td class="border border-black px-2 py-2 font-bold">-{{ formatPrice(dailyPrintTotalDiscount) }}</td>
+            <td class="border border-black px-2 py-2 font-bold">{{ formatPrice(dailyPrintTotalDiscount) }}</td>
             <td class="border border-black px-2 py-2">&nbsp;</td>
             <td class="border border-black px-2 py-2 font-bold">{{ formatPrice(dailyPrintTotals.hpp) }}</td>
             <td class="border border-black px-2 py-2 font-bold">{{ formatPrice(dailyPrintTotals.profit) }}</td>
@@ -1055,8 +1108,28 @@ select:focus {
     background: #fff !important;
   }
   body[data-report-print='true'] .daily-report-print-sheet {
-    padding: 1rem;
+    padding: 14mm 12mm;
     font-family: ui-sans-serif, system-ui, sans-serif;
+  }
+  body[data-report-print='true'] .print-header-center {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #000;
+  }
+  body[data-report-print='true'] .print-header-center > * + * {
+    margin-top: 0.35rem;
+  }
+  /* Lebar kolom ditetapkan via colgroup (table-layout: fixed); semua sel boleh wrap agar tidak tabrakan. */
+  body[data-report-print='true'] .daily-print-table {
+    table-layout: fixed;
+    font-size: 9px;
+  }
+  body[data-report-print='true'] .daily-print-table th,
+  body[data-report-print='true'] .daily-print-table td {
+    padding: 3px 3px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    vertical-align: top;
   }
 }
 
@@ -1071,6 +1144,9 @@ select:focus {
   body[data-report-print='true'] .admin-sidebar,
   body[data-report-print='true'] [data-sidebar='sidebar'],
   body[data-report-print='true'] .toaster.group,
+  body[data-report-print='true'] .toaster,
+  body[data-report-print='true'] .ai-fab-root,
+  body[data-report-print='true'] [data-sonner-toaster],
   body[data-report-print='true'] #phpdebugbar,
   body[data-report-print='true'] .phpdebugbar,
   body[data-report-print='true'] .phpdebugbar-openhandler {
@@ -1085,8 +1161,9 @@ select:focus {
     min-height: 0 !important;
   }
 
+  /* margin 0 agar Chrome tidak menyisipkan header/footer (tanggal & URL). Jarak tepi diatur via padding lembar. */
   @page {
-    margin: 12mm;
+    margin: 0;
   }
 }
 </style>

@@ -1,0 +1,511 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - img [ref=e8]
+        - generic [ref=e10]:
+          - paragraph [ref=e11]: Story Vape
+          - paragraph [ref=e12]: Admin Panel
+      - navigation [ref=e13]:
+        - link "Dashboard" [ref=e14] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - img [ref=e15]
+          - generic [ref=e20]: Dashboard
+        - link "Manajemen Produk" [ref=e21] [cursor=pointer]:
+          - /url: /admin/products
+          - img [ref=e22]
+          - generic [ref=e26]: Manajemen Produk
+        - link "Laporan Penjualan" [ref=e27] [cursor=pointer]:
+          - /url: /admin/reports/sales
+          - img [ref=e28]
+          - generic [ref=e30]: Laporan Penjualan
+        - link "History Pembayaran" [ref=e31] [cursor=pointer]:
+          - /url: /admin/transactions/today
+          - img [ref=e32]
+          - generic [ref=e35]: History Pembayaran
+        - link "Kelola Akun" [ref=e36] [cursor=pointer]:
+          - /url: /admin/users
+          - img [ref=e37]
+          - generic [ref=e42]: Kelola Akun
+        - link "Promo & Diskon" [ref=e43] [cursor=pointer]:
+          - /url: /admin/promotions
+          - img [ref=e44]
+          - generic [ref=e47]: Promo & Diskon
+      - generic [ref=e48]:
+        - link "Pengaturan Profil" [ref=e49] [cursor=pointer]:
+          - /url: /settings/profile
+          - img [ref=e50]
+          - generic [ref=e62]: Pengaturan Profil
+        - button "Logout" [ref=e63] [cursor=pointer]:
+          - img [ref=e64]
+          - generic [ref=e67]: Logout
+  - generic [ref=e68]:
+    - banner [ref=e69]:
+      - generic [ref=e70]:
+        - button "Toggle navigation menu" [expanded] [ref=e71] [cursor=pointer]
+        - heading "Admin Panel" [level=1] [ref=e72]
+      - button "Selamat datang, Admin User" [ref=e75] [cursor=pointer]:
+        - generic [ref=e76]: Selamat datang, Admin User
+    - main [ref=e77]:
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - generic [ref=e80]:
+            - heading "Audit Keuangan" [level=1] [ref=e81]
+            - paragraph [ref=e82]:
+              - text: Halaman tersembunyi — akses lewat URL
+              - code [ref=e83]: /admin/__audit
+              - text: . Untuk verifikasi pendapatan, HPP, profit, diskon, promo cukai, return, dan mutasi stok.
+          - generic [ref=e84]:
+            - generic [ref=e85]: Dari
+            - textbox [ref=e86]: 2026-05-24
+            - generic [ref=e87]: Sampai
+            - textbox [ref=e88]: 2026-05-24
+            - button "Terapkan" [ref=e89]
+        - generic [ref=e90]:
+          - paragraph [ref=e91]:
+            - text: Klik
+            - img [ref=e92]
+            - text: di tiap kartu untuk melihat rumus & metode perhitungannya.
+          - button "Buka semua rumus" [ref=e94]:
+            - img [ref=e95]
+            - text: Buka semua rumus
+        - generic [ref=e97]:
+          - generic [ref=e98]:
+            - generic [ref=e99]:
+              - paragraph [ref=e100]: Gross Revenue (sebelum diskon txn)
+              - button "Lihat rumus & metode" [ref=e101]:
+                - img [ref=e102]
+            - paragraph [ref=e104]: Rp 10.925.000
+          - generic [ref=e105]:
+            - generic [ref=e106]:
+              - paragraph [ref=e107]: Diskon Transaksi (voucher)
+              - button "Lihat rumus & metode" [ref=e108]:
+                - img [ref=e109]
+            - paragraph [ref=e111]: −Rp 75.000
+            - generic [ref=e113]:
+              - img [ref=e114]
+              - text: Laporan Penjualan · tab Return
+          - generic [ref=e117]:
+            - generic [ref=e118]:
+              - paragraph [ref=e119]: Diskon Manual per Item
+              - button "Lihat rumus & metode" [ref=e120]:
+                - img [ref=e121]
+            - paragraph [ref=e123]: −Rp 40.000
+          - generic [ref=e124]:
+            - generic [ref=e125]:
+              - paragraph [ref=e126]: Penghematan Promo Cukai
+              - button "Lihat rumus & metode" [ref=e127]:
+                - img [ref=e128]
+            - paragraph [ref=e130]: −Rp 925.000
+            - generic [ref=e132]:
+              - img [ref=e133]
+              - text: POS Transaksi Hari Ini · cukai lama
+          - generic [ref=e136]:
+            - generic [ref=e137]:
+              - paragraph [ref=e138]: Net Revenue (sebelum refund)
+              - button "Lihat rumus & metode" [ref=e139]:
+                - img [ref=e140]
+            - paragraph [ref=e142]: Rp 10.850.000
+            - generic [ref=e144]:
+              - img [ref=e145]
+              - text: Laporan Penjualan · Total Revenue (gross)
+          - generic [ref=e148]:
+            - generic [ref=e149]:
+              - paragraph [ref=e150]: Total Pendapatan (setelah refund)
+              - button "Lihat rumus & metode" [ref=e151]:
+                - img [ref=e152]
+            - paragraph [ref=e154]: Rp 10.620.000
+            - generic [ref=e155]:
+              - generic [ref=e156]:
+                - img [ref=e157]
+                - text: Dashboard · Total Pendapatan
+              - generic [ref=e160]:
+                - img [ref=e161]
+                - text: Laporan Penjualan · Total Revenue
+          - generic [ref=e164]:
+            - generic [ref=e165]:
+              - paragraph [ref=e166]: Total HPP (FIFO bruto)
+              - button "Lihat rumus & metode" [ref=e167]:
+                - img [ref=e168]
+            - paragraph [ref=e170]: Rp 8.000.850
+          - generic [ref=e171]:
+            - generic [ref=e172]:
+              - paragraph [ref=e173]: HPP Dikembalikan (Return)
+              - button "Lihat rumus & metode" [ref=e174]:
+                - img [ref=e175]
+            - paragraph [ref=e177]: −Rp 179.400
+          - generic [ref=e178]:
+            - generic [ref=e179]:
+              - paragraph [ref=e180]: Refund ke Customer
+              - button "Lihat rumus & metode" [ref=e181]:
+                - img [ref=e182]
+            - paragraph [ref=e184]: −Rp 230.000
+            - generic [ref=e186]:
+              - img [ref=e187]
+              - text: Laporan Penjualan · tab Return · Total Nilai Return
+          - generic [ref=e190]:
+            - generic [ref=e191]:
+              - paragraph [ref=e192]: Profit Kotor (nilai jual − modal)
+              - button "Lihat rumus & metode" [ref=e193]:
+                - img [ref=e194]
+            - paragraph [ref=e196]: Rp 2.913.550
+          - generic [ref=e197]:
+            - generic [ref=e198]:
+              - paragraph [ref=e199]: Total Keuntungan (Profit Bersih)
+              - button "Lihat rumus & metode" [ref=e200]:
+                - img [ref=e201]
+            - paragraph [ref=e203]: Rp 2.798.550
+            - generic [ref=e204]:
+              - generic [ref=e205]:
+                - img [ref=e206]
+                - text: Dashboard · Total Keuntungan
+              - generic [ref=e209]:
+                - img [ref=e210]
+                - text: Laporan Penjualan · Total Profit
+          - generic [ref=e213]:
+            - generic [ref=e214]:
+              - paragraph [ref=e215]: Pajak Tercatat
+              - button "Lihat rumus & metode" [ref=e216]:
+                - img [ref=e217]
+            - paragraph [ref=e219]: Rp 0
+          - generic [ref=e220]:
+            - generic [ref=e221]:
+              - paragraph [ref=e222]: Nilai Persediaan (live)
+              - button "Lihat rumus & metode" [ref=e223]:
+                - img [ref=e224]
+            - paragraph [ref=e226]: Rp 1.544.357.350
+            - generic [ref=e227]:
+              - generic [ref=e228]:
+                - img [ref=e229]
+                - text: Manajemen Produk · nilai stok
+              - generic [ref=e232]:
+                - img [ref=e233]
+                - text: Neraca · Aset Lancar · Persediaan
+          - generic [ref=e236]:
+            - generic [ref=e237]:
+              - paragraph [ref=e238]: Total Transaksi
+              - button "Lihat rumus & metode" [ref=e239]:
+                - img [ref=e240]
+            - paragraph [ref=e242]: "19"
+            - generic [ref=e243]:
+              - generic [ref=e244]:
+                - img [ref=e245]
+                - text: Dashboard · Total Transaksi
+              - generic [ref=e248]:
+                - img [ref=e249]
+                - text: Laporan Penjualan · Total Transaksi
+          - generic [ref=e252]:
+            - generic [ref=e253]:
+              - paragraph [ref=e254]: Produk Terjual (net)
+              - button "Lihat rumus & metode" [ref=e255]:
+                - img [ref=e256]
+            - paragraph [ref=e258]: "50"
+            - generic [ref=e259]:
+              - generic [ref=e260]:
+                - img [ref=e261]
+                - text: Dashboard · Produk Terjual
+              - generic [ref=e264]:
+                - img [ref=e265]
+                - text: Laporan Penjualan · Item Terjual
+          - generic [ref=e268]:
+            - generic [ref=e269]:
+              - paragraph [ref=e270]: Jumlah Return
+              - button "Lihat rumus & metode" [ref=e271]:
+                - img [ref=e272]
+            - paragraph [ref=e274]: "2"
+            - generic [ref=e276]:
+              - img [ref=e277]
+              - text: Laporan Penjualan · tab Return · Total Return
+        - generic [ref=e280]:
+          - button "Neraca" [ref=e281] [cursor=pointer]
+          - button "Sales (19)" [active] [ref=e282] [cursor=pointer]
+          - button "Returns (2)" [ref=e283] [cursor=pointer]
+          - button "Stock Mutations (34)" [ref=e284] [cursor=pointer]
+          - button "Batches (173)" [ref=e285] [cursor=pointer]
+        - table [ref=e392]:
+          - rowgroup [ref=e393]:
+            - row "Invoice Waktu Kasir Bayar Total Diskon Txn Promo HPP Refund Profit Kotor Profit Bersih" [ref=e394]:
+              - columnheader "Invoice" [ref=e395]
+              - columnheader "Waktu" [ref=e396]
+              - columnheader "Kasir" [ref=e397]
+              - columnheader "Bayar" [ref=e398]
+              - columnheader "Total" [ref=e399]
+              - columnheader "Diskon Txn" [ref=e400]
+              - columnheader "Promo" [ref=e401]
+              - columnheader "HPP" [ref=e402]
+              - columnheader "Refund" [ref=e403]
+              - columnheader "Profit Kotor" [ref=e404]
+              - columnheader "Profit Bersih" [ref=e405]
+              - columnheader [ref=e406]
+          - rowgroup [ref=e407]:
+            - row "SALE-001118 24 Mei 2026, 20.21 Kasir User cash Rp 1.471.000 - −Rp 204.000 Rp 1.139.000 - Rp 357.000 Rp 332.000" [ref=e408] [cursor=pointer]:
+              - cell "SALE-001118" [ref=e409]
+              - cell "24 Mei 2026, 20.21" [ref=e410]
+              - cell "Kasir User" [ref=e411]
+              - cell "cash" [ref=e412]
+              - cell "Rp 1.471.000" [ref=e413]
+              - cell "-" [ref=e414]
+              - cell "−Rp 204.000" [ref=e415]
+              - cell "Rp 1.139.000" [ref=e416]
+              - cell "-" [ref=e417]
+              - cell "Rp 357.000" [ref=e418]
+              - cell "Rp 332.000" [ref=e419]
+              - cell [ref=e420]:
+                - img [ref=e421]
+            - row "SALE-001102 24 Mei 2026, 19.34 Kasir User qris Rp 64.000 −Rp 10.000 −Rp 16.000 Rp 70.200 - Rp 3.800 -Rp 6.200" [ref=e423] [cursor=pointer]:
+              - cell "SALE-001102" [ref=e424]
+              - cell "24 Mei 2026, 19.34" [ref=e425]
+              - cell "Kasir User" [ref=e426]
+              - cell "qris" [ref=e427]
+              - cell "Rp 64.000" [ref=e428]
+              - cell "−Rp 10.000" [ref=e429]
+              - cell "−Rp 16.000" [ref=e430]
+              - cell "Rp 70.200" [ref=e431]
+              - cell "-" [ref=e432]
+              - cell "Rp 3.800" [ref=e433]
+              - cell "-Rp 6.200" [ref=e434]
+              - cell [ref=e435]:
+                - img [ref=e436]
+            - row "SALE-001116 24 Mei 2026, 19.11 Kasir User qris Rp 360.000 - - Rp 216.000 - Rp 144.000 Rp 144.000" [ref=e438] [cursor=pointer]:
+              - cell "SALE-001116" [ref=e439]
+              - cell "24 Mei 2026, 19.11" [ref=e440]
+              - cell "Kasir User" [ref=e441]
+              - cell "qris" [ref=e442]
+              - cell "Rp 360.000" [ref=e443]
+              - cell "-" [ref=e444]
+              - cell "-" [ref=e445]
+              - cell "Rp 216.000" [ref=e446]
+              - cell "-" [ref=e447]
+              - cell "Rp 144.000" [ref=e448]
+              - cell "Rp 144.000" [ref=e449]
+              - cell [ref=e450]:
+                - img [ref=e451]
+            - row "SALE-001109 24 Mei 2026, 18.57 Kasir User e_wallet Rp 81.000 −Rp 5.000 −Rp 14.000 Rp 66.000 - Rp 20.000 Rp 15.000" [ref=e453] [cursor=pointer]:
+              - cell "SALE-001109" [ref=e454]
+              - cell "24 Mei 2026, 18.57" [ref=e455]
+              - cell "Kasir User" [ref=e456]
+              - cell "e_wallet" [ref=e457]
+              - cell "Rp 81.000" [ref=e458]
+              - cell "−Rp 5.000" [ref=e459]
+              - cell "−Rp 14.000" [ref=e460]
+              - cell "Rp 66.000" [ref=e461]
+              - cell "-" [ref=e462]
+              - cell "Rp 20.000" [ref=e463]
+              - cell "Rp 15.000" [ref=e464]
+              - cell [ref=e465]:
+                - img [ref=e466]
+            - row "SALE-001104 24 Mei 2026, 18.20 Kasir User qris Rp 434.000 −Rp 25.000 −Rp 56.000 Rp 369.700 - Rp 89.300 Rp 64.300" [ref=e468] [cursor=pointer]:
+              - cell "SALE-001104" [ref=e469]
+              - cell "24 Mei 2026, 18.20" [ref=e470]
+              - cell "Kasir User" [ref=e471]
+              - cell "qris" [ref=e472]
+              - cell "Rp 434.000" [ref=e473]
+              - cell "−Rp 25.000" [ref=e474]
+              - cell "−Rp 56.000" [ref=e475]
+              - cell "Rp 369.700" [ref=e476]
+              - cell "-" [ref=e477]
+              - cell "Rp 89.300" [ref=e478]
+              - cell "Rp 64.300" [ref=e479]
+              - cell [ref=e480]:
+                - img [ref=e481]
+            - row "SALE-001103 24 Mei 2026, 17.12 Cashier e_wallet Rp 230.000 - - Rp 140.300 - Rp 89.700 Rp 89.700" [ref=e483] [cursor=pointer]:
+              - cell "SALE-001103" [ref=e484]
+              - cell "24 Mei 2026, 17.12" [ref=e485]
+              - cell "Cashier" [ref=e486]
+              - cell "e_wallet" [ref=e487]
+              - cell "Rp 230.000" [ref=e488]
+              - cell "-" [ref=e489]
+              - cell "-" [ref=e490]
+              - cell "Rp 140.300" [ref=e491]
+              - cell "-" [ref=e492]
+              - cell "Rp 89.700" [ref=e493]
+              - cell "Rp 89.700" [ref=e494]
+              - cell [ref=e495]:
+                - img [ref=e496]
+            - row "SALE-001113 24 Mei 2026, 17.01 Kasir User cash Rp 125.000 - −Rp 25.000 Rp 102.000 - Rp 23.000 Rp 23.000" [ref=e498] [cursor=pointer]:
+              - cell "SALE-001113" [ref=e499]
+              - cell "24 Mei 2026, 17.01" [ref=e500]
+              - cell "Kasir User" [ref=e501]
+              - cell "cash" [ref=e502]
+              - cell "Rp 125.000" [ref=e503]
+              - cell "-" [ref=e504]
+              - cell "−Rp 25.000" [ref=e505]
+              - cell "Rp 102.000" [ref=e506]
+              - cell "-" [ref=e507]
+              - cell "Rp 23.000" [ref=e508]
+              - cell "Rp 23.000" [ref=e509]
+              - cell [ref=e510]:
+                - img [ref=e511]
+            - row "SALE-001108 24 Mei 2026, 16.51 Cashier cash Rp 614.000 - −Rp 126.000 Rp 481.000 - Rp 133.000 Rp 133.000" [ref=e513] [cursor=pointer]:
+              - cell "SALE-001108" [ref=e514]
+              - cell "24 Mei 2026, 16.51" [ref=e515]
+              - cell "Cashier" [ref=e516]
+              - cell "cash" [ref=e517]
+              - cell "Rp 614.000" [ref=e518]
+              - cell "-" [ref=e519]
+              - cell "−Rp 126.000" [ref=e520]
+              - cell "Rp 481.000" [ref=e521]
+              - cell "-" [ref=e522]
+              - cell "Rp 133.000" [ref=e523]
+              - cell "Rp 133.000" [ref=e524]
+              - cell [ref=e525]:
+                - img [ref=e526]
+            - row "SALE-001110 24 Mei 2026, 16.45 Admin User e_wallet Rp 550.000 - - Rp 379.500 - Rp 170.500 Rp 170.500" [ref=e528] [cursor=pointer]:
+              - cell "SALE-001110" [ref=e529]
+              - cell "24 Mei 2026, 16.45" [ref=e530]
+              - cell "Admin User" [ref=e531]
+              - cell "e_wallet" [ref=e532]
+              - cell "Rp 550.000" [ref=e533]
+              - cell "-" [ref=e534]
+              - cell "-" [ref=e535]
+              - cell "Rp 379.500" [ref=e536]
+              - cell "-" [ref=e537]
+              - cell "Rp 170.500" [ref=e538]
+              - cell "Rp 170.500" [ref=e539]
+              - cell [ref=e540]:
+                - img [ref=e541]
+            - row "SALE-001106 24 Mei 2026, 15.52 Admin User bank_transfer Rp 2.688.000 - −Rp 312.000 Rp 1.899.900 - Rp 788.100 Rp 788.100" [ref=e543] [cursor=pointer]:
+              - cell "SALE-001106" [ref=e544]
+              - cell "24 Mei 2026, 15.52" [ref=e545]
+              - cell "Admin User" [ref=e546]
+              - cell "bank_transfer" [ref=e547]
+              - cell "Rp 2.688.000" [ref=e548]
+              - cell "-" [ref=e549]
+              - cell "−Rp 312.000" [ref=e550]
+              - cell "Rp 1.899.900" [ref=e551]
+              - cell "-" [ref=e552]
+              - cell "Rp 788.100" [ref=e553]
+              - cell "Rp 788.100" [ref=e554]
+              - cell [ref=e555]:
+                - img [ref=e556]
+            - row "SALE-001107 24 Mei 2026, 15.32 Cashier cash Rp 75.000 −Rp 10.000 - Rp 52.700 - Rp 32.300 Rp 22.300" [ref=e558] [cursor=pointer]:
+              - cell "SALE-001107" [ref=e559]
+              - cell "24 Mei 2026, 15.32" [ref=e560]
+              - cell "Cashier" [ref=e561]
+              - cell "cash" [ref=e562]
+              - cell "Rp 75.000" [ref=e563]
+              - cell "−Rp 10.000" [ref=e564]
+              - cell "-" [ref=e565]
+              - cell "Rp 52.700" [ref=e566]
+              - cell "-" [ref=e567]
+              - cell "Rp 32.300" [ref=e568]
+              - cell "Rp 22.300" [ref=e569]
+              - cell [ref=e570]:
+                - img [ref=e571]
+            - row "SALE-001114 24 Mei 2026, 14.57 Admin User cash Rp 1.249.000 - −Rp 136.000 Rp 943.550 - Rp 315.450 Rp 305.450" [ref=e573] [cursor=pointer]:
+              - cell "SALE-001114" [ref=e574]
+              - cell "24 Mei 2026, 14.57" [ref=e575]
+              - cell "Admin User" [ref=e576]
+              - cell "cash" [ref=e577]
+              - cell "Rp 1.249.000" [ref=e578]
+              - cell "-" [ref=e579]
+              - cell "−Rp 136.000" [ref=e580]
+              - cell "Rp 943.550" [ref=e581]
+              - cell "-" [ref=e582]
+              - cell "Rp 315.450" [ref=e583]
+              - cell "Rp 305.450" [ref=e584]
+              - cell [ref=e585]:
+                - img [ref=e586]
+            - row "SALE-001112 24 Mei 2026, 14.11 Kasir User cash Rp 395.000 - - Rp 262.000 - Rp 138.000 Rp 133.000" [ref=e588] [cursor=pointer]:
+              - cell "SALE-001112" [ref=e589]
+              - cell "24 Mei 2026, 14.11" [ref=e590]
+              - cell "Kasir User" [ref=e591]
+              - cell "cash" [ref=e592]
+              - cell "Rp 395.000" [ref=e593]
+              - cell "-" [ref=e594]
+              - cell "-" [ref=e595]
+              - cell "Rp 262.000" [ref=e596]
+              - cell "-" [ref=e597]
+              - cell "Rp 138.000" [ref=e598]
+              - cell "Rp 133.000" [ref=e599]
+              - cell [ref=e600]:
+                - img [ref=e601]
+            - row "SALE-001105 24 Mei 2026, 14.05 budi qris Rp 324.000 - −Rp 21.000 Rp 237.800 - Rp 86.200 Rp 86.200" [ref=e603] [cursor=pointer]:
+              - cell "SALE-001105" [ref=e604]
+              - cell "24 Mei 2026, 14.05" [ref=e605]
+              - cell "budi" [ref=e606]
+              - cell "qris" [ref=e607]
+              - cell "Rp 324.000" [ref=e608]
+              - cell "-" [ref=e609]
+              - cell "−Rp 21.000" [ref=e610]
+              - cell "Rp 237.800" [ref=e611]
+              - cell "-" [ref=e612]
+              - cell "Rp 86.200" [ref=e613]
+              - cell "Rp 86.200" [ref=e614]
+              - cell [ref=e615]:
+                - img [ref=e616]
+            - row "SALE-001115 24 Mei 2026, 12.34 Kasir User bank_transfer Rp 725.000 - - Rp 527.800 - Rp 197.200 Rp 197.200" [ref=e618] [cursor=pointer]:
+              - cell "SALE-001115" [ref=e619]
+              - cell "24 Mei 2026, 12.34" [ref=e620]
+              - cell "Kasir User" [ref=e621]
+              - cell "bank_transfer" [ref=e622]
+              - cell "Rp 725.000" [ref=e623]
+              - cell "-" [ref=e624]
+              - cell "-" [ref=e625]
+              - cell "Rp 527.800" [ref=e626]
+              - cell "-" [ref=e627]
+              - cell "Rp 197.200" [ref=e628]
+              - cell "Rp 197.200" [ref=e629]
+              - cell [ref=e630]:
+                - img [ref=e631]
+            - row "SALE-001119 24 Mei 2026, 12.10 Cashier cash Rp 230.000 - - Rp 179.400 −Rp 230.000 Rp 0 Rp 0" [ref=e633] [cursor=pointer]:
+              - cell "SALE-001119" [ref=e634]
+              - cell "24 Mei 2026, 12.10" [ref=e635]
+              - cell "Cashier" [ref=e636]
+              - cell "cash" [ref=e637]
+              - cell "Rp 230.000" [ref=e638]
+              - cell "-" [ref=e639]
+              - cell "-" [ref=e640]
+              - cell "Rp 179.400" [ref=e641]
+              - cell "−Rp 230.000" [ref=e642]
+              - cell "Rp 0" [ref=e643]
+              - cell "Rp 0" [ref=e644]
+              - cell [ref=e645]:
+                - img [ref=e646]
+            - row "SALE-001111 24 Mei 2026, 12.05 budi cash Rp 215.000 - - Rp 141.450 - Rp 73.550 Rp 73.550" [ref=e648] [cursor=pointer]:
+              - cell "SALE-001111" [ref=e649]
+              - cell "24 Mei 2026, 12.05" [ref=e650]
+              - cell "budi" [ref=e651]
+              - cell "cash" [ref=e652]
+              - cell "Rp 215.000" [ref=e653]
+              - cell "-" [ref=e654]
+              - cell "-" [ref=e655]
+              - cell "Rp 141.450" [ref=e656]
+              - cell "-" [ref=e657]
+              - cell "Rp 73.550" [ref=e658]
+              - cell "Rp 73.550" [ref=e659]
+              - cell [ref=e660]:
+                - img [ref=e661]
+            - row "SALE-001101 24 Mei 2026, 10.46 Cashier bank_transfer Rp 125.000 - - Rp 91.250 - Rp 33.750 Rp 33.750" [ref=e663] [cursor=pointer]:
+              - cell "SALE-001101" [ref=e664]
+              - cell "24 Mei 2026, 10.46" [ref=e665]
+              - cell "Cashier" [ref=e666]
+              - cell "bank_transfer" [ref=e667]
+              - cell "Rp 125.000" [ref=e668]
+              - cell "-" [ref=e669]
+              - cell "-" [ref=e670]
+              - cell "Rp 91.250" [ref=e671]
+              - cell "-" [ref=e672]
+              - cell "Rp 33.750" [ref=e673]
+              - cell "Rp 33.750" [ref=e674]
+              - cell [ref=e675]:
+                - img [ref=e676]
+            - row "SALE-001117 24 Mei 2026, 10.11 Kasir User qris Rp 895.000 −Rp 25.000 −Rp 15.000 Rp 701.300 - Rp 218.700 Rp 193.700" [ref=e678] [cursor=pointer]:
+              - cell "SALE-001117" [ref=e679]
+              - cell "24 Mei 2026, 10.11" [ref=e680]
+              - cell "Kasir User" [ref=e681]
+              - cell "qris" [ref=e682]
+              - cell "Rp 895.000" [ref=e683]
+              - cell "−Rp 25.000" [ref=e684]
+              - cell "−Rp 15.000" [ref=e685]
+              - cell "Rp 701.300" [ref=e686]
+              - cell "-" [ref=e687]
+              - cell "Rp 218.700" [ref=e688]
+              - cell "Rp 193.700" [ref=e689]
+              - cell [ref=e690]:
+                - img [ref=e691]
+  - region "Notifications alt+T":
+    - list
+  - button "Buka AI Asisten" [ref=e385] [cursor=pointer]:
+    - img [ref=e387]
+    - generic [ref=e390]: AI

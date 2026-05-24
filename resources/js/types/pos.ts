@@ -68,9 +68,11 @@ export interface TransactionItem {
   product_id?: string
   batch_id?: string
   quantity: number
+  returned_quantity?: number
   unit_price?: number
   discount?: number
   total: number
+  net_revenue?: number
   hpp_total?: number
   profit?: number
   product?: {

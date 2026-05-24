@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, nextTick } from 'vue'
 import { router } from '@inertiajs/vue3'
 import {
   ArrowLeft,
   Download,
+  Printer,
   Search,
   Calendar,
   Layers,
@@ -330,6 +331,37 @@ function triggerExport(type: ExportType) {
   exportOpen.value = false
 }
 
+// ─── Cetak / PDF ──────────────────────────────────────────────────────────
+const REPORT_TITLE = 'Laporan Penjualan Vape Story'
+const REPORT_ADDRESS = 'Jl. Raya Kedawung No.02, Panembahan, Kec. Plered, Kabupaten Cirebon, Jawa Barat 45154'
+const printSheetGeneratedLine = ref('')
+
+const activeTabLabel = computed(
+  () => tabs.find(t => t.key === activeTab.value)?.label ?? '',
+)
+
+function formatIdLongDateTime(d: Date): string {
+  const datePart = d.toLocaleDateString('id-ID', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+  })
+  const hh = String(d.getHours()).padStart(2, '0')
+  const mm = String(d.getMinutes()).padStart(2, '0')
+  return `${datePart} ${hh}:${mm}`
+}
+
+async function handlePrint() {
+  printSheetGeneratedLine.value = `Dicetak: ${formatIdLongDateTime(new Date())} WIB`
+  const prevTitle = document.title
+  document.title = `Laporan Penjualan ${activeTabLabel.value} ${periodLabel.value}`
+  document.body.dataset.reportPrint = 'true'
+  await nextTick()
+  window.print()
+  window.setTimeout(() => {
+    delete document.body.dataset.reportPrint
+    document.title = prevTitle
+  }, 300)
+}
+
 // ─── Switch tab resets sort key sensibly ─────────────────────────────────
 watch(activeTab, () => {
   sortKey.value = 'revenue'
@@ -379,6 +411,15 @@ const periodLabel = computed(() => {
           @click="openShoppingModal"
         >
           <ShoppingCart class="h-3.5 w-3.5" /> Belanja?
+        </button>
+
+        <!-- Cetak / PDF -->
+        <button
+          class="flex items-center gap-1.5 rounded-md border bg-white px-3 py-2 text-xs font-semibold shadow-sm transition hover:bg-gray-50"
+          style="border-color: var(--pos-border); color: var(--pos-text-secondary);"
+          @click="handlePrint"
+        >
+          <Printer class="h-3.5 w-3.5" /> Cetak
         </button>
 
         <!-- Export dropdown -->
@@ -786,6 +827,171 @@ const periodLabel = computed(() => {
     <!-- Click-outside catcher for export dropdown -->
     <div v-if="exportOpen" class="fixed inset-0 z-20" @click="exportOpen = false"></div>
 
+    <!-- ─── Lembar Cetak (PDF / print) ─────────────────────────────────── -->
+    <div class="report-print-sheet print-only-sheet text-black">
+      <div class="print-header-center mb-6 text-center leading-relaxed">
+        <h1 class="text-base font-bold uppercase tracking-wide">{{ REPORT_TITLE }}</h1>
+        <p class="text-sm font-bold">Laporan {{ activeTabLabel }} {{ periodLabel }}</p>
+        <p class="text-xs font-medium">{{ printSheetGeneratedLine }}</p>
+        <p class="max-w-xl mx-auto text-xs normal-case">{{ REPORT_ADDRESS }}</p>
+      </div>
+
+      <!-- Ringkasan -->
+      <div class="report-print-summary mb-4 flex flex-wrap justify-center gap-x-8 gap-y-1 text-xs">
+        <span><strong>Total Revenue:</strong> {{ formatRp(summary.total_revenue) }}</span>
+        <span><strong>Total Profit:</strong> {{ formatRp(summary.total_profit) }}</span>
+        <span><strong>Item Terjual:</strong> {{ formatNum(summary.total_items) }}</span>
+        <span><strong>Total Transaksi:</strong> {{ formatNum(summary.total_transactions) }}</span>
+      </div>
+
+      <!-- PRODUK -->
+      <table v-if="activeTab === 'product'" class="report-print-table w-full border-collapse text-xs">
+        <colgroup>
+          <col style="width: 11%" /><col style="width: 27%" /><col style="width: 14%" />
+          <col style="width: 12%" /><col style="width: 8%" /><col style="width: 10%" />
+          <col style="width: 10%" /><col style="width: 8%" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="border border-black px-2 py-1.5 text-left">Kode</th>
+            <th class="border border-black px-2 py-1.5 text-left">Nama Produk</th>
+            <th class="border border-black px-2 py-1.5 text-left">Kategori</th>
+            <th class="border border-black px-2 py-1.5 text-left">Merek</th>
+            <th class="border border-black px-2 py-1.5 text-right">Qty</th>
+            <th class="border border-black px-2 py-1.5 text-right">Revenue</th>
+            <th class="border border-black px-2 py-1.5 text-right">Profit</th>
+            <th class="border border-black px-2 py-1.5 text-right">Stok</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-if="!filteredProduct.length"><td colspan="8" class="border border-black px-2 py-6 text-center text-gray-600">Tidak ada data.</td></tr>
+          <tr v-for="row in filteredProduct" :key="row.id">
+            <td class="border border-black px-2 py-1 font-mono">{{ row.code }}</td>
+            <td class="border border-black px-2 py-1">{{ row.name }}</td>
+            <td class="border border-black px-2 py-1">{{ row.category ?? '—' }}</td>
+            <td class="border border-black px-2 py-1">{{ row.brand ?? '—' }}</td>
+            <td class="border border-black px-2 py-1 text-right">{{ formatNum(row.qty) }}</td>
+            <td class="border border-black px-2 py-1 text-right">{{ formatRp(row.revenue) }}</td>
+            <td class="border border-black px-2 py-1 text-right">{{ formatRp(row.profit) }}</td>
+            <td class="border border-black px-2 py-1 text-right">{{ formatNum(row.stock) }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- MEREK -->
+      <table v-else-if="activeTab === 'brand'" class="report-print-table w-full border-collapse text-xs">
+        <colgroup><col style="width: 36%" /><col style="width: 14%" /><col style="width: 18%" /><col style="width: 18%" /><col style="width: 14%" /></colgroup>
+        <thead>
+          <tr>
+            <th class="border border-black px-2 py-1.5 text-left">Merek</th>
+            <th class="border border-black px-2 py-1.5 text-right">Qty</th>
+            <th class="border border-black px-2 py-1.5 text-right">Revenue</th>
+            <th class="border border-black px-2 py-1.5 text-right">Profit</th>
+            <th class="border border-black px-2 py-1.5 text-right">Stok</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-if="!filteredBrand.length"><td colspan="5" class="border border-black px-2 py-6 text-center text-gray-600">Tidak ada data.</td></tr>
+          <tr v-for="row in filteredBrand" :key="row.id">
+            <td class="border border-black px-2 py-1">{{ row.name }}</td>
+            <td class="border border-black px-2 py-1 text-right">{{ formatNum(row.qty) }}</td>
+            <td class="border border-black px-2 py-1 text-right">{{ formatRp(row.revenue) }}</td>
+            <td class="border border-black px-2 py-1 text-right">{{ formatRp(row.profit) }}</td>
+            <td class="border border-black px-2 py-1 text-right">{{ formatNum(row.stock) }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- METODE BAYAR -->
+      <table v-else-if="activeTab === 'payment'" class="report-print-table w-full border-collapse text-xs">
+        <colgroup><col style="width: 34%" /><col style="width: 20%" /><col style="width: 26%" /><col style="width: 20%" /></colgroup>
+        <thead>
+          <tr>
+            <th class="border border-black px-2 py-1.5 text-left">Metode</th>
+            <th class="border border-black px-2 py-1.5 text-right">Transaksi</th>
+            <th class="border border-black px-2 py-1.5 text-right">Revenue</th>
+            <th class="border border-black px-2 py-1.5 text-right">Persentase</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-if="!filteredPayment.length"><td colspan="4" class="border border-black px-2 py-6 text-center text-gray-600">Tidak ada data.</td></tr>
+          <tr v-for="row in filteredPayment" :key="row.method">
+            <td class="border border-black px-2 py-1">{{ row.label }}</td>
+            <td class="border border-black px-2 py-1 text-right">{{ formatNum(row.transactions) }}</td>
+            <td class="border border-black px-2 py-1 text-right">{{ formatRp(row.revenue) }}</td>
+            <td class="border border-black px-2 py-1 text-right">{{ row.percentage }}%</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- STOK (Produk Terlaris) -->
+      <table v-else-if="activeTab === 'stock'" class="report-print-table w-full border-collapse text-xs">
+        <colgroup>
+          <col style="width: 5%" /><col style="width: 14%" /><col style="width: 25%" />
+          <col style="width: 14%" /><col style="width: 11%" /><col style="width: 16%" /><col style="width: 15%" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="border border-black px-2 py-1.5 text-right">#</th>
+            <th class="border border-black px-2 py-1.5 text-left">Kode</th>
+            <th class="border border-black px-2 py-1.5 text-left">Produk</th>
+            <th class="border border-black px-2 py-1.5 text-left">Kategori</th>
+            <th class="border border-black px-2 py-1.5 text-right">Qty Terjual</th>
+            <th class="border border-black px-2 py-1.5 text-right">Revenue</th>
+            <th class="border border-black px-2 py-1.5 text-right">Stok Sisa</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-if="!filteredTopSelling.length"><td colspan="7" class="border border-black px-2 py-6 text-center text-gray-600">Tidak ada data.</td></tr>
+          <tr v-for="(row, idx) in filteredTopSelling" :key="row.id">
+            <td class="border border-black px-2 py-1 text-right">{{ idx + 1 }}</td>
+            <td class="border border-black px-2 py-1 font-mono">{{ row.code }}</td>
+            <td class="border border-black px-2 py-1">{{ row.name }}</td>
+            <td class="border border-black px-2 py-1">{{ row.category ?? '—' }}</td>
+            <td class="border border-black px-2 py-1 text-right">{{ formatNum(row.qty_sold) }}</td>
+            <td class="border border-black px-2 py-1 text-right">{{ formatRp(row.revenue) }}</td>
+            <td class="border border-black px-2 py-1 text-right">{{ row.stock_remaining === 0 ? 'HABIS' : formatNum(row.stock_remaining) }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- RETURN -->
+      <table v-else-if="activeTab === 'returns'" class="report-print-table w-full border-collapse text-xs">
+        <colgroup>
+          <col style="width: 12%" /><col style="width: 14%" /><col style="width: 12%" />
+          <col style="width: 13%" /><col style="width: 23%" /><col style="width: 7%" /><col style="width: 11%" /><col style="width: 8%" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="border border-black px-2 py-1.5 text-left">No. Return</th>
+            <th class="border border-black px-2 py-1.5 text-left">Tanggal</th>
+            <th class="border border-black px-2 py-1.5 text-left">Transaksi</th>
+            <th class="border border-black px-2 py-1.5 text-left">Kasir</th>
+            <th class="border border-black px-2 py-1.5 text-left">Barang &amp; Alasan</th>
+            <th class="border border-black px-2 py-1.5 text-right">Qty</th>
+            <th class="border border-black px-2 py-1.5 text-right">Nilai</th>
+            <th class="border border-black px-2 py-1.5 text-center">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-if="!filteredReturns.length"><td colspan="8" class="border border-black px-2 py-6 text-center text-gray-600">Tidak ada data.</td></tr>
+          <tr v-for="r in filteredReturns" :key="r.id">
+            <td class="border border-black px-2 py-1 font-mono">{{ r.return_number }}</td>
+            <td class="border border-black px-2 py-1">{{ formatDateTime(r.created_at) }}</td>
+            <td class="border border-black px-2 py-1 font-mono">{{ r.invoice_number }}</td>
+            <td class="border border-black px-2 py-1">{{ r.cashier_name }}</td>
+            <td class="border border-black px-2 py-1">
+              <div v-for="(it, idx) in r.items" :key="idx">{{ it.quantity }}× {{ it.product_name }}</div>
+              <div class="italic text-gray-600">Alasan: {{ r.reason }}</div>
+            </td>
+            <td class="border border-black px-2 py-1 text-right">{{ formatNum(r.total_qty) }}</td>
+            <td class="border border-black px-2 py-1 text-right">{{ formatRp(r.total_value) }}</td>
+            <td class="border border-black px-2 py-1 text-center">{{ r.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <!-- ─── Belanja? Modal ──────────────────────────────────────────────── -->
     <Teleport to="body">
       <div
@@ -1020,6 +1226,42 @@ const periodLabel = computed(() => {
   --tw-ring-color: var(--pos-brand-primary);
   border-color: var(--pos-brand-primary);
 }
+
+/* Lembar cetak hanya tampil saat print */
+.print-only-sheet {
+  display: none;
+}
+
+@media print {
+  /* Sembunyikan seluruh isi layar, tampilkan hanya lembar cetak */
+  body[data-report-print='true'] .adm-page > *:not(.print-only-sheet) {
+    display: none !important;
+  }
+  body[data-report-print='true'] .print-only-sheet {
+    display: block !important;
+    padding: 14mm 12mm;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+  }
+  body[data-report-print='true'] .print-header-center {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #000;
+  }
+  body[data-report-print='true'] .print-header-center > * + * {
+    margin-top: 0.35rem;
+  }
+  body[data-report-print='true'] .report-print-table {
+    table-layout: fixed;
+    font-size: 9px;
+  }
+  body[data-report-print='true'] .report-print-table th,
+  body[data-report-print='true'] .report-print-table td {
+    padding: 3px 3px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    vertical-align: top;
+  }
+}
 </style>
 
 <style>
@@ -1043,5 +1285,34 @@ const periodLabel = computed(() => {
   --pos-warning-bg: #fef3c7;
   --pos-danger-text: #dc2626;
   --pos-danger-bg: #fee2e2;
+}
+
+/* Cetak: sembunyikan chrome layout & elemen non-laporan */
+@media print {
+  body[data-report-print='true'] .pos__header,
+  body[data-report-print='true'] .admin-sidebar,
+  body[data-report-print='true'] [data-sidebar='sidebar'],
+  body[data-report-print='true'] .toaster.group,
+  body[data-report-print='true'] .toaster,
+  body[data-report-print='true'] .ai-fab-root,
+  body[data-report-print='true'] [data-sonner-toaster],
+  body[data-report-print='true'] #phpdebugbar,
+  body[data-report-print='true'] .phpdebugbar,
+  body[data-report-print='true'] .phpdebugbar-openhandler {
+    display: none !important;
+  }
+
+  body[data-report-print='true'] .admin-layout,
+  body[data-report-print='true'] .pos-layout,
+  body[data-report-print='true'] [data-slot='sidebar-inset'] {
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  /* margin 0 agar Chrome tidak menyisipkan header/footer (tanggal & URL). */
+  @page {
+    margin: 0;
+  }
 }
 </style>

@@ -1,0 +1,108 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - img [ref=e8]
+        - generic [ref=e10]:
+          - paragraph [ref=e11]: Story Vape
+          - paragraph [ref=e12]: Admin Panel
+      - navigation [ref=e13]:
+        - link "Dashboard" [ref=e14] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - img [ref=e15]
+          - generic [ref=e20]: Dashboard
+        - link "Manajemen Produk" [ref=e21] [cursor=pointer]:
+          - /url: /admin/products
+          - img [ref=e22]
+          - generic [ref=e26]: Manajemen Produk
+        - link "Laporan Penjualan" [ref=e27] [cursor=pointer]:
+          - /url: /admin/reports/sales
+          - img [ref=e28]
+          - generic [ref=e30]: Laporan Penjualan
+        - link "History Pembayaran" [ref=e31] [cursor=pointer]:
+          - /url: /admin/transactions/today
+          - img [ref=e32]
+          - generic [ref=e35]: History Pembayaran
+        - link "Kelola Akun" [ref=e36] [cursor=pointer]:
+          - /url: /admin/users
+          - img [ref=e37]
+          - generic [ref=e42]: Kelola Akun
+        - link "Promo & Diskon" [ref=e43] [cursor=pointer]:
+          - /url: /admin/promotions
+          - img [ref=e44]
+          - generic [ref=e47]: Promo & Diskon
+      - generic [ref=e48]:
+        - link "Pengaturan Profil" [ref=e49] [cursor=pointer]:
+          - /url: /settings/profile
+          - img [ref=e50]
+          - generic [ref=e62]: Pengaturan Profil
+        - button "Logout" [ref=e63] [cursor=pointer]:
+          - img [ref=e64]
+          - generic [ref=e67]: Logout
+  - generic [ref=e68]:
+    - banner [ref=e69]:
+      - generic [ref=e70]:
+        - button "Toggle navigation menu" [expanded] [ref=e71] [cursor=pointer]
+        - heading "Admin Panel" [level=1] [ref=e72]
+      - button "Selamat datang, Admin User" [ref=e75] [cursor=pointer]:
+        - generic [ref=e76]: Selamat datang, Admin User
+    - main [ref=e77]:
+      - generic [ref=e78]:
+        - button "Kembali ke Audit" [ref=e79]:
+          - img [ref=e80]
+          - text: Kembali ke Audit
+        - generic [ref=e82]:
+          - heading "Saldo Awal (Opening Balance)" [level=1] [ref=e83]
+          - paragraph [ref=e84]: Masukkan saldo dari pembukuan terakhir sebelum sistem ini dipakai. Sistem akan menggunakan ini sebagai titik awal Neraca. Semua transaksi penjualan setelah tanggal cutoff dihitung otomatis.
+          - generic [ref=e85]:
+            - generic [ref=e86]:
+              - text: Tanggal Cutoff Pembukuan Lama
+              - textbox [ref=e87]: 2026-05-24
+            - generic [ref=e88]: Aset
+            - generic [ref=e89]:
+              - text: Kas (tunai)
+              - spinbutton [ref=e90]: "0"
+            - generic [ref=e91]:
+              - text: Bank / E-Wallet / QRIS
+              - spinbutton [ref=e92]: "0"
+            - generic [ref=e93]:
+              - text: Nilai Persediaan (referensi)
+              - spinbutton [ref=e94]: "0"
+            - generic [ref=e95]:
+              - text: Aset Tetap (etalase, peralatan)
+              - spinbutton [ref=e96]: "0"
+            - generic [ref=e97]: Kewajiban
+            - generic [ref=e98]:
+              - text: Hutang Usaha (ke supplier)
+              - spinbutton [ref=e99]: "0"
+            - generic [ref=e100]:
+              - text: Hutang Lain (pinjaman, dll)
+              - spinbutton [ref=e101]: "0"
+            - generic [ref=e102]: Ekuitas
+            - generic [ref=e103]:
+              - text: Modal Pemilik
+              - spinbutton [ref=e104]: "0"
+            - generic [ref=e105]:
+              - text: Laba Ditahan
+              - spinbutton [ref=e106]: "0"
+            - generic [ref=e107]:
+              - text: Catatan
+              - textbox [ref=e108]
+            - generic [ref=e109]:
+              - generic [ref=e110]:
+                - generic [ref=e111]: Total Aset
+                - generic [ref=e112]: Rp 0
+              - generic [ref=e113]:
+                - generic [ref=e114]: Total Kewajiban + Ekuitas
+                - generic [ref=e115]: Rp 0
+              - generic [ref=e116]:
+                - generic [ref=e117]: Selisih
+                - generic [ref=e118]: Rp 0
+            - button "Simpan Saldo Awal" [ref=e120]:
+              - img [ref=e121]
+              - text: Simpan Saldo Awal
+  - region "Notifications alt+T":
+    - list
+  - button "Buka AI Asisten" [ref=e125] [cursor=pointer]:
+    - img [ref=e127]
+    - generic [ref=e130]: AI
