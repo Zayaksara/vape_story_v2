@@ -47,6 +47,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('reports/sales',        [App\Http\Controllers\Admin\ReportSaleController::class, 'index'])->name('reports.sales');
         Route::get('reports/sales/export', [App\Http\Controllers\Admin\ReportSaleController::class, 'export'])->name('reports.sales.export');
+        Route::get('reports/sales/pdf',    [App\Http\Controllers\Admin\ReportSaleController::class, 'pdf'])->name('reports.sales.pdf');
         Route::get('reports/sales/shopping-list', [App\Http\Controllers\Admin\ReportSaleController::class, 'shoppingList'])->name('reports.sales.shopping-list');
 
         Route::middleware('throttle:30,1')->group(function () {

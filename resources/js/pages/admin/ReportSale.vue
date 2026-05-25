@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, nextTick } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { router } from '@inertiajs/vue3'
 import {
   ArrowLeft,
@@ -340,26 +340,16 @@ const activeTabLabel = computed(
   () => tabs.find(t => t.key === activeTab.value)?.label ?? '',
 )
 
-function formatIdLongDateTime(d: Date): string {
-  const datePart = d.toLocaleDateString('id-ID', {
-    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
-  })
-  const hh = String(d.getHours()).padStart(2, '0')
-  const mm = String(d.getMinutes()).padStart(2, '0')
-  return `${datePart} ${hh}:${mm}`
-}
-
-async function handlePrint() {
-  printSheetGeneratedLine.value = `Dicetak: ${formatIdLongDateTime(new Date())} WIB`
-  const prevTitle = document.title
-  document.title = `Laporan Penjualan ${activeTabLabel.value} ${periodLabel.value}`
-  document.body.dataset.reportPrint = 'true'
-  await nextTick()
-  window.print()
-  window.setTimeout(() => {
-    delete document.body.dataset.reportPrint
-    document.title = prevTitle
-  }, 300)
+function handlePrint() {
+  // Unduh PDF rapi via mPDF (server-side), mengikuti tab & periode yang sedang aktif.
+  const params = new URLSearchParams()
+  params.set('tab', activeTab.value)
+  params.set('period', selectedPeriod.value)
+  if (selectedPeriod.value === 'custom') {
+    params.set('start_date', customStart.value)
+    params.set('end_date', customEnd.value)
+  }
+  window.open(`/admin/reports/sales/pdf?${params.toString()}`, '_blank')
 }
 
 // ─── Switch tab resets sort key sensibly ─────────────────────────────────

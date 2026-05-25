@@ -89,6 +89,94 @@ class ReportSaleController extends Controller
         ]);
     }
 
+    // ─── PDF (mPDF) ────────────────────────────────────────────────────────────
+
+    private const REPORT_TITLE = 'Laporan Penjualan Vape Story';
+
+    private const STORE_ADDRESS = 'Jl. Raya Kedawung No.02, Panembahan, Kec. Plered, Kabupaten Cirebon, Jawa Barat 45154';
+
+    /**
+     * Render laporan penjualan ke PDF rapi via mPDF (tab & periode mengikuti tampilan layar).
+     */
+    public function pdf(Request $request)
+    {
+        [$start, $end] = $this->resolvePeriod($request);
+
+        $tabLabels = [
+            'product' => 'Per Produk',
+            'brand'   => 'Per Merek',
+            'payment' => 'Per Metode Bayar',
+            'stock'   => 'Produk Terlaris',
+            'returns' => 'Return',
+        ];
+        $tab = (string) $request->query('tab', 'product');
+        if (! array_key_exists($tab, $tabLabels)) {
+            $tab = 'product';
+        }
+
+        // Data sesuai tab (hanya yang diperlukan agar kueri seperlunya).
+        $rows = match ($tab) {
+            'brand'   => $this->aggregateByBrand($start, $end)->values(),
+            'payment' => $this->aggregateByPayment($start, $end)->values(),
+            'stock'   => collect($this->aggregateStock($start, $end)['top_selling'])->values(),
+            'returns' => collect($this->aggregateReturns($start, $end)['list'])->values(),
+            default   => $this->aggregateByProduct($start, $end)->values(),
+        };
+
+        $byPayment   = $this->aggregateByPayment($start, $end);
+        $byCategory  = $this->aggregateByCategory($start, $end);
+        $refundTotal = (float) DB::table('returns')
+            ->join('return_items', 'return_items.return_id', '=', 'returns.id')
+            ->whereBetween('returns.created_at', [$start, $end])
+            ->where('returns.status', '!=', 'rejected')
+            ->sum('return_items.subtotal');
+
+        $summary = [
+            'total_revenue'      => (float) $byPayment->sum('revenue') - $refundTotal,
+            'total_profit'       => (float) $byCategory->sum('profit'),
+            'total_items'        => (int) $byCategory->sum('qty'),
+            'total_transactions' => (int) $byPayment->sum('transactions'),
+        ];
+
+        $periodLabel = $start->isoFormat('D MMM YYYY') === $end->isoFormat('D MMM YYYY')
+            ? $start->isoFormat('D MMMM YYYY')
+            : $start->isoFormat('D MMM YYYY').' — '.$end->isoFormat('D MMM YYYY');
+
+        $html = view('reports.sale-pdf', [
+            'title'        => self::REPORT_TITLE,
+            'address'      => self::STORE_ADDRESS,
+            'tab'          => $tab,
+            'tab_label'    => $tabLabels[$tab],
+            'rows'         => $rows,
+            'summary'      => $summary,
+            'period_label' => $periodLabel,
+            'generated_at' => Carbon::now(self::TZ)->isoFormat('dddd, D MMMM YYYY · HH:mm').' WIB',
+        ])->render();
+
+        $mpdf = new \Mpdf\Mpdf([
+            'mode'             => 'utf-8',
+            'format'           => 'A4',
+            'margin_left'      => 12,
+            'margin_right'     => 12,
+            'margin_top'       => 16,
+            'margin_bottom'    => 16,
+            'margin_header'    => 6,
+            'margin_footer'    => 8,
+            'tempDir'          => storage_path('app/mpdf'),
+        ]);
+
+        $mpdf->SetTitle('Laporan Penjualan '.$tabLabels[$tab].' '.$periodLabel);
+        $mpdf->SetFooter('{PAGENO} / {nbpg}');
+        $mpdf->WriteHTML($html);
+
+        $stamp = $start->format('Ymd').'-'.$end->format('Ymd');
+
+        return response($mpdf->Output('', \Mpdf\Output\Destination::STRING_RETURN), 200, [
+            'Content-Type'        => 'application/pdf',
+            'Content-Disposition' => "inline; filename=\"laporan-penjualan-{$tab}-{$stamp}.pdf\"",
+        ]);
+    }
+
     // ─── Shopping list (Belanja?) ─────────────────────────────────────────────
 
     public function shoppingList(Request $request)
