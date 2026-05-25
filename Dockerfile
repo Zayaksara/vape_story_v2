@@ -30,7 +30,8 @@ RUN composer install --optimize-autoloader --no-dev --no-interaction
 
 RUN php artisan key:generate --force
 
-RUN npm install
+# Hapus lockfile agar npm resolve native binary (rollup/lightningcss) sesuai platform Linux.
+RUN rm -f package-lock.json pnpm-lock.yaml && npm install
 
 RUN npm run build
 

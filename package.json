@@ -58,13 +58,5 @@
         "vue-input-otp": "^0.3.2",
         "vue-sonner": "^2.0.0",
         "vue3-apexcharts": "^1.11.1"
-    },
-    "optionalDependencies": {
-        "@rollup/rollup-linux-x64-gnu": "4.9.5",
-        "@rollup/rollup-win32-x64-msvc": "4.9.5",
-        "@tailwindcss/oxide-linux-x64-gnu": "^4.0.1",
-        "@tailwindcss/oxide-win32-x64-msvc": "^4.0.1",
-        "lightningcss-linux-x64-gnu": "^1.29.1",
-        "lightningcss-win32-x64-msvc": "^1.29.1"
     }
 }
