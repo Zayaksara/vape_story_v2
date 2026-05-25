@@ -288,8 +288,8 @@ function stockInfo(stock: number, minStock: number = 0): StockInfo {
                                         v-model="search"
                                         type="text"
                                         placeholder="Cari produk, kode, flavor…"
-                                        class="h-8 border-0 pl-8 pr-8 text-xs outline-none transition"
-                                        style="color: var(--pos-text-secondary); width: 240px; background: #fff;"
+                                        class="h-8 w-40 border-0 pl-8 pr-8 text-xs outline-none transition md:w-52 lg:w-60"
+                                        style="color: var(--pos-text-secondary); background: #fff;"
                                     />
                                     <button
                                         v-if="search"
@@ -352,8 +352,93 @@ function stockInfo(stock: number, minStock: number = 0): StockInfo {
                             </span>
                         </div>
 
-                        <!-- Table -->
-                        <div class="w-full max-w-full overflow-x-auto pb-2">
+                        <!-- Card view (tablet & mobile, hidden lg+) -->
+                        <div class="lg:hidden">
+                            <template v-if="isLoading">
+                                <div v-for="n in 8" :key="n" class="flex items-center gap-3 border-b px-4 py-3" style="border-color: var(--pos-border);">
+                                    <Skeleton class="h-12 w-12 shrink-0 rounded-md" />
+                                    <div class="flex-1 space-y-2">
+                                        <Skeleton class="h-4 w-32" />
+                                        <Skeleton class="h-3 w-24" />
+                                    </div>
+                                    <Skeleton class="h-5 w-16 rounded-full" />
+                                </div>
+                            </template>
+
+                            <template v-else-if="products.data.length">
+                                <div
+                                    v-for="product in products.data"
+                                    :key="product.id"
+                                    class="flex cursor-pointer items-center gap-3 border-b px-4 py-3 transition-colors active:bg-[var(--pos-bg-accent)]"
+                                    style="border-color: var(--pos-border);"
+                                    @click="openDetail(product)"
+                                >
+                                    <div
+                                        class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-md text-xs font-bold"
+                                        style="background: var(--pos-bg-accent); color: var(--pos-brand-dark);"
+                                    >
+                                        <img
+                                            v-if="product.image_url"
+                                            :src="product.image_url"
+                                            :alt="product.name"
+                                            class="h-full w-full object-cover"
+                                        />
+                                        <span v-else>{{ productInitials(product.name) }}</span>
+                                    </div>
+
+                                    <div class="min-w-0 flex-1">
+                                        <p class="truncate text-sm font-semibold" style="color: var(--pos-text-secondary);">
+                                            {{ product.name }}
+                                        </p>
+                                        <p class="truncate text-xs" style="color: var(--pos-text-muted);">
+                                            <span class="font-mono font-semibold" style="color: var(--pos-brand-primary);">{{ product.sku }}</span>
+                                            · {{ product.brand?.name ?? '—' }} · {{ product.category?.name ?? '—' }}
+                                        </p>
+                                        <p class="truncate text-xs" style="color: var(--pos-text-light);">
+                                            {{ (product as any).flavor ?? '—' }}
+                                            <template v-if="(product as any).nicotine_strength">· {{ (product as any).nicotine_strength }} mg</template>
+                                            <template v-if="(product as any).size_ml">· {{ (product as any).size_ml }} ml</template>
+                                        </p>
+                                    </div>
+
+                                    <div class="shrink-0 text-right">
+                                        <p class="text-sm font-bold tabular-nums" style="color: var(--pos-text-secondary);">
+                                            {{ formatPrice((product as any).base_price ?? product.price) }}
+                                        </p>
+                                        <p class="text-xs tabular-nums" :style="{ color: stockInfo(product.stock, Number((product as any).min_stock ?? 0)).color }">
+                                            Stok: {{ product.stock }}
+                                        </p>
+                                        <span
+                                            class="mt-0.5 inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold"
+                                            :style="product.stock === 0
+                                                ? 'background: var(--pos-danger-bg); color: var(--pos-danger-text);'
+                                                : Number((product as any).min_stock ?? 0) > 0 && product.stock <= Number((product as any).min_stock)
+                                                    ? 'background: var(--pos-warning-bg); color: var(--pos-warning-text);'
+                                                    : 'background: var(--pos-success-bg); color: var(--pos-success-text);'"
+                                        >
+                                            {{ stockInfo(product.stock, Number((product as any).min_stock ?? 0)).label }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <div v-else class="py-16 text-center">
+                                <Package class="mx-auto mb-2 h-10 w-10" style="color: var(--pos-text-muted); opacity: 0.3;" />
+                                <p class="text-sm font-medium" style="color: var(--pos-text-muted);">Produk tidak ditemukan</p>
+                                <p class="mt-1 text-xs" style="color: var(--pos-text-light);">Coba ubah kata kunci atau filter</p>
+                                <button
+                                    v-if="hasActiveFilters"
+                                    class="mt-3 rounded-lg px-4 py-1.5 text-xs font-semibold transition"
+                                    style="background: var(--pos-brand-primary); color: #fff;"
+                                    @click="resetFilters"
+                                >
+                                    Hapus semua filter
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Table (desktop only) -->
+                        <div class="hidden w-full max-w-full overflow-x-auto pb-2 lg:block">
                         <Table class="min-w-[1480px]">
                             <TableHeader>
                                 <TableRow style="background: #f1f5f9;">

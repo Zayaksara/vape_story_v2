@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Offline – Story Vape POS</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100dvh;
+      margin: 0;
+      background: #f9fafb;
+      padding: 1.5rem;
+    }
+    .box { text-align: center; max-width: 360px; }
+    img { width: 72px; height: 72px; margin-bottom: 1rem; }
+    h1 { color: #14b8a6; font-size: 1.25rem; margin: 0 0 0.5rem; }
+    p { color: #6b7280; font-size: 0.9rem; margin: 0 0 1.5rem; }
+    button {
+      padding: 0.6rem 1.75rem;
+      background: #14b8a6;
+      color: #fff;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    button:active { transform: scale(0.97); }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <img src="/icons/icon-192.png" alt="Story Vape" />
+    <h1>Tidak Ada Koneksi</h1>
+    <p>Periksa koneksi internet Anda, lalu muat ulang halaman.</p>
+    <button onclick="location.reload()">Muat Ulang</button>
+  </div>
+</body>
+</html>

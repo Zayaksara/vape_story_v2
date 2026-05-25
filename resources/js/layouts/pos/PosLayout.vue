@@ -1,6 +1,6 @@
 <template>
-  <div class="pos-layout h-screen overflow-hidden bg-white">
-    <SidebarProvider class="h-screen overflow-hidden" :default-open="false">
+  <div class="pos-layout h-dvh overflow-hidden bg-white">
+    <SidebarProvider class="h-dvh overflow-hidden" :default-open="false">
       <PosSidebar />
       <SidebarInset>
         <PosHeader

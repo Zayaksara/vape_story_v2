@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isOpen" class="cart-drawer fixed inset-0 z-50 lg:hidden ">
+  <div v-if="isOpen" class="cart-drawer fixed inset-0 z-50 md:hidden ">
     <!-- Backdrop -->
     <div
       class="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
@@ -9,7 +9,7 @@
 
     <!-- Drawer -->
     <div
-      class="fixed right-0 top-0 h-100dvh w-full max-w-[320px] bg-white shadow-2xl transition-transform duration-300"
+      class="fixed right-0 top-0 h-dvh w-full max-w-[320px] bg-white shadow-2xl transition-transform duration-300"
       :class="isOpen ? 'translate-x-0' : 'translate-x-full'"
     >
       <CartPanel

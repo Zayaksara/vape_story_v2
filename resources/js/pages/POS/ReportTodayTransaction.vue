@@ -814,7 +814,7 @@ function handleExport() {
 
 <style scoped>
 .pos-report-container {
-  min-height: 100vh;
+  min-height: 100dvh;
   background: var(--pos-bg-secondary);
 }
 

@@ -99,7 +99,7 @@
     </div>
 
     <!-- Right:Panel (desktop) -->
-    <aside class="hidden w-80 border border-(--pos-border) bg-(--pos-bg-primary) lg:flex flex-col min-h-0">
+    <aside class="hidden w-72 border border-(--pos-border) bg-(--pos-bg-primary) md:flex flex-col min-h-0">
       <div class="flex-1 overflow-hidden pb-4">
         <CartPanel
           :cart="cart"
