@@ -7,9 +7,6 @@
     import path from 'path';
 
     export default defineConfig({
-        build: {
-            minify: false
-        },
         plugins: [
             laravel({
                 input: ['resources/css/app.css', 'resources/js/app.ts'],
