@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\User;
+use App\Models\Sale;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,8 +14,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Idempoten: di lingkungan deploy (Render) container sering restart.
-        // Lewati seed bila DB sudah terisi agar data tidak menumpuk/rusak.
-        if (User::query()->exists()) {
+        // Cek Sale (data terakhir di-seed) agar seed partial/gagal bisa diulang,
+        // tapi tidak menumpuk transaksi setelah seeding penuh berhasil.
+        if (Sale::query()->exists()) {
             $this->command?->info('Database sudah ter-seed sebelumnya, seeding dilewati.');
 
             return;
