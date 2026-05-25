@@ -26,7 +26,8 @@ COPY . .
 # Saat runtime, env var dari Render menimpa nilai-nilai ini.
 RUN cp .env.example .env
 
-RUN composer install --optimize-autoloader --no-dev --no-interaction
+# Tanpa --no-dev: seeder demo butuh fakerphp/faker (ada di require-dev).
+RUN composer install --optimize-autoloader --no-interaction
 
 RUN php artisan key:generate --force
 
