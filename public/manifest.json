@@ -2,7 +2,7 @@
   "name": "Story Vape POS",
   "short_name": "StoryPOS",
   "description": "Point of Sale untuk Story Vape",
-  "start_url": "/pos",
+  "start_url": "/pos/dashboard",
   "scope": "/",
   "display": "standalone",
   "orientation": "any",

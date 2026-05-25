@@ -1,4 +1,4 @@
-const CACHE_NAME = 'story-vape-pos-v1';
+const CACHE_NAME = 'story-vape-pos-v2';
 const PRECACHE_URLS = ['/offline.html'];
 
 self.addEventListener('install', (event) => {

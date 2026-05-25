@@ -10,27 +10,29 @@
             <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="close" />
 
             <div
-                class="receipt-content relative z-10 w-full max-w-sm animate-in overflow-hidden rounded-2xl shadow-2xl duration-200 zoom-in-95 fade-in"
+                class="receipt-content relative z-10 flex max-h-[90dvh] w-full max-w-sm flex-col animate-in overflow-hidden rounded-2xl shadow-2xl duration-200 zoom-in-95 fade-in"
                 :style="{
                     backgroundColor: 'var(--pos-border-focus, #14b8a6)',
                 }"
             >
                 <!-- Receipt body (shared dengan live preview di Settings) -->
-                <ReceiptPreview
-                    :store-name="storeName"
-                    :store-logo="storeLogo"
-                    :store-address="storeAddress"
-                    :store-phone="storePhone"
-                    :receipt-header="receiptHeader"
-                    :receipt-footer="receiptFooter"
-                    :show-logo-on-receipt="showLogoOnReceipt"
-                    :options="receiptOptions"
-                    :transaction="transaction ?? null"
-                />
+                <div class="min-h-0 flex-1 overflow-y-auto">
+                    <ReceiptPreview
+                        :store-name="storeName"
+                        :store-logo="storeLogo"
+                        :store-address="storeAddress"
+                        :store-phone="storePhone"
+                        :receipt-header="receiptHeader"
+                        :receipt-footer="receiptFooter"
+                        :show-logo-on-receipt="showLogoOnReceipt"
+                        :options="receiptOptions"
+                        :transaction="transaction ?? null"
+                    />
+                </div>
 
                 <!-- Footer -->
                 <div
-                    class="border-t p-4"
+                    class="shrink-0 border-t p-4"
                     :style="{
                         backgroundColor: 'var(--pos-bg-primary)'
                     }"
