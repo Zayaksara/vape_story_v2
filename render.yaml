@@ -1,11 +1,18 @@
+databases:
+  - name: story-vape-db
+    plan: free
+    postgresMajorVersion: "15"
+
 services:
   - type: web
     name: story-vape
     runtime: php
-    buildCommand: composer install --optimize-autoloader --no-dev && npm install && npm run build && php artisan key:generate --force
-    startCommand: php artisan serve --host=0.0.0.0 --port=$PORT
-    postDeployCommand: php artisan migrate --force
+    plan: free
+    buildCommand: composer install --optimize-autoloader --no-dev && npm install && npm run build
+    startCommand: php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT
     envVars:
+      - key: APP_KEY
+        sync: false
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
@@ -19,24 +26,28 @@ services:
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
-        value: ${RENDER_DATABASE_HOST}
+        fromDatabase:
+          name: story-vape-db
+          property: host
       - key: DB_PORT
-        value: "5432"
+        fromDatabase:
+          name: story-vape-db
+          property: port
       - key: DB_DATABASE
-        value: ${RENDER_DATABASE_NAME}
+        fromDatabase:
+          name: story-vape-db
+          property: database
       - key: DB_USERNAME
-        value: ${RENDER_DATABASE_USER}
+        fromDatabase:
+          name: story-vape-db
+          property: user
       - key: DB_PASSWORD
-        value: ${RENDER_DATABASE_PASSWORD}
+        fromDatabase:
+          name: story-vape-db
+          property: password
       - key: SESSION_DRIVER
         value: database
       - key: CACHE_STORE
         value: database
       - key: QUEUE_CONNECTION
         value: database
-
-  - type: postgresql
-    name: story-vape-db
-    version: 15
-    plan: free
-    ipAllowList: []

@@ -30,7 +30,11 @@ Checklist singkat sebelum klik deploy.
    - Dashboard Render → **New +** → **Blueprint**
    - Pilih repo `story_vape`
    - Render show preview konfigurasi (1 Web + 1 PostgreSQL)
-   - Click **Deploy** (jangan ubah apa-apa)
+   - Render akan **minta isi `APP_KEY`** (karena di-set sebagai secret). Paste nilai ini:
+     ```
+     base64:5BROfYTQYvzJQf+rQBP5JlPsO3u4CwTd53feIdcVjF0=
+     ```
+   - Click **Deploy**
 
 4. **Tunggu Build**
    - Render build ~3-5 menit

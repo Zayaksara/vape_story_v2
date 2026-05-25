@@ -47,16 +47,19 @@ git push origin main
 1. Di dashboard Render, klik **New +** → **Blueprint** (atau cari **Blueprints**)
 2. Pilih GitHub repo `story_vape` Anda
 3. Render akan otomatis **membaca `render.yaml`** dan preview:
-   - 1 Web Service (`story_vape`)
-   - 1 PostgreSQL Database (`story_vape-db`)
-4. Klik **Deploy**
-5. **Tunggu ~3-5 menit** sampai build selesai
+   - 1 Web Service (`story-vape`)
+   - 1 PostgreSQL Database (`story-vape-db`)
+4. Render minta isi **`APP_KEY`** (di-set sebagai secret, tidak disimpan di git). Paste:
+   ```
+   base64:5BROfYTQYvzJQf+rQBP5JlPsO3u4CwTd53feIdcVjF0=
+   ```
+5. Klik **Deploy**
+6. **Tunggu ~3-5 menit** sampai build selesai
 
 Saat build, Render akan:
 - Jalankan `composer install` + `npm install` + `npm run build`
-- Generate `APP_KEY` otomatis
-- Buat PostgreSQL database
-- Jalankan `php artisan migrate --force` (create tables)
+- Buat PostgreSQL database & inject kredensial otomatis (`fromDatabase`)
+- Saat start: `php artisan migrate --force` (create tables) lalu serve
 - Start web service
 
 ---
