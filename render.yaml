@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: story-vape
+    runtime: php
+    buildCommand: composer install --optimize-autoloader --no-dev && npm install && npm run build && php artisan key:generate --force
+    startCommand: php artisan serve --host=0.0.0.0 --port=$PORT
+    postDeployCommand: php artisan migrate --force
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_URL
+        value: https://story-vape.onrender.com
+      - key: LOG_LEVEL
+        value: info
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        value: ${RENDER_DATABASE_HOST}
+      - key: DB_PORT
+        value: "5432"
+      - key: DB_DATABASE
+        value: ${RENDER_DATABASE_NAME}
+      - key: DB_USERNAME
+        value: ${RENDER_DATABASE_USER}
+      - key: DB_PASSWORD
+        value: ${RENDER_DATABASE_PASSWORD}
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+
+  - type: postgresql
+    name: story-vape-db
+    version: 15
+    plan: free
+    ipAllowList: []
