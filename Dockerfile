@@ -34,5 +34,8 @@ RUN npm install
 
 RUN npm run build
 
+# Hapus .env sementara: saat runtime, konfigurasi murni dari env var Render.
+RUN rm -f .env
+
 # Render meng-inject $PORT saat runtime
 CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
