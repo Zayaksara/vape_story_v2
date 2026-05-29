@@ -168,7 +168,7 @@
           </div>
         </div>
 
-        <!-- Other Electronic Methods (Debit/E-Wallet) -->
+        <!-- Bank Transfer / E-Wallet Section -->
         <div v-else class="mb-5">
           <div
             class="flex flex-col items-center justify-center rounded-xl border-2 p-5 text-center"
@@ -205,7 +205,7 @@
           Batal
         </Button>
         <Button
-          :disabled="isProcessing || (localMethod === 'cash' && localCashReceived < total && total > 0)"
+          :disabled="isProcessing || (localMethod === 'cash' && localCashReceived < total && total > 0) || !isPaymentDetailValid"
           class="flex-1 gap-2"
           :style="{
             backgroundColor: 'var(--pos-brand-primary)',
@@ -289,7 +289,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   'update:modelValue': [value: boolean]
-  'confirm': [{ method: PaymentMethod; cashReceived?: number }]
+  'confirm': [{ method: PaymentMethod; cashReceived?: number; paymentDetail?: any }]
 }>()
 
 // Ref menempel pada komponen shadcn <Input> (instance Vue), bukan elemen native.
@@ -364,12 +364,14 @@ const changeBoxStyle = computed<CSSProperties>(() =>
 const paymentMethodLabel = computed(() => {
   const labels: Record<PaymentMethod, string> = {
     cash: 'Cash',
-    bank_transfer: 'bank transfer',
+    bank_transfer: 'Bank Transfer',
     qris: 'QRIS',
-    e_wallet: 'e_Wallet'
+    e_wallet: 'E-Wallet'
   }
   return labels[localMethod.value]
 })
+
+const isPaymentDetailValid = computed(() => true)
 
 function close() {
   emit('update:modelValue', false)
@@ -406,9 +408,20 @@ function confirmPayment() {
     return
   }
 
+  // Detail metode pembayaran: untuk sementara default "-" (nanti diambil dari Pengaturan Toko)
+  let paymentDetail: any = undefined
+  if (localMethod.value === 'qris') {
+    paymentDetail = { merchant_id: '-', ref: '-', paid_amount: props.total, status: 'LUNAS' }
+  } else if (localMethod.value === 'bank_transfer') {
+    paymentDetail = { bank_name: '-', account_number: '-', ref: '-', paid_amount: props.total, status: 'LUNAS' }
+  } else if (localMethod.value === 'e_wallet') {
+    paymentDetail = { wallet_name: '-', ref: '-', paid_amount: props.total, status: 'LUNAS' }
+  }
+
   emit('confirm', {
     method: localMethod.value,
     cashReceived: localMethod.value === 'cash' ? localCashReceived.value : undefined,
+    paymentDetail,
   })
 }
 

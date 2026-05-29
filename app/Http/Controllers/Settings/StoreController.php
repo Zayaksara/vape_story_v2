@@ -25,6 +25,7 @@ class StoreController extends Controller
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:500',
             'phone' => 'nullable|string|max:50',
+            'npwp' => 'nullable|string|max:50',
             'tagline' => 'nullable|string|max:100',
             'receipt_header' => 'nullable|string|max:1000',
             'receipt_footer' => 'nullable|string|max:1000',
@@ -48,11 +49,6 @@ class StoreController extends Controller
                 $validated['receipt_options'],
                 StoreSetting::DEFAULT_RECEIPT_OPTIONS,
             );
-
-            // Sinkron kolom legacy `show_logo_on_receipt` agar tidak drift.
-            if (array_key_exists('show_logo', $validated['receipt_options'])) {
-                $validated['show_logo_on_receipt'] = (bool) $validated['receipt_options']['show_logo'];
-            }
         }
 
         unset($validated['logo']);

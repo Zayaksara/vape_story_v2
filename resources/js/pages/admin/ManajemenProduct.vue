@@ -36,17 +36,11 @@ import {
 import AdminLayout from '@/layouts/admin/AdminLayout.vue'
 import ConfirmModal from '@/components/admin/ConfirmModal.vue'
 import { index as adminProductsRoute, create as createRoute, destroy as destroyRoute } from '@/routes/admin/products'
-import { index as adminDashboardRoute } from '@/routes/admin/dashboard'
 
 // ── Layout ────────────────────────────────────────────────────────────────────
 
 defineOptions({
-    layout: (h: any, page: any) => h(AdminLayout, {
-        breadcrumbs: [
-            { title: 'Dashboard', href: adminDashboardRoute.url() },
-            { title: 'Manajemen Produk' },
-        ],
-    }, () => page),
+    layout: AdminLayout,
 })
 
 // ── Props ─────────────────────────────────────────────────────────────────────

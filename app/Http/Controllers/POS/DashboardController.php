@@ -16,6 +16,7 @@ class DashboardController extends Controller
         $today = now()->toDateString();
 
         $promos = Promotion::query()
+            ->with('products:id')
             ->where('is_active', true)
             ->whereIn('type', ['percentage', 'fixed'])
             ->whereDate('start_date', '<=', $today)
@@ -32,6 +33,8 @@ class DashboardController extends Controller
                 'min_purchase' => (float) $p->min_purchase,
                 'max_discount' => $p->max_discount !== null ? (float) $p->max_discount : null,
                 'expires_at'   => $p->end_date?->toISOString(),
+                'target'       => $p->target,
+                'product_ids'  => $p->products->pluck('id')->all(),
             ]);
 
         return Inertia::render('POS/dashboard', [

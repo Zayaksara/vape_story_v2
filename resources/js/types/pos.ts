@@ -40,9 +40,21 @@ export interface Discount {
   max_discount?: number
   min_purchase?: number
   expires_at?: string
+  target?: 'all' | 'specific'
+  product_ids?: string[]
 }
 
 export type PaymentMethod = 'cash' | 'e_wallet' | 'bank_transfer' | 'qris'
+
+export interface PaymentDetail {
+  bank_name?: string
+  account_number?: string
+  wallet_name?: string
+  merchant_id?: string
+  ref?: string
+  paid_amount?: number
+  status?: string
+}
 
 export interface Transaction {
   id: string
@@ -58,6 +70,7 @@ export interface Transaction {
   payment_method: PaymentMethod
   cash_received?: number
   change?: number
+  payment_detail?: PaymentDetail
   created_at: string
   status: 'success' | 'failed' | 'pending'
 }

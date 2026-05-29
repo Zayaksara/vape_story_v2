@@ -4,18 +4,11 @@ import { ArrowLeft } from 'lucide-vue-next'
 import { ref } from 'vue'
 import AdminLayout from '@/layouts/admin/AdminLayout.vue'
 import { index as adminProductsRoute, store as storeRoute } from '@/routes/admin/products'
-import { index as adminDashboardRoute } from '@/routes/admin/dashboard'
 import ProductFormFields from '@/pages/admin/product/ProductFormFields.vue'
 import CurrencyInput from '@/components/admin/CurrencyInput.vue'
 
 defineOptions({
-    layout: (h: any, page: any) => h(AdminLayout, {
-        breadcrumbs: [
-            { title: 'Dashboard', href: adminDashboardRoute.url() },
-            { title: 'Manajemen Produk', href: adminProductsRoute.url() },
-            { title: 'Tambah Produk' },
-        ],
-    }, () => page),
+    layout: AdminLayout,
 })
 
 const props = defineProps<{

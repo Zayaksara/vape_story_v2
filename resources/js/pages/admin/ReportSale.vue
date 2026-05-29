@@ -30,17 +30,7 @@ import AdminLayout from '@/layouts/admin/AdminLayout.vue'
 import { index as adminDashboardRoute } from '@/routes/admin/dashboard'
 
 defineOptions({
-  layout: (h: any, page: any) =>
-    h(
-      AdminLayout,
-      {
-        breadcrumbs: [
-          { title: 'Dashboard', href: adminDashboardRoute.url() },
-          { title: 'Laporan Penjualan' },
-        ],
-      },
-      () => page,
-    ),
+  layout: AdminLayout,
 })
 
 // ─── Types ───────────────────────────────────────────────────────────────

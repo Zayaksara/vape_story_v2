@@ -73,6 +73,8 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('returns', [App\Http\Controllers\POS\ReturnController::class, 'index'])->name('returns.index');
         Route::post('returns', [App\Http\Controllers\POS\ReturnController::class, 'store'])->name('returns.store');
+
+        Route::inertia('printer-test', 'POS/PrinterTest')->name('printer.test');
     });
 });
 

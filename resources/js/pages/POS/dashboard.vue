@@ -213,6 +213,7 @@ const {
   discount,
   paymentMethod,
   cashReceived,
+  paymentDetail,
   isProcessing,
   lastTransaction,
   toast,
@@ -236,7 +237,7 @@ const {
   processPayment,
   resetTransaction,
   showToast,
-} = usePos(props.initial_trx_id)
+} = usePos(props.initial_trx_id, props.cashier.name)
 
 // Search state
 const searchQuery = ref('')
@@ -346,16 +347,17 @@ function handleSearch(value: string) {
   searchQuery.value = value
 }
 
-async function handlePaymentConfirm({ method, cashReceived: received }: { method: any; cashReceived?: number }) {
+async function handlePaymentConfirm({ method, cashReceived: received, paymentDetail: detail }: { method: any; cashReceived?: number; paymentDetail?: any }) {
   try {
     isLoading.value = true
     error.value = null
     cashReceived.value = received || 0
     paymentMethod.value = method
+    paymentDetail.value = detail ?? null
     await processPayment()
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Payment failed'
-    
+
   } finally {
     isLoading.value = false
   }

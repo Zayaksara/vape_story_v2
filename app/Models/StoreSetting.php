@@ -11,6 +11,7 @@ class StoreSetting extends Model
         'name',
         'address',
         'phone',
+        'npwp',
         'tagline',
         'logo_path',
         'receipt_header',
@@ -35,18 +36,15 @@ class StoreSetting extends Model
         'show_store_name'      => true,
         'show_address'         => true,
         'show_phone'           => true,
-        'show_status_badge'    => true,
         'show_datetime'        => true,
         'show_invoice_number'  => true,
-        'show_transaction_id'  => true,
+        'show_cashier'         => true,
         'show_item_unit_line'  => true,
         'show_subtotal'        => true,
         'show_discount_row'    => true,
         'show_payment_method'  => true,
         'show_cash_received'   => true,
         'show_change'          => true,
-        'show_cashier'         => true,
-        'show_header_text'     => true,
         'show_footer_text'     => true,
     ];
 
@@ -70,13 +68,7 @@ class StoreSetting extends Model
     public function getReceiptOptionsResolvedAttribute(): array
     {
         $saved = is_array($this->receipt_options) ? $this->receipt_options : [];
-        $merged = array_merge(self::DEFAULT_RECEIPT_OPTIONS, $saved);
 
-        // Backward-compat: kalau `show_logo` belum pernah disimpan di JSON, ambil dari kolom lama.
-        if (! array_key_exists('show_logo', $saved)) {
-            $merged['show_logo'] = (bool) $this->show_logo_on_receipt;
-        }
-
-        return $merged;
+        return array_merge(self::DEFAULT_RECEIPT_OPTIONS, array_intersect_key($saved, self::DEFAULT_RECEIPT_OPTIONS));
     }
 }

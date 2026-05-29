@@ -5,7 +5,7 @@ import { ArrowLeft, Save } from 'lucide-vue-next'
 import AdminLayout from '@/layouts/admin/AdminLayout.vue'
 
 defineOptions({
-  layout: (h: any, page: any) => h(AdminLayout, {}, () => page),
+  layout: AdminLayout,
 })
 
 interface OpeningPayload {

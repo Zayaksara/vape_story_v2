@@ -26,19 +26,24 @@
 
     <!-- Info -->
     <div class="flex min-w-0 flex-1 flex-col gap-0.5">
-      <h4 class="truncate text-xs font-medium"
-          :style="{ color: 'var(--pos-text-primary)' }">
-        {{ item.product.name }}
-      </h4>
-      <p class="flex items-center gap-1 text-[10px]"
+      <div class="flex min-w-0 items-center gap-1.5">
+        <h4 class="truncate text-xs font-medium"
+            :style="{ color: 'var(--pos-text-primary)' }">
+          {{ item.product.name }}
+        </h4>
+      </div>
+      <p class="flex min-w-0 flex-wrap items-center gap-1 text-[10px]"
          :style="{ color: 'var(--pos-text-primary)' }">
-        <span v-if="hasPromo" class="line-through" :style="{ color: 'var(--pos-text-light)' }">{{ formatPrice(item.product.price) }}</span>
-        <span :style="hasPromo ? { color: '#b45309', fontWeight: 600 } : {}">{{ formatPrice(unitPrice) }}</span>
-        <span>/pcs</span>
-        <span v-if="hasPromo" class="rounded px-1 py-0 text-[9px] font-bold" style="background: #fef3c7; color: #b45309;">CUKAI LAMA</span>
+        <span v-if="hasPromo" class="truncate line-through" :style="{ color: 'var(--pos-text-light)' }">{{ formatPrice(item.product.price) }}</span>
+        <span class="truncate" :style="hasPromo ? { color: '#b45309', fontWeight: 600 } : {}">{{ formatPrice(unitPrice) }}</span>
+        <span class="shrink-0">/pcs</span>
+        <span v-if="hasPromo" class="inline-flex shrink-0 items-center gap-0.5 rounded px-1 py-0.5 text-[9px] font-bold leading-none" style="background: #fef3c7; color: #b45309;" title="Harga cukai lama">
+          <Tag class="h-2.5 w-2.5" />
+          CUKAI LAMA
+        </span>
       </p>
-      <div class="flex items-center gap-2 pt-0.5">
-        <div class="qty-btn flex items-center gap-1 rounded-lg border bg-white"
+      <div class="flex min-w-0 flex-wrap items-center gap-2 pt-0.5">
+        <div class="qty-btn flex shrink-0 items-center gap-1 rounded-lg border bg-white"
              :style="{ borderColor: 'var(--pos-border)' }">
           <button
             class="flex h-6 w-6 items-center justify-center rounded-l-lg transition-colors hover:bg-gray-100"
@@ -72,10 +77,6 @@
             </svg>
           </button>
         </div>
-        <span class="text-xs font-medium"
-              :style="{ color: 'var(--pos-brand-primary)' }">
-          {{ formatPrice(item.subtotal) }}
-        </span>
       </div>
     </div>
 
@@ -95,6 +96,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { Tag } from 'lucide-vue-next'
 import type { CartItem } from '@/types/pos'
 
 const props = defineProps<{

@@ -35,7 +35,7 @@ import {
 import AdminLayout from '@/layouts/admin/AdminLayout.vue'
 
 defineOptions({
-  layout: (h: any, page: any) => h(AdminLayout, {}, () => page),
+  layout: AdminLayout,
 })
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -297,6 +297,14 @@ function toggleProductTarget(id: number | string) {
   const list = form.value.product_ids
   const i = list.indexOf(id)
   if (i === -1) list.push(id); else list.splice(i, 1)
+}
+
+const selectedProducts = computed(() =>
+  props.products.filter(p => form.value.product_ids.includes(p.id)),
+)
+
+function productName(id: number | string): string {
+  return props.products.find(p => p.id === id)?.name ?? `#${id}`
 }
 </script>
 
@@ -606,6 +614,27 @@ function toggleProductTarget(id: number | string) {
               </div>
             </div>
 
+            <div
+              v-if="selectedPromo.target === 'specific' && selectedPromo.product_ids.length"
+              class="rounded-lg border p-3"
+              style="border-color: var(--pos-border);"
+            >
+              <div class="mb-2 flex items-center gap-1.5 text-xs font-semibold" style="color: var(--pos-text-secondary);">
+                <Package class="h-3.5 w-3.5" style="color: var(--pos-brand-primary);" />
+                Produk Terpilih ({{ selectedPromo.product_ids.length }})
+              </div>
+              <div class="flex flex-wrap gap-1">
+                <span
+                  v-for="id in selectedPromo.product_ids"
+                  :key="id"
+                  class="rounded-full px-2 py-0.5 text-[11px] font-medium"
+                  style="background: var(--pos-brand-light); color: var(--pos-brand-dark);"
+                >
+                  {{ productName(id) }}
+                </span>
+              </div>
+            </div>
+
             <div class="flex gap-2 pt-1">
               <button
                 class="flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold"
@@ -785,6 +814,37 @@ function toggleProductTarget(id: number | string) {
                   <span style="color: var(--pos-text-secondary);">{{ product.name }}</span>
                   <span v-if="product.sku" class="ml-auto font-mono text-[10px]" style="color: var(--pos-text-muted);">{{ product.sku }}</span>
                 </label>
+              </div>
+
+              <!-- Info tambahan: ringkasan produk terpilih -->
+              <div
+                v-if="form.target === 'specific' && selectedProducts.length"
+                class="rounded-md border p-2.5"
+                style="border-color: var(--pos-border); background: var(--pos-brand-light);"
+              >
+                <div class="mb-1.5 flex items-center gap-1.5 text-xs font-semibold" style="color: var(--pos-brand-dark);">
+                  <Package class="h-3.5 w-3.5" />
+                  {{ selectedProducts.length }} produk dipilih
+                </div>
+                <div class="flex flex-wrap gap-1">
+                  <span
+                    v-for="product in selectedProducts"
+                    :key="product.id"
+                    class="inline-flex items-center gap-1 rounded-full bg-white px-2 py-0.5 text-[11px] font-medium"
+                    style="color: var(--pos-text-secondary); border: 1px solid var(--pos-border);"
+                  >
+                    {{ product.name }}
+                    <button
+                      type="button"
+                      class="cursor-pointer"
+                      style="color: var(--pos-text-muted);"
+                      @click="toggleProductTarget(product.id)"
+                      :aria-label="`Hapus ${product.name}`"
+                    >
+                      <X class="h-3 w-3" />
+                    </button>
+                  </span>
+                </div>
               </div>
             </div>
           </form>

@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
-import { LayoutGrid, Package, FileText, RotateCcw } from 'lucide-vue-next';
+import { Link, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { LayoutGrid, Package, FileText, RotateCcw, ShieldCheck } from 'lucide-vue-next';
 import AppLogo from '@/components/AppLogo.vue';
 import NavUser from '@/components/NavUser.vue';
+import PrinterStatusBadge from '@/components/pos/PrinterStatusBadge.vue';
 import {
     Sidebar,
     SidebarContent,
@@ -25,6 +27,12 @@ const mainNavItems: NavItem[] = [
     { title: 'Riwayat Transaksi', href: pos.transactions.today.url(), icon: FileText },
     { title: 'Pengembalian Barang', href: '/pos/returns', icon: RotateCcw },
 ];
+
+const page = usePage();
+const isAdmin = computed(() => {
+    const role = (page.props.auth as any)?.user?.role;
+    return role && role !== 'cashier';
+});
 </script>
 
 <template>
@@ -65,9 +73,28 @@ const mainNavItems: NavItem[] = [
                     </SidebarMenu>
                 </SidebarGroupContent>
             </SidebarGroup>
+            <SidebarGroup v-if="isAdmin">
+                <SidebarGroupContent>
+                    <SidebarMenu>
+                        <SidebarMenuItem>
+                            <SidebarMenuButton as-child>
+                                <Link
+                                    href="/admin/dashboard"
+                                    :preserve-state="false"
+                                    :preserve-scroll="false"
+                                >
+                                    <ShieldCheck />
+                                    <span>Kembali ke Admin</span>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </SidebarGroupContent>
+            </SidebarGroup>
         </SidebarContent>
 
         <SidebarFooter>
+            <PrinterStatusBadge />
             <NavUser />
         </SidebarFooter>
 

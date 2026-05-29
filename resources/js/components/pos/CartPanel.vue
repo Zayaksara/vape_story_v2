@@ -1,9 +1,9 @@
 <template>
   <div class="cart-panel flex h-full flex-col min-h-0 overflow-hidden" :style="{ backgroundColor: 'var(--pos-bg-primary)' }">
     <!-- Header -->
-    <div class="flex items-center justify-between  p-4 shrink-0"
+    <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 p-4 shrink-0 border-b"
          :style="{ borderBottomColor: 'var(--pos-border)' }">
-      <div class="flex items-center gap-2">
+      <div class="flex min-w-0 items-center gap-2">
         <!-- Cart toggle button -->
         <button
           v-if="showCartButton"
@@ -27,30 +27,64 @@
         <h2 class="text-lg font-bold" :style="{ color: 'var(--pos-text-primary)' }">Keranjang</h2>
       </div>
 
-      <div class="flex flex-col items-end gap-2">
-        <button
-          v-if="cart.length > 0"
-          class="rounded-lg px-3 py-2 text-xs font-bold transition-all hover:opacity-90"
-          :style="{
-            backgroundColor: 'var(--pos-brand-primary)',
-            color: 'white'
-          }"
-          @click="$emit('open-discount')"
-        >
-          Terapkan Voucher
-        </button>
-      </div>
+      <button
+        v-if="cart.length > 0"
+        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border transition-colors hover:bg-[var(--pos-bg-secondary)] active:scale-95"
+        :style="{
+          borderColor: 'var(--pos-brand-primary)',
+          color: 'var(--pos-brand-primary)'
+        }"
+        @click="$emit('open-discount')"
+        title="Terapkan Voucher"
+        aria-label="Terapkan Voucher"
+      >
+        <Ticket class="h-5 w-5" />
+      </button>
 
     </div>
 
     <button
       v-if="cart.length > 0"
-      class="shrink-0 px-1 py-5 text-xs font-medium transition-colors rounded-xs"
-      :style="{ color: 'var(--pos-danger-text)', backgroundColor: 'var(--pos-bg-danger)', borderColor: 'var(--pos-border)'   }"
-      @click="confirmClearCart"
+      class="shrink-0 w-full px-3 py-3 text-xs font-medium transition-colors rounded-md md:text-sm"
+      :style="{ color: 'var(--pos-danger-text)', backgroundColor: 'var(--pos-bg-danger)' }"
+      @click="isClearConfirmOpen = true"
     >
-      Kosongkan
+      Kosongkan Keranjang
     </button>
+
+    <!-- Confirm Clear Cart Modal -->
+    <Dialog :open="isClearConfirmOpen" @update:open="isClearConfirmOpen = $event">
+      <DialogContent class="w-[min(94vw,28rem)] p-0 overflow-hidden">
+        <div class="p-5">
+          <DialogHeader>
+            <div class="mb-3 flex h-12 w-12 items-center justify-center rounded-full"
+                 :style="{ backgroundColor: 'var(--pos-bg-danger)' }">
+              <AlertTriangle class="h-6 w-6" :style="{ color: 'var(--pos-danger-text)' }" />
+            </div>
+            <DialogTitle :style="{ color: 'var(--pos-text-primary)' }">
+              Kosongkan Keranjang?
+            </DialogTitle>
+            <DialogDescription :style="{ color: 'var(--pos-text-muted)' }">
+              Semua {{ cart.length }} item di keranjang akan dihapus.
+              Tindakan ini tidak dapat dibatalkan.
+            </DialogDescription>
+          </DialogHeader>
+        </div>
+        <DialogFooter class="border-t px-5 py-4 flex flex-col-reverse sm:flex-row gap-2 justify-end"
+                     :style="{ borderColor: 'var(--pos-border)', backgroundColor: 'var(--pos-bg-primary)' }">
+          <Button variant="outline" class="flex-1" @click="isClearConfirmOpen = false">
+            Batal
+          </Button>
+          <Button
+            class="flex-1"
+            :style="{ backgroundColor: 'var(--pos-danger-text)', color: 'var(--pos-text-inverse)' }"
+            @click="handleClearCart"
+          >
+            Ya, Kosongkan
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
     <!-- Cart items - scrollable area -->
     <div class="flex-1 overflow-hidden py-1 min-h-0">
       <div class="h-full min-h-0 overflow-y-auto px-4">
@@ -110,9 +144,13 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import { Ticket, AlertTriangle } from 'lucide-vue-next'
 import type { CartItem } from '@/types/pos'
 import CartSummary from './CartSummary.vue'
 import CartItemComponent from './CartItem.vue'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
 
 const props = defineProps<{
   cart: CartItem[]
@@ -137,10 +175,11 @@ const emit = defineEmits<{
   'remove-discount': []
 }>()
 
-function confirmClearCart() {
-  if (window.confirm('Yakin ingin mengosongkan keranjang?')) {
-    emit('clear-cart')
-  }
+const isClearConfirmOpen = ref(false)
+
+function handleClearCart() {
+  emit('clear-cart')
+  isClearConfirmOpen.value = false
 }
 
 function formatPrice(price: number): string {

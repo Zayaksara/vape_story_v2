@@ -50,6 +50,7 @@ class HandleInertiaRequests extends Middleware
             'storeTagline' => $store?->tagline,
             'storeAddress' => $store?->address,
             'storePhone' => $store?->phone,
+            'storeLogo' => $store?->logo_url,
             'storeReceiptHeader' => $store?->receipt_header,
             'storeReceiptFooter' => $store?->receipt_footer,
             'storeShowLogoOnReceipt' => (bool) ($store?->show_logo_on_receipt ?? false),

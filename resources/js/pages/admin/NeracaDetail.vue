@@ -5,7 +5,7 @@ import { ArrowLeft, Banknote, CreditCard, Boxes, Tag, TrendingUp } from 'lucide-
 import AdminLayout from '@/layouts/admin/AdminLayout.vue'
 
 defineOptions({
-  layout: (h: any, page: any) => h(AdminLayout, {}, () => page),
+  layout: AdminLayout,
 })
 
 interface CashIn { id: number; invoice: string; created_at: string; amount: number; status: string }

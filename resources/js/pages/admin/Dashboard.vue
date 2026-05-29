@@ -40,7 +40,7 @@ const PASTEL_STROKES   = [PALETTE_STRONG.teal, PALETTE_STRONG.amber, PALETTE_STR
 
 
 defineOptions({
-    layout: (h: any, page: any) => h(AdminLayout, {}, () => page),
+    layout: AdminLayout,
 })
 
 const props = defineProps<DashboardPageProps>()

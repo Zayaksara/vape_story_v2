@@ -1,16 +1,20 @@
 import { ref, computed } from 'vue'
+import { usePage } from '@inertiajs/vue3'
 import type {
   Product, CartItem, Discount,
   PaymentMethod, Transaction
 } from '@/types/pos'
+import { usePrinter } from '@/composables/usePrinter'
+import { buildReceiptBytes } from '@/lib/escposReceipt'
 
-export function usePos(initialTrxId: string) {
+export function usePos(initialTrxId: string, cashierName: string = 'Kasir') {
 
   // ── STATE ──────────────────────────────────────────
   const cart = ref<CartItem[]>([])
   const discount = ref<Discount | null>(null)
   const paymentMethod = ref<PaymentMethod>('cash')
   const cashReceived = ref<number>(0)
+  const paymentDetail = ref<any>(null)
   const transactionId = ref<string>(initialTrxId)
   const isProcessing = ref<boolean>(false)
   const lastTransaction = ref<Transaction | null>(null)
@@ -31,20 +35,42 @@ export function usePos(initialTrxId: string) {
   const subtotal = computed(() =>
     cart.value.reduce((sum, i) => sum + i.subtotal, 0)
   )
-  const discountAmount = computed(() => {
-    if (!discount.value) {
+  // Subtotal produk yang berhak dapat diskon. Untuk promo "specific" hanya
+  // jumlahkan item yang product_id-nya termasuk target; selain itu seluruh cart.
+  const eligibleSubtotal = computed(() => {
+    const d = discount.value
+    if (!d) {
       return 0
     }
 
-    if (discount.value.type === 'fixed') {
-      return discount.value.value
+    if (d.target === 'specific' && d.product_ids && d.product_ids.length > 0) {
+      return cart.value
+        .filter(i => d.product_ids!.includes(String(i.product.id)))
+        .reduce((sum, i) => sum + i.subtotal, 0)
     }
 
-    const raw = (subtotal.value * discount.value.value) / 100
+    return subtotal.value
+  })
 
-    return discount.value.max_discount
-      ? Math.min(raw, discount.value.max_discount)
-      : raw
+  const discountAmount = computed(() => {
+    const d = discount.value
+    if (!d) {
+      return 0
+    }
+
+    const base = eligibleSubtotal.value
+    if (base <= 0) {
+      return 0
+    }
+
+    let raw = d.type === 'fixed' ? d.value : (base * d.value) / 100
+
+    if (d.max_discount) {
+      raw = Math.min(raw, d.max_discount)
+    }
+
+    // Diskon tidak boleh melebihi nilai produk yang berhak.
+    return Math.min(raw, base)
   })
   const taxBase = computed(() => subtotal.value - discountAmount.value)
   const taxAmount = computed(() => 0)
@@ -144,6 +170,17 @@ export function usePos(initialTrxId: string) {
       return
     }
 
+    if (d.target === 'specific' && d.product_ids && d.product_ids.length > 0) {
+      const hasEligible = cart.value.some(i =>
+        d.product_ids!.includes(String(i.product.id))
+      )
+
+      if (!hasEligible) {
+        showToast('Voucher ini hanya berlaku untuk produk tertentu', 'error')
+        return
+      }
+    }
+
     discount.value = d
     showToast(`Diskon "${d.label}" berhasil diterapkan`, 'success')
     isDiscountModalOpen.value = false
@@ -204,7 +241,7 @@ export function usePos(initialTrxId: string) {
         id: result.sale?.id ?? transactionId.value,
         invoice_number: result.sale?.invoice_number ?? `INV-${String(result.sale?.id ?? transactionId.value).slice(-8).toUpperCase()}`,
         cashier_id: 0,
-        cashier_name: 'Kasir',
+        cashier_name: cashierName,
         items: [...cart.value],
         discount: discount.value,
         subtotal: subtotal.value,
@@ -214,16 +251,61 @@ export function usePos(initialTrxId: string) {
         payment_method: paymentMethod.value,
         cash_received: cashReceived.value || undefined,
         change: change.value || undefined,
+        payment_detail: paymentDetail.value || undefined,
         created_at: new Date().toISOString(),
         status: 'success',
       }
       isPaymentModalOpen.value = false
       isReceiptModalOpen.value = true
+
+      // ── AUTO-PRINT ke printer Bluetooth (best-effort, jangan blok flow) ──
+      void autoPrintReceipt(lastTransaction.value)
     } catch {
       showToast('Pembayaran gagal. Coba lagi.', 'error')
     } finally {
       isProcessing.value = false
     }
+  }
+
+  async function autoPrintReceipt(trx: Transaction | null): Promise<void> {
+    if (!trx) return
+    const printer = usePrinter()
+    if (!printer.supported) return
+
+    try {
+      if (!printer.ready.value) {
+        const ok = await printer.tryAutoConnect()
+        if (!ok) {
+          showToast('Printer tidak terhubung — struk tidak tercetak otomatis.', 'error')
+          return
+        }
+      }
+
+      const page = usePage().props as Record<string, any>
+      const bytes = await buildReceiptBytes({
+        store: {
+          name: page.storeName ?? null,
+          address: page.storeAddress ?? null,
+          phone: page.storePhone ?? null,
+        },
+        transaction: trx,
+        paperWidth: 58,
+        options: page.storeReceiptOptions ?? {},
+        footerText: page.storeReceiptFooter ?? null,
+        logoUrl: page.storeLogo ?? null,
+      })
+      await printer.printBytes(bytes)
+    } catch (err: any) {
+      showToast(`Cetak otomatis gagal: ${err?.message ?? err}`, 'error')
+    }
+  }
+
+  async function reprintLastReceipt(): Promise<void> {
+    if (!lastTransaction.value) {
+      showToast('Tidak ada transaksi untuk dicetak ulang.', 'error')
+      return
+    }
+    await autoPrintReceipt(lastTransaction.value)
   }
 
   // ── POST TRANSACTION ───────────────────────────────
@@ -244,7 +326,7 @@ export function usePos(initialTrxId: string) {
 
   return {
     // state
-    cart, discount, paymentMethod, cashReceived,
+    cart, discount, paymentMethod, cashReceived, paymentDetail,
     transactionId, isProcessing, lastTransaction, toast,
     // modal states
     isDiscountModalOpen, isPaymentModalOpen,
@@ -256,5 +338,6 @@ export function usePos(initialTrxId: string) {
     addToCart, removeFromCart, updateQuantity, clearCart,
     validateDiscount, applyDiscount, removeDiscount,
     processPayment, resetTransaction, showToast,
+    reprintLastReceipt,
   }
 }

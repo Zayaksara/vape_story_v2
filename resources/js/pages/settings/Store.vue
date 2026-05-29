@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { Head, useForm } from '@inertiajs/vue3';
 import { ImagePlus } from 'lucide-vue-next';
-import { computed, onBeforeUnmount, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { usePrinter } from '@/composables/usePrinter';
+import { buildReceiptBytes } from '@/lib/escposReceipt';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
@@ -19,18 +21,15 @@ const DEFAULT_RECEIPT_OPTIONS: ReceiptOptions = {
     show_store_name: true,
     show_address: true,
     show_phone: true,
-    show_status_badge: true,
     show_datetime: true,
     show_invoice_number: true,
-    show_transaction_id: true,
+    show_cashier: true,
     show_item_unit_line: true,
     show_subtotal: true,
     show_discount_row: true,
     show_payment_method: true,
     show_cash_received: true,
     show_change: true,
-    show_cashier: true,
-    show_header_text: true,
     show_footer_text: true,
 };
 
@@ -42,16 +41,13 @@ const RECEIPT_OPTION_GROUPS = [
             { key: 'show_store_name', label: 'Nama toko' },
             { key: 'show_address', label: 'Alamat' },
             { key: 'show_phone', label: 'Nomor telepon' },
-            { key: 'show_header_text', label: 'Teks header tambahan' },
         ],
     },
     {
         title: 'Info Transaksi',
         items: [
-            { key: 'show_status_badge', label: 'Status LUNAS' },
             { key: 'show_datetime', label: 'Tanggal & waktu' },
             { key: 'show_invoice_number', label: 'Nomor invoice' },
-            { key: 'show_transaction_id', label: 'Nomor transaksi' },
             { key: 'show_cashier', label: 'Nama kasir' },
         ],
     },
@@ -64,7 +60,7 @@ const RECEIPT_OPTION_GROUPS = [
             { key: 'show_payment_method', label: 'Metode pembayaran' },
             { key: 'show_cash_received', label: 'Jumlah dibayar (tunai)' },
             { key: 'show_change', label: 'Kembalian (tunai)' },
-            { key: 'show_footer_text', label: 'Teks footer' },
+            { key: 'show_footer_text', label: 'Teks footer custom' },
         ],
     },
 ] as const;
@@ -96,7 +92,6 @@ const form = useForm({
     address: props.store.address ?? '',
     phone: props.store.phone ?? '',
     tagline: props.store.tagline ?? '',
-    receipt_header: props.store.receipt_header ?? '',
     receipt_footer: props.store.receipt_footer ?? '',
     receipt_options: { ...DEFAULT_RECEIPT_OPTIONS, ...(props.store.receipt_options_resolved ?? {}) } as ReceiptOptions,
     logo: null as File | null,
@@ -110,6 +105,50 @@ function toggleAllReceiptOptions(value: boolean) {
 
 const printMode = ref<'58' | '80'>('58');
 const previewRef = ref<HTMLElement | null>(null);
+
+// ── Bluetooth Printer (composable) ──────────────────────────────
+const printer = usePrinter();
+const btError = ref<string | null>(null);
+
+async function handleConnect() {
+    btError.value = null;
+    await printer.pair();
+    if (printer.status.value === 'error') btError.value = printer.lastMessage.value;
+}
+
+async function handleReconnect() {
+    btError.value = null;
+    const ok = await printer.tryAutoConnect();
+    if (!ok) btError.value = printer.lastMessage.value;
+}
+
+async function handleBtPrint() {
+    btError.value = null;
+    try {
+        const bytes = await buildReceiptBytes({
+            store: {
+                name: form.name,
+                address: form.address,
+                phone: form.phone,
+            },
+            transaction: sampleTransaction.value,
+            paperWidth: printMode.value === '80' ? 80 : 58,
+            options: form.receipt_options,
+            footerText: form.receipt_footer,
+            logoUrl: previewLogoUrl.value,
+        });
+        await printer.printBytes(bytes);
+    } catch (err: any) {
+        btError.value = err?.message ?? String(err);
+    }
+}
+
+onMounted(() => {
+    // Coba auto-detect printer tersimpan (tanpa dialog) — silent kalau gagal
+    if (printer.supported && !printer.ready.value) {
+        printer.tryAutoConnect().catch(() => { /* ignore */ });
+    }
+});
 
 function handleTestPrint() {
     const node = previewRef.value;
@@ -254,30 +293,21 @@ const sampleTransaction = computed<Transaction>(() => ({
             <Heading
                 variant="small"
                 title="Kustom Struk"
-                description="Teks opsional di atas dan bawah struk pembayaran."
+                description="Teks tambahan opsional di bawah struk pembayaran."
             />
-
-            <div class="grid gap-2">
-                <Label for="receipt-header">Header struk</Label>
-                <textarea
-                    id="receipt-header"
-                    v-model="form.receipt_header"
-                    rows="2"
-                    class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    placeholder="cth. Story Vape — Jl. Mawar No. 1"
-                />
-                <InputError :message="form.errors.receipt_header" />
-            </div>
 
             <div class="grid gap-2">
                 <Label for="receipt-footer">Footer struk</Label>
                 <textarea
                     id="receipt-footer"
                     v-model="form.receipt_footer"
-                    rows="2"
+                    rows="5"
                     class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    placeholder="cth. Terima kasih telah berbelanja!"
+                    placeholder="Terima kasih!&#10;Barang tidak dapat ditukar&#10;kecuali rusak/garansi.&#10;&#10;** Produk 18+ **&#10;Mengandung nikotin"
                 />
+                <p class="text-xs text-muted-foreground">
+                    Tampil di bagian paling bawah struk (rata tengah). Pisahkan baris dengan Enter.
+                </p>
                 <InputError :message="form.errors.receipt_footer" />
             </div>
 
@@ -393,6 +423,86 @@ const sampleTransaction = computed<Transaction>(() => ({
             </div>
         </div>
 
+        <!-- ── Printer Bluetooth ───────────────────────────────────── -->
+        <div class="rounded-lg border bg-card p-4">
+            <div class="flex flex-wrap items-start justify-between gap-3">
+                <div class="space-y-1">
+                    <p class="text-sm font-semibold">Printer Bluetooth (ESC/POS)</p>
+                    <p class="text-xs text-muted-foreground">
+                        Hubungkan ke printer thermal Bluetooth (cth. Codeshop CM-T58BL).
+                        Cetak akan menggunakan data pratinjau di atas — bukan via dialog cetak browser.
+                    </p>
+                    <p v-if="printer.device.value" class="text-xs">
+                        Perangkat: <span class="font-mono">{{ printer.deviceName.value ?? '(tanpa nama)' }}</span>
+                        <span
+                            class="ml-2 font-semibold"
+                            :class="{
+                                'text-green-600': printer.ready.value,
+                                'text-yellow-600': printer.status.value === 'connecting',
+                                'text-red-600': printer.status.value === 'error',
+                                'text-gray-500': printer.status.value === 'idle' && !printer.ready.value,
+                            }"
+                        >
+                            {{ printer.ready.value ? 'Terhubung' : (printer.status.value === 'connecting' ? 'Menghubungkan…' : 'Belum siap') }}
+                        </span>
+                    </p>
+                    <p v-else-if="printer.lastMessage.value" class="text-xs text-muted-foreground">
+                        {{ printer.lastMessage.value }}
+                    </p>
+                </div>
+                <div class="flex shrink-0 flex-wrap items-center gap-2">
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        class="h-8 text-xs"
+                        :disabled="printer.status.value === 'connecting' || printer.ready.value"
+                        @click="handleConnect"
+                    >
+                        {{ printer.status.value === 'connecting' ? 'Mencari…' : (printer.ready.value ? 'Terhubung' : 'Pair Printer') }}
+                    </Button>
+                    <Button
+                        v-if="!printer.ready.value && printer.device.value"
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        class="h-8 text-xs"
+                        @click="handleReconnect"
+                    >
+                        Reconnect
+                    </Button>
+                    <Button
+                        v-if="printer.device.value"
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        class="h-8 text-xs"
+                        @click="printer.disconnect"
+                    >
+                        Disconnect
+                    </Button>
+                    <Button
+                        type="button"
+                        size="sm"
+                        class="h-8 text-xs"
+                        :disabled="!printer.ready.value || printer.printing.value"
+                        @click="handleBtPrint"
+                    >
+                        {{ printer.printing.value ? 'Mencetak…' : 'Cetak via Printer BT' }}
+                    </Button>
+                </div>
+            </div>
+            <div
+                v-if="btError"
+                class="mt-3 rounded border border-red-300 bg-red-50 px-3 py-2 text-xs text-red-700"
+            >
+                {{ btError }}
+            </div>
+            <div v-if="!printer.supported" class="mt-3 rounded border border-red-300 bg-red-50 px-3 py-2 text-xs text-red-700">
+                Browser ini tidak mendukung Web Bluetooth. Gunakan Chrome / Edge di Android atau desktop, dan akses via HTTPS / localhost.
+            </div>
+        </div>
+
         <div class="rounded-lg border bg-muted/30 p-6">
             <div
                 ref="previewRef"
@@ -400,13 +510,13 @@ const sampleTransaction = computed<Transaction>(() => ({
             >
                 <ReceiptPreview
                     :store-name="form.name || 'Nama Toko'"
-                    :store-logo="previewLogoUrl"
                     :store-address="form.address || null"
                     :store-phone="form.phone || null"
-                    :receipt-header="form.receipt_header || null"
-                    :receipt-footer="form.receipt_footer || null"
-                    :options="form.receipt_options"
+                    :store-logo="previewLogoUrl"
+                    :paper-width="printMode === '80' ? 80 : 58"
                     :transaction="sampleTransaction"
+                    :options="form.receipt_options"
+                    :footer-text="form.receipt_footer || null"
                     invoice-fallback="INV-PREVIEW-001"
                 />
             </div>

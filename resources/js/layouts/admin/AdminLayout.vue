@@ -56,6 +56,13 @@
           :style="{ borderColor: 'var(--pos-border)' }"
         >
           <Link
+            href="/pos/dashboard"
+            class="admin-nav-item flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium cursor-pointer"
+          >
+            <ShoppingBasket class="h-4 w-4 shrink-0" />
+            <span class="truncate">Buka POS</span>
+          </Link>
+          <Link
             href="/settings/profile"
             class="admin-nav-item flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium cursor-pointer"
             :class="{ 'is-active': isActive('/settings/profile') }"
