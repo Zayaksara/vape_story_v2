@@ -50,8 +50,13 @@ class ProcessPaymentController extends Controller
 
             $saleSubtotal = 0.0; // total setelah promo cukai + diskon manual per item (sebelum diskon transaksi)
 
+            // Muat semua produk sekaligus untuk menghindari N+1 di dalam loop item.
+            $products = Product::findMany(
+                collect($validated['items'])->pluck('product_id')->unique()
+            )->keyBy('id');
+
             foreach ($validated['items'] as $item) {
-                $product   = Product::find($item['product_id']);
+                $product   = $products->get($item['product_id']);
                 $basePrice = (float) ($product?->base_price ?? $item['unit_price']);
                 $quantity  = (int) $item['quantity'];
                 $remaining = $quantity;

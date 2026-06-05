@@ -52,6 +52,10 @@ TX_SEED_DAYS=90 TX_SEED_MIN_PER_DAY=4 TX_SEED_MAX_PER_DAY=18
 | 11 | Pengembalian Barang | [11-pengembalian-barang.md](11-pengembalian-barang.md) | ✅ Lulus (BUG-09 diperbaiki) |
 | 12 | Pengaturan (POS) | [12-pengaturan-pos.md](12-pengaturan-pos.md) | ✅ Lulus |
 | 13 | Cross-Account (POS→Admin) | [13-cross-account.md](13-cross-account.md) | ✅ Lulus |
+| 14 | Pengaturan Toko & Struk | [14-pengaturan-toko-struk.md](14-pengaturan-toko-struk.md) | ✅ Lulus (BUG-10 diperbaiki) |
+| 15 | Printer Thermal Bluetooth (ESC/POS) | [15-printer-escpos.md](15-printer-escpos.md) | ✅ Lulus (uji manual pemilik) |
+| 16 | Responsiveness (Tablet) & PWA | [16-responsive-pwa.md](16-responsive-pwa.md) | ✅ Lulus sebagian (tablet diverifikasi; PWA perlu manual) |
+| 17 | Negative Testing & Otorisasi | [17-negative-otorisasi.md](17-negative-otorisasi.md) | ✅ Lulus sebagian (otorisasi & login negatif diverifikasi) |
 
 ## Ringkasan Bug yang Ditemukan & Diperbaiki
 
@@ -66,6 +70,18 @@ TX_SEED_DAYS=90 TX_SEED_MIN_PER_DAY=4 TX_SEED_MAX_PER_DAY=18
 | BUG-07 | Katalog Produk POS | 🔴 Mayor (fungsional) | Klon BUG-01 — tombol nomor halaman pagination disabled permanen di `ProductPos.vue`. | ✅ Diperbaiki |
 | BUG-08 | Riwayat/History & Cross-account | 🟠 Sedang | Transaksi yang diretur (`partial_return`/`returned`) **hilang** dari History Pembayaran admin & Riwayat POS, padahal Dashboard tetap menghitungnya → tidak konsisten. | ✅ Diperbaiki (Opsi 1: tampil + nilai bersih + badge "Diretur") |
 | BUG-09 | Pengembalian Barang | 🟡 Minor | Saat transaksi habis diretur **bertahap** (beberapa kali retur), status sale tetap `partial_return` (tidak jadi `returned`) karena hanya menghitung qty retur terakhir, bukan akumulasi. | ✅ Diperbaiki (akumulasi returned dari alokasi) |
+| BUG-10 | Pengaturan Toko / Struk | 🟠 Sedang | Saat `/settings/store` dibuka, **semua** checkbox "Konten Struk" tampil kosong padahal opsi aktif. Akar masalah: `receipt_options` tersimpan sebagai **string `"1"/"0"`** (efek `forceFormData`), bukan boolean — `v-model` checkbox membandingkan loose ke `true` → gagal → unchecked (juga memicu hydration mismatch). | ✅ Diperbaiki (cast boolean di `StoreSetting::getReceiptOptionsResolvedAttribute` & `StoreController::update`) |
+
+### Catatan perubahan pasca-uji awal (2026-05-30)
+
+- **Modul 14–17 ditambahkan** untuk fitur baru pasca 24 Mei (Pengaturan Toko/Struk, Printer
+  ESC/POS, Responsive/PWA) dan pengujian negatif + otorisasi. Tanggal uji: **2026-05-30**.
+- **Fitur NPWP dihapus** atas permintaan pemilik: dihilangkan dari `StoreSetting` (fillable),
+  `StoreController` (validasi), dan file migration `add_npwp_to_store_settings` dihapus.
+  Kolom `npwp` (nullable) mungkin masih tersisa di DB lama — hilang saat `migrate:fresh`.
+- **Keterbatasan uji:** password admin (`admin@vape.com`) di DB uji sudah diubah dari nilai
+  seeder (`12345`), sehingga kasus uji ber-label ⏳ "perlu admin" belum diverifikasi browser.
+  Jalankan ulang `UserSeeder` untuk melengkapinya.
 
 ### Catatan: Isu lintas-halaman (belum diperbaiki — low priority)
 

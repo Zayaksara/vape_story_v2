@@ -1,0 +1,42 @@
+- generic [ref=e6]:
+  - generic [ref=e10]:
+    - generic [ref=e11]:
+      - img "Slide 1" [ref=e12]
+      - img "Slide 2" [ref=e13]
+      - img "Slide 3" [ref=e14]
+    - generic [ref=e15]:
+      - button "Go to slide 1" [ref=e16]
+      - button "Go to slide 2" [ref=e17]
+      - button "Go to slide 3" [ref=e18]
+  - generic [ref=e20]:
+    - generic [ref=e21]:
+      - heading "Selamat datang di VapeStory" [level=1] [ref=e22]
+      - paragraph [ref=e23]: Vape Story Sejak 2026
+    - generic [ref=e24]:
+      - generic [ref=e25]:
+        - generic [ref=e26]: Email
+        - textbox "Email" [ref=e27]:
+          - /placeholder: name@company.com
+          - text: cashier@vape.com
+        - paragraph [ref=e48]: Email atau password salah.
+      - generic [ref=e28]:
+        - generic [ref=e29]:
+          - generic [ref=e30]: Password
+          - link "Lupa password?" [ref=e31] [cursor=pointer]:
+            - /url: /forgot-password
+        - generic [ref=e32]:
+          - textbox "Password" [ref=e33]:
+            - /placeholder: Masukkan password
+            - text: cashier123
+          - button "Show password" [ref=e34]:
+            - img [ref=e35]
+      - generic [ref=e39] [cursor=pointer]:
+        - checkbox "Ingat saya" [ref=e40]:
+          - checkbox [ref=e41]
+        - generic [ref=e42]: Ingat saya
+      - button "Loading Masuk" [disabled]:
+        - status "Loading"
+        - text: Masuk
+    - generic [ref=e44]:
+      - paragraph [ref=e45]: Jl. Raya Kedawung No.02, Panembahan, Kec. Plered, Kabupaten Cirebon, Jawa Barat 45154
+      - paragraph [ref=e46]: "085161500214"

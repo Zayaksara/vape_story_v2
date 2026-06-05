@@ -1,0 +1,848 @@
+- generic [ref=e4]:
+  - generic [ref=e7]:
+    - list [ref=e9]:
+      - listitem [ref=e10]:
+        - link "Vape Story Vape Story" [ref=e11] [cursor=pointer]:
+          - /url: /pos/dashboard
+          - img "Vape Story" [ref=e13]
+          - generic:
+            - generic: Vape Story
+    - generic [ref=e20]:
+      - generic [ref=e21]: Menu Utama
+      - list [ref=e23]:
+        - listitem [ref=e24]:
+          - link "Dashboard POS" [ref=e25] [cursor=pointer]:
+            - /url: /pos/dashboard
+            - img [ref=e26]
+            - generic: Dashboard POS
+        - listitem [ref=e31]:
+          - link "Katalog Produk" [ref=e32] [cursor=pointer]:
+            - /url: /pos/products
+            - img [ref=e33]
+            - generic: Katalog Produk
+        - listitem [ref=e37]:
+          - link "Riwayat Transaksi" [ref=e38] [cursor=pointer]:
+            - /url: /pos/transactions/today
+            - img [ref=e39]
+            - generic: Riwayat Transaksi
+        - listitem [ref=e42]:
+          - link "Pengembalian Barang" [ref=e43] [cursor=pointer]:
+            - /url: /pos/returns
+            - img [ref=e44]
+            - generic: Pengembalian Barang
+    - list [ref=e48]:
+      - listitem [ref=e49]:
+        - button "AU Admin User" [ref=e50]:
+          - generic [ref=e52]: AU
+          - generic:
+            - generic: Admin User
+          - img [ref=e53]
+    - button "Toggle sidebar" [ref=e56]
+  - main [ref=e57]:
+    - generic [ref=e58]:
+      - generic [ref=e59]:
+        - button "Toggle sidebar" [ref=e60]:
+          - img [ref=e61]
+        - img "Story Vape Logo" [ref=e64]
+        - heading "Vape Story" [level=1] [ref=e66]
+      - generic [ref=e67]:
+        - generic [ref=e68]: Sel, 26 Mei 2026 17:39:57
+        - generic [ref=e69]: Selamat datang, Admin User
+    - main [ref=e71]:
+      - generic [ref=e72]:
+        - generic [ref=e73]:
+          - generic [ref=e76]:
+            - img [ref=e77]
+            - textbox "Cari produk" [ref=e79]:
+              - /placeholder: Cari produk...
+          - tablist "Kategori produk" [ref=e80]:
+            - generic [ref=e81]:
+              - tab "Semua 61" [selected] [ref=e82] [cursor=pointer]:
+                - generic [ref=e83]: Semua
+                - generic [ref=e84]: "61"
+              - tab "Freebase 11" [ref=e85] [cursor=pointer]:
+                - generic [ref=e86]: Freebase
+                - generic [ref=e87]: "11"
+              - tab "Nicotine Salt 11" [ref=e88] [cursor=pointer]:
+                - generic [ref=e89]: Nicotine Salt
+                - generic [ref=e90]: "11"
+              - tab "Pod Device 7" [ref=e91] [cursor=pointer]:
+                - generic [ref=e92]: Pod Device
+                - generic [ref=e93]: "7"
+              - tab "Mod Device 16" [ref=e94] [cursor=pointer]:
+                - generic [ref=e95]: Mod Device
+                - generic [ref=e96]: "16"
+              - tab "Disposable 11" [ref=e97] [cursor=pointer]:
+                - generic [ref=e98]: Disposable
+                - generic [ref=e99]: "11"
+              - tab "Coil & Accessories 5" [ref=e100] [cursor=pointer]:
+                - generic [ref=e101]: Coil & Accessories
+                - generic [ref=e102]: "5"
+        - generic [ref=e105]:
+          - generic [ref=e106]:
+            - generic [ref=e107]:
+              - generic [ref=e108]: 375 pcs
+              - generic [ref=e109]: CUKAI LAMA
+            - img [ref=e112]
+            - generic [ref=e114]:
+              - heading "Just Juice Mixed Berry F6" [level=3] [ref=e115]
+              - generic [ref=e116]:
+                - generic [ref=e117]: JUSTJUICE-0001
+                - generic [ref=e118]: 50ml
+              - generic [ref=e120]:
+                - generic [ref=e121]: Rp 115.000
+                - generic [ref=e122]: Rp 97.000
+              - img [ref=e125]
+          - generic [ref=e127]:
+            - generic [ref=e128]:
+              - generic [ref=e129]: 256 pcs
+              - generic [ref=e130]: CUKAI LAMA
+            - img [ref=e133]
+            - generic [ref=e135]:
+              - heading "Dinner Lady Argus ZG" [level=3] [ref=e136]
+              - generic [ref=e137]:
+                - generic [ref=e138]: DINNERLADY-0002
+                - generic [ref=e139]: 0ml
+              - generic [ref=e141]:
+                - generic [ref=e142]: Rp 605.000
+                - generic [ref=e143]: Rp 538.000
+              - img [ref=e146]
+          - generic [ref=e148]:
+            - generic [ref=e150]: 223 pcs
+            - img [ref=e153]
+            - generic [ref=e155]:
+              - heading "Just Juice T200 17" [level=3] [ref=e156]
+              - generic [ref=e157]:
+                - generic [ref=e158]: JUSTJUICE-0003
+                - generic [ref=e159]: 0ml
+              - generic [ref=e161]: Rp 715.000
+              - img [ref=e164]
+          - generic [ref=e166]:
+            - generic [ref=e167]:
+              - generic [ref=e168]: 176 pcs
+              - generic [ref=e169]: CUKAI LAMA
+            - img [ref=e172]
+            - generic [ref=e174]:
+              - heading "HQD Energy Drink P1" [level=3] [ref=e175]
+              - generic [ref=e176]:
+                - generic [ref=e177]: HQD-0004
+                - generic [ref=e178]: 60ml
+              - generic [ref=e180]:
+                - generic [ref=e181]: Rp 130.000
+                - generic [ref=e182]: Rp 116.000
+              - img [ref=e185]
+          - generic [ref=e187]:
+            - generic [ref=e189]: 262 pcs
+            - img [ref=e192]
+            - generic [ref=e194]:
+              - heading "Elf Bar BC5000 MN" [level=3] [ref=e195]
+              - generic [ref=e196]:
+                - generic [ref=e197]: ELFBAR-0005
+                - generic [ref=e198]: 10ml
+              - generic [ref=e200]: Rp 245.000
+              - img [ref=e203]
+          - generic [ref=e205]:
+            - generic [ref=e206]:
+              - generic [ref=e207]: 330 pcs
+              - generic [ref=e208]: CUKAI LAMA
+            - img [ref=e211]
+            - generic [ref=e213]:
+              - heading "Smok Luxe HO" [level=3] [ref=e214]
+              - generic [ref=e215]:
+                - generic [ref=e216]: SMOK-0006
+                - generic [ref=e217]: 0ml
+              - generic [ref=e219]:
+                - generic [ref=e220]: Rp 485.000
+                - generic [ref=e221]: Rp 412.000
+              - img [ref=e224]
+          - generic [ref=e226]:
+            - generic [ref=e228]: 275 pcs
+            - img [ref=e231]
+            - generic [ref=e233]:
+              - heading "OXVA T200 VD" [level=3] [ref=e234]
+              - generic [ref=e235]:
+                - generic [ref=e236]: OXVA-0007
+                - generic [ref=e237]: 0ml
+              - generic [ref=e239]: Rp 750.000
+              - img [ref=e242]
+          - generic [ref=e244]:
+            - generic [ref=e245]:
+              - generic [ref=e246]: 593 pcs
+              - generic [ref=e247]: CUKAI LAMA
+            - img [ref=e250]
+            - generic [ref=e252]:
+              - heading "Geek Bar Banana RY" [level=3] [ref=e253]
+              - generic [ref=e254]:
+                - generic [ref=e255]: GEEKBAR-0008
+                - generic [ref=e256]: 60ml
+              - generic [ref=e258]:
+                - generic [ref=e259]: Rp 170.000
+                - generic [ref=e260]: Rp 143.000
+              - img [ref=e263]
+          - generic [ref=e265]:
+            - generic [ref=e267]: 186 pcs
+            - img [ref=e270]
+            - generic [ref=e272]:
+              - heading "Just Juice Blue Razz GX" [level=3] [ref=e273]
+              - generic [ref=e274]:
+                - generic [ref=e275]: JUSTJUICE-0009
+                - generic [ref=e276]: 100ml
+              - generic [ref=e278]: Rp 140.000
+              - img [ref=e281]
+          - generic [ref=e283]:
+            - generic [ref=e285]: 164 pcs
+            - img [ref=e288]
+            - generic [ref=e290]:
+              - heading "Vampire Vape Blue Razz U9" [level=3] [ref=e291]
+              - generic [ref=e292]:
+                - generic [ref=e293]: VAMPIREVAPE-0010
+                - generic [ref=e294]: 30ml
+              - generic [ref=e296]: Rp 125.000
+              - img [ref=e299]
+          - generic [ref=e301]:
+            - generic [ref=e302]:
+              - generic [ref=e303]: 8 pcs
+              - generic [ref=e304]: CUKAI LAMA
+            - img [ref=e307]
+            - generic [ref=e309]:
+              - heading "Riyal Luxe MH" [level=3] [ref=e310]
+              - generic [ref=e311]:
+                - generic [ref=e312]: RIYAL-0011
+                - generic [ref=e313]: 0ml
+              - generic [ref=e315]:
+                - generic [ref=e316]: Rp 625.000
+                - generic [ref=e317]: Rp 544.000
+              - img [ref=e320]
+          - generic [ref=e322]:
+            - generic [ref=e324]: 104 pcs
+            - img [ref=e327]
+            - generic [ref=e329]:
+              - heading "Innokin Lychee RF" [level=3] [ref=e330]
+              - generic [ref=e331]:
+                - generic [ref=e332]: INNOKIN-0012
+                - generic [ref=e333]: 92ml
+              - generic [ref=e335]: Rp 145.000
+              - img [ref=e338]
+          - generic [ref=e340]:
+            - generic [ref=e341]:
+              - generic [ref=e342]: 330 pcs
+              - generic [ref=e343]: CUKAI LAMA
+            - img [ref=e346]
+            - generic [ref=e348]:
+              - heading "Dinner Lady Crystal HK" [level=3] [ref=e349]
+              - generic [ref=e350]:
+                - generic [ref=e351]: DINNERLADY-0013
+                - generic [ref=e352]: 10ml
+              - generic [ref=e354]:
+                - generic [ref=e355]: Rp 275.000
+                - generic [ref=e356]: Rp 242.000
+              - img [ref=e359]
+          - generic [ref=e361]:
+            - generic [ref=e362]:
+              - generic [ref=e363]: 63 pcs
+              - generic [ref=e364]: CUKAI LAMA
+            - img [ref=e367]
+            - generic [ref=e369]:
+              - heading "Caliburn Drag KX" [level=3] [ref=e370]
+              - generic [ref=e371]:
+                - generic [ref=e372]: CALIBURN-0014
+                - generic [ref=e373]: 0ml
+              - generic [ref=e375]:
+                - generic [ref=e376]: Rp 425.000
+                - generic [ref=e377]: Rp 353.000
+              - img [ref=e380]
+          - generic [ref=e382]:
+            - generic [ref=e383]:
+              - generic [ref=e384]: Sisa 4
+              - generic [ref=e385]: CUKAI LAMA
+            - img [ref=e388]
+            - generic [ref=e390]:
+              - heading "Aspire Mango TB" [level=3] [ref=e391]
+              - generic [ref=e392]:
+                - generic [ref=e393]: ASPIRE-0015
+                - generic [ref=e394]: 34ml
+              - generic [ref=e396]:
+                - generic [ref=e397]: Rp 145.000
+                - generic [ref=e398]: Rp 120.000
+              - img [ref=e401]
+          - generic [ref=e403]:
+            - generic [ref=e404]:
+              - generic [ref=e405]: 232 pcs
+              - generic [ref=e406]: CUKAI LAMA
+            - img [ref=e409]
+            - generic [ref=e411]:
+              - heading "Geek Bar Blackcurrant UG" [level=3] [ref=e412]
+              - generic [ref=e413]:
+                - generic [ref=e414]: GEEKBAR-0016
+                - generic [ref=e415]: 100ml
+              - generic [ref=e417]:
+                - generic [ref=e418]: Rp 140.000
+                - generic [ref=e419]: Rp 123.000
+              - img [ref=e422]
+          - generic [ref=e424]:
+            - generic [ref=e425]:
+              - generic [ref=e426]: 410 pcs
+              - generic [ref=e427]: CUKAI LAMA
+            - img [ref=e430]
+            - generic [ref=e432]:
+              - heading "Lost Vape Aegis 15" [level=3] [ref=e433]
+              - generic [ref=e434]:
+                - generic [ref=e435]: LOSTVAPE-0017
+                - generic [ref=e436]: 0ml
+              - generic [ref=e438]:
+                - generic [ref=e439]: Rp 865.000
+                - generic [ref=e440]: Rp 761.000
+              - img [ref=e443]
+          - generic [ref=e445]:
+            - generic [ref=e447]: 313 pcs
+            - img [ref=e450]
+            - generic [ref=e452]:
+              - heading "Relx Pulse PG" [level=3] [ref=e453]
+              - generic [ref=e454]:
+                - generic [ref=e455]: RELX-0018
+                - generic [ref=e456]: 20ml
+              - generic [ref=e458]: Rp 200.000
+              - img [ref=e461]
+          - generic [ref=e463]:
+            - generic [ref=e464]:
+              - generic [ref=e465]: 76 pcs
+              - generic [ref=e466]: CUKAI LAMA
+            - img [ref=e469]
+            - generic [ref=e471]:
+              - heading "Dinner Lady 10000 O6" [level=3] [ref=e472]
+              - generic [ref=e473]:
+                - generic [ref=e474]: DINNERLADY-0019
+                - generic [ref=e475]: 20ml
+              - generic [ref=e477]:
+                - generic [ref=e478]: Rp 175.000
+                - generic [ref=e479]: Rp 147.000
+              - img [ref=e482]
+          - generic [ref=e484]:
+            - generic [ref=e486]: 229 pcs
+            - img [ref=e489]
+            - generic [ref=e491]:
+              - heading "Vuse T200 ML" [level=3] [ref=e492]
+              - generic [ref=e493]:
+                - generic [ref=e494]: VUSE-0020
+                - generic [ref=e495]: 0ml
+              - generic [ref=e497]: Rp 1.035.000
+              - img [ref=e500]
+          - generic [ref=e502]:
+            - generic [ref=e503]:
+              - generic [ref=e504]: 178 pcs
+              - generic [ref=e505]: CUKAI LAMA
+            - img [ref=e508]
+            - generic [ref=e510]:
+              - heading "Uwell Apple XQ" [level=3] [ref=e511]
+              - generic [ref=e512]:
+                - generic [ref=e513]: UWELL-0021
+                - generic [ref=e514]: 100ml
+              - generic [ref=e516]:
+                - generic [ref=e517]: Rp 160.000
+                - generic [ref=e518]: Rp 141.000
+              - img [ref=e521]
+          - generic [ref=e523]:
+            - generic [ref=e525]: 160 pcs
+            - img [ref=e528]
+            - generic [ref=e530]:
+              - heading "Innokin Centaurus LT" [level=3] [ref=e531]
+              - generic [ref=e532]:
+                - generic [ref=e533]: INNOKIN-0022
+                - generic [ref=e534]: 0ml
+              - generic [ref=e536]: Rp 340.000
+              - img [ref=e539]
+          - generic [ref=e541]:
+            - generic [ref=e543]: 67 pcs
+            - img [ref=e546]
+            - generic [ref=e548]:
+              - heading "Vaporesso Pulse AU" [level=3] [ref=e549]
+              - generic [ref=e550]:
+                - generic [ref=e551]: VAPORESSO-0023
+                - generic [ref=e552]: 11ml
+              - generic [ref=e554]: Rp 210.000
+              - img [ref=e557]
+          - generic [ref=e559]:
+            - generic [ref=e561]: 117 pcs
+            - img [ref=e564]
+            - generic [ref=e566]:
+              - heading "Smok Cherry ZG" [level=3] [ref=e567]
+              - generic [ref=e568]:
+                - generic [ref=e569]: SMOK-0024
+                - generic [ref=e570]: 0ml
+              - generic [ref=e572]: Rp 100.000
+              - img [ref=e575]
+          - generic [ref=e577]:
+            - generic [ref=e579]: 175 pcs
+            - img [ref=e582]
+            - generic [ref=e584]:
+              - heading "Geekvape Blackcurrant XL" [level=3] [ref=e585]
+              - generic [ref=e586]:
+                - generic [ref=e587]: GEEKVAPE-0025
+                - generic [ref=e588]: 30ml
+              - generic [ref=e590]: Rp 135.000
+              - img [ref=e593]
+          - generic [ref=e595]:
+            - generic [ref=e596]:
+              - generic [ref=e597]: 252 pcs
+              - generic [ref=e598]: CUKAI LAMA
+            - img [ref=e601]
+            - generic [ref=e603]:
+              - heading "Just Juice Blue Razz M0" [level=3] [ref=e604]
+              - generic [ref=e605]:
+                - generic [ref=e606]: JUSTJUICE-0026
+                - generic [ref=e607]: 60ml
+              - generic [ref=e609]:
+                - generic [ref=e610]: Rp 155.000
+                - generic [ref=e611]: Rp 133.000
+              - img [ref=e614]
+          - generic [ref=e616]:
+            - generic [ref=e617]:
+              - generic [ref=e618]: 298 pcs
+              - generic [ref=e619]: CUKAI LAMA
+            - img [ref=e622]
+            - generic [ref=e624]:
+              - heading "Vaporesso Luxe 1P" [level=3] [ref=e625]
+              - generic [ref=e626]:
+                - generic [ref=e627]: VAPORESSO-0027
+                - generic [ref=e628]: 0ml
+              - generic [ref=e630]:
+                - generic [ref=e631]: Rp 415.000
+                - generic [ref=e632]: Rp 357.000
+              - img [ref=e635]
+          - generic [ref=e637]:
+            - generic [ref=e639]: 426 pcs
+            - img [ref=e642]
+            - generic [ref=e644]:
+              - heading "Vuse Pineapple AS" [level=3] [ref=e645]
+              - generic [ref=e646]:
+                - generic [ref=e647]: VUSE-0028
+                - generic [ref=e648]: 68ml
+              - generic [ref=e650]: Rp 135.000
+              - img [ref=e653]
+          - generic [ref=e655]:
+            - generic [ref=e657]: 271 pcs
+            - img [ref=e660]
+            - generic [ref=e662]:
+              - heading "Geekvape 6000 WJ" [level=3] [ref=e663]
+              - generic [ref=e664]:
+                - generic [ref=e665]: GEEKVAPE-0029
+                - generic [ref=e666]: 10ml
+              - generic [ref=e668]: Rp 225.000
+              - img [ref=e671]
+          - generic [ref=e673]:
+            - generic [ref=e675]: 24 pcs
+            - img [ref=e678]
+            - generic [ref=e680]:
+              - heading "Geek Bar Drag AW" [level=3] [ref=e681]
+              - generic [ref=e682]:
+                - generic [ref=e683]: GEEKBAR-0030
+                - generic [ref=e684]: 0ml
+              - generic [ref=e686]: Rp 665.000
+              - img [ref=e689]
+          - generic [ref=e691]:
+            - generic [ref=e692]:
+              - generic [ref=e693]: 121 pcs
+              - generic [ref=e694]: CUKAI LAMA
+            - img [ref=e697]
+            - generic [ref=e699]:
+              - heading "Lost Vape Menthol WW" [level=3] [ref=e700]
+              - generic [ref=e701]:
+                - generic [ref=e702]: LOSTVAPE-0031
+                - generic [ref=e703]: 30ml
+              - generic [ref=e705]:
+                - generic [ref=e706]: Rp 145.000
+                - generic [ref=e707]: Rp 123.000
+              - img [ref=e710]
+          - generic [ref=e712]:
+            - generic [ref=e713]:
+              - generic [ref=e714]: 165 pcs
+              - generic [ref=e715]: CUKAI LAMA
+            - img [ref=e718]
+            - generic [ref=e720]:
+              - heading "Elf Bar Drag ER" [level=3] [ref=e721]
+              - generic [ref=e722]:
+                - generic [ref=e723]: ELFBAR-0032
+                - generic [ref=e724]: 0ml
+              - generic [ref=e726]:
+                - generic [ref=e727]: Rp 600.000
+                - generic [ref=e728]: Rp 522.000
+              - img [ref=e731]
+          - generic [ref=e733]:
+            - generic [ref=e735]: 339 pcs
+            - img [ref=e738]
+            - generic [ref=e740]:
+              - heading "Caliburn T200 GI" [level=3] [ref=e741]
+              - generic [ref=e742]:
+                - generic [ref=e743]: CALIBURN-0033
+                - generic [ref=e744]: 0ml
+              - generic [ref=e746]: Rp 740.000
+              - img [ref=e749]
+          - generic [ref=e751]:
+            - generic [ref=e752]:
+              - generic [ref=e753]: 280 pcs
+              - generic [ref=e754]: CUKAI LAMA
+            - img [ref=e757]
+            - generic [ref=e759]:
+              - heading "Voopoo XROS LZ" [level=3] [ref=e760]
+              - generic [ref=e761]:
+                - generic [ref=e762]: VOOPOO-0034
+                - generic [ref=e763]: 0ml
+              - generic [ref=e765]:
+                - generic [ref=e766]: Rp 635.000
+                - generic [ref=e767]: Rp 527.000
+              - img [ref=e770]
+          - generic [ref=e772]:
+            - generic [ref=e773]:
+              - generic [ref=e774]: 384 pcs
+              - generic [ref=e775]: CUKAI LAMA
+            - img [ref=e778]
+            - generic [ref=e780]:
+              - heading "Geekvape Luxe 3W" [level=3] [ref=e781]
+              - generic [ref=e782]:
+                - generic [ref=e783]: GEEKVAPE-0035
+                - generic [ref=e784]: 0ml
+              - generic [ref=e786]:
+                - generic [ref=e787]: Rp 930.000
+                - generic [ref=e788]: Rp 791.000
+              - img [ref=e791]
+          - generic [ref=e793]:
+            - generic [ref=e795]: 228 pcs
+            - img [ref=e798]
+            - generic [ref=e800]:
+              - heading "Vaporesso Blue Razz 9V" [level=3] [ref=e801]
+              - generic [ref=e802]:
+                - generic [ref=e803]: VAPORESSO-0036
+                - generic [ref=e804]: 65ml
+              - generic [ref=e806]: Rp 160.000
+              - img [ref=e809]
+          - generic [ref=e811]:
+            - generic [ref=e813]: 49 pcs
+            - img [ref=e816]
+            - generic [ref=e818]:
+              - heading "Uwell Centaurus NG" [level=3] [ref=e819]
+              - generic [ref=e820]:
+                - generic [ref=e821]: UWELL-0037
+                - generic [ref=e822]: 0ml
+              - generic [ref=e824]: Rp 230.000
+              - img [ref=e827]
+          - generic [ref=e829]:
+            - generic [ref=e830]:
+              - generic [ref=e831]: 256 pcs
+              - generic [ref=e832]: CUKAI LAMA
+            - img [ref=e835]
+            - generic [ref=e837]:
+              - heading "Geek Bar Watermelon 2O" [level=3] [ref=e838]
+              - generic [ref=e839]:
+                - generic [ref=e840]: GEEKBAR-0038
+                - generic [ref=e841]: 0ml
+              - generic [ref=e843]:
+                - generic [ref=e844]: Rp 55.000
+                - generic [ref=e845]: Rp 50.000
+              - img [ref=e848]
+          - generic [ref=e850]:
+            - generic [ref=e851]:
+              - generic [ref=e852]: 410 pcs
+              - generic [ref=e853]: CUKAI LAMA
+            - img [ref=e856]
+            - generic [ref=e858]:
+              - heading "Uwell Drag XQ" [level=3] [ref=e859]
+              - generic [ref=e860]:
+                - generic [ref=e861]: UWELL-0039
+                - generic [ref=e862]: 0ml
+              - generic [ref=e864]:
+                - generic [ref=e865]: Rp 565.000
+                - generic [ref=e866]: Rp 503.000
+              - img [ref=e869]
+          - generic [ref=e871]:
+            - generic [ref=e872]:
+              - generic [ref=e873]: 153 pcs
+              - generic [ref=e874]: CUKAI LAMA
+            - img [ref=e877]
+            - generic [ref=e879]:
+              - heading "Elf Bar XROS 7W" [level=3] [ref=e880]
+              - generic [ref=e881]:
+                - generic [ref=e882]: ELFBAR-0040
+                - generic [ref=e883]: 0ml
+              - generic [ref=e885]:
+                - generic [ref=e886]: Rp 350.000
+                - generic [ref=e887]: Rp 294.000
+              - img [ref=e890]
+          - generic [ref=e892]:
+            - generic [ref=e893]:
+              - generic [ref=e894]: 127 pcs
+              - generic [ref=e895]: CUKAI LAMA
+            - img [ref=e898]
+            - generic [ref=e900]:
+              - heading "Geekvape Lemon Mint LV" [level=3] [ref=e901]
+              - generic [ref=e902]:
+                - generic [ref=e903]: GEEKVAPE-0041
+                - generic [ref=e904]: 67ml
+              - generic [ref=e906]:
+                - generic [ref=e907]: Rp 125.000
+                - generic [ref=e908]: Rp 111.000
+              - img [ref=e911]
+          - generic [ref=e913]:
+            - generic [ref=e914]:
+              - generic [ref=e915]: 267 pcs
+              - generic [ref=e916]: CUKAI LAMA
+            - img [ref=e919]
+            - generic [ref=e921]:
+              - heading "Geekvape Lychee V8" [level=3] [ref=e922]
+              - generic [ref=e923]:
+                - generic [ref=e924]: GEEKVAPE-0042
+                - generic [ref=e925]: 0ml
+              - generic [ref=e927]:
+                - generic [ref=e928]: Rp 100.000
+                - generic [ref=e929]: Rp 83.000
+              - img [ref=e932]
+          - generic [ref=e934]:
+            - generic [ref=e936]: 117 pcs
+            - img [ref=e939]
+            - generic [ref=e941]:
+              - heading "Just Juice Luxe WV" [level=3] [ref=e942]
+              - generic [ref=e943]:
+                - generic [ref=e944]: JUSTJUICE-0043
+                - generic [ref=e945]: 0ml
+              - generic [ref=e947]: Rp 1.210.000
+              - img [ref=e950]
+          - generic [ref=e952]:
+            - generic [ref=e954]: 158 pcs
+            - img [ref=e957]
+            - generic [ref=e959]:
+              - heading "Vuse Blue Razz IO" [level=3] [ref=e960]
+              - generic [ref=e961]:
+                - generic [ref=e962]: VUSE-0044
+                - generic [ref=e963]: 47ml
+              - generic [ref=e965]: Rp 105.000
+              - img [ref=e968]
+          - generic [ref=e970]:
+            - generic [ref=e971]:
+              - generic [ref=e972]: 377 pcs
+              - generic [ref=e973]: CUKAI LAMA
+            - img [ref=e976]
+            - generic [ref=e978]:
+              - heading "Vaporesso Kiwi IY" [level=3] [ref=e979]
+              - generic [ref=e980]:
+                - generic [ref=e981]: VAPORESSO-0045
+                - generic [ref=e982]: 100ml
+              - generic [ref=e984]:
+                - generic [ref=e985]: Rp 125.000
+                - generic [ref=e986]: Rp 103.000
+              - img [ref=e989]
+          - generic [ref=e991]:
+            - generic [ref=e993]: 108 pcs
+            - img [ref=e996]
+            - generic [ref=e998]:
+              - heading "Nasty Juice Argus S8" [level=3] [ref=e999]
+              - generic [ref=e1000]:
+                - generic [ref=e1001]: NASTYJUICE-0046
+                - generic [ref=e1002]: 0ml
+              - generic [ref=e1004]: Rp 340.000
+              - img [ref=e1007]
+          - generic [ref=e1009]:
+            - generic [ref=e1010]:
+              - generic [ref=e1011]: 442 pcs
+              - generic [ref=e1012]: CUKAI LAMA
+            - img [ref=e1015]
+            - generic [ref=e1017]:
+              - heading "Dinner Lady BC5000 LM" [level=3] [ref=e1018]
+              - generic [ref=e1019]:
+                - generic [ref=e1020]: DINNERLADY-0047
+                - generic [ref=e1021]: 20ml
+              - generic [ref=e1023]:
+                - generic [ref=e1024]: Rp 260.000
+                - generic [ref=e1025]: Rp 213.000
+              - img [ref=e1028]
+          - generic [ref=e1030]:
+            - generic [ref=e1032]: 356 pcs
+            - img [ref=e1035]
+            - generic [ref=e1037]:
+              - heading "Vuse BC5000 DQ" [level=3] [ref=e1038]
+              - generic [ref=e1039]:
+                - generic [ref=e1040]: VUSE-0048
+                - generic [ref=e1041]: 20ml
+              - generic [ref=e1043]: Rp 185.000
+              - img [ref=e1046]
+          - generic [ref=e1048]:
+            - generic [ref=e1049]:
+              - generic [ref=e1050]: 303 pcs
+              - generic [ref=e1051]: CUKAI LAMA
+            - img [ref=e1054]
+            - generic [ref=e1056]:
+              - heading "Aspire Centaurus 1Y" [level=3] [ref=e1057]
+              - generic [ref=e1058]:
+                - generic [ref=e1059]: ASPIRE-0049
+                - generic [ref=e1060]: 0ml
+              - generic [ref=e1062]:
+                - generic [ref=e1063]: Rp 930.000
+                - generic [ref=e1064]: Rp 800.000
+              - img [ref=e1067]
+          - generic [ref=e1069]:
+            - generic [ref=e1070]:
+              - generic [ref=e1071]: 220 pcs
+              - generic [ref=e1072]: CUKAI LAMA
+            - img [ref=e1075]
+            - generic [ref=e1077]:
+              - heading "HQD Meloso WN" [level=3] [ref=e1078]
+              - generic [ref=e1079]:
+                - generic [ref=e1080]: HQD-0050
+                - generic [ref=e1081]: 20ml
+              - generic [ref=e1083]:
+                - generic [ref=e1084]: Rp 160.000
+                - generic [ref=e1085]: Rp 134.000
+              - img [ref=e1088]
+          - generic [ref=e1090]:
+            - generic [ref=e1092]: 29 pcs
+            - img [ref=e1095]
+            - generic [ref=e1097]:
+              - heading "Relx BC5000 WA" [level=3] [ref=e1098]
+              - generic [ref=e1099]:
+                - generic [ref=e1100]: RELX-0051
+                - generic [ref=e1101]: 10ml
+              - generic [ref=e1103]: Rp 165.000
+              - img [ref=e1106]
+          - generic [ref=e1108]:
+            - generic [ref=e1109]:
+              - generic [ref=e1110]: 434 pcs
+              - generic [ref=e1111]: CUKAI LAMA
+            - img [ref=e1114]
+            - generic [ref=e1116]:
+              - heading "HQD Blackcurrant L4" [level=3] [ref=e1117]
+              - generic [ref=e1118]:
+                - generic [ref=e1119]: HQD-0052
+                - generic [ref=e1120]: 50ml
+              - generic [ref=e1122]:
+                - generic [ref=e1123]: Rp 165.000
+                - generic [ref=e1124]: Rp 140.000
+              - img [ref=e1127]
+          - generic [ref=e1129]:
+            - generic [ref=e1131]: 263 pcs
+            - img [ref=e1134]
+            - generic [ref=e1136]:
+              - heading "Innokin Coffee GZ" [level=3] [ref=e1137]
+              - generic [ref=e1138]:
+                - generic [ref=e1139]: INNOKIN-0053
+                - generic [ref=e1140]: 50ml
+              - generic [ref=e1142]: Rp 160.000
+              - img [ref=e1145]
+          - generic [ref=e1147]:
+            - generic [ref=e1149]: 203 pcs
+            - img [ref=e1152]
+            - generic [ref=e1154]:
+              - heading "Just Juice Mixed Berry GU" [level=3] [ref=e1155]
+              - generic [ref=e1156]:
+                - generic [ref=e1157]: JUSTJUICE-0054
+                - generic [ref=e1158]: 35ml
+              - generic [ref=e1160]: Rp 115.000
+              - img [ref=e1163]
+          - generic [ref=e1165]:
+            - generic [ref=e1166]:
+              - generic [ref=e1167]: 11 pcs
+              - generic [ref=e1168]: CUKAI LAMA
+            - img [ref=e1171]
+            - generic [ref=e1173]:
+              - heading "Innokin Lemon Mint QR" [level=3] [ref=e1174]
+              - generic [ref=e1175]:
+                - generic [ref=e1176]: INNOKIN-0055
+                - generic [ref=e1177]: 30ml
+              - generic [ref=e1179]:
+                - generic [ref=e1180]: Rp 110.000
+                - generic [ref=e1181]: Rp 98.000
+              - img [ref=e1184]
+          - generic [ref=e1186]:
+            - generic [ref=e1187]:
+              - generic [ref=e1188]: 400 pcs
+              - generic [ref=e1189]: CUKAI LAMA
+            - img [ref=e1192]
+            - generic [ref=e1194]:
+              - heading "Relx Mango NY" [level=3] [ref=e1195]
+              - generic [ref=e1196]:
+                - generic [ref=e1197]: RELX-0056
+                - generic [ref=e1198]: 30ml
+              - generic [ref=e1200]:
+                - generic [ref=e1201]: Rp 115.000
+                - generic [ref=e1202]: Rp 97.000
+              - img [ref=e1205]
+          - generic [ref=e1207]:
+            - generic [ref=e1208]:
+              - generic [ref=e1209]: 210 pcs
+              - generic [ref=e1210]: CUKAI LAMA
+            - img [ref=e1213]
+            - generic [ref=e1215]:
+              - heading "HQD Luxe FK" [level=3] [ref=e1216]
+              - generic [ref=e1217]:
+                - generic [ref=e1218]: HQD-0057
+                - generic [ref=e1219]: 0ml
+              - generic [ref=e1221]:
+                - generic [ref=e1222]: Rp 275.000
+                - generic [ref=e1223]: Rp 231.000
+              - img [ref=e1226]
+          - generic [ref=e1228]:
+            - generic [ref=e1230]: 165 pcs
+            - img [ref=e1233]
+            - generic [ref=e1235]:
+              - heading "Relx Argus ZZ" [level=3] [ref=e1236]
+              - generic [ref=e1237]:
+                - generic [ref=e1238]: RELX-0058
+                - generic [ref=e1239]: 0ml
+              - generic [ref=e1241]: Rp 755.000
+              - img [ref=e1244]
+          - generic [ref=e1246]:
+            - generic [ref=e1247]:
+              - generic [ref=e1248]: 315 pcs
+              - generic [ref=e1249]: CUKAI LAMA
+            - img [ref=e1252]
+            - generic [ref=e1254]:
+              - heading "Riyal Watermelon IU" [level=3] [ref=e1255]
+              - generic [ref=e1256]:
+                - generic [ref=e1257]: RIYAL-0059
+                - generic [ref=e1258]: 0ml
+              - generic [ref=e1260]:
+                - generic [ref=e1261]: Rp 50.000
+                - generic [ref=e1262]: Rp 42.000
+              - img [ref=e1265]
+          - generic [ref=e1267]:
+            - generic [ref=e1269]: 269 pcs
+            - img [ref=e1272]
+            - generic [ref=e1274]:
+              - heading "Geekvape Orange 9R" [level=3] [ref=e1275]
+              - generic [ref=e1276]:
+                - generic [ref=e1277]: GEEKVAPE-0060
+                - generic [ref=e1278]: 0ml
+              - generic [ref=e1280]: Rp 50.000
+              - img [ref=e1283]
+          - generic:
+            - generic:
+              - generic: Habis
+            - generic:
+              - generic:
+                - img
+            - generic:
+              - heading "testing" [level=3]
+              - generic:
+                - generic: TESTING
+              - generic:
+                - generic: Rp 100.000
+      - complementary [ref=e1285]:
+        - generic [ref=e1287]:
+          - generic [ref=e1289]:
+            - button "Buka keranjang" [ref=e1290]:
+              - generic [ref=e1291]:
+                - img "Shopping Cart" [ref=e1292]
+                - img "Shopping Cart" [ref=e1293]
+            - heading "Keranjang" [level=2] [ref=e1294]
+          - generic [ref=e1297]:
+            - img [ref=e1298]
+            - paragraph [ref=e1300]: Keranjang kosong
+            - paragraph [ref=e1301]: Silakan tambah produk
+          - generic [ref=e1302]:
+            - generic [ref=e1304]:
+              - generic [ref=e1305]:
+                - generic [ref=e1306]: Subtotal
+                - generic [ref=e1307]: Rp 0
+              - generic [ref=e1309]:
+                - generic [ref=e1310]: Total
+                - generic [ref=e1311]: Rp 0
+            - button "Bayar Saja" [disabled] [ref=e1312]
+  - region "Notifications alt+T":
+    - list

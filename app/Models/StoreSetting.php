@@ -11,7 +11,6 @@ class StoreSetting extends Model
         'name',
         'address',
         'phone',
-        'npwp',
         'tagline',
         'logo_path',
         'receipt_header',
@@ -69,6 +68,14 @@ class StoreSetting extends Model
     {
         $saved = is_array($this->receipt_options) ? $this->receipt_options : [];
 
-        return array_merge(self::DEFAULT_RECEIPT_OPTIONS, array_intersect_key($saved, self::DEFAULT_RECEIPT_OPTIONS));
+        // Pastikan nilai dikembalikan sebagai boolean murni — nilai tersimpan bisa berupa
+        // string "1"/"0" (efek serialisasi FormData saat submit), yang membuat checkbox
+        // `v-model` tampil kosong & memicu hydration mismatch (BUG-10).
+        $saved = array_map(
+            static fn ($value): bool => filter_var($value, FILTER_VALIDATE_BOOLEAN),
+            array_intersect_key($saved, self::DEFAULT_RECEIPT_OPTIONS),
+        );
+
+        return array_merge(self::DEFAULT_RECEIPT_OPTIONS, $saved);
     }
 }

@@ -1,0 +1,3 @@
+[    6441ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://127.0.0.1:8000/_boost/browser-logs @ http://127.0.0.1:8000/login:55
+[    7204ms] [WARNING] Error while trying to use the following icon from the Manifest: http://127.0.0.1:8000/icons/icon-192.png (Download error or resource isn't a valid image) @ http://127.0.0.1:8000/login:0
+[    7234ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://127.0.0.1:8000/_boost/browser-logs @ http://127.0.0.1:8000/login:55

@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<title>Cover — Story Vape User Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  /* ---- Print setup: exact A4, no browser margins ---- */
+  @page { size: A4 portrait; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 210mm; height: 297mm;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+
+  /* System design tokens (from resources/css/app.css) */
+  :root {
+    --bg: #f9fafb;
+    --card: #ffffff;
+    --teal: #14b8a6;
+    --teal-dark: #0f766e;
+    --slate-900: #1e293b;
+    --slate-700: #334155;
+    --muted: #6b7280;
+    --light: #9ca3af;
+    --border: #e5e7eb;
+  }
+
+  body {
+    font-family: 'Nunito Sans', ui-sans-serif, system-ui, sans-serif;
+    color: var(--slate-900);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    position: relative;
+    width: 210mm; height: 297mm;
+    background: var(--card);
+    overflow: hidden;
+  }
+
+  .card {
+    position: relative;
+    width: 100%; height: 100%;
+    background: var(--card);
+    display: flex; flex-direction: column;
+    /* full-bleed: content padded, teal rail meets the paper edge */
+    padding: 24mm 22mm 22mm 26mm;
+  }
+  /* Solid teal accent rail flush to the left paper edge */
+  .card::before {
+    content: "";
+    position: absolute; top: 0; left: 0;
+    width: 6mm; height: 100%;
+    background: var(--teal);
+  }
+
+  /* ---- Top bar: brand mark + doc tag ---- */
+  .top {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 10mm;
+    border-bottom: 1px solid var(--border);
+  }
+  .brand { display: flex; align-items: center; gap: 11px; }
+  .brand .mark {
+    width: 13mm; height: 13mm; border-radius: 7px;
+    background: var(--teal);
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 15pt; color: #fff;
+  }
+  .brand .name { font-size: 12pt; font-weight: 700; color: var(--slate-900); letter-spacing: 0.01em; }
+  .brand .name span { display: block; font-size: 7.5pt; font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+  .doc-tag {
+    font-size: 8.5pt; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--teal-dark);
+    background: #ccfbf1;
+    border-radius: 999px;
+    padding: 6px 14px;
+  }
+
+  /* ---- Hero ---- */
+  .hero { padding-top: 22mm; }
+  .eyebrow {
+    font-size: 10pt; font-weight: 700;
+    letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--teal-dark);
+  }
+  h1 {
+    margin-top: 7mm;
+    font-size: 50pt; line-height: 1.0; font-weight: 800;
+    letter-spacing: -0.015em; color: var(--slate-900);
+  }
+  .hero h2 {
+    margin-top: 4mm;
+    font-size: 17pt; font-weight: 600; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--teal);
+  }
+  .rule { width: 26mm; height: 3px; background: var(--teal); border-radius: 2px; margin: 8mm 0; }
+  .subtitle {
+    max-width: 120mm;
+    font-size: 12pt; font-weight: 400; line-height: 1.6;
+    color: var(--slate-700);
+  }
+
+  /* ---- Contents teaser (fills the body) ---- */
+  .contents {
+    margin-top: auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4mm 10mm;
+  }
+  .contents .label {
+    grid-column: 1 / -1;
+    font-size: 8.5pt; font-weight: 700; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--light);
+    margin-bottom: 1mm;
+  }
+  .chapter { display: flex; align-items: baseline; gap: 10px; }
+  .chapter .num {
+    font-size: 11pt; font-weight: 800; color: var(--teal);
+    min-width: 8mm;
+  }
+  .chapter .txt { font-size: 11.5pt; font-weight: 600; color: var(--slate-900); }
+
+  /* ---- Footer: author + version ---- */
+  .footer {
+    margin-top: 14mm;
+    padding-top: 8mm; border-top: 1px solid var(--border);
+    display: flex; align-items: flex-end; justify-content: space-between;
+  }
+  .footer .by .label {
+    font-size: 8pt; font-weight: 700; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 3px;
+  }
+  .footer .by .who { font-size: 15pt; font-weight: 800; color: var(--slate-900); }
+  .meta { text-align: right; }
+  .meta strong { display: block; font-size: 12pt; font-weight: 800; color: var(--teal-dark); }
+  .meta span { font-size: 9.5pt; color: var(--muted); }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="card">
+
+      <div class="top">
+        <div class="brand">
+          <div class="mark">S</div>
+          <div class="name">Story Vape<span>POS &amp; Admin</span></div>
+        </div>
+        <div class="doc-tag">User Guide</div>
+      </div>
+
+      <div class="hero">
+        <div class="eyebrow">Panduan Pengguna</div>
+        <h1>Story Vape</h1>
+        <h2>User Guide</h2>
+        <div class="rule"></div>
+        <p class="subtitle">
+          Sistem Point of Sale &amp; Manajemen Toko Vape. Panduan instalasi,
+          pengoperasian kasir, dan administrasi toko untuk seluruh pengguna.
+        </p>
+      </div>
+
+      <div class="contents">
+        <div class="label">Isi Panduan</div>
+        <div class="chapter"><span class="num">01</span><span class="txt">Pengenalan Aplikasi</span></div>
+        <div class="chapter"><span class="num">02</span><span class="txt">Spesifikasi Aplikasi</span></div>
+        <div class="chapter"><span class="num">03</span><span class="txt">Panduan Instalasi</span></div>
+        <div class="chapter"><span class="num">04</span><span class="txt">Panduan Pengguna (Semua Aktor)</span></div>
+      </div>
+
+      <div class="footer">
+        <div class="by">
+          <div class="label">Disusun oleh</div>
+          <div class="who">Kelompok 1</div>
+        </div>
+        <div class="meta">
+          <strong>Versi 1.0</strong>
+          <span>2026</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

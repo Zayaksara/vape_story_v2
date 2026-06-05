@@ -1,0 +1,482 @@
+[    2168ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/login:55
+[ 1117246ms] [WARNING] [Vue warn]: Failed to resolve component: AlertTriangle
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object, Object, Object] subtotal=1868000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: auth/Login, props: Object, url: /login, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: Login, props: Object, setup: , __hmrId: ab03e11e, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/login:114
+[ 1117263ms] [WARNING] [Vue warn]: Failed to resolve component: DialogTitle
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object, Object, Object] subtotal=1868000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: auth/Login, props: Object, url: /login, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: Login, props: Object, setup: , __hmrId: ab03e11e, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/login:114
+[ 1117266ms] [WARNING] [Vue warn]: Failed to resolve component: DialogDescription
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object, Object, Object] subtotal=1868000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: auth/Login, props: Object, url: /login, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: Login, props: Object, setup: , __hmrId: ab03e11e, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/login:114
+[ 1117269ms] [WARNING] [Vue warn]: Failed to resolve component: DialogHeader
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object, Object, Object] subtotal=1868000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: auth/Login, props: Object, url: /login, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: Login, props: Object, setup: , __hmrId: ab03e11e, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/login:114
+[ 1117272ms] [WARNING] [Vue warn]: Failed to resolve component: Button
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object, Object, Object] subtotal=1868000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: auth/Login, props: Object, url: /login, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: Login, props: Object, setup: , __hmrId: ab03e11e, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/login:114
+[ 1117276ms] [WARNING] [Vue warn]: Failed to resolve component: DialogFooter
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object, Object, Object] subtotal=1868000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: auth/Login, props: Object, url: /login, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: Login, props: Object, setup: , __hmrId: ab03e11e, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/login:114
+[ 1117283ms] [WARNING] [Vue warn]: Failed to resolve component: DialogContent
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object, Object, Object] subtotal=1868000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: auth/Login, props: Object, url: /login, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: Login, props: Object, setup: , __hmrId: ab03e11e, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/login:114
+[ 1117286ms] [WARNING] [Vue warn]: Failed to resolve component: Dialog
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object, Object, Object] subtotal=1868000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: auth/Login, props: Object, url: /login, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: Login, props: Object, setup: , __hmrId: ab03e11e, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/login:114
+[ 1117291ms] [WARNING] [Vue warn]: Property "isClearConfirmOpen" was accessed during render but is not defined on instance. 
+  at <CartPanel cart= [Object, Object, Object, Object] subtotal=1868000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: auth/Login, props: Object, url: /login, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: Login, props: Object, setup: , __hmrId: ab03e11e, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/login:114
+[ 1117299ms] [WARNING] [Vue warn]: Property "handleClearCart" was accessed during render but is not defined on instance. 
+  at <CartPanel cart= [Object, Object, Object, Object] subtotal=1868000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: auth/Login, props: Object, url: /login, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: Login, props: Object, setup: , __hmrId: ab03e11e, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/login:114
+[ 1120083ms] [ERROR] Failed to send logs: TypeError: Failed to fetch
+    at flushLogs (http://localhost:8000/login:92:9) @ http://localhost:8000/login:100
+[ 1120172ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/pos/dashboard:55
+[ 1121242ms] [WARNING] [Vue warn]: Failed to resolve component: AlertTriangle
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [] subtotal=0 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1121252ms] [WARNING] [Vue warn]: Failed to resolve component: DialogTitle
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [] subtotal=0 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1121260ms] [WARNING] [Vue warn]: Failed to resolve component: DialogDescription
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [] subtotal=0 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1121268ms] [WARNING] [Vue warn]: Failed to resolve component: DialogHeader
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [] subtotal=0 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1121279ms] [WARNING] [Vue warn]: Failed to resolve component: Button
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [] subtotal=0 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1121286ms] [WARNING] [Vue warn]: Failed to resolve component: DialogFooter
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [] subtotal=0 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1121295ms] [WARNING] [Vue warn]: Failed to resolve component: DialogContent
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [] subtotal=0 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1121303ms] [WARNING] [Vue warn]: Failed to resolve component: Dialog
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [] subtotal=0 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1121318ms] [WARNING] [Vue warn]: Property "isClearConfirmOpen" was accessed during render but is not defined on instance. 
+  at <CartPanel cart= [] subtotal=0 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1121329ms] [WARNING] [Vue warn]: Property "handleClearCart" was accessed during render but is not defined on instance. 
+  at <CartPanel cart= [] subtotal=0 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1121341ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: {name: Teleport, __isTeleport: true, process: , remove: , move: } 
+  at <CartPanel cart= [] subtotal=0 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1121352ms] [ERROR] Hydration completed but contains mismatches. @ http://localhost:8000/pos/dashboard:114
+[ 1121356ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <CartPanel cart= [] subtotal=0 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1121366ms] [WARNING] [Vue warn]: Hydration children mismatch on JSHandle@node 
+Server rendered element contains fewer child nodes than client vdom. 
+  at <CartPanel cart= [] subtotal=0 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1124069ms] [WARNING] [Vue warn]: Failed to resolve component: AlertTriangle
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object] subtotal=715000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1124075ms] [WARNING] [Vue warn]: Failed to resolve component: DialogTitle
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object] subtotal=715000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1124082ms] [WARNING] [Vue warn]: Failed to resolve component: DialogDescription
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object] subtotal=715000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1124088ms] [WARNING] [Vue warn]: Failed to resolve component: DialogHeader
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object] subtotal=715000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1124094ms] [WARNING] [Vue warn]: Failed to resolve component: Button
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object] subtotal=715000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1124101ms] [WARNING] [Vue warn]: Failed to resolve component: DialogFooter
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object] subtotal=715000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1124106ms] [WARNING] [Vue warn]: Failed to resolve component: DialogContent
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object] subtotal=715000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1124111ms] [WARNING] [Vue warn]: Failed to resolve component: Dialog
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object] subtotal=715000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1124117ms] [WARNING] [Vue warn]: Property "isClearConfirmOpen" was accessed during render but is not defined on instance. 
+  at <CartPanel cart= [Object] subtotal=715000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1124122ms] [WARNING] [Vue warn]: Property "handleClearCart" was accessed during render but is not defined on instance. 
+  at <CartPanel cart= [Object] subtotal=715000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1124565ms] [WARNING] [Vue warn]: Failed to resolve component: AlertTriangle
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object] subtotal=1253000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1124569ms] [WARNING] [Vue warn]: Failed to resolve component: DialogTitle
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object] subtotal=1253000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1124573ms] [WARNING] [Vue warn]: Failed to resolve component: DialogDescription
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object] subtotal=1253000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1124578ms] [WARNING] [Vue warn]: Failed to resolve component: DialogHeader
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object] subtotal=1253000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1124585ms] [WARNING] [Vue warn]: Failed to resolve component: Button
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object] subtotal=1253000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1124595ms] [WARNING] [Vue warn]: Failed to resolve component: DialogFooter
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object] subtotal=1253000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1124606ms] [WARNING] [Vue warn]: Failed to resolve component: DialogContent
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object] subtotal=1253000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1124615ms] [WARNING] [Vue warn]: Failed to resolve component: Dialog
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object] subtotal=1253000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1124622ms] [WARNING] [Vue warn]: Property "isClearConfirmOpen" was accessed during render but is not defined on instance. 
+  at <CartPanel cart= [Object, Object] subtotal=1253000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1124632ms] [WARNING] [Vue warn]: Property "handleClearCart" was accessed during render but is not defined on instance. 
+  at <CartPanel cart= [Object, Object] subtotal=1253000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1125605ms] [WARNING] [Vue warn]: Failed to resolve component: AlertTriangle
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object, Object] subtotal=1369000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1125610ms] [WARNING] [Vue warn]: Failed to resolve component: DialogTitle
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object, Object] subtotal=1369000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1125614ms] [WARNING] [Vue warn]: Failed to resolve component: DialogDescription
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object, Object] subtotal=1369000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1125618ms] [WARNING] [Vue warn]: Failed to resolve component: DialogHeader
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object, Object] subtotal=1369000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1125622ms] [WARNING] [Vue warn]: Failed to resolve component: Button
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object, Object] subtotal=1369000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1125627ms] [WARNING] [Vue warn]: Failed to resolve component: DialogFooter
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object, Object] subtotal=1369000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1125631ms] [WARNING] [Vue warn]: Failed to resolve component: DialogContent
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object, Object] subtotal=1369000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1125636ms] [WARNING] [Vue warn]: Failed to resolve component: Dialog
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <CartPanel cart= [Object, Object, Object] subtotal=1369000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1125641ms] [WARNING] [Vue warn]: Property "isClearConfirmOpen" was accessed during render but is not defined on instance. 
+  at <CartPanel cart= [Object, Object, Object] subtotal=1369000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1125646ms] [WARNING] [Vue warn]: Property "handleClearCart" was accessed during render but is not defined on instance. 
+  at <CartPanel cart= [Object, Object, Object] subtotal=1369000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[ 1126025ms] [WARNING] [Vue warn]: Property "isClearConfirmOpen" was accessed during render but is not defined on instance. 
+  at <CartPanel cart= [Object, Object, Object] subtotal=1369000 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114

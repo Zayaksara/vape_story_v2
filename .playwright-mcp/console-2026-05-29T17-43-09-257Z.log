@@ -1,0 +1,103 @@
+[     760ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://127.0.0.1:8000/_boost/browser-logs @ http://127.0.0.1:8000/settings/store:55
+[    1364ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <Store errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Layout> 
+  at <AdminLayout> 
+  at <SettingsRoleLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: settings/Store, props: Object, url: /settings/store, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {layout: Object, __name: Store, props: Object, setup: , __hmrId: 3e2d1386} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/settings/store:114
+[    1366ms] [ERROR] Hydration completed but contains mismatches. @ http://127.0.0.1:8000/settings/store:114
+[   82474ms] [ERROR] Failed to load resource: the server responded with a status of 409 (Conflict) @ http://127.0.0.1:8000/settings/store:0
+[  174389ms] [WARNING] [Vue warn]: Property "mounted" was accessed during render but is not defined on instance. 
+  at <Store errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Layout> 
+  at <AdminLayout> 
+  at <SettingsRoleLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: settings/Store, props: Object, url: /settings/store, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {layout: Object, __name: Store, props: Object, setup: , __hmrId: 3e2d1386} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/settings/store:114
+[  174392ms] [WARNING] [Vue warn]: Extraneous non-props attributes (errors, name, auth, storeName, storeLogo, storeTagline, storeAddress, storePhone, storeReceiptHeader, storeReceiptFooter, storeShowLogoOnReceipt, storeReceiptOptions, sidebarOpen) were passed to component but could not be automatically inherited because component renders fragment or text or teleport root nodes. 
+  at <Store errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Layout> 
+  at <AdminLayout> 
+  at <SettingsRoleLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: settings/Store, props: Object, url: /settings/store, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {layout: Object, __name: Store, props: Object, setup: , __hmrId: 3e2d1386} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/settings/store:114
+[  174413ms] [WARNING] [Vue warn]: Unhandled error during execution of mounted hook 
+  at <Store errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Layout> 
+  at <AdminLayout> 
+  at <SettingsRoleLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: settings/Store, props: Object, url: /settings/store, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {layout: Object, __name: Store, props: Object, setup: , __hmrId: 3e2d1386} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/settings/store:114
+[  174450ms] ReferenceError: mounted is not defined
+    at http://[::1]:5173/@id/D:/story_vape/resources/js/pages/settings/Store.vue?t=1780076763491:168:4
+    at http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-B611VJIO.js?v=cc79e029:3783:87
+    at callWithErrorHandling (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-B611VJIO.js?v=cc79e029:1874:17)
+    at callWithAsyncErrorHandling (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-B611VJIO.js?v=cc79e029:1881:15)
+    at hook.__weh.hook.__weh (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-B611VJIO.js?v=cc79e029:3772:16)
+    at flushPostFlushCbs (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-B611VJIO.js?v=cc79e029:2006:25)
+    at flushJobs (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-B611VJIO.js?v=cc79e029:2034:3)
+[  193958ms] [WARNING] [Vue warn]: Extraneous non-props attributes (errors, name, auth, storeName, storeLogo, storeTagline, storeAddress, storePhone, storeReceiptHeader, storeReceiptFooter, storeShowLogoOnReceipt, storeReceiptOptions, sidebarOpen) were passed to component but could not be automatically inherited because component renders fragment or text or teleport root nodes. 
+  at <Store errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Layout> 
+  at <AdminLayout> 
+  at <SettingsRoleLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: settings/Store, props: Object, url: /settings/store, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {layout: Object, __name: Store, props: Object, setup: , __hmrId: 3e2d1386} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/settings/store:114
+[  204207ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://127.0.0.1:8000/_boost/browser-logs @ http://127.0.0.1:8000/settings/store:55
+[  204744ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <Store errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Layout> 
+  at <AdminLayout> 
+  at <SettingsRoleLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: settings/Store, props: Object, url: /settings/store, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {layout: Object, __name: Store, props: Object, setup: , __hmrId: 3e2d1386} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/settings/store:114
+[  204747ms] [ERROR] Hydration completed but contains mismatches. @ http://127.0.0.1:8000/settings/store:114
+[  212258ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://127.0.0.1:8000/_boost/browser-logs @ http://127.0.0.1:8000/settings/store:55
+[  212647ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <Store errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Layout> 
+  at <AdminLayout> 
+  at <SettingsRoleLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: settings/Store, props: Object, url: /settings/store, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {layout: Object, __name: Store, props: Object, setup: , __hmrId: 3e2d1386} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/settings/store:114
+[  212649ms] [ERROR] Hydration completed but contains mismatches. @ http://127.0.0.1:8000/settings/store:114
+[  213972ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://[::1]:5173/resources/js/routes/index.ts?t=1780076803215:0
+[  213974ms] [ERROR] [vite] Failed to reload /resources/js/components/AppSidebar.vue. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:8000/settings/store:114
+[  213976ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://[::1]:5173/resources/js/routes/admin/index.ts?t=1780076803203:0
+[  213977ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://[::1]:5173/resources/js/routes/pos/index.ts?t=1780076803221:0
+[  213985ms] [ERROR] [vite] Failed to reload /resources/js/components/AppSidebar.vue. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:8000/settings/store:114
+[  213998ms] [ERROR] [vite] Failed to reload /resources/js/components/AppSidebar.vue. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:8000/settings/store:114
+[  214014ms] [ERROR] [vite] Failed to reload /resources/js/components/UserMenuContent.vue. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:8000/settings/store:114
+[  214015ms] [ERROR] [vite] Failed to reload /resources/js/components/AppSidebar.vue. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:8000/settings/store:114
+[  214037ms] [ERROR] [vite] Failed to reload /resources/js/components/pos/PosSidebar.vue. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:8000/settings/store:114
+[  214039ms] [ERROR] [vite] Failed to reload /resources/js/components/AppSidebar.vue. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:8000/settings/store:114
+[  214056ms] [ERROR] [vite] Failed to reload /resources/js/components/pos/PosSidebar.vue. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:8000/settings/store:114
+[  214061ms] [ERROR] [vite] Failed to reload /resources/js/components/AppSidebar.vue. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:8000/settings/store:114
+[  214064ms] [ERROR] [vite] Failed to reload /resources/js/components/UserMenuContent.vue. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:8000/settings/store:114
+[  214076ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://[::1]:5173/resources/js/routes/profile/index.ts?t=1780076803227:0
+[  214087ms] [ERROR] [vite] Failed to reload /resources/js/layouts/settings/Layout.vue. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:8000/settings/store:114
+[  214112ms] [ERROR] [vite] Failed to reload /resources/js/layouts/settings/Layout.vue. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:8000/settings/store:114
+[  214123ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://[::1]:5173/resources/js/routes/security/index.ts?t=1780076803230:0
+[  214441ms] [ERROR] [vite] Failed to reload /resources/js/components/UserMenuContent.vue. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:8000/settings/store:114
+[  214447ms] [ERROR] [vite] Failed to reload /resources/js/components/AppSidebar.vue. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:8000/settings/store:114
+[  214574ms] [ERROR] [vite] Failed to reload /resources/js/components/AppSidebar.vue. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:8000/settings/store:114
+[  214625ms] [ERROR] [vite] Failed to reload /resources/js/components/pos/PosSidebar.vue. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:8000/settings/store:114
+[  214627ms] [ERROR] [vite] Failed to reload /resources/js/components/AppSidebar.vue. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://127.0.0.1:8000/settings/store:114
+[  215846ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://127.0.0.1:8000/_boost/browser-logs @ http://127.0.0.1:8000/settings/store:55
+[  216365ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <Store errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Layout> 
+  at <AdminLayout> 
+  at <SettingsRoleLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: settings/Store, props: Object, url: /settings/store, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {layout: Object, __name: Store, props: Object, setup: , __hmrId: 3e2d1386} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/settings/store:114
+[  216368ms] [ERROR] Hydration completed but contains mismatches. @ http://127.0.0.1:8000/settings/store:114

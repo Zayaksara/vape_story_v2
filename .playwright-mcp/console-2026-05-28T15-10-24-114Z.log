@@ -1,0 +1,14 @@
+[     975ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/pos/dashboard:55
+[    1534ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-fgt) 
+  at <DialogRoot data-slot="dialog" open=false onUpdate:open=fn > 
+  at <Dialog open=false onUpdate:open=fn > 
+  at <CartPanel cart= [] subtotal=0 discount-amount=0  ... > 
+  at <Dashboard errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <SidebarInset> 
+  at <SidebarProvider class="h-dvh overflow-hidden" default-open=false > 
+  at <PosLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: POS/dashboard, props: Object, url: /pos/dashboard, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {__name: dashboard, props: Object, setup: , __hmrId: e4566f42, render: } resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/pos/dashboard:114
+[    1543ms] [ERROR] Hydration completed but contains mismatches. @ http://localhost:8000/pos/dashboard:114

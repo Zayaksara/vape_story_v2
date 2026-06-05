@@ -1,0 +1,77 @@
+[     305ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://127.0.0.1:8000/_boost/browser-logs @ http://127.0.0.1:8000/settings/store:55
+[     687ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <Store errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Layout> 
+  at <AdminLayout> 
+  at <SettingsRoleLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: settings/Store, props: Object, url: /settings/store, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {layout: Object, __name: Store, props: Object, setup: , __hmrId: 3e2d1386} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/settings/store:114
+[     687ms] [ERROR] Hydration completed but contains mismatches. @ http://127.0.0.1:8000/settings/store:114
+[   29053ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://127.0.0.1:8000/_boost/browser-logs @ http://127.0.0.1:8000/settings/store:55
+[   29405ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <Store errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Layout> 
+  at <AdminLayout> 
+  at <SettingsRoleLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: settings/Store, props: Object, url: /settings/store, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {layout: Object, __name: Store, props: Object, setup: , __hmrId: 3e2d1386} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/settings/store:114
+[   29406ms] [ERROR] Hydration completed but contains mismatches. @ http://127.0.0.1:8000/settings/store:114
+[   37073ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://127.0.0.1:8000/_boost/browser-logs @ http://127.0.0.1:8000/settings/store:55
+[   37393ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <Store errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Layout> 
+  at <AdminLayout> 
+  at <SettingsRoleLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: settings/Store, props: Object, url: /settings/store, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {layout: Object, __name: Store, props: Object, setup: , __hmrId: 3e2d1386} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/settings/store:114
+[   37394ms] [ERROR] Hydration completed but contains mismatches. @ http://127.0.0.1:8000/settings/store:114
+[   45425ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://127.0.0.1:8000/_boost/browser-logs @ http://127.0.0.1:8000/settings/store:55
+[   45801ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <Store errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Layout> 
+  at <AdminLayout> 
+  at <SettingsRoleLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: settings/Store, props: Object, url: /settings/store, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {layout: Object, __name: Store, props: Object, setup: , __hmrId: 3e2d1386} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/settings/store:114
+[   45803ms] [ERROR] Hydration completed but contains mismatches. @ http://127.0.0.1:8000/settings/store:114
+[   65328ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://127.0.0.1:8000/_boost/browser-logs @ http://127.0.0.1:8000/settings/store:55
+[   65648ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <Store errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Layout> 
+  at <AdminLayout> 
+  at <SettingsRoleLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: settings/Store, props: Object, url: /settings/store, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {layout: Object, __name: Store, props: Object, setup: , __hmrId: 3e2d1386} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/settings/store:114
+[   65649ms] [ERROR] Hydration completed but contains mismatches. @ http://127.0.0.1:8000/settings/store:114
+[   73388ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://127.0.0.1:8000/_boost/browser-logs @ http://127.0.0.1:8000/settings/store:55
+[   73767ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <Store errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Layout> 
+  at <AdminLayout> 
+  at <SettingsRoleLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: settings/Store, props: Object, url: /settings/store, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {layout: Object, __name: Store, props: Object, setup: , __hmrId: 3e2d1386} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/settings/store:114
+[   73768ms] [ERROR] Hydration completed but contains mismatches. @ http://127.0.0.1:8000/settings/store:114
+[   75836ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://127.0.0.1:8000/_boost/browser-logs @ http://127.0.0.1:8000/settings/store:55
+[   76097ms] [WARNING] [Vue warn]: Hydration node mismatch:
+- rendered on server: JSHandle@node  
+- expected on client: Symbol(v-cmt) 
+  at <Store errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Layout> 
+  at <AdminLayout> 
+  at <SettingsRoleLayout errors= {} name="VapeStory" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: settings/Store, props: Object, url: /settings/store, version: a4302af09ffafc50573204cb0c464000, sharedProps: Array(13)} initialComponent= {layout: Object, __name: Store, props: Object, setup: , __hmrId: 3e2d1386} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://127.0.0.1:8000/settings/store:114
+[   76098ms] [ERROR] Hydration completed but contains mismatches. @ http://127.0.0.1:8000/settings/store:114

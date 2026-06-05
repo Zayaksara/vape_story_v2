@@ -1,0 +1,253 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - img [ref=e8]
+        - generic [ref=e10]:
+          - paragraph [ref=e11]: Story Vape
+          - paragraph [ref=e12]: Admin Panel
+      - navigation [ref=e13]:
+        - link "Dashboard" [ref=e14] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - img [ref=e15]
+          - generic [ref=e20]: Dashboard
+        - link "Manajemen Produk" [ref=e21] [cursor=pointer]:
+          - /url: /admin/products
+          - img [ref=e22]
+          - generic [ref=e26]: Manajemen Produk
+        - link "Laporan Penjualan" [ref=e27] [cursor=pointer]:
+          - /url: /admin/reports/sales
+          - img [ref=e28]
+          - generic [ref=e30]: Laporan Penjualan
+        - link "History Pembayaran" [ref=e31] [cursor=pointer]:
+          - /url: /admin/transactions/today
+          - img [ref=e32]
+          - generic [ref=e35]: History Pembayaran
+        - link "Kelola Akun" [ref=e36] [cursor=pointer]:
+          - /url: /admin/users
+          - img [ref=e37]
+          - generic [ref=e42]: Kelola Akun
+        - link "Promo & Diskon" [ref=e43] [cursor=pointer]:
+          - /url: /admin/promotions
+          - img [ref=e44]
+          - generic [ref=e47]: Promo & Diskon
+      - generic [ref=e48]:
+        - link "Buka POS" [ref=e49] [cursor=pointer]:
+          - /url: /pos/dashboard
+          - img [ref=e50]
+          - generic [ref=e56]: Buka POS
+        - link "Pengaturan Profil" [ref=e57] [cursor=pointer]:
+          - /url: /settings/profile
+          - img [ref=e58]
+          - generic [ref=e70]: Pengaturan Profil
+        - button "Logout" [ref=e71] [cursor=pointer]:
+          - img [ref=e72]
+          - generic [ref=e75]: Logout
+  - generic [ref=e76]:
+    - banner [ref=e77]:
+      - generic [ref=e78]:
+        - button "Toggle navigation menu" [expanded] [ref=e79] [cursor=pointer]
+        - heading "Admin Panel" [level=1] [ref=e80]
+      - button "Selamat datang, Admin User" [ref=e83] [cursor=pointer]:
+        - generic [ref=e84]: Selamat datang, Admin User
+    - main [ref=e85]:
+      - generic [ref=e86]:
+        - generic [ref=e87]:
+          - heading "Pengaturan" [level=1] [ref=e88]
+          - paragraph [ref=e89]: Kelola profil, keamanan, dan preferensi akun Anda.
+        - generic [ref=e90]:
+          - complementary [ref=e91]:
+            - navigation "Settings" [ref=e92]:
+              - link "Profil Nama & email akun" [ref=e93] [cursor=pointer]:
+                - /url: /settings/profile
+                - img [ref=e94]
+                - generic [ref=e106]:
+                  - generic [ref=e107]: Profil
+                  - generic [ref=e108]: Nama & email akun
+              - link "Keamanan Password & 2FA" [ref=e109] [cursor=pointer]:
+                - /url: /settings/security
+                - img [ref=e110]
+                - generic [ref=e113]:
+                  - generic [ref=e114]: Keamanan
+                  - generic [ref=e115]: Password & 2FA
+              - link "Toko Identitas & struk" [ref=e116] [cursor=pointer]:
+                - /url: /settings/store
+                - img [ref=e118]
+                - generic [ref=e123]:
+                  - generic [ref=e124]: Toko
+                  - generic [ref=e125]: Identitas & struk
+          - generic [ref=e128]:
+            - heading "Pengaturan Toko" [level=1] [ref=e129]
+            - generic [ref=e130]:
+              - generic [ref=e131]:
+                - heading "Identitas Toko" [level=2] [ref=e132]
+                - paragraph [ref=e133]: Informasi ini ditampilkan di header struk dan halaman login.
+              - generic [ref=e134]:
+                - generic [ref=e135]:
+                  - generic [ref=e136]: Nama toko
+                  - textbox "Nama toko" [ref=e137]:
+                    - /placeholder: cth. Story Vape
+                    - text: VapeStory
+                - generic [ref=e138]:
+                  - generic [ref=e139]: Alamat
+                  - textbox "Alamat" [ref=e140]:
+                    - /placeholder: Jl. ...
+                    - text: Jl. Raya Kedawung No.02, Panembahan, Kec. Plered, Kabupaten Cirebon, Jawa Barat 45154
+                - generic [ref=e141]:
+                  - generic [ref=e142]: Nomor telepon
+                  - textbox "Nomor telepon" [ref=e143]:
+                    - /placeholder: 08xx-xxxx-xxxx
+                    - text: "085161500214"
+                - generic [ref=e144]:
+                  - generic [ref=e145]: Tagline
+                  - textbox "Tagline" [ref=e146]:
+                    - /placeholder: cth. Vape Premium Sejak 2020
+                    - text: Vape Story Sejak 2026
+                  - paragraph [ref=e147]: Muncul di halaman login sebagai sambutan.
+                - generic [ref=e148]:
+                  - generic [ref=e149]: Logo
+                  - generic [ref=e150]:
+                    - img "Logo toko" [ref=e152]
+                    - button "Logo" [ref=e153] [cursor=pointer]
+                  - paragraph [ref=e154]: PNG/JPG, maks 2 MB.
+                  - paragraph [ref=e299]: The logo field must be an image.
+                - generic [ref=e155]:
+                  - heading "Kustom Struk" [level=2] [ref=e156]
+                  - paragraph [ref=e157]: Teks tambahan opsional di bawah struk pembayaran.
+                - generic [ref=e158]:
+                  - generic [ref=e159]: Footer struk
+                  - textbox "Footer struk" [ref=e160]:
+                    - /placeholder: "Terima kasih!\nBarang tidak dapat ditukar\nkecuali rusak/garansi.\n\n** Produk 18+ **\nMengandung nikotin"
+                    - text: "Terimakasih Telah Berbelanja! Di Vape Story Instagram: @mfatihh14"
+                  - paragraph [ref=e161]: Tampil di bagian paling bawah struk (rata tengah). Pisahkan baris dengan Enter.
+                - generic [ref=e162]:
+                  - generic [ref=e163]:
+                    - generic [ref=e164]:
+                      - heading "Konten Struk" [level=2] [ref=e165]
+                      - paragraph [ref=e166]: Centang bagian yang ingin ditampilkan di struk pembayaran.
+                    - generic [ref=e167]:
+                      - button "Centang semua" [ref=e168]
+                      - button "Hapus semua" [ref=e169]
+                  - generic [ref=e170]:
+                    - generic [ref=e171]:
+                      - paragraph [ref=e172]: Header Toko
+                      - generic [ref=e173]:
+                        - generic [ref=e174]:
+                          - checkbox "Logo toko" [ref=e175]
+                          - generic [ref=e176]: Logo toko
+                        - generic [ref=e177]:
+                          - checkbox "Nama toko" [ref=e178]
+                          - generic [ref=e179]: Nama toko
+                        - generic [ref=e180]:
+                          - checkbox "Alamat" [ref=e181]
+                          - generic [ref=e182]: Alamat
+                        - generic [ref=e183]:
+                          - checkbox "Nomor telepon" [ref=e184]
+                          - generic [ref=e185]: Nomor telepon
+                    - generic [ref=e186]:
+                      - paragraph [ref=e187]: Info Transaksi
+                      - generic [ref=e188]:
+                        - generic [ref=e189]:
+                          - checkbox "Tanggal & waktu" [ref=e190]
+                          - generic [ref=e191]: Tanggal & waktu
+                        - generic [ref=e192]:
+                          - checkbox "Nomor invoice" [ref=e193]
+                          - generic [ref=e194]: Nomor invoice
+                        - generic [ref=e195]:
+                          - checkbox "Nama kasir" [ref=e196]
+                          - generic [ref=e197]: Nama kasir
+                    - generic [ref=e198]:
+                      - paragraph [ref=e199]: Detail Item & Total
+                      - generic [ref=e200]:
+                        - generic [ref=e201]:
+                          - checkbox "Harga × qty per item" [ref=e202]
+                          - generic [ref=e203]: Harga × qty per item
+                        - generic [ref=e204]:
+                          - checkbox "Baris subtotal" [ref=e205]
+                          - generic [ref=e206]: Baris subtotal
+                        - generic [ref=e207]:
+                          - checkbox "Baris diskon" [ref=e208]
+                          - generic [ref=e209]: Baris diskon
+                        - generic [ref=e210]:
+                          - checkbox "Metode pembayaran" [ref=e211]
+                          - generic [ref=e212]: Metode pembayaran
+                        - generic [ref=e213]:
+                          - checkbox "Jumlah dibayar (tunai)" [ref=e214]
+                          - generic [ref=e215]: Jumlah dibayar (tunai)
+                        - generic [ref=e216]:
+                          - checkbox "Kembalian (tunai)" [ref=e217]
+                          - generic [ref=e218]: Kembalian (tunai)
+                        - generic [ref=e219]:
+                          - checkbox "Teks footer custom" [ref=e220]
+                          - generic [ref=e221]: Teks footer custom
+                - button "Simpan perubahan" [ref=e223]
+              - generic [ref=e224]:
+                - generic [ref=e225]:
+                  - heading "Pratinjau Struk" [level=2] [ref=e226]
+                  - paragraph [ref=e227]: Tampilan struk diperbarui otomatis saat kamu mengetik. Belum tersimpan sampai klik Simpan.
+                - generic [ref=e228]:
+                  - group "Ukuran kertas" [ref=e229]:
+                    - button "58 mm" [ref=e230]
+                    - button "80 mm" [ref=e231]
+                  - button "Cetak Pratinjau" [ref=e232]
+              - generic [ref=e234]:
+                - generic [ref=e235]:
+                  - paragraph [ref=e236]: Printer Bluetooth (ESC/POS)
+                  - paragraph [ref=e237]: Hubungkan ke printer thermal Bluetooth (cth. Codeshop CM-T58BL). Cetak akan menggunakan data pratinjau di atas — bukan via dialog cetak browser.
+                - generic [ref=e238]:
+                  - button "Pair Printer" [ref=e239]
+                  - button "Cetak via Printer BT" [disabled]
+              - generic [ref=e240]:
+                - generic [ref=e242]:
+                  - generic [ref=e243]:
+                    - img "Logo toko" [ref=e244]
+                    - paragraph [ref=e245]: VapeStory
+                    - paragraph [ref=e246]: Jl. Raya Kedawung No.02, Panembahan, Kec. Plered, Kabupaten Cirebon, Jawa Barat 45154
+                    - paragraph [ref=e247]: "085161500214"
+                  - generic [ref=e249]:
+                    - generic [ref=e250]:
+                      - generic [ref=e251]: "No"
+                      - generic [ref=e252]: ": INV-PREVIEW-001"
+                    - generic [ref=e253]:
+                      - generic [ref=e254]: Tgl
+                      - generic [ref=e255]: ": 30/05/2026 00:25"
+                    - generic [ref=e256]:
+                      - generic [ref=e257]: Kasir
+                      - generic [ref=e258]: ": Kasir Demo"
+                  - generic [ref=e260]:
+                    - generic [ref=e261]:
+                      - paragraph [ref=e262]: Liquid Mango Ice 30ml
+                      - generic [ref=e263]:
+                        - generic [ref=e264]: 1 x 95.000
+                        - generic [ref=e265]: "95.000"
+                    - generic [ref=e266]:
+                      - paragraph [ref=e267]: Coil RBA 0.3 ohm
+                      - generic [ref=e268]:
+                        - generic [ref=e269]: 2 x 45.000
+                        - generic [ref=e270]: "90.000"
+                  - generic [ref=e272]:
+                    - generic [ref=e273]:
+                      - generic [ref=e274]: Subtotal
+                      - generic [ref=e275]: "185.000"
+                    - generic [ref=e276]:
+                      - generic [ref=e277]: Diskon
+                      - generic [ref=e278]: "-10.000"
+                    - generic [ref=e279]:
+                      - generic [ref=e280]: TOTAL
+                      - generic [ref=e281]: "175.000"
+                  - generic [ref=e282]:
+                    - generic [ref=e283]:
+                      - generic [ref=e284]: METODE
+                      - generic [ref=e285]: TUNAI
+                    - generic [ref=e286]:
+                      - generic [ref=e287]: Tunai
+                      - generic [ref=e288]: "200.000"
+                    - generic [ref=e289]:
+                      - generic [ref=e290]: Kembalian
+                      - generic [ref=e291]: "25.000"
+                  - paragraph [ref=e294]: "Terimakasih Telah Berbelanja! Di Vape Story Instagram: @mfatihh14"
+                - paragraph [ref=e296]:
+                  - text: Data transaksi di atas hanya contoh — bukan transaksi nyata.
+                  - generic [ref=e297]: Klik "Cetak Pratinjau" untuk tes ke printer dengan data dummy.
+  - region "Notifications alt+T":
+    - list

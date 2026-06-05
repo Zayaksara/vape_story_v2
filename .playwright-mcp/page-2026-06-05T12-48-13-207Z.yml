@@ -1,0 +1,20 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]: Panduan Pengguna
+    - generic [ref=e6]: User Guide
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - generic [ref=e9]: S
+      - generic [ref=e10]:
+        - strong [ref=e11]: Story Vape
+        - generic [ref=e12]: POS & Admin
+    - heading "Story Vape" [level=1] [ref=e13]
+    - heading "User Guide" [level=2] [ref=e14]
+    - paragraph [ref=e16]: Sistem Point of Sale & Manajemen Toko Vape. Panduan instalasi, pengoperasian kasir, dan administrasi toko untuk seluruh pengguna.
+  - generic [ref=e17]:
+    - generic [ref=e18]:
+      - text: Story Vape
+      - generic [ref=e19]: Point of Sale & Manajemen Toko
+    - generic [ref=e20]:
+      - strong [ref=e21]: Versi 1.0
+      - text: "2026"
