@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Head, useForm } from '@inertiajs/vue3';
-import { ImagePlus } from 'lucide-vue-next';
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { usePrinter } from '@/composables/usePrinter';
 import { buildReceiptBytes } from '@/lib/escposReceipt';
 import Heading from '@/components/Heading.vue';
@@ -94,7 +93,6 @@ const form = useForm({
     tagline: props.store.tagline ?? '',
     receipt_footer: props.store.receipt_footer ?? '',
     receipt_options: { ...DEFAULT_RECEIPT_OPTIONS, ...(props.store.receipt_options_resolved ?? {}) } as ReceiptOptions,
-    logo: null as File | null,
 });
 
 function toggleAllReceiptOptions(value: boolean) {
@@ -171,31 +169,9 @@ function submit() {
     });
 }
 
-// ── Live preview state ──────────────────────────────────────────
-const localLogoUrl = ref<string | null>(null);
-
-function onLogoChange(e: Event) {
-    const file = (e.target as HTMLInputElement).files?.[0] ?? null;
-    form.logo = file;
-
-    if (localLogoUrl.value) {
-        URL.revokeObjectURL(localLogoUrl.value);
-        localLogoUrl.value = null;
-    }
-    if (file) {
-        localLogoUrl.value = URL.createObjectURL(file);
-    }
-}
-
-onBeforeUnmount(() => {
-    if (localLogoUrl.value) URL.revokeObjectURL(localLogoUrl.value);
-});
-
-const previewLogoUrl = computed<string | null>(() => {
-    if (localLogoUrl.value) return localLogoUrl.value;
-    if (props.store.logo_path) return `/storage/${props.store.logo_path}`;
-    return null;
-});
+// Logo toko di-hardcode (tidak lagi dari upload). Dipakai untuk pratinjau & cetak struk.
+const STORE_LOGO_URL = '/storage/store/logo/vape-story-logo.jpg';
+const previewLogoUrl = computed<string | null>(() => STORE_LOGO_URL);
 
 // Dummy transaksi untuk simulasi tampilan struk
 const sampleTransaction = computed<Transaction>(() => ({
@@ -268,24 +244,6 @@ const sampleTransaction = computed<Transaction>(() => ({
                 />
                 <p class="text-xs text-muted-foreground">Muncul di halaman login sebagai sambutan.</p>
                 <InputError :message="form.errors.tagline" />
-            </div>
-
-            <div class="grid gap-2">
-                <Label for="store-logo">Logo</Label>
-                <div class="flex items-center gap-4">
-                    <div class="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg border bg-muted">
-                        <img
-                            v-if="store.logo_path"
-                            :src="`/storage/${store.logo_path}`"
-                            alt="Logo toko"
-                            class="h-full w-full object-contain"
-                        />
-                        <ImagePlus v-else class="h-6 w-6 text-muted-foreground" />
-                    </div>
-                    <Input id="store-logo" type="file" accept="image/*" class="cursor-pointer" @change="onLogoChange" />
-                </div>
-                <p class="text-xs text-muted-foreground">PNG/JPG, maks 2 MB.</p>
-                <InputError :message="form.errors.logo" />
             </div>
 
             <Separator />

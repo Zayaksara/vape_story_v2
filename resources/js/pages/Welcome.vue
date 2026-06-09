@@ -9,7 +9,7 @@ defineProps<{
 
 const page = usePage();
 const storeName = computed(() => (page.props.storeName as string | undefined) ?? 'Story Vape');
-const storeLogo = computed(() => (page.props.storeLogo as string | null | undefined) ?? '/storage/images/logo.png');
+const storeLogo = computed(() => (page.props.storeLogo as string | null | undefined) ?? '/storage/store/logo/vape-story-logo.jpg');
 const storeTagline = computed(() => (page.props.storeTagline as string | null | undefined) ?? 'premium vape sejak 2020');
 
 const SPLASH_DURATION = 1800;

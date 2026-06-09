@@ -26,3 +26,11 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+# Dokumentasi analisis/laporan internal (tidak di-track)
+/docs/FIX-KAMI.md
+/docs/LAPORAN-AFTER.md
+/docs/analisis-post-indeks-kami.md
+/docs/intervensi-mitra.md
+/docs/*.xlsx
+/docs/~$*

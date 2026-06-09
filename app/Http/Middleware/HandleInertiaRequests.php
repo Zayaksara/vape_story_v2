@@ -46,11 +46,11 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'storeName' => $store?->name ?? config('app.name'),
-            'storeLogo' => $store?->logo_url,
+            // Logo toko di-hardcode (tidak lagi dari upload). Dipakai di splash, login, dan struk.
+            'storeLogo' => '/storage/store/logo/vape-story-logo.jpg',
             'storeTagline' => $store?->tagline,
             'storeAddress' => $store?->address,
             'storePhone' => $store?->phone,
-            'storeLogo' => $store?->logo_url,
             'storeReceiptHeader' => $store?->receipt_header,
             'storeReceiptFooter' => $store?->receipt_footer,
             'storeShowLogoOnReceipt' => (bool) ($store?->show_logo_on_receipt ?? false),
