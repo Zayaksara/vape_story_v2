@@ -31,4 +31,9 @@
                 '@': path.resolve(__dirname, 'resources/js'),
             },
         },
+        build: {
+            // Default rolldown (oxc) minifier menghasilkan output rusak pada build ini
+            // (mis. "_ is not a function" di ConfirmModal). Pakai esbuild yang stabil.
+            minify: 'esbuild',
+        },
     });
