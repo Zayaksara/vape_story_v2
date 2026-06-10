@@ -151,6 +151,7 @@ class UserController extends Controller
         return DB::table('users')
             ->where('role', UserRole::ADMIN->value)
             ->where('id', '!=', $exceptId)
+            ->whereNull('deleted_at') // abaikan admin yang sudah di-soft-delete
             ->count();
     }
 
