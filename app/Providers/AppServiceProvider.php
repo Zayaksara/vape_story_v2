@@ -26,8 +26,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureDefaults();
 
-        // Tambahkan Logika Force HTTPS untuk Cloudflare Tunnel
-        if (config('app.env') !== 'local' || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) {
+        // Paksa HTTPS hanya jika request datang lewat proxy HTTPS
+        // (mis. Cloudflare Tunnel / load balancer yang set X-Forwarded-Proto).
+        // Tidak dipaksa berdasarkan environment, agar deploy HTTP biasa (akses via IP) tetap jalan.
+        if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
             URL::forceScheme('https');
         }
     }
