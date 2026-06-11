@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Enums\UserRole;
 use App\Http\Requests\Settings\ProfileDeleteRequest;
 use App\Http\Requests\Settings\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -43,6 +45,12 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
+        if ($user->isAdmin() && $this->countOtherActiveAdmins($user->id) === 0) {
+            return back()->withErrors([
+                'password' => 'Akun admin terakhir tidak dapat dihapus. Buat admin lain terlebih dahulu.',
+            ]);
+        }
+
         Auth::logout();
 
         $user->delete();
@@ -51,5 +59,14 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    private function countOtherActiveAdmins(string $exceptId): int
+    {
+        return DB::table('users')
+            ->where('role', UserRole::ADMIN->value)
+            ->where('id', '!=', $exceptId)
+            ->whereNull('deleted_at')
+            ->count();
     }
 }

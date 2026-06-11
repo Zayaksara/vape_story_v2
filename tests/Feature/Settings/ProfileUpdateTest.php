@@ -1,6 +1,10 @@
 <?php
 
+use App\Enums\UserRole;
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
+uses(DatabaseTransactions::class);
 
 test('profile page is displayed', function () {
     $user = User::factory()->create();
@@ -64,7 +68,7 @@ test('user can delete their account', function () {
         ->assertRedirect(route('home'));
 
     $this->assertGuest();
-    expect($user->fresh())->toBeNull();
+    expect($user->fresh()->trashed())->toBeTrue();
 });
 
 test('correct password must be provided to delete account', function () {
@@ -82,4 +86,46 @@ test('correct password must be provided to delete account', function () {
         ->assertRedirect(route('profile.edit'));
 
     expect($user->fresh())->not->toBeNull();
+});
+
+test('the last admin cannot delete their own account', function () {
+    $admin = User::factory()->create(['role' => UserRole::ADMIN]);
+
+    // jadikan satu-satunya admin aktif (perubahan di-rollback oleh DatabaseTransactions)
+    User::query()
+        ->where('role', UserRole::ADMIN->value)
+        ->where('id', '!=', $admin->id)
+        ->update(['role' => UserRole::CASHIER->value]);
+
+    $response = $this
+        ->actingAs($admin)
+        ->from(route('profile.edit'))
+        ->delete(route('profile.destroy'), [
+            'password' => 'password',
+        ]);
+
+    $response
+        ->assertSessionHasErrors('password')
+        ->assertRedirect(route('profile.edit'));
+
+    $this->assertAuthenticated();
+    expect($admin->fresh())->not->toBeNull();
+});
+
+test('an admin can delete their account when another admin exists', function () {
+    $admin = User::factory()->create(['role' => UserRole::ADMIN]);
+    User::factory()->create(['role' => UserRole::ADMIN]);
+
+    $response = $this
+        ->actingAs($admin)
+        ->delete(route('profile.destroy'), [
+            'password' => 'password',
+        ]);
+
+    $response
+        ->assertSessionHasNoErrors()
+        ->assertRedirect(route('home'));
+
+    $this->assertGuest();
+    expect($admin->fresh()->trashed())->toBeTrue();
 });
