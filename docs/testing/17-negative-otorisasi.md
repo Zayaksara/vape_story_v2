@@ -39,13 +39,9 @@ Login sebagai **kasir**, lalu akses URL admin langsung via address bar.
 
 | ID | Skenario | Langkah | Hasil yang Diharapkan | Status |
 |----|----------|---------|------------------------|--------|
-| TC-17.15 | Tambah produk field wajib kosong | Submit form produk kosong | Validasi menolak, pesan error per field | ⏳ perlu admin |
+| TC-17.15 | Tambah produk field wajib kosong | Submit form produk kosong | Validasi menolak, pesan error per field | Sesuai | ✅ |
 | TC-17.16 | Email akun duplikat | Buat user dgn email sudah ada | Validasi `unique` menolak | ⏳ perlu admin |
 | TC-17.17 | Harga/stok negatif | Isi harga/stok < 0 | Validasi menolak | ⏳ perlu admin |
 | TC-17.18 | Retur > qty beli | Set qty retur > qty dibeli | Dibatasi ke qty beli | ✅ (tercover TC-11.12) |
 
-## Catatan
-- TC ✅ diverifikasi via browser otomatis (2026-05-30) atau sudah tercover modul lain.
-- TC ⏳ butuh: (a) login admin (password seeder `12345` sudah diubah di DB uji), atau
-  (b) langkah interaktif tambahan. Rekomendasi: reset `UserSeeder` lalu lengkapi.
-- Pemisahan role solid: semua URL admin yang diuji mengembalikan **403** untuk kasir.
+

@@ -32,7 +32,3 @@ dan toggle aktif/nonaktif.
 | TC-06.12 | Toggle status | Klik badge/tombol status | Status aktif/nonaktif berubah (endpoint `toggle`) | Sesuai | ✅ |
 | TC-06.13 | Hapus promo | Klik hapus + konfirmasi | Promo terhapus | Sesuai | ✅ |
 
-## Catatan
-- Tidak ditemukan bug fungsional pada modul ini.
-- Voucher pada data seed transaksi (mis. `HEMAT10K`) bersifat label sintetis pada
-  tabel `sales` dan tidak menambah counter pemakaian promo nyata — wajar untuk data demo.

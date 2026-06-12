@@ -37,13 +37,3 @@ Halaman laporan di `/admin/reports/sales`: ringkasan revenue/profit, tab analisi
 | TC-04.13 | Shopping List       | Klik "Belanja?"                  | Tampil rekomendasi belanja/restock                                    | Sesuai (endpoint `reports/sales/shopping-list`) | ✅      |
 | TC-04.14 | Tombol kembali      | Klik "Kembali ke dashboard"      | Navigasi ke dashboard                                                 | Sesuai                                          | ✅      |
 | TC-04.15 | Konsistensi profit  | Periksa kolom Profit             | Profit = Revenue − HPP (snapshot batch F IFO)                         | Konsisten dgn data seed                         | ✅      |
-
-
-## Catatan
-
-- Laporan memanfaatkan `sale_item_batches` (snapshot HPP per batch) sehingga profit
-akurat terhadap konsumsi FIFO. Data seed 90 hari membuat laporan terlihat penuh.
-- Muncul warning *"Hydration node mismatch"* (lihat isu lintas-halaman di README) —
-tidak memengaruhi fungsi laporan.
-- Tidak ditemukan bug fungsional pada modul ini.
-

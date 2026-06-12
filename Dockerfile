@@ -31,8 +31,11 @@ RUN composer install --optimize-autoloader --no-interaction
 
 RUN php artisan key:generate --force
 
-# Hapus lockfile agar npm resolve native binary (rollup/lightningcss) sesuai platform Linux.
-RUN rm -f package-lock.json pnpm-lock.yaml && npm install
+# Pakai lockfile (npm ci) agar versi paket persis seperti yang teruji lokal.
+# Lockfile npm 10+ sudah menyertakan binary native lintas platform (rollup/lightningcss),
+# jadi tidak perlu lagi dihapus — menghapusnya membuat build mengambil rilis terbaru
+# yang bisa rusak (kasus @inertiajs/core@3.4.0 belum terpropagasi).
+RUN npm ci
 
 RUN npm run build
 

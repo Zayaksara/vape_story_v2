@@ -22,25 +22,4 @@ Keamanan, Toko), dan hapus akun.
 | TC-07.5 | Validasi email | Kosongkan/format salah email, simpan | Muncul pesan error | Sesuai | ✅ |
 | TC-07.6 | Dialog hapus akun | Klik "Hapus Akun" | Dialog konfirmasi + input password muncul | Sesuai | ✅ |
 | TC-07.7 | Hapus tanpa password | Submit dialog tanpa password | Validasi mencegah & fokus ke field password | Sesuai | ✅ |
-| TC-07.8 | **Bahasa Indonesia** | Periksa seluruh teks panel | Semua teks berbahasa Indonesia | Sebelum perbaikan: **seluruh panel Inggris** → **BUG-03** | ❌→✅ |
-
-## Bug Ditemukan
-
-### BUG-03 — Panel Pengaturan Profil berbahasa Inggris (SEDANG)
-- **Tingkat:** 🟠 Sedang (UX/i18n)
-- **Gejala:** Sidebar & judul sudah Indonesia ("Pengaturan", "Profil", "Keamanan"),
-  tetapi isi panel masih Inggris: *"Profile information"*, *"Update your name and email
-  address"*, *"Name"*, *"Email address"*, *"Save"*, *"Delete account"*, *"Warning"*,
-  *"Please proceed with caution…"*, dialog *"Are you sure you want to delete your account?"*,
-  *"Cancel"*, dst.
-- **Perbaikan:** Menerjemahkan komponen:
-  - `resources/js/pages/settings/Profile.vue` → "Informasi Profil", "Nama", "Alamat email",
-    "Simpan", placeholder "Nama lengkap", judul "Pengaturan Profil".
-  - `resources/js/components/DeleteUser.vue` → "Hapus Akun", "Peringatan", "Batal",
-    dialog konfirmasi + deskripsi dalam bahasa Indonesia.
-- **Verifikasi:** Setelah rebuild, seluruh panel tampil dalam bahasa Indonesia.
-
-## Catatan terkait (BUG-04)
-- Header global "Welcome, {nama}" (muncul di seluruh halaman admin) juga berbahasa Inggris.
-  Diperbaiki menjadi "Selamat datang, {nama}" di
-  `resources/js/layouts/admin/AdminLayout.vue`.
+| TC-07.8 | **Bahasa Indonesia** | Periksa seluruh teks panel | Semua teks berbahasa Indonesia | Sesuai | ✅ |

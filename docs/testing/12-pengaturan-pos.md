@@ -24,8 +24,3 @@ Pengaturan akun untuk kasir, diakses via menu user (avatar) → "Pengaturan", me
 | TC-12.6 | Ubah & simpan | Edit nama, Simpan | Tersimpan + notifikasi | Sesuai | ✅ |
 | TC-12.7 | Logout | Klik "Keluar" | Sesi berakhir, kembali ke splash/login | Sesuai | ✅ |
 
-## Catatan
-- Panel pengaturan sudah berbahasa Indonesia berkat perbaikan **BUG-03** (lihat
-  [07-pengaturan-profil.md](07-pengaturan-profil.md)).
-- Pemisahan role baik: kasir tidak melihat menu "Toko".
-- Tidak ditemukan bug baru pada modul ini.

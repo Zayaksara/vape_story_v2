@@ -12,6 +12,7 @@ use App\Services\ImageOptimizer;
 use App\Services\POS\ProductService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -125,13 +126,34 @@ class ProductController extends Controller
 
     public function destroy(Product $product): RedirectResponse
     {
-        if ($product->image) {
-            Storage::disk('public')->delete($product->image);
+        // Hard delete produk akan men-cascade sale_items/transaction_items,
+        // sehingga riwayat & laporan penjualan ikut terhapus. Tolak bila pernah terjual.
+        if ($this->hasSalesHistory($product)) {
+            return back()->withErrors([
+                'product' => 'Produk tidak dapat dihapus karena memiliki riwayat penjualan. Nonaktifkan produk sebagai gantinya.',
+            ]);
         }
 
+        $image = $product->image;
         $product->delete();
+
+        if ($image) {
+            Storage::disk('public')->delete($image);
+        }
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Produk berhasil dihapus.');
+    }
+
+    private function hasSalesHistory(Product $product): bool
+    {
+        $batchIds = DB::table('batches')->where('product_id', $product->id)->pluck('id');
+
+        return DB::table('sale_items')->where('product_id', $product->id)->exists()
+            || DB::table('transaction_items')->where('product_id', $product->id)->exists()
+            || ($batchIds->isNotEmpty() && (
+                DB::table('order_items')->whereIn('batch_id', $batchIds)->exists()
+                || DB::table('return_items')->whereIn('batch_id', $batchIds)->exists()
+            ));
     }
 }

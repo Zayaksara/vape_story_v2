@@ -32,8 +32,3 @@ perbandingan periode, dan top produk/kategori/merek.
 | TC-02.11 | Top 5 Merek | Lihat bar chart | 5 merek terurut pendapatan | Sesuai | ✅ |
 | TC-02.12 | Konsistensi angka | Bandingkan kartu vs ringkasan grafik | Total di kartu = total di ringkasan chart | Konsisten (Rp 10.6 jt / 18 transaksi) | ✅ |
 
-## Catatan
-- Dengan data 90 hari, seluruh grafik & tabel terisi penuh sehingga tampilan
-  "data banyak" terbukti (omzet kumulatif ±Rp943 juta).
-- Tidak ditemukan bug fungsional pada modul ini.
-- Header global "Welcome, ..." → lihat **BUG-04** (diperbaiki ke "Selamat datang, ...").

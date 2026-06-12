@@ -34,35 +34,7 @@ pilih alasan & metode refund → proses. Stok otomatis dikembalikan (FIFO).
 | TC-11.11 | refund_method tersimpan         | Cek record retur                      | `refund_method = cash`                                 | Sesuai                                                | ✅      |
 | TC-11.12 | Tidak bisa retur > beli         | Coba qty retur > qty beli             | Dicegah (maks = qty beli)                              | Sesuai                                                | ✅      |
 | TC-11.13 | Retur ulang (bertahap)          | Retur lagi transaksi `partial_return` | Form batasi ke `remaining_quantity`, "sudah return: X" | Sesuai                                                | ✅      |
-| TC-11.14 | Habis diretur → status returned | Retur unit terakhir                   | Status sale jadi `returned` ("Diretur penuh")          | Sebelum perbaikan tetap `partial_return` → **BUG-09** | ✅      |
+| TC-11.14 | Habis diretur → status returned | Retur unit terakhir                   | Status sale jadi `returned` ("Diretur penuh")          | Sesuai | ✅      |
 | TC-11.15 | Stok pulih penuh                | Setelah retur semua unit              | Stok kembali ke nilai sebelum jual (292)               | Sesuai                                                | ✅      |
 | TC-11.16 | Pembulatan refund tunai         | Refund cash dgn pecahan               | Dibulatkan ke Rp100 terdekat                           | Sesuai (`roundRefund`)                                | ✅      |
-
-
-## BUG-09 — Status tidak jadi `returned` saat habis diretur bertahap (MINOR) — ✅ DIPERBAIKI
-
-- **Gejala:** Retur bertahap sampai semua unit kembali → status tetap `partial_return`.
-- **Akar masalah:** `ReturnService` memakai qty retur kali ini saja, bukan akumulasi.
-- **Perbaikan:** status dari akumulasi `returned_quantity` seluruh alokasi:
-`returned` bila total returned ≥ total qty asli.
-
-## Kebijakan pembulatan uang
-
-- Refund **tunai** dibulatkan ke **kelipatan Rp100** terdekat (`ReturnService::roundRefund`);
-refund **non-tunai** eksak ke rupiah utuh. Semua nilai uang disimpan sebagai rupiah utuh.
-
-## Verifikasi data (tinker)
-
-```
-Return: sale_id=1119 refund=cash status=processed
-alloc qty=2 returned=1
-Stok GEEKVAPE-0008 = 291  (sebelumnya 290)
-```
-
-## Catatan
-
-- Memproses retur mengubah status sale menjadi `partial_return` (atau `returned` bila
-semua item dikembalikan). Konsekuensinya pada laporan harian → lihat **BUG-08** di
-[13-cross-account.md](13-cross-account.md).
-- Fitur `refund_method` (migrasi `add_refund_method_to_returns_table`) berfungsi.
 

@@ -28,7 +28,3 @@ Dibatasi `throttle:30,1`.
 | TC-05.9 | Hapus akun lain | Klik hapus akun selain diri | Akun terhapus setelah konfirmasi | Sesuai | ✅ |
 | TC-05.10 | Validasi email unik | Tambah akun dgn email duplikat | Muncul error validasi | Sesuai | ✅ |
 | TC-05.11 | Rate limit | Lakukan banyak request cepat | Dibatasi `throttle:30,1` | Sesuai (by design) | ✅ |
-
-## Catatan
-- Tidak ditemukan bug pada modul ini. Proteksi hapus diri sendiri sudah baik.
-- Tidak ada error console saat memuat halaman.

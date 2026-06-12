@@ -7,6 +7,7 @@ use App\Models\Batch;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class BatchController extends Controller
@@ -43,6 +44,8 @@ class BatchController extends Controller
 
     public function update(Request $request, Product $product, Batch $batch): RedirectResponse
     {
+        $this->ensureBelongsToProduct($product, $batch);
+
         $data = $request->validate($this->rules());
 
         $data['is_promo']    = (bool) ($data['is_promo'] ?? false);
@@ -55,8 +58,37 @@ class BatchController extends Controller
 
     public function destroy(Product $product, Batch $batch): RedirectResponse
     {
+        $this->ensureBelongsToProduct($product, $batch);
+
+        if ($batch->stock_quantity > 0) {
+            return back()->withErrors([
+                'batch' => 'Batch masih memiliki stok. Kosongkan stok (penyesuaian) sebelum menghapus.',
+            ]);
+        }
+
+        // Hard delete batch men-cascade alokasi penjualan, mutasi stok, dan retur.
+        if ($this->hasHistory($batch)) {
+            return back()->withErrors([
+                'batch' => 'Batch tidak dapat dihapus karena memiliki riwayat penjualan/retur.',
+            ]);
+        }
+
         $batch->delete();
 
         return back()->with('success', 'Batch stok berhasil dihapus.');
+    }
+
+    private function ensureBelongsToProduct(Product $product, Batch $batch): void
+    {
+        if ($batch->product_id !== $product->getKey()) {
+            abort(404);
+        }
+    }
+
+    private function hasHistory(Batch $batch): bool
+    {
+        return DB::table('sale_item_batches')->where('batch_id', $batch->id)->exists()
+            || DB::table('order_items')->where('batch_id', $batch->id)->exists()
+            || DB::table('return_items')->where('batch_id', $batch->id)->exists();
     }
 }

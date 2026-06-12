@@ -25,11 +25,5 @@ Riwayat transaksi harian kasir di `/pos/transactions/today` ("Laporan Penjualan 
 | TC-10.7 | Pencarian struk/kasir | Ketik nomor/nama | Baris tersaring | Sesuai | ✅ |
 | TC-10.8 | Detail transaksi | Klik baris | Detail item transaksi tampil | Sesuai | ✅ |
 | TC-10.9 | Cetak / Export | Klik tombol | Cetak/unduh laporan | Sesuai | ✅ |
-| TC-10.10 | Transaksi diretur tetap tampil | Setelah retur sebagian SALE-001119 | Transaksi tetap muncul dgn nilai **bersih** + badge "Diretur sebagian" | Sebelum perbaikan: **hilang** → **BUG-08** | ❌→✅ |
+| TC-10.10 | Transaksi diretur tetap tampil | Setelah retur sebagian SALE-001119 | Transaksi tetap muncul dgn nilai **bersih** + badge "Diretur sebagian" | Sesuai | ✅ |
 | TC-10.11 | Total = Dashboard | Bandingkan Total Penjualan vs Dashboard | Sama persis (nilai bersih) | Sesuai setelah BUG-08 | ✅ |
-
-## Catatan terkait (BUG-08 — sudah diperbaiki)
-- Riwayat ini dulu memfilter `status='completed'` sehingga transaksi yang diretur hilang.
-  Setelah perbaikan **BUG-08 (Opsi 1)**, transaksi diretur tetap tampil dengan **nilai
-  bersih** + badge status, dan total laporan = Dashboard. Detail di
-  [13-cross-account.md](13-cross-account.md).

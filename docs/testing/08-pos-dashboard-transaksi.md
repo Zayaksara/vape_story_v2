@@ -31,24 +31,4 @@ Inilah tempat transaksi penjualan dibuat.
 | TC-08.11 | Struk & cetak | Lihat struk | Opsi Thermal 58/80mm, Print Nota, Selesai | Sesuai | ✅ |
 | TC-08.12 | Selesaikan transaksi | Klik "Selesai" | Keranjang kosong, kembali ke grid | Sesuai | ✅ |
 | TC-08.13 | Stok berkurang | Cek stok produk setelah jual 2 | Stok 292 → 290 | Sesuai | ✅ |
-| TC-08.14 | Fokus input cash tanpa error | Buka modal / klik nominal cepat | Input ter-fokus tanpa error JS | Sebelum perbaikan: `TypeError cashInput.focus` → **BUG-06** | ❌→✅ |
-
-## Bug Ditemukan
-
-### BUG-06 — `TypeError: cashInput.value?.focus is not a function` (SEDANG)
-- **Tingkat:** 🟠 Sedang (error runtime, tidak memblok transaksi)
-- **Gejala:** Saat modal pembayaran terbuka / menekan tombol nominal cepat, console melempar
-  `TypeError: cashInput.value?.focus is not a function` (`PaymentModal.vue`).
-- **Akar masalah:** `ref="cashInput"` menempel pada komponen shadcn `<Input>` (instance Vue),
-  bukan elemen `<input>` native, sehingga `.focus()` bukan fungsi.
-- **Perbaikan** (`resources/js/components/pos/modals/PaymentModal.vue`): menambah helper
-  `focusCashInput()` yang me-resolve elemen native via `$el` (atau `querySelector('input')`),
-  lalu memakainya di kedua call site (`watch` modal open & `setCashReceived`).
-- **Verifikasi:** Setelah perbaikan, membuka modal & menekan nominal cepat tidak lagi
-  melempar error; input tetap ter-fokus.
-
-## Catatan
-- Transaksi tercatat sebagai **SALE-001119** (cash, Rp230.000, kembalian Rp70.000) dan
-  langsung tampil di Riwayat Transaksi serta metrik admin (lihat [13-cross-account.md](13-cross-account.md)).
-- Struk mencetak nama toko **dua kali** ("Story Vape / Story Vape") — kosmetik minor
-  (kemungkinan field nama & alamat toko sama), tidak memblok.
+| TC-08.14 | Fokus input cash tanpa error | Buka modal / klik nominal cepat | Input ter-fokus tanpa error JS | Sesuai | ✅ |

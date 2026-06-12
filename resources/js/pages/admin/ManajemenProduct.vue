@@ -33,6 +33,7 @@ import {
     TooltipProvider, TooltipTrigger,
 } from '@/components/ui/tooltip'
 
+import { toast } from 'vue-sonner'
 import AdminLayout from '@/layouts/admin/AdminLayout.vue'
 import ConfirmModal from '@/components/admin/ConfirmModal.vue'
 import { index as adminProductsRoute, create as createRoute, destroy as destroyRoute } from '@/routes/admin/products'
@@ -171,6 +172,9 @@ function confirmDeleteProduct() {
     deletingProduct.value = true
     router.delete(destroyRoute.url(p.id), {
         preserveScroll: true,
+        onError: (errors: Record<string, string>) => {
+            toast.error(errors.product ?? 'Gagal menghapus produk')
+        },
         onFinish: () => {
             deletingProduct.value = false
             confirmDeleteProductOpen.value = false

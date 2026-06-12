@@ -2,6 +2,7 @@
 import { useForm, router } from '@inertiajs/vue3'
 import { ArrowLeft, Plus, Pencil, Trash2, Check } from 'lucide-vue-next'
 import { ref, reactive } from 'vue'
+import { toast } from 'vue-sonner'
 import AdminLayout from '@/layouts/admin/AdminLayout.vue'
 import { index as adminProductsRoute, update as updateRoute } from '@/routes/admin/products'
 import type { Product } from '@/types/pos'
@@ -155,6 +156,10 @@ function confirmDeleteBatch() {
     deletingBatch.value = true
     router.delete(`/admin/products/${props.product.id}/batches/${batch.id}`, {
         preserveScroll: true,
+        onError: (errors: Record<string, string>) => {
+            batchErrors.value = errors as Record<string, string>
+            toast.error(errors.batch ?? 'Gagal menghapus batch')
+        },
         onFinish: () => {
             deletingBatch.value = false
             confirmDeleteBatchOpen.value = false

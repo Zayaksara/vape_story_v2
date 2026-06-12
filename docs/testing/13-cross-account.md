@@ -35,39 +35,6 @@ di akun **admin** (dashboard, riwayat, laporan), dan dampak stok konsisten.
 - Setelah retur **penuh** (unit terakhir): SALE-001119 tampil "Rp 0 · **Diretur penuh**",
   Total Penjualan kembali Rp 10.620.000, Item Terjual 50 (= Dashboard).
 
-## BUG-08 — Transaksi yang diretur hilang dari laporan harian (SEDANG) — ✅ DIPERBAIKI
-
-- **Tingkat:** 🟠 Sedang (konsistensi data / pelaporan)
-- **Gejala:** Begitu sebuah transaksi diretur (status `completed` → `partial_return`/`returned`),
-  transaksi itu **tidak lagi muncul** di Admin "History Pembayaran" maupun POS
-  "Riwayat Transaksi", padahal **Dashboard tetap menghitungnya** → angka tidak konsisten.
-- **Akar masalah:** Kedua `TodayTransactionController` memfilter `where('status','completed')`,
-  sementara `ReturnService` mengubah status sale menjadi `partial_return`/`returned`.
-  Helper `totalsFor()` & `bucketSales()` (admin) juga memfilter `completed` saja.
-- **Perbaikan (Opsi 1 — nilai bersih, dipilih):**
-  - `Admin\TodayTransactionController` & `POS\TodayTransactionController`:
-    - Query memakai `whereIn('status', ['completed','partial_return','returned'])`.
-    - `mapSalesToTransactions` menghitung **nilai bersih** per transaksi:
-      `total_amount = round(gross − refund)`, `net_quantity = qty_jual − qty_retur`,
-      menambah flag `is_returned`, `gross_amount`, `returned_amount`, dan status asli sale.
-    - Sumber refund = `return_items.subtotal` (retur non-rejected) — selaras Dashboard.
-    - `totalsFor()` & `bucketSales()` admin disesuaikan (status inklusif + kurangi refund).
-  - Frontend `admin/ReportTodayTransaction.vue` & `POS/ReportTodayTransaction.vue`:
-    badge status berlabel **"Berhasil" / "Diretur sebagian" / "Diretur penuh"**.
-- **Verifikasi:** Total laporan harian kini **persis sama** dengan Dashboard (lihat di atas).
-
-## BUG-09 — Status tidak jadi `returned` saat habis diretur bertahap (MINOR) — ✅ DIPERBAIKI
-
-- **Tingkat:** 🟡 Minor
-- **Gejala:** Transaksi yang diretur **bertahap** (mis. 1 unit, lalu 1 unit lagi) sampai
-  semua unit kembali, statusnya tetap `partial_return` — seharusnya `returned`.
-- **Akar masalah:** `ReturnService` menentukan status dari `$totalReturnedQty` (qty retur
-  **kali ini** saja), bukan akumulasi seluruh retur.
-- **Perbaikan:** status dihitung dari **akumulasi** `returned_quantity` seluruh alokasi sale:
-  `status = (totalReturnedAll >= allOriginalQty) ? 'returned' : 'partial_return'`.
-- **Verifikasi:** Setelah retur unit terakhir, status 1119 menjadi `returned` dan tampil
-  "Diretur penuh".
-
 ## Kebijakan Pembulatan Uang (retur)
 - **Disimpan & dihitung sebagai rupiah utuh** (`round()`), tidak ada pecahan sen.
 - **Refund tunai dibulatkan ke kelipatan Rp100** terdekat (`ReturnService::roundRefund`),

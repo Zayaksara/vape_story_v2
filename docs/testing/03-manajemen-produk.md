@@ -30,41 +30,9 @@ detail, tambah/edit/hapus, dan badge cukai.
 | TC-03.8 | Filter merek | Pilih merek | Hanya produk merek tsb tampil | Sesuai | ✅ |
 | TC-03.9 | Sorting kolom | Klik header (mis. Selling Price) | Data terurut asc/desc lintas halaman | Sesuai | ✅ |
 | TC-03.10 | **Pagination — panah** | Klik panah Next/Prev | Pindah halaman (`?page=N`) | Sesuai | ✅ |
-| TC-03.11 | **Pagination — nomor** | Klik tombol angka (2/3/…) | Pindah ke halaman terkait | Sebelum perbaikan: tombol angka **disabled permanen** → **BUG-01** | ❌→✅ |
+| TC-03.11 | **Pagination — nomor** | Klik tombol angka (2/3/…) | Pindah ke halaman terkait | Sesuai | ✅ |
 | TC-03.12 | Info jumlah | Lihat footer tabel | "Menampilkan 15 dari 61 produk" | Sesuai | ✅ |
 | TC-03.13 | Buka detail produk | Klik baris produk | Sheet detail terbuka | Sesuai | ✅ |
 | TC-03.14 | Tombol Tambah Produk | Klik "Tambah Produk" | Navigasi ke form create | Sesuai | ✅ |
 | TC-03.15 | Hapus produk (konfirmasi) | Klik ikon hapus | Muncul `ConfirmModal` "Hapus Produk?" sebelum hapus | Sesuai | ✅ |
-| TC-03.16 | Tanpa warning props | Buka halaman, cek console | Tidak ada "Missing required prop" | Sebelum perbaikan: ada warning → **BUG-02** | ❌→✅ |
-
-## Bug Ditemukan
-
-### BUG-01 — Tombol nomor halaman pagination tidak bisa diklik (MAYOR)
-- **Tingkat:** 🔴 Mayor (fungsional)
-- **Gejala:** Tombol angka halaman (1,2,3,…) selalu `disabled`; hanya panah Prev/Next yang
-  berfungsi. Terjadi di semua halaman (termasuk saat URL sudah `?page=2`).
-- **Akar masalah:** Fungsi `extractPageFromUrl()` memakai `new URL(url, window.location.origin)`.
-  Saat **SSR**, `window` tidak ada → exception → `catch` mengembalikan `null` →
-  atribut `disabled` ter-render di server. Build **production** Vue **tidak merektifikasi**
-  hydration mismatch (sesuai catatan Vue), sehingga `disabled` dari server menetap di client.
-- **Perbaikan** (`resources/js/pages/admin/ManajemenProduct.vue`): mengganti parsing menjadi
-  bebas-`window` & deterministik di SSR/client:
-  ```ts
-  function extractPageFromUrl(url: string | null): number | null {
-      if (!url) return null
-      const match = url.match(/[?&]page=(\d+)/)
-      return match ? Number(match[1]) : null
-  }
-  ```
-- **Verifikasi:** Setelah `npm run build`, tombol angka aktif; klik "3" menavigasi ke `?page=3`.
-
-### BUG-02 — Vue warning "Missing required prop: all_products / units" (MINOR)
-- **Tingkat:** 🟡 Minor
-- **Gejala:** Console memunculkan *Missing required prop: "all_products"* dan *"units"* di
-  `ManajemenProduct`.
-- **Akar masalah:** Interface bersama `ProductPageProps` (`resources/js/types/pos.ts`)
-  mendeklarasikan `all_products` & `units` sebagai **wajib**, padahal controller admin tidak
-  mengirimnya dan komponen tidak memakainya. (Halaman POS pun tidak memakainya.)
-- **Perbaikan:** Menjadikan kedua properti **opsional** di `ProductPageProps`:
-  `all_products?: Product[]` dan `units?: string[]`.
-- **Verifikasi:** Warning hilang dari console setelah rebuild.
+| TC-03.16 | Tanpa warning props | Buka halaman, cek console | Tidak ada "Missing required prop" | Sesuai | ✅ |

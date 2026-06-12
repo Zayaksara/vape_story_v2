@@ -4,10 +4,6 @@ Cetak struk langsung ke printer thermal Bluetooth via **Web Bluetooth + ESC/POS*
 dialog print browser. Tersedia di halaman **Pengaturan Toko** (panel "Printer Bluetooth")
 dan halaman uji `/pos/printer-test` (Codeshop CM-T58BL).
 
-> ✅ **Status:** Diuji manual oleh pemilik dengan perangkat printer fisik — **berhasil**.
-> Tidak dapat diotomasi (butuh hardware Bluetooth + HTTPS/localhost + Chrome/Edge), jadi
-> dokumen ini berupa **prosedur manual** dengan hasil yang sudah dikonfirmasi.
-
 ## Cakupan
 - Deteksi dukungan Web Bluetooth (fallback pesan bila tak didukung)
 - Pairing printer (dialog perangkat Bluetooth)
@@ -34,15 +30,3 @@ dan halaman uji `/pos/printer-test` (Codeshop CM-T58BL).
 | TC-15.9 | Printer test page | Buka `/pos/printer-test`, ketik teks, "Cetak Test" | Teks tercetak (double height/width), log "Selesai mencetak" | Sesuai | ✅ |
 | TC-15.10 | Cetak tanpa koneksi | "Cetak Test" sebelum connect | Log error "Belum terhubung ke printer" | Sesuai | ✅ |
 | TC-15.11 | Printer terputus saat sesi | Matikan printer saat terhubung | Event `gattserverdisconnected` → status "Printer terputus." | Sesuai | ✅ |
-
-## Catatan teknis (review kode)
-- Service/characteristic ESC/POS umum di-scan otomatis (`findWritableCharacteristic`):
-  pilih characteristic pertama yang `write`/`writeWithoutResponse`.
-- Data dikirim ber-chunk 180 byte (`writeChunks`) — aman untuk MTU BLE kecil.
-- Byte struk dibangun di `lib/escposReceipt.ts` (`buildReceiptBytes`) memakai opsi & footer
-  yang sama dengan pratinjau → struk fisik konsisten dengan layar.
-- `usePrinter` composable mengelola state pairing/koneksi/cetak dan auto-connect.
-
-## Catatan pengujian
-- TC yang melibatkan hardware fisik tidak bisa diotomasi (Playwright tidak dapat mengakses
-  Web Bluetooth real). Hasil di atas berdasarkan **uji manual pemilik** dengan printer nyata.
